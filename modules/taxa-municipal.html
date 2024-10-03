@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxa Municipal Turística</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestão da Taxa Municipal Turística</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Dashboard</a></li>
+                <li><a href="mensagens.html">Mensagens</a></li>
+                <li><a href="iva.html">Função IVA</a></li>
+                <li><a href="caixa.html">Função Caixa</a></li>
+                <li><a href="modelo30.html">Modelo 30</a></li>
+                <li><a href="notas.html">Notas / Tarefas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Adicionar Dados da Taxa Municipal</h2>
+            <form id="taxa-form">
+                <div class="form-group">
+                    <label for="valor-total">Valor Total Pago por Reserva:</label>
+                    <input type="number" id="valor-total" required min="0" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="mes">Mês:</label>
+                    <select id="mes" required>
+                        <option value="">-- Selecionar Mês --</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ano">Ano:</label>
+                    <input type="number" id="ano" required min="2000" max="2100">
+                </div>
+
+                <div class="form-group">
+                    <label for="noites-excedidas">Noites Excedidas Além das 7 Gratuitas:</label>
+                    <input type="number" id="noites-excedidas" required min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="noites-criancas">Noites para Crianças (até 13 anos):</label>
+                    <input type="number" id="noites-criancas" required min="0">
+                </div>
+
+                <button type="submit">Adicionar Dados</button>
+            </form>
+        </section>
+
+        <section id="relatorios" style="margin-top: 40px;">
+            <h2>Relatórios Trimestrais</h2>
+            <button onclick="gerarRelatorio()">Gerar Relatório</button>
+            <div id="relatorio-container" style="margin-top: 20px;"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="../js/taxa-municipal.js"></script>
+</body>
+</html>

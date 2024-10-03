@@ -104,3 +104,62 @@ button:hover {
 #mensagem {
     white-space: pre-wrap;
 }
+/* Estilos para os formulários dos módulos */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+form .form-group {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input[type="number"],
+form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Estilos para os relatórios */
+#relatorio-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+#relatorio-container th, #relatorio-container td {
+    padding: 10px;
+    text-align: center;
+}
+
+#relatorio-container th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#relatorio-container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
