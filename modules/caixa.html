@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <h1>Gestão do Caixa</h1>
+        <h1>Função Caixa</h1>
         <nav>
             <ul>
                 <li><a href="../index.html">Dashboard</a></li>
@@ -27,27 +27,30 @@
         <section>
             <h2>Registrar Transação</h2>
             <form id="caixa-form">
-                <label for="descricao">Descrição da Transação:</label>
-                <input type="text" id="descricao" name="descricao" required>
-
-                <label for="tipo">Tipo de Transação:</label>
-                <select id="tipo" name="tipo" required>
-                    <option value="">Selecionar Tipo</option>
-                    <option value="Entrada">Entrada</option>
-                    <option value="Saída">Saída</option>
-                </select>
-
-                <label for="valor">Valor:</label>
-                <input type="number" id="valor" name="valor" step="0.01" required>
-
-                <button type="submit">Registrar</button>
+                <div>
+                    <label for="descricao">Descrição da Transação:</label>
+                    <input type="text" id="descricao" required>
+                </div>
+                <div>
+                    <label for="tipo">Tipo de Transação:</label>
+                    <select id="tipo" required>
+                        <option value="">Selecionar Tipo</option>
+                        <option value="Entrada">Entrada</option>
+                        <option value="Saída">Saída</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="valor">Valor (€):</label>
+                    <input type="number" id="valor" step="0.01" required>
+                </div>
+                <button type="submit">Registrar Transação</button>
             </form>
         </section>
 
         <section>
-            <h2>Relatórios de Caixa</h2>
-            <div id="relatorios-caixa">
-                <!-- Relatórios serão carregados aqui -->
+            <h2>Relatório de Caixa</h2>
+            <div id="relatorio-caixa">
+                <!-- Relatórios serão exibidos aqui -->
             </div>
         </section>
     </main>
@@ -56,10 +59,6 @@
         <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
-    <!-- Add Firebase Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
     <script src="../js/script.js"></script>
     <script src="../js/caixa.js"></script>
 </body>
