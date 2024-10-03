@@ -1,13 +1,8 @@
 // js/iva.js
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbwd8HQ0EPfKfhxp2bFieQS74lhN3wDvbNyUBMQM1HeTtF_fQt29HEYuezZCCnztJl4W/exec'; // Substitua SEU_SCRIPT_ID pelo ID real
+import { copiarMensagem } from './script.js';
 
-// Selecionar elementos do DOM
-const ivaForm = document.getElementById('iva-form');
-const relatorioIvaDiv = document.getElementById('relatorio-iva');
-
-// Função para adicionar um registro de IVA
-ivaForm.addEventListener('submit', async (e) => {
+document.getElementById('iva-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const dataCompra = document.getElementById('data-compra').value;
@@ -18,17 +13,24 @@ ivaForm.addEventListener('submit', async (e) => {
         return;
     }
 
+    const url = 'URL_DO_SEU_APPS_SCRIPT'; // Substitua pelo URL do seu Apps Script
+    const params = new URLSearchParams({
+        action: 'add',
+        data_compra: dataCompra,
+        valor_iva: valorIva
+    });
+
     try {
-        const response = await fetch(`${API_URL}?sheet=IVA&action=create&data_compra=${dataCompra}&valor_iva=${valorIva}`, {
-            method: 'GET'
+        const response = await fetch(`${url}?${params.toString()}`, {
+            method: 'POST'
         });
         const result = await response.json();
-        if (result.status === 'success') {
+        if (result.success) {
             alert('IVA registrado com sucesso!');
-            ivaForm.reset();
+            document.getElementById('iva-form').reset();
             carregarRelatorio();
         } else {
-            alert('Erro ao registrar IVA: ' + result.message);
+            alert(`Erro: ${result.error}`);
         }
     } catch (error) {
         console.error("Erro ao registrar IVA: ", error);
@@ -36,45 +38,42 @@ ivaForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Função para carregar e exibir o relatório trimestral
 async function carregarRelatorio() {
-    relatorioIvaDiv.innerHTML = '<p>Carregando relatórios...</p>';
+    const url = 'URL_DO_SEU_APPS_SCRIPT'; // Substitua pelo URL do seu Apps Script
+    const params = new URLSearchParams({
+        action: 'get'
+    });
+
     try {
-        const response = await fetch(`${API_URL}?sheet=IVA&action=read`, {
-            method: 'GET'
-        });
-        const result = await response.json();
-        if (result.status === 'success') {
-            const dados = result.data;
-            const dadosTrimestrais = {};
+        const response = await fetch(`${url}?${params.toString()}`);
+        const data = await response.json();
 
-            dados.forEach(entry => {
-                const data = new Date(entry.data_compra);
-                const trimestre = Math.ceil((data.getMonth() + 1) / 3);
-                const ano = data.getFullYear();
-                const chave = `${ano} T${trimestre}`;
+        // Agregar dados por trimestre
+        const dados = {};
+        data.forEach(entry => {
+            const date = new Date(entry.data_compra);
+            const trimestre = Math.ceil((date.getMonth() + 1) / 3);
+            const ano = date.getFullYear();
+            const chave = `${ano} T${trimestre}`;
 
-                if (!dadosTrimestrais[chave]) {
-                    dadosTrimestrais[chave] = 0;
-                }
-                dadosTrimestrais[chave] += parseFloat(entry.valor_iva);
-            });
-
-            // Criar HTML para exibir os relatórios
-            let html = '<table>';
-            html += '<tr><th>Trimestre</th><th>Total IVA Pago (€)</th></tr>';
-            for (const chave in dadosTrimestrais) {
-                html += `<tr><td>${chave}</td><td>€ ${dadosTrimestrais[chave].toFixed(2)}</td></tr>`;
+            if (!dados[chave]) {
+                dados[chave] = 0;
             }
-            html += '</table>';
+            dados[chave] += parseFloat(entry.valor_iva);
+        });
 
-            relatorioIvaDiv.innerHTML = html;
-        } else {
-            relatorioIvaDiv.innerHTML = `<p>Erro ao carregar relatórios: ${result.message}</p>`;
+        // Criar HTML para exibir os relatórios
+        let html = '<table>';
+        html += '<tr><th>Trimestre</th><th>Total IVA Pago (€)</th></tr>';
+        for (const chave in dados) {
+            html += `<tr><td>${chave}</td><td>€ ${dados[chave].toFixed(2)}</td></tr>`;
         }
+        html += '</table>';
+
+        document.getElementById('relatorio-iva').innerHTML = html;
     } catch (error) {
         console.error("Erro ao carregar relatórios de IVA: ", error);
-        relatorioIvaDiv.innerHTML = '<p>Ocorreu um erro ao carregar os relatórios.</p>';
+        document.getElementById('relatorio-iva').innerHTML = '<p>Ocorreu um erro ao carregar os relatórios.</p>';
     }
 }
 

@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <h1>Gestão do IVA Pago</h1>
+        <h1>Função IVA</h1>
         <nav>
             <ul>
                 <li><a href="../index.html">Dashboard</a></li>
@@ -25,22 +25,24 @@
 
     <main>
         <section>
-            <h2>Inserir Dados de IVA Pago</h2>
+            <h2>Registrar IVA Pago</h2>
             <form id="iva-form">
-                <label for="data_compra">Data da Compra:</label>
-                <input type="date" id="data_compra" name="data_compra" required>
-
-                <label for="valor_iva">Valor do IVA Pago:</label>
-                <input type="number" id="valor_iva" name="valor_iva" step="0.01" required>
-
-                <button type="submit">Guardar</button>
+                <div>
+                    <label for="data-compra">Data da Compra:</label>
+                    <input type="date" id="data-compra" required>
+                </div>
+                <div>
+                    <label for="valor-iva">Valor do IVA Pago:</label>
+                    <input type="number" id="valor-iva" step="0.01" required>
+                </div>
+                <button type="submit">Registrar IVA</button>
             </form>
         </section>
 
         <section>
             <h2>Relatórios Trimestrais de IVA</h2>
-            <div id="relatorios-iva">
-                <!-- Relatórios serão carregados aqui -->
+            <div id="relatorio-iva">
+                <!-- Relatórios serão exibidos aqui -->
             </div>
         </section>
     </main>
@@ -49,10 +51,6 @@
         <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
-    <!-- Add Firebase Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
     <script src="../js/script.js"></script>
     <script src="../js/iva.js"></script>
 </body>
