@@ -1,9 +1,6 @@
 // js/iva.js
 
-import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-
-// Inicializar Firestore
-const db = getFirestore();
+const API_URL = 'https://script.google.com/macros/s/AKfycbwd8HQ0EPfKfhxp2bFieQS74lhN3wDvbNyUBMQM1HeTtF_fQt29HEYuezZCCnztJl4W/exec'; // Substitua SEU_SCRIPT_ID pelo ID real
 
 // Selecionar elementos do DOM
 const ivaForm = document.getElementById('iva-form');
@@ -22,15 +19,19 @@ ivaForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        await addDoc(collection(db, "iva"), {
-            data_compra: dataCompra,
-            valor_iva: valorIva
+        const response = await fetch(`${API_URL}?sheet=IVA&action=create&data_compra=${dataCompra}&valor_iva=${valorIva}`, {
+            method: 'GET'
         });
-        alert('IVA registrado com sucesso!');
-        ivaForm.reset();
-        carregarRelatorio();
-    } catch (e) {
-        console.error("Erro ao registrar IVA: ", e);
+        const result = await response.json();
+        if (result.status === 'success') {
+            alert('IVA registrado com sucesso!');
+            ivaForm.reset();
+            carregarRelatorio();
+        } else {
+            alert('Erro ao registrar IVA: ' + result.message);
+        }
+    } catch (error) {
+        console.error("Erro ao registrar IVA: ", error);
         alert('Ocorreu um erro ao registrar o IVA.');
     }
 });
@@ -39,36 +40,40 @@ ivaForm.addEventListener('submit', async (e) => {
 async function carregarRelatorio() {
     relatorioIvaDiv.innerHTML = '<p>Carregando relatórios...</p>';
     try {
-        const q = query(collection(db, "iva"), orderBy("data_compra", "asc"));
-        const querySnapshot = await getDocs(q);
-        const dados = {};
-
-        querySnapshot.forEach((doc) => {
-            const dataCompra = doc.data().data_compra;
-            const valorIva = doc.data().valor_iva;
-
-            const date = new Date(dataCompra);
-            const trimestre = Math.ceil((date.getMonth() + 1) / 3);
-            const ano = date.getFullYear();
-            const chave = `${ano} T${trimestre}`;
-
-            if (!dados[chave]) {
-                dados[chave] = 0;
-            }
-            dados[chave] += valorIva;
+        const response = await fetch(`${API_URL}?sheet=IVA&action=read`, {
+            method: 'GET'
         });
+        const result = await response.json();
+        if (result.status === 'success') {
+            const dados = result.data;
+            const dadosTrimestrais = {};
 
-        // Criar HTML para exibir os relatórios
-        let html = '<table>';
-        html += '<tr><th>Trimestre</th><th>Total IVA Pago</th></tr>';
-        for (const chave in dados) {
-            html += `<tr><td>${chave}</td><td>€ ${dados[chave].toFixed(2)}</td></tr>`;
+            dados.forEach(entry => {
+                const data = new Date(entry.data_compra);
+                const trimestre = Math.ceil((data.getMonth() + 1) / 3);
+                const ano = data.getFullYear();
+                const chave = `${ano} T${trimestre}`;
+
+                if (!dadosTrimestrais[chave]) {
+                    dadosTrimestrais[chave] = 0;
+                }
+                dadosTrimestrais[chave] += parseFloat(entry.valor_iva);
+            });
+
+            // Criar HTML para exibir os relatórios
+            let html = '<table>';
+            html += '<tr><th>Trimestre</th><th>Total IVA Pago (€)</th></tr>';
+            for (const chave in dadosTrimestrais) {
+                html += `<tr><td>${chave}</td><td>€ ${dadosTrimestrais[chave].toFixed(2)}</td></tr>`;
+            }
+            html += '</table>';
+
+            relatorioIvaDiv.innerHTML = html;
+        } else {
+            relatorioIvaDiv.innerHTML = `<p>Erro ao carregar relatórios: ${result.message}</p>`;
         }
-        html += '</table>';
-
-        relatorioIvaDiv.innerHTML = html;
-    } catch (e) {
-        console.error("Erro ao carregar relatórios de IVA: ", e);
+    } catch (error) {
+        console.error("Erro ao carregar relatórios de IVA: ", error);
         relatorioIvaDiv.innerHTML = '<p>Ocorreu um erro ao carregar os relatórios.</p>';
     }
 }
