@@ -19,6 +19,70 @@ const mensagensData = {
             "Alemão": "Nachricht für Estacionamento 123 auf Deutsch.",
             "Italiano": "Messaggio per Estacionamento 123 in Italiano."
         },
+        "Estacionamento 1248": {
+            "Português": "Mensagem para Estacionamento 1248 em Português.",
+            "Inglês": "Message for Estacionamento 1248 in English.",
+            "Espanhol": "Mensaje para Estacionamento 1248 en Español.",
+            "Francês": "Message pour Estacionamento 1248 en Français.",
+            "Alemão": "Nachricht für Estacionamento 1248 auf Deutsch.",
+            "Italiano": "Messaggio per Estacionamento 1248 in Italiano."
+        },
+        "Escadas 123": {
+            "Português": "Mensagem para Escadas 123 em Português.",
+            "Inglês": "Message for Escadas 123 in English.",
+            "Espanhol": "Mensaje para Escadas 123 en Español.",
+            "Francês": "Message pour Escadas 123 en Français.",
+            "Alemão": "Nachricht für Escadas 123 auf Deutsch.",
+            "Italiano": "Messaggio per Escadas 123 in Italiano."
+        },
+        "Escadas 1248": {
+            "Português": "Mensagem para Escadas 1248 em Português.",
+            "Inglês": "Message for Escadas 1248 in English.",
+            "Espanhol": "Mensaje para Escadas 1248 en Español.",
+            "Francês": "Message pour Escadas 1248 en Français.",
+            "Alemão": "Nachricht für Escadas 1248 auf Deutsch.",
+            "Italiano": "Messaggio per Escadas 1248 in Italiano."
+        },
+        "Localização": {
+            "Português": "Mensagem para Localização em Português.",
+            "Inglês": "Message for Localização in English.",
+            "Espanhol": "Mensaje para Localização en Español.",
+            "Francês": "Message pour Localização en Français.",
+            "Alemão": "Nachricht für Localização auf Deutsch.",
+            "Italiano": "Messaggio per Localização in Italiano."
+        },
+        "Check-In cedo sem hóspedes": {
+            "Português": "Mensagem para Check-In cedo sem hóspedes em Português.",
+            "Inglês": "Message for Check-In cedo sem hóspedes in English.",
+            "Espanhol": "Mensaje para Check-In cedo sem hóspedes en Español.",
+            "Francês": "Message pour Check-In cedo sem hóspedes en Français.",
+            "Alemão": "Nachricht für Check-In cedo sem hóspedes auf Deutsch.",
+            "Italiano": "Messaggio per Check-In cedo sem hóspedes in Italiano."
+        },
+        "Check-In cedo com hóspedes 123": {
+            "Português": "Mensagem para Check-In cedo com hóspedes 123 em Português.",
+            "Inglês": "Message for Check-In cedo com hóspedes 123 in English.",
+            "Espanhol": "Mensaje para Check-In cedo com hóspedes 123 en Español.",
+            "Francês": "Message pour Check-In cedo com hóspedes 123 en Français.",
+            "Alemão": "Nachricht für Check-In cedo com hóspedes 123 auf Deutsch.",
+            "Italiano": "Messaggio per Check-In cedo com hóspedes 123 in Italiano."
+        },
+        "Check-In cedo com hóspedes 1248": {
+            "Português": "Mensagem para Check-In cedo com hóspedes 1248 em Português.",
+            "Inglês": "Message for Check-In cedo com hóspedes 1248 in English.",
+            "Espanhol": "Mensaje para Check-In cedo com hóspedes 1248 en Español.",
+            "Francês": "Message pour Check-In cedo com hóspedes 1248 en Français.",
+            "Alemão": "Nachricht für Check-In cedo com hóspedes 1248 auf Deutsch.",
+            "Italiano": "Messaggio per Check-In cedo com hóspedes 1248 in Italiano."
+        },
+        "Check-in tardio": {
+            "Português": "Mensagem para Check-in tardio em Português.",
+            "Inglês": "Message for Check-in tardio in English.",
+            "Espanhol": "Mensaje para Check-in tardio en Español.",
+            "Francês": "Message pour Check-in tardio en Français.",
+            "Alemão": "Nachricht für Check-in tardio auf Deutsch.",
+            "Italiano": "Messaggio per Check-in tardio in Italiano."
+        },
         // Adicione mais opções conforme necessário
     },
     "Antes do Check-in": {
