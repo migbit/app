@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Função IVA</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestão do IVA Pago</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Dashboard</a></li>
+                <li><a href="mensagens.html">Mensagens</a></li>
+                <li><a href="taxa-municipal.html">Taxa Municipal Turística</a></li>
+                <li><a href="iva.html">Função IVA</a></li>
+                <li><a href="caixa.html">Função Caixa</a></li>
+                <li><a href="modelo30.html">Modelo 30</a></li>
+                <li><a href="notas.html">Notas / Tarefas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Inserir Dados de IVA Pago</h2>
+            <form id="iva-form">
+                <label for="data_compra">Data da Compra:</label>
+                <input type="date" id="data_compra" name="data_compra" required>
+
+                <label for="valor_iva">Valor do IVA Pago:</label>
+                <input type="number" id="valor_iva" name="valor_iva" step="0.01" required>
+
+                <button type="submit">Guardar</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Relatórios Trimestrais de IVA</h2>
+            <div id="relatorios-iva">
+                <!-- Relatórios serão carregados aqui -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
+    <!-- Add Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/iva.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <h1>Gestão da Taxa Municipal Turística</h1>
+        <h1>Taxa Municipal Turística</h1>
         <nav>
             <ul>
                 <li><a href="../index.html">Dashboard</a></li>
@@ -24,51 +24,33 @@
     </header>
 
     <main>
-        <section>
-            <h2>Registrar Taxa Municipal Turística</h2>
+        <section class="form-section">
+            <h2>Registrar Taxa Municipal</h2>
             <form id="taxa-form">
-                <div>
-                    <label for="valor-reserva">Valor Total por Reserva (R$):</label>
-                    <input type="number" id="valor-reserva" name="valor-reserva" step="0.01" required>
+                <div class="form-group">
+                    <label for="data-reserva">Data da Reserva (Mês/Ano):</label>
+                    <input type="month" id="data-reserva" name="data-reserva" required>
                 </div>
-                <div>
-                    <label for="mes">Mês:</label>
-                    <select id="mes" name="mes" required>
-                        <option value="">Selecionar Mês</option>
-                        <option value="1">Janeiro</option>
-                        <option value="2">Fevereiro</option>
-                        <option value="3">Março</option>
-                        <option value="4">Abril</option>
-                        <option value="5">Maio</option>
-                        <option value="6">Junho</option>
-                        <option value="7">Julho</option>
-                        <option value="8">Agosto</option>
-                        <option value="9">Setembro</option>
-                        <option value="10">Outubro</option>
-                        <option value="11">Novembro</option>
-                        <option value="12">Dezembro</option>
-                    </select>
+                <div class="form-group">
+                    <label for="valor-total">Valor Total Pago por Reserva (€):</label>
+                    <input type="number" id="valor-total" name="valor-total" step="0.01" min="0" required>
                 </div>
-                <div>
-                    <label for="ano">Ano:</label>
-                    <input type="number" id="ano" name="ano" min="2000" max="2100" required>
-                </div>
-                <div>
-                    <label for="noites-excedidas">Noites Excedidas (além das 7 gratuitas):</label>
+                <div class="form-group">
+                    <label for="noites-excedidas">Noites Excedidas (Além das 7 Gratuitas):</label>
                     <input type="number" id="noites-excedidas" name="noites-excedidas" min="0" required>
                 </div>
-                <div>
-                    <label for="noites-criancas">Noites para Crianças (até 13 anos):</label>
+                <div class="form-group">
+                    <label for="noites-criancas">Noites para Crianças (Até 13 anos):</label>
                     <input type="number" id="noites-criancas" name="noites-criancas" min="0" required>
                 </div>
-                <button type="submit">Registrar</button>
+                <button type="submit">Registrar Taxa</button>
             </form>
         </section>
 
-        <section>
-            <h2>Relatórios Trimestrais</h2>
-            <div id="relatorios">
-                <!-- Relatórios serão exibidos aqui -->
+        <section class="report-section">
+            <h2>Relatório Trimestral</h2>
+            <div id="relatorio-taxa">
+                <!-- Relatórios serão inseridos aqui -->
             </div>
         </section>
     </main>
