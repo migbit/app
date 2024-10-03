@@ -1,94 +1,77 @@
 // js/iva.js
 
-// Importar funções necessárias do Firebase
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Inicializar Firestore
 const db = getFirestore();
 
 // Selecionar elementos do DOM
 const ivaForm = document.getElementById('iva-form');
-const relatoriosDiv = document.getElementById('relatorios-iva');
+const relatorioIvaDiv = document.getElementById('relatorio-iva');
 
-// Evento para submissão do formulário
+// Função para adicionar um registro de IVA
 ivaForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const dataCompra = document.getElementById('data_compra').value;
-    const valorIva = parseFloat(document.getElementById('valor_iva').value);
+    const dataCompra = document.getElementById('data-compra').value;
+    const valorIva = parseFloat(document.getElementById('valor-iva').value);
 
-    // Determinar o trimestre com base na data da compra
-    const mes = parseInt(dataCompra.split('-')[1]);
-    const trimestre = Math.ceil(mes / 3);
-
-    // Criar objeto de dados
-    const ivaData = {
-        data_compra: dataCompra,
-        valor_iva: valorIva,
-        trimestre: trimestre
-    };
+    if (!dataCompra || isNaN(valorIva) || valorIva <= 0) {
+        alert('Por favor, insira dados válidos.');
+        return;
+    }
 
     try {
-        // Adicionar documento à coleção 'iva'
-        await addDoc(collection(db, "iva"), ivaData);
-        alert('Dados de IVA guardados com sucesso!');
+        await addDoc(collection(db, "iva"), {
+            data_compra: dataCompra,
+            valor_iva: valorIva
+        });
+        alert('IVA registrado com sucesso!');
         ivaForm.reset();
-        carregarRelatorios();
+        carregarRelatorio();
     } catch (e) {
-        console.error("Erro ao adicionar documento: ", e);
+        console.error("Erro ao registrar IVA: ", e);
+        alert('Ocorreu um erro ao registrar o IVA.');
     }
 });
 
-// Função para carregar relatórios trimestrais de IVA
-async function carregarRelatorios() {
-    relatoriosDiv.innerHTML = '<p>Carregando relatórios...</p>';
-
+// Função para carregar e exibir o relatório trimestral
+async function carregarRelatorio() {
+    relatorioIvaDiv.innerHTML = '<p>Carregando relatórios...</p>';
     try {
-        const querySnapshot = await getDocs(collection(db, "iva"));
-        const dados = [];
+        const q = query(collection(db, "iva"), orderBy("data_compra", "asc"));
+        const querySnapshot = await getDocs(q);
+        const dados = {};
 
         querySnapshot.forEach((doc) => {
-            dados.push(doc.data());
-        });
+            const dataCompra = doc.data().data_compra;
+            const valorIva = doc.data().valor_iva;
 
-        // Agregar dados por trimestre
-        const relatorios = {};
+            const date = new Date(dataCompra);
+            const trimestre = Math.ceil((date.getMonth() + 1) / 3);
+            const ano = date.getFullYear();
+            const chave = `${ano} T${trimestre}`;
 
-        dados.forEach(entry => {
-            const tr = entry.trimestre;
-            if (!relatorios[tr]) {
-                relatorios[tr] = {
-                    total_iva: 0
-                };
+            if (!dados[chave]) {
+                dados[chave] = 0;
             }
-            relatorios[tr].total_iva += entry.valor_iva;
+            dados[chave] += valorIva;
         });
 
         // Criar HTML para exibir os relatórios
         let html = '<table>';
-        html += `
-            <tr>
-                <th>Trimestre</th>
-                <th>Total IVA Pago</th>
-            </tr>
-        `;
-
-        for (const [trimestre, dadosTrimestre] of Object.entries(relatorios)) {
-            html += `
-                <tr>
-                    <td>${trimestre}º Trimestre</td>
-                    <td>${dadosTrimestre.total_iva.toFixed(2)}</td>
-                </tr>
-            `;
+        html += '<tr><th>Trimestre</th><th>Total IVA Pago</th></tr>';
+        for (const chave in dados) {
+            html += `<tr><td>${chave}</td><td>€ ${dados[chave].toFixed(2)}</td></tr>`;
         }
-
         html += '</table>';
-        relatoriosDiv.innerHTML = html;
+
+        relatorioIvaDiv.innerHTML = html;
     } catch (e) {
-        console.error("Erro ao carregar relatórios: ", e);
-        relatoriosDiv.innerHTML = '<p>Erro ao carregar relatórios.</p>';
+        console.error("Erro ao carregar relatórios de IVA: ", e);
+        relatorioIvaDiv.innerHTML = '<p>Ocorreu um erro ao carregar os relatórios.</p>';
     }
 }
 
-// Carregar relatórios ao carregar a página
-window.addEventListener('load', carregarRelatorios);
+// Carregar o relatório ao iniciar
+carregarRelatorio();
