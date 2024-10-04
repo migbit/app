@@ -3,6 +3,17 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBRx2EYDi3FpfmJjttO2wd9zeFVV3uH6Q0",
+    authDomain: "apartments-a4b17.firebaseapp.com",
+    databaseURL: "https://apartments-a4b17-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "apartments-a4b17",
+    storageBucket: "apartments-a4b17.appspot.com",
+    messagingSenderId: "465612199373",
+    appId: "1:465612199373:web:2b8e1eb14f453caa532084"
+};
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
@@ -23,11 +34,11 @@ btnSaida.addEventListener('click', () => setTipoTransacao('Saída'));
 function setTipoTransacao(tipo) {
     tipoInput.value = tipo;
     if (tipo === 'Entrada') {
-        btnEntrada.classList.add('active');
-        btnSaida.classList.remove('active');
+        btnEntrada.classList.add('btn-active');
+        btnSaida.classList.remove('btn-active');
     } else {
-        btnSaida.classList.add('active');
-        btnEntrada.classList.remove('active');
+        btnSaida.classList.add('btn-active');
+        btnEntrada.classList.remove('btn-active');
     }
 }
 
@@ -71,7 +82,7 @@ async function carregarRelatorio() {
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             totalCaixa += data.valor;
-            transacoes.push(data);
+            transacoes.push({...data, id: doc.id});
         });
 
         // Criar HTML para exibir as transações
@@ -100,4 +111,6 @@ async function carregarRelatorio() {
 }
 
 // Carregar o relatório ao iniciar
-carregarRelatorio();
+document.addEventListener('DOMContentLoaded', () => {
+    carregarRelatorio();
+});
