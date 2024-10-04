@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taxa Municipal Turística</title>
+    <title>Taxa Municipal Turística (T.M.T.)</title>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
     <header>
-        <h1>Taxa Municipal Turística</h1>
+        <h1>Taxa Municipal Turística (T.M.T.)</h1>
         <nav>
             <ul>
-                <li><a href="../index.html">Dashboard</a></li>
+                <li><a href="../index.html">Início</a></li>
                 <li><a href="mensagens.html">Mensagens</a></li>
                 <li><a href="taxa-municipal.html">Taxa Municipal Turística</a></li>
-                <li><a href="iva.html">Função IVA</a></li>
-                <li><a href="caixa.html">Função Caixa</a></li>
+                <li><a href="caixa.html">Caixa</a></li>
                 <li><a href="modelo30.html">Modelo 30</a></li>
                 <li><a href="notas.html">Notas / Tarefas</a></li>
             </ul>
@@ -25,32 +24,66 @@
 
     <main>
         <section class="form-section">
-            <h2>Registrar Taxa Municipal</h2>
-            <form id="taxa-form">
+            <h2>Registrar Taxa Municipal Turística</h2>
+            <form id="tmt-form">
                 <div class="form-group">
-                    <label for="data-reserva">Data da Reserva (Mês/Ano):</label>
-                    <input type="month" id="data-reserva" name="data-reserva" required>
+                    <label for="apartamento">Apartamento:</label>
+                    <select id="apartamento" required>
+                        <option value="">Selecionar Apartamento</option>
+                        <option value="123">Apartamento 123</option>
+                        <option value="1248">Apartamento 1248</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="valor-total">Valor Total Pago por Reserva (€):</label>
-                    <input type="number" id="valor-total" name="valor-total" step="0.01" min="0" required>
+                    <label for="valor-tmt">Valor T.M.T por noite (€):</label>
+                    <input type="number" id="valor-tmt" step="0.01" value="2.00" required>
                 </div>
                 <div class="form-group">
-                    <label for="noites-excedidas">Noites Excedidas (Além das 7 Gratuitas):</label>
-                    <input type="number" id="noites-excedidas" name="noites-excedidas" min="0" required>
+                    <label for="ano">Ano:</label>
+                    <input type="number" id="ano" required>
                 </div>
                 <div class="form-group">
-                    <label for="noites-criancas">Noites para Crianças (Até 13 anos):</label>
-                    <input type="number" id="noites-criancas" name="noites-criancas" min="0" required>
+                    <label for="mes">Mês:</label>
+                    <select id="mes" required>
+                        <option value="">Selecionar Mês</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
                 </div>
-                <button type="submit">Registrar Taxa</button>
+                <div class="form-group">
+                    <label for="valor-pago-operador">Valor Pago Operador Turístico (€):</label>
+                    <input type="number" id="valor-pago-operador" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="valor-pago-diretamente">Valor Pago Diretamente (€):</label>
+                    <input type="number" id="valor-pago-diretamente" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="noites-extra">Noites Extra 7 dias:</label>
+                    <input type="number" id="noites-extra" step="1" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="noites-criancas">Noites Crianças:</label>
+                    <input type="number" id="noites-criancas" step="1" min="0" required>
+                </div>
+                <button type="submit">Registrar T.M.T.</button>
             </form>
         </section>
 
         <section class="report-section">
-            <h2>Relatório Trimestral</h2>
-            <div id="relatorio-taxa">
-                <!-- Relatórios serão inseridos aqui -->
+            <h2 class="centered">Relatório T.M.T.</h2>
+            <div id="relatorio-tmt">
+                <!-- Relatórios serão exibidos aqui -->
             </div>
         </section>
     </main>
@@ -59,7 +92,7 @@
         <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
     </footer>
 
-
+    <!-- Importar o script.js e taxa-municipal.js como módulos -->
     <script type="module" src="../js/script.js"></script>
     <script type="module" src="../js/taxa-municipal.js"></script>
 </body>
