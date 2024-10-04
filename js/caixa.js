@@ -98,3 +98,5 @@ async function carregarRelatorio() {
 document.addEventListener('DOMContentLoaded', () => {
     carregarRelatorio();
 });
+
+// V1
