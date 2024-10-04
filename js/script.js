@@ -1,6 +1,27 @@
 // js/script.js
 
-// Defina funções ou variáveis globais, se necessário
+// Importar as funções necessárias do Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+// Configuração do Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyBRx2EYDi3FpfmJjttO2wd9zeFVV3uH6Q0",
+    authDomain: "apartments-a4b17.firebaseapp.com",
+    projectId: "apartments-a4b17",
+    storageBucket: "apartments-a4b17.appspot.com",
+    messagingSenderId: "465612199373",
+    appId: "1:465612199373:web:2b8e1eb14f453caa532084"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+
+// Inicializar Firestore
+const db = getFirestore(app);
+
+// Exportar Firestore para uso nos outros módulos
+export { db };
 
 // Exemplo: Função para copiar texto
 function copiarMensagem(texto) {
