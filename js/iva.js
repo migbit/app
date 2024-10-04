@@ -22,21 +22,21 @@ ivaForm.addEventListener('submit', async (e) => {
     const params = new URLSearchParams({
         action: 'add',
         data_compra: dataCompra,
-        valor_iva: valorIva // Corrigido para 'valor_iva'
+        valor_iva: valorIva
     });
 
     try {
         const response = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
-            method: 'GET' // Utilize 'POST' se o seu script está configurado para lidar com POST
+            method: 'GET'
         });
         const result = await response.json();
-        console.log('Resposta do servidor:', result); // Adicionado para depuração
+        console.log('Resposta do servidor:', result);
         if (result.success) {
             alert('IVA registrado com sucesso!');
             ivaForm.reset();
             carregarRelatorio();
         } else {
-            alert(`Erro: ${result.error}`);
+            alert(`Erro: ${result.error || 'Ocorreu um erro desconhecido'}`);
         }
     } catch (error) {
         console.error("Erro ao registrar IVA: ", error);
@@ -56,7 +56,7 @@ async function carregarRelatorio() {
             method: 'GET'
         });
         const data = await response.json();
-        console.log('Dados recebidos:', data); // Adicionado para depuração
+        console.log('Dados recebidos:', data);
 
         if (data.error) {
             relatorioIvaDiv.innerHTML = `<p>Erro: ${data.error}</p>`;
@@ -65,12 +65,23 @@ async function carregarRelatorio() {
 
         if (!Array.isArray(data)) {
             relatorioIvaDiv.innerHTML = '<p>Dados recebidos em formato inesperado.</p>';
+            console.error('Dados recebidos:', data);
+            return;
+        }
+
+        if (data.length === 0) {
+            relatorioIvaDiv.innerHTML = '<p>Nenhum dado de IVA registrado.</p>';
             return;
         }
 
         // Agregar dados por trimestre
         const dados = {};
         data.forEach(entry => {
+            if (!entry['Data da Compra'] || !entry['Valor do IVA']) {
+                console.warn('Entrada inválida:', entry);
+                return;
+            }
+
             const date = new Date(entry['Data da Compra']);
             const trimestre = Math.ceil((date.getMonth() + 1) / 3);
             const ano = date.getFullYear();
