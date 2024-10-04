@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,11 +12,10 @@
         <h1>Função Caixa</h1>
         <nav>
             <ul>
-                <li><a href="../index.html">Dashboard</a></li>
+                <li><a href="../index.html">Início</a></li>
                 <li><a href="mensagens.html">Mensagens</a></li>
                 <li><a href="taxa-municipal.html">Taxa Municipal Turística</a></li>
-                <li><a href="iva.html">Função IVA</a></li>
-                <li><a href="caixa.html">Função Caixa</a></li>
+                <li><a href="caixa.html">Caixa</a></li>
                 <li><a href="modelo30.html">Modelo 30</a></li>
                 <li><a href="notas.html">Notas / Tarefas</a></li>
             </ul>
@@ -24,22 +23,15 @@
     </header>
 
     <main>
-        <section>
+        <section class="form-section">
             <h2>Registrar Transação</h2>
             <form id="caixa-form">
-                <div>
-                    <label for="descricao">Descrição da Transação:</label>
-                    <input type="text" id="descricao" required>
+                <div class="form-group">
+                    <button type="button" id="btn-entrada" class="btn-entrada">Entrada</button>
+                    <button type="button" id="btn-saida" class="btn-saida">Saída</button>
+                    <input type="hidden" id="tipo" value="">
                 </div>
-                <div>
-                    <label for="tipo">Tipo de Transação:</label>
-                    <select id="tipo" required>
-                        <option value="">Selecionar Tipo</option>
-                        <option value="Entrada">Entrada</option>
-                        <option value="Saída">Saída</option>
-                    </select>
-                </div>
-                <div>
+                <div class="form-group">
                     <label for="valor">Valor (€):</label>
                     <input type="number" id="valor" step="0.01" required>
                 </div>
@@ -47,7 +39,7 @@
             </form>
         </section>
 
-        <section>
+        <section class="report-section">
             <h2>Relatório de Caixa</h2>
             <div id="relatorio-caixa">
                 <!-- Relatórios serão exibidos aqui -->
@@ -56,9 +48,30 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
+        <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
     </footer>
 
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRx2EYDi3FpfmJjttO2wd9zeFVV3uH6Q0",
+            authDomain: "apartments-a4b17.firebaseapp.com",
+            databaseURL: "https://apartments-a4b17-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "apartments-a4b17",
+            storageBucket: "apartments-a4b17.appspot.com",
+            messagingSenderId: "465612199373",
+            appId: "1:465612199373:web:2b8e1eb14f453caa532084"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
     <script type="module" src="../js/script.js"></script>
     <script type="module" src="../js/caixa.js"></script>
 </body>
