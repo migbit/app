@@ -11,8 +11,13 @@ const anoInput = document.getElementById('ano');
 const mesSelect = document.getElementById('mes');
 const apartamentoSelect = document.getElementById('apartamento');
 const valorTmtInput = document.getElementById('valor-tmt');
+const valorPagoDiretamenteInput = document.getElementById('valor-pago-diretamente');
+const noitesExtraInput = document.getElementById('noites-extra');
+const noitesCriancasInput = document.getElementById('noites-criancas');
 
-// Função para definir o ano e mês atuais como padrão
+/**
+ * Define o ano e mês atuais como padrão nos campos de entrada.
+ */
 function definirAnoMesAtual() {
     const hoje = new Date();
     anoInput.value = hoje.getFullYear();
@@ -22,7 +27,9 @@ function definirAnoMesAtual() {
 // Chamar a função ao carregar a página
 document.addEventListener('DOMContentLoaded', definirAnoMesAtual);
 
-// Função para adicionar um registro de T.M.T.
+/**
+ * Função para adicionar um registro de T.M.T.
+ */
 tmtForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -31,9 +38,10 @@ tmtForm.addEventListener('submit', async (e) => {
     const ano = parseInt(anoInput.value);
     const mes = parseInt(mesSelect.value);
     const valorPagoOperador = parseFloat(document.getElementById('valor-pago-operador').value);
-    const valorPagoDiretamente = parseFloat(document.getElementById('valor-pago-diretamente').value);
-    const noitesExtra = parseInt(document.getElementById('noites-extra').value);
-    const noitesCriancas = parseInt(document.getElementById('noites-criancas').value);
+    // Se os campos opcionais estiverem vazios, definir como 0
+    const valorPagoDiretamente = parseFloat(valorPagoDiretamenteInput.value) || 0;
+    const noitesExtra = parseInt(noitesExtraInput.value) || 0;
+    const noitesCriancas = parseInt(noitesCriancasInput.value) || 0;
 
     // Validações
     if (
@@ -72,7 +80,9 @@ tmtForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Função para carregar e exibir o relatório de T.M.T.
+/**
+ * Função para carregar e exibir o relatório de T.M.T.
+ */
 async function carregarRelatorio() {
     relatorioTmtDiv.innerHTML = '<p>Carregando relatório...</p>';
     try {
@@ -145,7 +155,6 @@ async function carregarRelatorio() {
                             <td>${grupo.total_noites.toFixed(2)}</td>
                          </tr>`;
             });
-
             html += '</table>';
 
             // Calcular Totais por Mês e por Trimestre
@@ -215,9 +224,17 @@ async function carregarRelatorio() {
         }
 
         relatorioTmtDiv.innerHTML = html;
+    } catch (e) {
+        console.error("Erro ao carregar relatório T.M.T.: ", e);
+        relatorioTmtDiv.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
     }
+}
 
-// Função auxiliar para obter o nome do mês a partir do número
+/**
+ * Função auxiliar para obter o nome do mês a partir do número
+ * @param {number} numeroMes - Número do mês (1-12)
+ * @returns {string} Nome do mês correspondente
+ */
 function obterNomeMes(numeroMes) {
     const meses = [
         'Janeiro', 'Fevereiro', 'Março', 'Abril',
@@ -227,7 +244,11 @@ function obterNomeMes(numeroMes) {
     return meses[numeroMes - 1] || 'Mês Inválido';
 }
 
-// Função auxiliar para obter o trimestre a partir do mês
+/**
+ * Função auxiliar para obter o trimestre a partir do mês
+ * @param {number} numeroMes - Número do mês (1-12)
+ * @returns {string} Nome do trimestre correspondente
+ */
 function obterTrimestre(numeroMes) {
     if (numeroMes >= 1 && numeroMes <= 3) return '1º Trimestre (Jan-Mar)';
     if (numeroMes >= 4 && numeroMes <= 6) return '2º Trimestre (Abr-Jun)';
