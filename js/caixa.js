@@ -1,9 +1,13 @@
 // js/caixa.js
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Inicializar Firestore
-const db = getFirestore();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firestore
+const db = getFirestore(app);
 
 // Selecionar elementos do DOM
 const caixaForm = document.getElementById('caixa-form');
@@ -95,5 +99,5 @@ async function carregarRelatorio() {
     }
 }
 
-// Carregar o relatório ao iniciar d
+// Carregar o relatório ao iniciar
 carregarRelatorio();
