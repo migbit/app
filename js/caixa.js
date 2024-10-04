@@ -19,15 +19,11 @@ btnSaida.addEventListener('click', () => setTipoTransacao('Saída'));
 function setTipoTransacao(tipo) {
     tipoInput.value = tipo;
     if (tipo === 'Entrada') {
-        btnEntrada.classList.add('btn-active');
-        btnEntrada.classList.remove('btn-inactive');
-        btnSaida.classList.add('btn-inactive');
-        btnSaida.classList.remove('btn-active');
+        btnEntrada.classList.add('active');
+        btnSaida.classList.remove('active');
     } else {
-        btnSaida.classList.add('btn-active');
-        btnSaida.classList.remove('btn-inactive');
-        btnEntrada.classList.add('btn-inactive');
-        btnEntrada.classList.remove('btn-active');
+        btnSaida.classList.add('active');
+        btnEntrada.classList.remove('active');
     }
 }
 
@@ -46,7 +42,7 @@ caixaForm.addEventListener('submit', async (e) => {
     try {
         await addDoc(collection(db, "caixa"), {
             tipo: tipo,
-            valor: valor,
+            valor: tipo === 'Entrada' ? valor : -valor,
             timestamp: new Date()
         });
         alert('Transação registrada com sucesso!');
@@ -65,43 +61,32 @@ async function carregarRelatorio() {
     try {
         const q = query(collection(db, "caixa"), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
-        let entradas = 0;
-        let saidas = 0;
+        let totalCaixa = 0;
         let transacoes = [];
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            if (data.tipo === "Entrada") {
-                entradas += data.valor;
-            } else if (data.tipo === "Saída") {
-                saidas += data.valor;
-            }
+            totalCaixa += data.valor;
             transacoes.push(data);
         });
 
-        const saldo = entradas - saidas;
-
-        // Criar HTML para exibir os relatórios
-        let html = '<h3>Resumo</h3>';
+        // Criar HTML para exibir as transações
+        let html = '<h3>Transações</h3>';
         html += '<table>';
-        html += '<tr><th>Tipo</th><th>Total (€)</th></tr>';
-        html += `<tr><td>Entradas</td><td>€ ${entradas.toFixed(2)}</td></tr>`;
-        html += `<tr><td>Saídas</td><td>€ ${saidas.toFixed(2)}</td></tr>`;
-        html += `<tr><td><strong>Saldo</strong></td><td><strong>€ ${saldo.toFixed(2)}</strong></td></tr>`;
-        html += '</table>';
-
-        html += '<h3>Últimas Transações</h3>';
-        html += '<table>';
-        html += '<tr><th>Tipo</th><th>Valor (€)</th><th>Data</th></tr>';
-        transacoes.slice(0, 10).forEach((t) => {
+        html += '<tr><th>Data</th><th>Tipo</th><th>Valor (€)</th></tr>';
+        transacoes.forEach((t) => {
             const date = t.timestamp.toDate().toLocaleDateString('pt-PT');
+            const valorClass = t.valor >= 0 ? 'valor-positivo' : 'valor-negativo';
             html += `<tr>
-                <td>${t.tipo}</td>
-                <td>€ ${t.valor.toFixed(2)}</td>
                 <td>${date}</td>
+                <td>${t.tipo}</td>
+                <td class="${valorClass}">€ ${Math.abs(t.valor).toFixed(2)}</td>
             </tr>`;
         });
         html += '</table>';
+
+        // Adicionar o total em caixa
+        html += `<div class="total-caixa">Total em caixa: € ${totalCaixa.toFixed(2)}</div>`;
 
         relatorioCaixaDiv.innerHTML = html;
     } catch (e) {

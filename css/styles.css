@@ -279,35 +279,31 @@ footer {
     }
 }
 
-/* Novos estilos para a página de caixa */
+
+/* Adicione isso ao final do seu arquivo styles.css */
+
+.centered {
+    text-align: center;
+}
+
 .btn-entrada, .btn-saida {
     padding: 10px 20px;
     margin: 5px;
     border: none;
     cursor: pointer;
     font-weight: bold;
+    background-color: #f0f0f0;
+    color: black;
 }
 
-.btn-entrada {
+.btn-entrada.btn-active {
     background-color: #2ecc71;
     color: white;
 }
 
-.btn-saida {
+.btn-saida.btn-active {
     background-color: #e74c3c;
     color: white;
-}
-
-.btn-active {
-    opacity: 1;
-}
-
-.btn-inactive {
-    opacity: 0.6;
-}
-
-#valor {
-    margin-top: 10px;
 }
 
 #relatorio-caixa table {
@@ -335,6 +331,18 @@ footer {
     background-color: #ddd;
 }
 
-.centered {
-    text-align: center;
+.valor-positivo {
+    color: #2ecc71;
 }
+
+.valor-negativo {
+    color: #e74c3c;
+}
+
+.total-caixa {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+/* Resto do CSS permanece o mesmo */
