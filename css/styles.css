@@ -334,3 +334,7 @@ footer {
 #relatorio-caixa tr:hover {
     background-color: #ddd;
 }
+
+.centered {
+    text-align: center;
+}
