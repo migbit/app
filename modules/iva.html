@@ -51,6 +51,28 @@
         <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
     </footer>
 
-    <script type="module" src="../js/iva.js"></script>
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBRx2EYDi3FpfmJjttO2wd9zeFVV3uH6Q0",
+            authDomain: "apartments-a4b17.firebaseapp.com",
+            databaseURL: "https://apartments-a4b17-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "apartments-a4b17",
+            storageBucket: "apartments-a4b17.appspot.com",
+            messagingSenderId: "465612199373",
+            appId: "1:465612199373:web:59f4d147e298603c532084"
+
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script src="../js/iva.js"></script>
 </body>
 </html>
