@@ -1,6 +1,6 @@
 // js/caixa.js
 
-// Importar Firestore do script.js
+// Importar a instância do Firestore do script.js e funções necessárias do Firestore
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
@@ -15,6 +15,10 @@ const tipoInput = document.getElementById('tipo');
 btnEntrada.addEventListener('click', () => setTipoTransacao('Entrada'));
 btnSaida.addEventListener('click', () => setTipoTransacao('Saída'));
 
+/**
+ * Define o tipo de transação e atualiza as classes dos botões para refletir a seleção.
+ * @param {string} tipo - O tipo de transação ('Entrada' ou 'Saída').
+ */
 function setTipoTransacao(tipo) {
     tipoInput.value = tipo;
     if (tipo === 'Entrada') {
@@ -66,7 +70,7 @@ async function carregarRelatorio() {
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             totalCaixa += data.valor;
-            transacoes.push({...data, id: doc.id});
+            transacoes.push({ ...data, id: doc.id });
         });
 
         // Criar HTML para exibir as transações
@@ -98,5 +102,3 @@ async function carregarRelatorio() {
 document.addEventListener('DOMContentLoaded', () => {
     carregarRelatorio();
 });
-
-// V1

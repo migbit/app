@@ -1,5 +1,6 @@
 // js/modelo30.js
 
+// Importar a instância do Firestore do script.js e funções necessárias do Firestore
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
@@ -9,7 +10,9 @@ const relatorioModelo30Div = document.getElementById('relatorio-modelo30');
 const anoInput = document.getElementById('ano');
 const mesSelect = document.getElementById('mes');
 
-// Função para definir o ano e mês atuais como padrão
+/**
+ * Define o ano e mês atuais como padrão nos campos de entrada.
+ */
 function definirAnoMesAtual() {
     const hoje = new Date();
     anoInput.value = hoje.getFullYear();
@@ -19,7 +22,9 @@ function definirAnoMesAtual() {
 // Chamar a função ao carregar a página
 document.addEventListener('DOMContentLoaded', definirAnoMesAtual);
 
-// Função para adicionar um registro de Modelo 30
+/**
+ * Função para adicionar um registro de Modelo 30
+ */
 modelo30Form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -49,7 +54,9 @@ modelo30Form.addEventListener('submit', async (e) => {
     }
 });
 
-// Função para carregar e exibir o relatório de Modelo 30
+/**
+ * Função para carregar e exibir o relatório de Modelo 30
+ */
 async function carregarRelatorio() {
     relatorioModelo30Div.innerHTML = '<p>Carregando relatório...</p>';
     try {
@@ -80,7 +87,11 @@ async function carregarRelatorio() {
     }
 }
 
-// Função para obter o nome do mês a partir do número
+/**
+ * Função auxiliar para obter o nome do mês a partir do número
+ * @param {number} numeroMes - Número do mês (1-12)
+ * @returns {string} Nome do mês correspondente
+ */
 function obterNomeMes(numeroMes) {
     const meses = [
         'Janeiro', 'Fevereiro', 'Março', 'Abril',
@@ -91,4 +102,6 @@ function obterNomeMes(numeroMes) {
 }
 
 // Carregar o relatório ao iniciar
-document.addEventListener('DOMContentLoaded', carregarRelatorio);
+document.addEventListener('DOMContentLoaded', () => {
+    carregarRelatorio();
+});
