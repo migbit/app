@@ -1,24 +1,8 @@
 // js/caixa.js
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-
-// Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyBRx2EYDi3FpfmJjttO2wd9zeFVV3uH6Q0",
-    authDomain: "apartments-a4b17.firebaseapp.com",
-    databaseURL: "https://apartments-a4b17-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "apartments-a4b17",
-    storageBucket: "apartments-a4b17.appspot.com",
-    messagingSenderId: "465612199373",
-    appId: "1:465612199373:web:2b8e1eb14f453caa532084"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firestore
-const db = getFirestore(app);
+// Importar Firestore do script.js
+import { db } from './script.js';
+import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Selecionar elementos do DOM
 const caixaForm = document.getElementById('caixa-form');
