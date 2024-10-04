@@ -1,14 +1,11 @@
 // js/iva.js
 
-// Função para copiar texto (importada de script.js, se necessário)
-import { copiarMensagem } from './script.js';
-
 // Selecionar elementos do DOM
 const ivaForm = document.getElementById('iva-form');
 const relatorioIvaDiv = document.getElementById('relatorio-iva');
 
 // URL do seu Google Apps Script Web App
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwd8HQ0EPfKfhxp2bFieQS74lhN3wDvbNyUBMQM1HeTtF_fQt29HEYuezZCCnztJl4W/exec'; // Substitua pelo URL real
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUxwAM0O-ED9JJ7ueM5wNU5_im9VwVbrnhQ0T3E8WJnrE5bEbQri-kmHpFDH5jJIlU/exec'; // Substitua pelo URL real
 
 // Função para adicionar um registro de IVA
 ivaForm.addEventListener('submit', async (e) => {
@@ -25,7 +22,7 @@ ivaForm.addEventListener('submit', async (e) => {
     const params = new URLSearchParams({
         action: 'add',
         data_compra: dataCompra,
-        valor_iva: valorIva
+        valor_iva: valorIva // Corrigido para 'valor_iva'
     });
 
     try {
@@ -33,6 +30,7 @@ ivaForm.addEventListener('submit', async (e) => {
             method: 'GET' // Utilize 'POST' se o seu script está configurado para lidar com POST
         });
         const result = await response.json();
+        console.log('Resposta do servidor:', result); // Adicionado para depuração
         if (result.success) {
             alert('IVA registrado com sucesso!');
             ivaForm.reset();
@@ -58,16 +56,22 @@ async function carregarRelatorio() {
             method: 'GET'
         });
         const data = await response.json();
+        console.log('Dados recebidos:', data); // Adicionado para depuração
 
         if (data.error) {
             relatorioIvaDiv.innerHTML = `<p>Erro: ${data.error}</p>`;
             return;
         }
 
+        if (!Array.isArray(data)) {
+            relatorioIvaDiv.innerHTML = '<p>Dados recebidos em formato inesperado.</p>';
+            return;
+        }
+
         // Agregar dados por trimestre
         const dados = {};
         data.forEach(entry => {
-            const date = new Date(entry.Data_da_Compra);
+            const date = new Date(entry['Data da Compra']);
             const trimestre = Math.ceil((date.getMonth() + 1) / 3);
             const ano = date.getFullYear();
             const chave = `${ano} T${trimestre}`;
@@ -75,7 +79,7 @@ async function carregarRelatorio() {
             if (!dados[chave]) {
                 dados[chave] = 0;
             }
-            dados[chave] += parseFloat(entry.Valor_do_IVA);
+            dados[chave] += parseFloat(entry['Valor do IVA']);
         });
 
         // Criar HTML para exibir os relatórios
