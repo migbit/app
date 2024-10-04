@@ -95,5 +95,5 @@ async function carregarRelatorio() {
     }
 }
 
-// Carregar o relatório ao iniciar
+// Carregar o relatório ao iniciar d
 carregarRelatorio();
