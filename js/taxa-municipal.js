@@ -1,5 +1,3 @@
-// js/taxa-municipal.js
-
 // Importar a instância do Firestore do script.js e funções necessárias do Firestore
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
@@ -105,8 +103,8 @@ async function carregarRelatorio() {
 
         for (const [apartamento, dados] of Object.entries(dadosPorApartamento)) {
             html += `<h3>Apartamento ${apartamento}</h3>`;
-            html += '<table>';
-            html += '<tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th><th>Ação</th></tr>';
+            html += '<table>'; 
+            html += '<tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr>';
 
             // Agrupar por Ano e Mês
             const dadosAgrupados = {};
@@ -120,8 +118,7 @@ async function carregarRelatorio() {
                         estadias: 0,
                         estadias_extra: 0,
                         estadias_criancas: 0,
-                        total_noites: 0,
-                        detalhes: []
+                        total_noites: 0
                     };
                 }
 
@@ -131,7 +128,6 @@ async function carregarRelatorio() {
                 dadosAgrupados[key].estadias_extra += item.noites_extra_7_dias;
                 dadosAgrupados[key].estadias_criancas += item.noites_criancas;
                 dadosAgrupados[key].total_noites += estadias + item.noites_extra_7_dias + item.noites_criancas;
-                dadosAgrupados[key].detalhes.push(item);
             });
 
             // Ordenar os grupos por Ano e Mês
@@ -155,61 +151,17 @@ async function carregarRelatorio() {
                             <td>${grupo.estadias_extra}</td>
                             <td>${grupo.estadias_criancas}</td>
                             <td>${Math.round(grupo.total_noites)}</td>
-                            <td><button class='ver-detalhes' data-detalhes='${JSON.stringify(grupo.detalhes)}'>Ver Detalhes</button></td>
                          </tr>`;
             });
-            html += '</table><hr>';
+            html += '</table>';
+
+            html += '<hr>';
         }
 
         relatorioTmtDiv.innerHTML = html;
-
-        // Adicionar event listeners para botões de detalhes
-        document.querySelectorAll('.ver-detalhes').forEach(button => {
-            button.addEventListener('click', () => mostrarDetalhes(button));
-        });
     } catch (e) {
         console.error("Erro ao carregar relatório T.M.T.: ", e);
         relatorioTmtDiv.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
-    }
-}
-
-/**
- * Função para mostrar detalhes ao clicar no botão de detalhes do mês
- */
-function mostrarDetalhes(button) {
-    let detalhesDiv = button.nextElementSibling;
-    if (detalhesDiv && detalhesDiv.classList.contains('detalhes')) {
-        // Se os detalhes já estão visíveis, ocultá-los e mudar o texto do botão
-        if (detalhesDiv.style.display === 'none') {
-            detalhesDiv.style.display = 'block';
-            button.textContent = 'Ocultar Detalhes';
-        } else {
-            detalhesDiv.style.display = 'none';
-            button.textContent = 'Ver Detalhes';
-        }
-    } else {
-        // Caso contrário, adicionar os detalhes e mudar o texto do botão
-        const detalhes = JSON.parse(button.dataset.detalhes);
-        let detailsHtml = "<div class='detalhes'><table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Pago Operador (€)</th><th>Valor Pago Diretamente (€)</th><th>Noites Extra 7 dias</th><th>Noites Crianças</th></tr></thead><tbody>";
-        detalhes.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
-            const nomeMes = obterNomeMes(mes);
-            detailsHtml += `
-                <tr>
-                    <td>${ano}</td>
-                    <td>${nomeMes}</td>
-                    <td>€ ${valor_pago_operador_turistico.toFixed(2)}</td>
-                    <td>€ ${valor_pago_diretamente.toFixed(2)}</td>
-                    <td>${noites_extra_7_dias}</td>
-                    <td>${noites_criancas}</td>
-                </tr>`;
-        });
-        detailsHtml += "</tbody></table></div>";
-        const div = document.createElement("div");
-        div.classList.add('detalhes');
-        div.style.display = 'block';
-        div.innerHTML = detailsHtml;
-        button.parentElement.appendChild(div);
-        button.textContent = 'Ocultar Detalhes';
     }
 }
 
