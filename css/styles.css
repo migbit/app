@@ -184,11 +184,22 @@ footer {
     padding: 10px 0;
 }
 
-#apartamento option[value="1248"] {
-    margin-top: 10px;
-}
+/* Linha separação */
+.form-section div {
+    background-color: #f7f7f7;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+ 
+  
+.form-section div > span {
+    display: inline-block;
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+  }
 
-/* Responsiveness */
+  /* Responsiveness */
 @media (max-width: 600px) {
     nav ul {
         flex-direction: column;
