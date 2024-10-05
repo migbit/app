@@ -62,20 +62,43 @@ async function carregarRelatorio() {
     try {
         const q = query(collection(db, "modelo30"), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
-        let html = '<table>';
-        html += '<tr><th>Ano</th><th>Mês</th><th>Valor (€)</th></tr>';
+        
+        // Objeto para armazenar os valores agrupados por ano e mês
+        const valoresAgrupados = {};
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             const ano = data.ano;
             const mes = data.mes;
-            const valor = data.valor.toFixed(2);
+            const valor = data.valor;
+
+            const chave = `${ano}-${mes}`;
+            if (!valoresAgrupados[chave]) {
+                valoresAgrupados[chave] = { ano, mes, valor };
+            } else {
+                valoresAgrupados[chave].valor += valor;
+            }
+        });
+
+        // Converter o objeto em array e ordenar por ano e mês (decrescente)
+        const valoresOrdenados = Object.values(valoresAgrupados).sort((a, b) => {
+            if (a.ano !== b.ano) return b.ano - a.ano;
+            return b.mes - a.mes;
+        });
+
+        let html = '<table>';
+        html += '<tr><th>Ano</th><th>Mês</th><th>Valor Total (€)</th></tr>';
+
+        valoresOrdenados.forEach((item) => {
+            const ano = item.ano;
+            const mes = item.mes;
+            const valorTotal = item.valor.toFixed(2);
             const nomeMes = obterNomeMes(mes);
 
             html += `<tr>
                         <td>${ano}</td>
                         <td>${nomeMes}</td>
-                        <td>€ ${valor}</td>
+                        <td>€ ${valorTotal}</td>
                      </tr>`;
         });
 
