@@ -164,19 +164,23 @@ async function carregarRelatorio() {
 
                 if (!totaisPorTrimestreEAno[anoTrimestreKey]) {
                     totaisPorTrimestreEAno[anoTrimestreKey] = {
-                        valor: 0,
-                        noites: 0
+                        estadias: 0,
+                        estadias_extra: 0,
+                        estadias_criancas: 0,
+                        total_noites: 0
                     };
                 }
 
-                totaisPorTrimestreEAno[anoTrimestreKey].valor += item.valor_pago_operador_turistico + item.valor_pago_diretamente;
-                totaisPorTrimestreEAno[anoTrimestreKey].noites += item.noites_extra_7_dias + item.noites_criancas + (item.valor_pago_operador_turistico + item.valor_pago_diretamente) / item.valor_tmt_por_noite;
+                totaisPorTrimestreEAno[anoTrimestreKey].estadias += (item.valor_pago_operador_turistico + item.valor_pago_diretamente) / item.valor_tmt_por_noite;
+                totaisPorTrimestreEAno[anoTrimestreKey].estadias_extra += item.noites_extra_7_dias;
+                totaisPorTrimestreEAno[anoTrimestreKey].estadias_criancas += item.noites_criancas;
+                totaisPorTrimestreEAno[anoTrimestreKey].total_noites += (item.valor_pago_operador_turistico + item.valor_pago_diretamente) / item.valor_tmt_por_noite + item.noites_extra_7_dias + item.noites_criancas;
             });
 
             // Exibir totais por trimestre e ano para cada apartamento
-            let totaisHtml = "<h3>Totais por Trimestre e Ano - Apartamento " + apartamento + "</h3><table><thead><tr><th>Trimestre</th><th>Valor Total (€)</th><th>Total Noites</th></tr></thead><tbody>";
+            let totaisHtml = "<h3>Totais por Trimestre e Ano - Apartamento " + apartamento + "</h3><table><thead><tr><th>Trimestre</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr></thead><tbody>";
             for (const [key, dados] of Object.entries(totaisPorTrimestreEAno)) {
-                totaisHtml += `<tr><td>${key}</td><td>€ ${dados.valor.toFixed(2)}</td><td>${Math.round(dados.noites)}</td></tr>`;
+                totaisHtml += `<tr><td>${key}</td><td>${Math.round(dados.estadias)}</td><td>${dados.estadias_extra}</td><td>${dados.estadias_criancas}</td><td>${Math.round(dados.total_noites)}</td></tr>`;
             }
             totaisHtml += "</tbody></table>";
 
