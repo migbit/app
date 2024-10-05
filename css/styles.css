@@ -98,7 +98,7 @@ button:hover {
     background-color: #45a049;
 }
 
-/* Table Styles (for all tables including Modelo 30) */
+/* Table Styles (for all tables) */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -130,11 +130,6 @@ tr:hover {
 
 td:last-child {
     text-align: right;
-}
-
-/* Specific Styles for Modelo 30 */
-#relatorio-modelo30 table {
-    /* These styles are now covered by the general table styles above */
 }
 
 /* Specific Styles for Caixa */
