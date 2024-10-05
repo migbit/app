@@ -31,6 +31,7 @@
                     <select id="apartamento" required>
                         <option value="">Selecionar Apartamento</option>
                         <option value="123">Apartamento 123</option>
+                        <div style="height: 1px; border-bottom: 1px solid #ccc;"></div> <!-- Linha de separação -->
                         <option value="1248">Apartamento 1248</option>
                     </select>
                 </div>
@@ -80,11 +81,16 @@
             </form>
         </section>
 
-        <div style="margin-top: 30px;"></div>
+        <section class="report-section">
+            <h2 class="centered">Relatório T.M.T.</h2>
+            <div id="relatorio-tmt">
+                <!-- Relatórios serão exibidos aqui -->
+            </div>
+        </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Seu Nome. Todos os direitos reservados 15:36.</p>
+        <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
     </footer>
 
     <!-- Importar o script.js e taxa-municipal.js como módulos -->
@@ -95,11 +101,16 @@
          * Atualizar a função mostrarDetalhes para alternar entre mostrar e ocultar detalhes.
          */
         function mostrarDetalhes(button) {
-            const detalhesDiv = button.nextElementSibling;
+            let detalhesDiv = button.nextElementSibling;
             if (detalhesDiv && detalhesDiv.classList.contains('detalhes')) {
-                // Se os detalhes já estão visíveis, removê-los e mudar o texto do botão
-                detalhesDiv.remove();
-                button.textContent = 'Ver Detalhes';
+                // Se os detalhes já estão visíveis, ocultá-los e mudar o texto do botão
+                if (detalhesDiv.style.display === 'none') {
+                    detalhesDiv.style.display = 'block';
+                    button.textContent = 'Ocultar Detalhes';
+                } else {
+                    detalhesDiv.style.display = 'none';
+                    button.textContent = 'Ver Detalhes';
+                }
             } else {
                 // Caso contrário, adicionar os detalhes e mudar o texto do botão
                 const detalhes = JSON.parse(button.dataset.detalhes);
@@ -118,6 +129,8 @@
                 });
                 detailsHtml += "</tbody></table></div>";
                 const div = document.createElement("div");
+                div.classList.add('detalhes');
+                div.style.display = 'block';
                 div.innerHTML = detailsHtml;
                 button.parentElement.appendChild(div);
                 button.textContent = 'Ocultar Detalhes';
