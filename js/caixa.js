@@ -21,13 +21,17 @@ btnSaida.addEventListener('click', () => setTipoTransacao('Saída'));
  */
 function setTipoTransacao(tipo) {
     tipoInput.value = tipo;
-    if (tipo === 'Entrada') {
-        btnEntrada.classList.add('btn-active');
-        btnSaida.classList.remove('btn-active');
-    } else {
-        btnSaida.classList.add('btn-active');
-        btnEntrada.classList.remove('btn-active');
-    }
+    btnEntrada.classList.toggle('btn-active', tipo === 'Entrada');
+    btnSaida.classList.toggle('btn-active', tipo === 'Saída');
+}
+
+/**
+ * Formata um número com separadores de milhares e duas casas decimais.
+ * @param {number} number - O número a ser formatado.
+ * @returns {string} O número formatado.
+ */
+function formatNumber(number) {
+    return number.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 // Função para adicionar uma transação
@@ -80,16 +84,19 @@ async function carregarRelatorio() {
         transacoes.forEach((t) => {
             const date = t.timestamp.toDate().toLocaleDateString('pt-PT');
             const valorClass = t.valor >= 0 ? 'valor-positivo' : 'valor-negativo';
+            const formattedValor = formatNumber(Math.abs(t.valor));
             html += `<tr>
                 <td>${date}</td>
                 <td>${t.tipo}</td>
-                <td class="${valorClass}">€ ${Math.abs(t.valor).toFixed(2)}</td>
+                <td class="${valorClass} formatted-number">${t.valor >= 0 ? '+' : '-'}€${formattedValor}</td>
             </tr>`;
         });
         html += '</table>';
 
         // Adicionar o total em caixa
-        html += `<div class="total-caixa">Total em caixa: € ${totalCaixa.toFixed(2)}</div>`;
+        const totalClass = totalCaixa >= 0 ? 'valor-positivo' : 'valor-negativo';
+        const formattedTotal = formatNumber(Math.abs(totalCaixa));
+        html += `<div class="total-caixa">Total em caixa: <span class="${totalClass} formatted-number">${totalCaixa >= 0 ? '+' : '-'}€${formattedTotal}</span></div>`;
 
         relatorioCaixaDiv.innerHTML = html;
     } catch (e) {
