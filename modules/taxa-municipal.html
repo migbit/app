@@ -114,16 +114,16 @@
                 // Caso contrário, adicionar os detalhes e mudar o texto do botão
                 const detalhes = JSON.parse(button.dataset.detalhes);
                 let detailsHtml = "<div class='detalhes'><table><thead><tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr></thead><tbody>";
-                detalhes.forEach(({ ano, mes, estadias, estadias_extra, estadias_criancas, total_noites }) => {
+                detalhes.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
                     const nomeMes = obterNomeMes(mes);
                     detailsHtml += `
                         <tr>
                             <td>${ano}</td>
                             <td>${nomeMes}</td>
-                            <td>${Math.round(estadias)}</td>
-                            <td>${estadias_extra}</td>
-                            <td>${estadias_criancas}</td>
-                            <td>${Math.round(total_noites)}</td>
+                            <td>€ ${valor_pago_operador_turistico.toFixed(2)}</td>
+                            <td>€ ${valor_pago_diretamente.toFixed(2)}</td>
+                            <td>${noites_extra_7_dias}</td>
+                            <td>${noites_criancas}</td>
                         </tr>`;
                 });
                 detailsHtml += "</tbody></table></div>";
