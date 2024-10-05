@@ -31,7 +31,7 @@ function setTipoTransacao(tipo) {
  * @returns {string} O número formatado.
  */
 function formatNumber(number) {
-    return number.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\./g, ',');
+    return number.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\s/g, '.').replace(/,(?=\d{3})/g, '.').replace(/\./g, ',');
 }
 
 // Função para adicionar uma transação
