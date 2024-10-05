@@ -180,8 +180,13 @@ function mostrarDetalhes(button) {
     let detalhesDiv = button.nextElementSibling;
     if (detalhesDiv && detalhesDiv.classList.contains('detalhes')) {
         // Se os detalhes já estão visíveis, ocultá-los e mudar o texto do botão
-        detalhesDiv.style.display = detalhesDiv.style.display === 'none' ? 'block' : 'none';
-        button.textContent = detalhesDiv.style.display === 'none' ? 'Ver Detalhes' : 'Ocultar Detalhes';
+        if (detalhesDiv.style.display === 'none') {
+            detalhesDiv.style.display = 'block';
+            button.textContent = 'Ocultar Detalhes';
+        } else {
+            detalhesDiv.style.display = 'none';
+            button.textContent = 'Ver Detalhes';
+        }
     } else {
         // Caso contrário, adicionar os detalhes e mudar o texto do botão
         const detalhes = JSON.parse(button.dataset.detalhes);
@@ -200,6 +205,8 @@ function mostrarDetalhes(button) {
         });
         detailsHtml += "</tbody></table></div>";
         const div = document.createElement("div");
+        div.classList.add('detalhes');
+        div.style.display = 'block';
         div.innerHTML = detailsHtml;
         button.parentElement.appendChild(div);
         button.textContent = 'Ocultar Detalhes';
