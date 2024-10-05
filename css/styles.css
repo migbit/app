@@ -87,7 +87,7 @@ input[type="checkbox"] {
 
 button {
     padding: 8px 16px;
-    background-color: #d3d3d3;
+    background-color: #b0b0b0;
     border: none;
     color: white;
     cursor: pointer;
@@ -148,7 +148,7 @@ td:last-child {
 }
 
 .btn-entrada.btn-active {
-    background-color: #a9a9a9;
+    background-color: #b0b0b0;
     color: white;
 }
 
