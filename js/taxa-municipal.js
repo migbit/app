@@ -104,7 +104,7 @@ async function carregarRelatorio() {
         for (const [apartamento, dados] of Object.entries(dadosPorApartamento)) {
             html += `<h3>Apartamento ${apartamento}</h3>`;
             html += '<table>';
-            html += '<tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr>';
+            html += '<tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th><th>Ações</th></tr>';
 
             // Agrupar por Ano e Mês
             const dadosAgrupados = {};
@@ -118,7 +118,8 @@ async function carregarRelatorio() {
                         estadias: 0,
                         estadias_extra: 0,
                         estadias_criancas: 0,
-                        total_noites: 0
+                        total_noites: 0,
+                        detalhes: []
                     };
                 }
 
@@ -128,6 +129,7 @@ async function carregarRelatorio() {
                 dadosAgrupados[key].estadias_extra += item.noites_extra_7_dias;
                 dadosAgrupados[key].estadias_criancas += item.noites_criancas;
                 dadosAgrupados[key].total_noites += estadias + item.noites_extra_7_dias + item.noites_criancas;
+                dadosAgrupados[key].detalhes.push(item);
             });
 
             // Ordenar os grupos por Ano e Mês
@@ -151,6 +153,7 @@ async function carregarRelatorio() {
                             <td>${grupo.estadias_extra}</td>
                             <td>${grupo.estadias_criancas}</td>
                             <td>${Math.round(grupo.total_noites)}</td>
+                            <td><button onclick='mostrarDetalhes(this)' data-detalhes='${JSON.stringify(grupo.detalhes)}'>Ver Detalhes</button></td>
                          </tr>`;
             });
             html += '</table>';
