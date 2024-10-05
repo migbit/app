@@ -67,36 +67,21 @@ async function carregarRelatorio() {
         const q = query(collection(db, "tmt"), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
 
-        const groupedData = {};
+        const groupedData123 = [];
+        const groupedData1248 = [];
 
         querySnapshot.forEach((doc) => {
-            const { ano, mes, apartamento, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas } = doc.data();
-            const key = `${ano}-${mes}-${apartamento}`;
-            if (!groupedData[key]) {
-                groupedData[key] = {
-                    ano,
-                    mes,
-                    apartamento,
-                    valor_pago_operador_turistico,
-                    valor_pago_diretamente,
-                    noites_extra_7_dias,
-                    noites_criancas
-                };
-            } else {
-                groupedData[key].valor_pago_operador_turistico += valor_pago_operador_turistico;
-                groupedData[key].valor_pago_diretamente += valor_pago_diretamente;
-                groupedData[key].noites_extra_7_dias += noites_extra_7_dias;
-                groupedData[key].noites_criancas += noites_criancas;
+            const data = doc.data();
+            if (data.apartamento === "123") {
+                groupedData123.push(data);
+            } else if (data.apartamento === "1248") {
+                groupedData1248.push(data);
             }
         });
 
-        const sortedData = Object.values(groupedData).sort((a, b) => {
-            if (a.ano !== b.ano) return b.ano - a.ano;
-            return b.mes - a.mes;
-        });
-
-        const tableHTML = generateReportTable(sortedData);
-        relatorioTmtDiv.innerHTML = tableHTML;
+        const tableHTML123 = generateReportTable(groupedData123, "Apartamento 123");
+        const tableHTML1248 = generateReportTable(groupedData1248, "Apartamento 1248");
+        relatorioTmtDiv.innerHTML = tableHTML123 + tableHTML1248;
     } catch (e) {
         console.error("Erro ao carregar relatório T.M.T.: ", e);
         relatorioTmtDiv.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
@@ -104,14 +89,14 @@ async function carregarRelatorio() {
 }
 
 // Função para gerar tabela HTML para o relatório
-function generateReportTable(data) {
+function generateReportTable(data, titulo) {
     let html = `
+        <h3>${titulo}</h3>
         <table>
             <thead>
                 <tr>
                     <th>Ano</th>
                     <th>Mês</th>
-                    <th>Apartamento</th>
                     <th>Valor Pago Operador (€)</th>
                     <th>Valor Pago Diretamente (€)</th>
                     <th>Noites Extra 7 dias</th>
@@ -120,13 +105,12 @@ function generateReportTable(data) {
             </thead>
             <tbody>
     `;
-    data.forEach(({ ano, mes, apartamento, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
+    data.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
         const nomeMes = obterNomeMes(mes);
         html += `
             <tr>
                 <td>${ano}</td>
                 <td>${nomeMes}</td>
-                <td>${apartamento}</td>
                 <td>€ ${valor_pago_operador_turistico.toFixed(2)}</td>
                 <td>€ ${valor_pago_diretamente.toFixed(2)}</td>
                 <td>${noites_extra_7_dias}</td>
