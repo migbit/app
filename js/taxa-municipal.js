@@ -158,7 +158,34 @@ async function carregarRelatorio() {
             html += '<hr>';
         }
 
-        relatorioTmtDiv.innerHTML = html;
+        // Calcular totais por trimestre e ano
+        const totaisPorTrimestreEAno = {};
+
+        for (const [apartamento, dados] of Object.entries(dadosPorApartamento)) {
+            dados.forEach((item) => {
+                const trimestre = Math.ceil(item.mes / 3);
+                const anoTrimestreKey = `${item.ano} - ${trimestre}º Trimestre`;
+
+                if (!totaisPorTrimestreEAno[anoTrimestreKey]) {
+                    totaisPorTrimestreEAno[anoTrimestreKey] = {
+                        valor: 0,
+                        noites: 0
+                    };
+                }
+
+                totaisPorTrimestreEAno[anoTrimestreKey].valor += item.valor_pago_operador_turistico + item.valor_pago_diretamente;
+                totaisPorTrimestreEAno[anoTrimestreKey].noites += item.noites_extra_7_dias + item.noites_criancas + (item.valor_pago_operador_turistico + item.valor_pago_diretamente) / item.valor_tmt_por_noite;
+            });
+        }
+
+        // Exibir totais por trimestre e ano
+        let totaisHtml = "<h3>Totais por Trimestre e Ano</h3><table><thead><tr><th>Trimestre</th><th>Valor Total (€)</th><th>Total Noites</th></tr></thead><tbody>";
+        for (const [key, dados] of Object.entries(totaisPorTrimestreEAno)) {
+            totaisHtml += `<tr><td>${key}</td><td>€ ${dados.valor.toFixed(2)}</td><td>${Math.round(dados.noites)}</td></tr>`;
+        }
+        totaisHtml += "</tbody></table>";
+
+        relatorioTmtDiv.innerHTML = html + totaisHtml;
     } catch (e) {
         console.error("Erro ao carregar relatório T.M.T.: ", e);
         relatorioTmtDiv.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
