@@ -91,12 +91,12 @@ async function carregarRelatorio() {
 // Função para gerar tabela de resumo e permitir detalhes
 function generateSummaryAndDetailsTable(data, titulo) {
     const groupedByMonth = {};
-    data.forEach((entry) => {
-        const key = `${entry.ano}-${entry.mes}`;
+    data.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
+        const key = `${ano}-${mes}`;
         if (!groupedByMonth[key]) {
             groupedByMonth[key] = [];
         }
-        groupedByMonth[key].push(entry);
+        groupedByMonth[key].push({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas });
     });
 
     let html = `<h3>${titulo}</h3>`;
