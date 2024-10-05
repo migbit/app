@@ -201,3 +201,40 @@ footer {
         max-width: 100%;
     }
 }
+
+/* Add these styles to your existing CSS file (e.g., styles.css) */
+
+/* Add space after each table */
+table {
+    margin-bottom: 30px;
+}
+
+/* Style for apartment headings */
+#relatorio-tmt h3 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+/* Style for "Totais por Trimestre e Ano" headings */
+#relatorio-tmt h4 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    color: #555;
+}
+
+/* Add a divider between apartment sections */
+#relatorio-tmt > div {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+}
+
+/* Remove border from the last apartment section */
+#relatorio-tmt > div:last-child {
+    border-bottom: none;
+}
