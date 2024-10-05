@@ -1,36 +1,29 @@
 // js/modelo30.js
 
-// Importar a instância do Firestore do script.js e funções necessárias do Firestore
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Selecionar elementos do DOM
+// DOM Elements
 const modelo30Form = document.getElementById('modelo30-form');
 const relatorioModelo30Div = document.getElementById('relatorio-modelo30');
 const anoInput = document.getElementById('ano');
 const mesSelect = document.getElementById('mes');
+const valorInput = document.getElementById('valor');
 
-/**
- * Define o ano e mês atuais como padrão nos campos de entrada.
- */
-function definirAnoMesAtual() {
-    const hoje = new Date();
-    anoInput.value = hoje.getFullYear();
-    mesSelect.value = hoje.getMonth() + 1; // getMonth() retorna de 0 a 11
+// Initialize form with current year and month
+function initializeForm() {
+    const today = new Date();
+    anoInput.value = today.getFullYear();
+    mesSelect.value = today.getMonth() + 1; // getMonth() returns 0-11
 }
 
-// Chamar a função ao carregar a página
-document.addEventListener('DOMContentLoaded', definirAnoMesAtual);
-
-/**
- * Função para adicionar um registro de Modelo 30
- */
-modelo30Form.addEventListener('submit', async (e) => {
+// Add Modelo 30 entry
+async function addModelo30Entry(e) {
     e.preventDefault();
 
     const ano = parseInt(anoInput.value);
     const mes = parseInt(mesSelect.value);
-    const valor = parseFloat(document.getElementById('valor').value);
+    const valor = parseFloat(valorInput.value);
 
     if (isNaN(ano) || isNaN(mes) || isNaN(valor) || ano < 2000 || mes < 1 || mes > 12 || valor <= 0) {
         alert('Por favor, insira dados válidos.');
@@ -39,92 +32,85 @@ modelo30Form.addEventListener('submit', async (e) => {
 
     try {
         await addDoc(collection(db, "modelo30"), {
-            ano: ano,
-            mes: mes,
-            valor: valor,
+            ano,
+            mes,
+            valor,
             timestamp: new Date()
         });
         alert('Modelo 30 registrado com sucesso!');
         modelo30Form.reset();
-        definirAnoMesAtual();
-        carregarRelatorio();
-    } catch (e) {
-        console.error("Erro ao registrar Modelo 30: ", e);
+        initializeForm();
+        loadReport();
+    } catch (error) {
+        console.error("Erro ao registrar Modelo 30: ", error);
         alert('Ocorreu um erro ao registrar o Modelo 30.');
     }
-});
+}
 
-/**
- * Função para carregar e exibir o relatório de Modelo 30
- */
-async function carregarRelatorio() {
+// Load and display Modelo 30 report
+async function loadReport() {
     relatorioModelo30Div.innerHTML = '<p>Carregando relatório...</p>';
     try {
         const q = query(collection(db, "modelo30"), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
         
-        // Objeto para armazenar os valores agrupados por ano e mês
-        const valoresAgrupados = {};
+        const groupedData = {};
 
         querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const ano = data.ano;
-            const mes = data.mes;
-            const valor = data.valor;
-
-            const chave = `${ano}-${mes}`;
-            if (!valoresAgrupados[chave]) {
-                valoresAgrupados[chave] = { ano, mes, valor };
+            const { ano, mes, valor } = doc.data();
+            const key = `${ano}-${mes}`;
+            if (!groupedData[key]) {
+                groupedData[key] = { ano, mes, valor };
             } else {
-                valoresAgrupados[chave].valor += valor;
+                groupedData[key].valor += valor;
             }
         });
 
-        // Converter o objeto em array e ordenar por ano e mês (decrescente)
-        const valoresOrdenados = Object.values(valoresAgrupados).sort((a, b) => {
+        const sortedData = Object.values(groupedData).sort((a, b) => {
             if (a.ano !== b.ano) return b.ano - a.ano;
             return b.mes - a.mes;
         });
 
-        let html = '<table>';
-        html += '<tr><th>Ano</th><th>Mês</th><th>Valor Total (€)</th></tr>';
-
-        valoresOrdenados.forEach((item) => {
-            const ano = item.ano;
-            const mes = item.mes;
-            const valorTotal = item.valor.toFixed(2);
-            const nomeMes = obterNomeMes(mes);
-
-            html += `<tr>
-                        <td>${ano}</td>
-                        <td>${nomeMes}</td>
-                        <td>€ ${valorTotal}</td>
-                     </tr>`;
-        });
-
-        html += '</table>';
-        relatorioModelo30Div.innerHTML = html;
-    } catch (e) {
-        console.error("Erro ao carregar relatório Modelo 30: ", e);
+        const tableHTML = generateReportTable(sortedData);
+        relatorioModelo30Div.innerHTML = tableHTML;
+    } catch (error) {
+        console.error("Erro ao carregar relatório Modelo 30: ", error);
         relatorioModelo30Div.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
     }
 }
 
-/**
- * Função auxiliar para obter o nome do mês a partir do número
- * @param {number} numeroMes - Número do mês (1-12)
- * @returns {string} Nome do mês correspondente
- */
-function obterNomeMes(numeroMes) {
-    const meses = [
-        'Janeiro', 'Fevereiro', 'Março', 'Abril',
-        'Maio', 'Junho', 'Julho', 'Agosto',
-        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-    ];
-    return meses[numeroMes - 1] || 'Mês Inválido';
+// Generate HTML table for the report
+function generateReportTable(data) {
+    let html = '<table><tr><th>Ano</th><th>Mês</th><th>Valor Total (€)</th></tr>';
+    data.forEach(({ ano, mes, valor }) => {
+        html += `
+            <tr>
+                <td>${ano}</td>
+                <td>${getMonthName(mes)}</td>
+                <td>€ ${valor.toFixed(2)}</td>
+            </tr>
+        `;
+    });
+    html += '</table>';
+    return html;
 }
 
-// Carregar o relatório ao iniciar
+// Get month name from month number
+function getMonthName(monthNumber) {
+    const months = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+    return months[monthNumber - 1] || 'Mês Inválido';
+}
+
+// Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    carregarRelatorio();
+    initializeForm();
+    loadReport();
 });
+
+modelo30Form.addEventListener('submit', addModelo30Entry);
+
+// Export functions for potential use in other modules
+export { loadReport, initializeForm };
