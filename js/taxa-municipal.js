@@ -103,7 +103,7 @@ async function carregarRelatorio() {
 
         for (const [apartamento, dados] of Object.entries(dadosPorApartamento)) {
             html += `<h3>Apartamento ${apartamento}</h3>`;
-            html += '<table>'; 
+            html += '<table>';
             html += '<tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr>';
 
             // Agrupar por Ano e Mês
@@ -155,13 +155,9 @@ async function carregarRelatorio() {
             });
             html += '</table>';
 
-            html += '<hr>';
-        }
+            // Calcular totais por trimestre e ano para cada apartamento
+            const totaisPorTrimestreEAno = {};
 
-        // Calcular totais por trimestre e ano
-        const totaisPorTrimestreEAno = {};
-
-        for (const [apartamento, dados] of Object.entries(dadosPorApartamento)) {
             dados.forEach((item) => {
                 const trimestre = Math.ceil(item.mes / 3);
                 const anoTrimestreKey = `${item.ano} - ${trimestre}º Trimestre`;
@@ -176,16 +172,19 @@ async function carregarRelatorio() {
                 totaisPorTrimestreEAno[anoTrimestreKey].valor += item.valor_pago_operador_turistico + item.valor_pago_diretamente;
                 totaisPorTrimestreEAno[anoTrimestreKey].noites += item.noites_extra_7_dias + item.noites_criancas + (item.valor_pago_operador_turistico + item.valor_pago_diretamente) / item.valor_tmt_por_noite;
             });
+
+            // Exibir totais por trimestre e ano para cada apartamento
+            let totaisHtml = "<h3>Totais por Trimestre e Ano - Apartamento " + apartamento + "</h3><table><thead><tr><th>Trimestre</th><th>Valor Total (€)</th><th>Total Noites</th></tr></thead><tbody>";
+            for (const [key, dados] of Object.entries(totaisPorTrimestreEAno)) {
+                totaisHtml += `<tr><td>${key}</td><td>€ ${dados.valor.toFixed(2)}</td><td>${Math.round(dados.noites)}</td></tr>`;
+            }
+            totaisHtml += "</tbody></table>";
+
+            html += totaisHtml;
+            html += '<hr>';
         }
 
-        // Exibir totais por trimestre e ano
-        let totaisHtml = "<h3>Totais por Trimestre e Ano</h3><table><thead><tr><th>Trimestre</th><th>Valor Total (€)</th><th>Total Noites</th></tr></thead><tbody>";
-        for (const [key, dados] of Object.entries(totaisPorTrimestreEAno)) {
-            totaisHtml += `<tr><td>${key}</td><td>€ ${dados.valor.toFixed(2)}</td><td>${Math.round(dados.noites)}</td></tr>`;
-        }
-        totaisHtml += "</tbody></table>";
-
-        relatorioTmtDiv.innerHTML = html + totaisHtml;
+        relatorioTmtDiv.innerHTML = html;
     } catch (e) {
         console.error("Erro ao carregar relatório T.M.T.: ", e);
         relatorioTmtDiv.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
@@ -194,8 +193,6 @@ async function carregarRelatorio() {
 
 /**
  * Função auxiliar para obter o nome do mês a partir do número
- * @param {number} numeroMes - Número do mês (1-12)
- * @returns {string} Nome do mês correspondente
  */
 function obterNomeMes(numeroMes) {
     const meses = [
