@@ -79,35 +79,52 @@ async function carregarRelatorio() {
             }
         });
 
-        const tableHTML123 = generateReportTable(groupedData123, "Apartamento 123");
-        const tableHTML1248 = generateReportTable(groupedData1248, "Apartamento 1248");
-        relatorioTmtDiv.innerHTML = tableHTML123 + tableHTML1248;
+        const tableHTML123 = generateSummaryAndDetailsTable(groupedData123, "Apartamento 123");
+        const tableHTML1248 = generateSummaryAndDetailsTable(groupedData1248, "Apartamento 1248");
+        relatorioTmtDiv.innerHTML = tableHTML123 + "<br><br>" + tableHTML1248;
     } catch (e) {
         console.error("Erro ao carregar relatório T.M.T.: ", e);
         relatorioTmtDiv.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
     }
 }
 
-// Função para gerar tabela HTML para o relatório
-function generateReportTable(data, titulo) {
-    let html = `
-        <h3>${titulo}</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Ano</th>
-                    <th>Mês</th>
-                    <th>Valor Pago Operador (€)</th>
-                    <th>Valor Pago Diretamente (€)</th>
-                    <th>Noites Extra 7 dias</th>
-                    <th>Noites Crianças</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-    data.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
-        const nomeMes = obterNomeMes(mes);
+// Função para gerar tabela de resumo e permitir detalhes
+function generateSummaryAndDetailsTable(data, titulo) {
+    const groupedByMonth = {};
+    data.forEach((entry) => {
+        const key = `${entry.ano}-${entry.mes}`;
+        if (!groupedByMonth[key]) {
+            groupedByMonth[key] = [];
+        }
+        groupedByMonth[key].push(entry);
+    });
+
+    let html = `<h3>${titulo}</h3>`;
+    Object.keys(groupedByMonth).forEach((key) => {
+        const [ano, mes] = key.split("-");
+        const monthName = obterNomeMes(parseInt(mes));
+        const totalOperador = groupedByMonth[key].reduce((sum, item) => sum + item.valor_pago_operador_turistico, 0).toFixed(2);
+        const totalDiretamente = groupedByMonth[key].reduce((sum, item) => sum + item.valor_pago_diretamente, 0).toFixed(2);
+
         html += `
+            <div class="monthly-summary" data-details='${JSON.stringify(groupedByMonth[key])}'>
+                <h4>${monthName} ${ano}</h4>
+                <p>Valor Pago Operador: € ${totalOperador}</p>
+                <p>Valor Pago Diretamente: € ${totalDiretamente}</p>
+                <button onclick='mostrarDetalhes(this)'>Ver Detalhes</button>
+            </div>
+        `;
+    });
+    return html;
+}
+
+// Função para mostrar detalhes ao clicar
+function mostrarDetalhes(button) {
+    const details = JSON.parse(button.parentElement.dataset.details);
+    let detailsHtml = "<table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Pago Operador (€)</th><th>Valor Pago Diretamente (€)</th><th>Noites Extra 7 dias</th><th>Noites Crianças</th></tr></thead><tbody>";
+    details.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
+        const nomeMes = obterNomeMes(mes);
+        detailsHtml += `
             <tr>
                 <td>${ano}</td>
                 <td>${nomeMes}</td>
@@ -118,8 +135,10 @@ function generateReportTable(data, titulo) {
             </tr>
         `;
     });
-    html += '</tbody></table>';
-    return html;
+    detailsHtml += "</tbody></table>";
+    const div = document.createElement("div");
+    div.innerHTML = detailsHtml;
+    button.parentElement.appendChild(div);
 }
 
 // Função auxiliar para obter o nome do mês a partir do número
