@@ -113,7 +113,7 @@
             } else {
                 // Caso contrário, adicionar os detalhes e mudar o texto do botão
                 const detalhes = JSON.parse(button.dataset.detalhes);
-                let detailsHtml = "<div class='detalhes'><table><thead><tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr></thead><tbody>";
+                let detailsHtml = "<div class='detalhes'><table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Pago Operador (€)</th><th>Valor Pago Diretamente (€)</th><th>Noites Extra 7 dias</th><th>Noites Crianças</th></tr></thead><tbody>";
                 detalhes.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
                     const nomeMes = obterNomeMes(mes);
                     detailsHtml += `
@@ -134,6 +134,20 @@
                 button.parentElement.appendChild(div);
                 button.textContent = 'Ocultar Detalhes';
             }
+        }
+
+        /**
+         * Função auxiliar para obter o nome do mês a partir do número
+         * @param {number} numeroMes - Número do mês (1-12)
+         * @returns {string} Nome do mês correspondente
+         */
+        function obterNomeMes(numeroMes) {
+            const meses = [
+                'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                'Maio', 'Junho', 'Julho', 'Agosto',
+                'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+            ];
+            return meses[numeroMes - 1] || 'Mês Inválido';
         }
     </script>
 </body>
