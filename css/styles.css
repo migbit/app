@@ -184,6 +184,10 @@ footer {
     padding: 10px 0;
 }
 
+#apartamento option[value="1248"] {
+    margin-top: 10px;
+}
+
 /* Responsiveness */
 @media (max-width: 600px) {
     nav ul {
