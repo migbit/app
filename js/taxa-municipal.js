@@ -151,11 +151,11 @@ async function carregarRelatorio() {
                 html += `<tr>
                             <td>${grupo.ano}</td>
                             <td>${nomeMes}</td>
-                            <td>${grupo.estadias.toFixed(2)}</td>
+                            <td>${Math.round(grupo.estadias)}</td>
                             <td>${grupo.estadias_extra}</td>
                             <td>${grupo.estadias_criancas}</td>
-                            <td>${grupo.total_noites.toFixed(2)}</td>
-                            <td><button onclick='mostrarDetalhes(${JSON.stringify(grupo.detalhes)})'>Ver Detalhes</button></td>
+                            <td>${Math.round(grupo.total_noites)}</td>
+                            <td><button onclick='mostrarDetalhes(event, $1)})'>Ver Detalhes</button></td>
                          </tr>`;
             });
             html += '</table><hr>';
@@ -171,7 +171,8 @@ async function carregarRelatorio() {
 /**
  * Função para mostrar detalhes ao clicar no botão de detalhes do mês
  */
-function mostrarDetalhes(detalhes) {
+function mostrarDetalhes(event, detalhes) {
+    event.stopPropagation();
     let detailsHtml = "<table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Pago Operador (€)</th><th>Valor Pago Diretamente (€)</th><th>Noites Extra 7 dias</th><th>Noites Crianças</th></tr></thead><tbody>";
     detalhes.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
         const nomeMes = obterNomeMes(mes);
@@ -189,7 +190,7 @@ function mostrarDetalhes(detalhes) {
     detailsHtml += "</tbody></table>";
     const div = document.createElement("div");
     div.innerHTML = detailsHtml;
-    document.body.appendChild(div);
+    event.target.parentElement.appendChild(div);
 }
 
 /**
