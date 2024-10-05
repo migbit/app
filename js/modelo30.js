@@ -81,7 +81,7 @@ async function loadReport() {
 
 // Generate HTML table for the report
 function generateReportTable(data) {
-    let html = '<table><tr><th>Ano</th><th>Mês</th><th>Valor Total (€)</th></tr>';
+    let html = '<table class="relatorio-table"><thead><tr><th>Ano</th><th>Mês</th><th>Valor Total (€)</th></tr></thead><tbody>';
     data.forEach(({ ano, mes, valor }) => {
         html += `
             <tr>
@@ -91,7 +91,7 @@ function generateReportTable(data) {
             </tr>
         `;
     });
-    html += '</table>';
+    html += '</tbody></table>';
     return html;
 }
 
