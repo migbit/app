@@ -106,7 +106,7 @@ async function carregarRelatorio() {
         for (const [apartamento, dados] of Object.entries(dadosPorApartamento)) {
             html += `<h3>Apartamento ${apartamento}</h3>`;
             html += '<table>';
-            html += '<tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr>';
+            html += '<tr><th>Ano</th><th>Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th><th>Ação</th></tr>';
 
             // Agrupar por Ano e Mês
             const dadosAgrupados = {};
@@ -120,7 +120,8 @@ async function carregarRelatorio() {
                         estadias: 0,
                         estadias_extra: 0,
                         estadias_criancas: 0,
-                        total_noites: 0
+                        total_noites: 0,
+                        detalhes: []
                     };
                 }
 
@@ -130,6 +131,7 @@ async function carregarRelatorio() {
                 dadosAgrupados[key].estadias_extra += item.noites_extra_7_dias;
                 dadosAgrupados[key].estadias_criancas += item.noites_criancas;
                 dadosAgrupados[key].total_noites += estadias + item.noites_extra_7_dias + item.noites_criancas;
+                dadosAgrupados[key].detalhes.push(item);
             });
 
             // Ordenar os grupos por Ano e Mês
@@ -153,74 +155,10 @@ async function carregarRelatorio() {
                             <td>${grupo.estadias_extra}</td>
                             <td>${grupo.estadias_criancas}</td>
                             <td>${grupo.total_noites.toFixed(2)}</td>
+                            <td><button onclick='mostrarDetalhes(${JSON.stringify(grupo.detalhes)})'>Ver Detalhes</button></td>
                          </tr>`;
             });
-            html += '</table>';
-
-            // Calcular Totais por Mês e por Trimestre
-            const totaisPorMes = {};
-            const totaisPorTrimestre = {};
-
-            chavesOrdenadas.forEach((key) => {
-                const grupo = dadosAgrupados[key];
-                // Totais por Mês
-                totaisPorMes[key] = {
-                    estadias: grupo.estadias,
-                    estadias_extra: grupo.estadias_extra,
-                    estadias_criancas: grupo.estadias_criancas,
-                    total_noites: grupo.total_noites
-                };
-
-                // Totais por Trimestre
-                const trimestre = obterTrimestre(grupo.mes);
-                if (!totaisPorTrimestre[trimestre]) {
-                    totaisPorTrimestre[trimestre] = {
-                        estadias: 0,
-                        estadias_extra: 0,
-                        estadias_criancas: 0,
-                        total_noites: 0
-                    };
-                }
-
-                totaisPorTrimestre[trimestre].estadias += grupo.estadias;
-                totaisPorTrimestre[trimestre].estadias_extra += grupo.estadias_extra;
-                totaisPorTrimestre[trimestre].estadias_criancas += grupo.estadias_criancas;
-                totaisPorTrimestre[trimestre].total_noites += grupo.total_noites;
-            });
-
-            // Exibir Totais por Mês
-            html += '<h4>Total por Mês</h4>';
-            html += '<table>';
-            html += '<tr><th>Ano-Mês</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr>';
-            for (const [key, total] of Object.entries(totaisPorMes)) {
-                const [ano, mes] = key.split('-').map(Number);
-                const nomeMes = obterNomeMes(mes);
-                html += `<tr>
-                            <td>${ano} - ${nomeMes}</td>
-                            <td>${total.estadias.toFixed(2)}</td>
-                            <td>${total.estadias_extra}</td>
-                            <td>${total.estadias_criancas}</td>
-                            <td>${total.total_noites.toFixed(2)}</td>
-                         </tr>`;
-            }
-            html += '</table>';
-
-            // Exibir Totais por Trimestre
-            html += '<h4>Total por Trimestre</h4>';
-            html += '<table>';
-            html += '<tr><th>Trimestre</th><th>Estadias</th><th>Estadias Extra 7 dias</th><th>Estadias Crianças</th><th>Total Noites</th></tr>';
-            for (const [trimestre, total] of Object.entries(totaisPorTrimestre)) {
-                html += `<tr>
-                            <td>${trimestre}</td>
-                            <td>${total.estadias.toFixed(2)}</td>
-                            <td>${total.estadias_extra}</td>
-                            <td>${total.estadias_criancas}</td>
-                            <td>${total.total_noites.toFixed(2)}</td>
-                         </tr>`;
-            }
-            html += '</table>';
-
-            html += '<hr>';
+            html += '</table><hr>';
         }
 
         relatorioTmtDiv.innerHTML = html;
@@ -228,6 +166,30 @@ async function carregarRelatorio() {
         console.error("Erro ao carregar relatório T.M.T.: ", e);
         relatorioTmtDiv.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
     }
+}
+
+/**
+ * Função para mostrar detalhes ao clicar no botão de detalhes do mês
+ */
+function mostrarDetalhes(detalhes) {
+    let detailsHtml = "<table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Pago Operador (€)</th><th>Valor Pago Diretamente (€)</th><th>Noites Extra 7 dias</th><th>Noites Crianças</th></tr></thead><tbody>";
+    detalhes.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
+        const nomeMes = obterNomeMes(mes);
+        detailsHtml += `
+            <tr>
+                <td>${ano}</td>
+                <td>${nomeMes}</td>
+                <td>€ ${valor_pago_operador_turistico.toFixed(2)}</td>
+                <td>€ ${valor_pago_diretamente.toFixed(2)}</td>
+                <td>${noites_extra_7_dias}</td>
+                <td>${noites_criancas}</td>
+            </tr>
+        `;
+    });
+    detailsHtml += "</tbody></table>";
+    const div = document.createElement("div");
+    div.innerHTML = detailsHtml;
+    document.body.appendChild(div);
 }
 
 /**
@@ -244,21 +206,7 @@ function obterNomeMes(numeroMes) {
     return meses[numeroMes - 1] || 'Mês Inválido';
 }
 
-/**
- * Função auxiliar para obter o trimestre a partir do mês
- * @param {number} numeroMes - Número do mês (1-12)
- * @returns {string} Nome do trimestre correspondente
- */
-function obterTrimestre(numeroMes) {
-    if (numeroMes >= 1 && numeroMes <= 3) return '1º Trimestre (Jan-Mar)';
-    if (numeroMes >= 4 && numeroMes <= 6) return '2º Trimestre (Abr-Jun)';
-    if (numeroMes >= 7 && numeroMes <= 9) return '3º Trimestre (Jul-Set)';
-    if (numeroMes >= 10 && numeroMes <= 12) return '4º Trimestre (Out-Dez)';
-    return 'Trimestre Inválido';
-}
-
 // Carregar o relatório ao iniciar
 document.addEventListener('DOMContentLoaded', () => {
     carregarRelatorio();
 });
-//
