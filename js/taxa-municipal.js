@@ -177,11 +177,11 @@ async function carregarRelatorio() {
  * Função para mostrar detalhes ao clicar no botão de detalhes do mês
  */
 function mostrarDetalhes(button) {
-    const detalhesDiv = button.nextElementSibling;
+    let detalhesDiv = button.nextElementSibling;
     if (detalhesDiv && detalhesDiv.classList.contains('detalhes')) {
-        // Se os detalhes já estão visíveis, removê-los e mudar o texto do botão
-        detalhesDiv.remove();
-        button.textContent = 'Ver Detalhes';
+        // Se os detalhes já estão visíveis, ocultá-los e mudar o texto do botão
+        detalhesDiv.style.display = detalhesDiv.style.display === 'none' ? 'block' : 'none';
+        button.textContent = detalhesDiv.style.display === 'none' ? 'Ver Detalhes' : 'Ocultar Detalhes';
     } else {
         // Caso contrário, adicionar os detalhes e mudar o texto do botão
         const detalhes = JSON.parse(button.dataset.detalhes);
