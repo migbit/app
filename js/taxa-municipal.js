@@ -177,24 +177,33 @@ async function carregarRelatorio() {
  * Função para mostrar detalhes ao clicar no botão de detalhes do mês
  */
 function mostrarDetalhes(button) {
-    const detalhes = JSON.parse(button.dataset.detalhes);
-    let detailsHtml = "<table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Pago Operador (€)</th><th>Valor Pago Diretamente (€)</th><th>Noites Extra 7 dias</th><th>Noites Crianças</th></tr></thead><tbody>";
-    detalhes.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
-        const nomeMes = obterNomeMes(mes);
-        detailsHtml += `
-            <tr>
-                <td>${ano}</td>
-                <td>${nomeMes}</td>
-                <td>€ ${valor_pago_operador_turistico.toFixed(2)}</td>
-                <td>€ ${valor_pago_diretamente.toFixed(2)}</td>
-                <td>${noites_extra_7_dias}</td>
-                <td>${noites_criancas}</td>
-            </tr>`;
-    });
-    detailsHtml += "</tbody></table>";
-    const div = document.createElement("div");
-    div.innerHTML = detailsHtml;
-    button.parentElement.appendChild(div);
+    const detalhesDiv = button.nextElementSibling;
+    if (detalhesDiv && detalhesDiv.classList.contains('detalhes')) {
+        // Se os detalhes já estão visíveis, removê-los e mudar o texto do botão
+        detalhesDiv.remove();
+        button.textContent = 'Ver Detalhes';
+    } else {
+        // Caso contrário, adicionar os detalhes e mudar o texto do botão
+        const detalhes = JSON.parse(button.dataset.detalhes);
+        let detailsHtml = "<div class='detalhes'><table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Pago Operador (€)</th><th>Valor Pago Diretamente (€)</th><th>Noites Extra 7 dias</th><th>Noites Crianças</th></tr></thead><tbody>";
+        detalhes.forEach(({ ano, mes, valor_pago_operador_turistico, valor_pago_diretamente, noites_extra_7_dias, noites_criancas }) => {
+            const nomeMes = obterNomeMes(mes);
+            detailsHtml += `
+                <tr>
+                    <td>${ano}</td>
+                    <td>${nomeMes}</td>
+                    <td>€ ${valor_pago_operador_turistico.toFixed(2)}</td>
+                    <td>€ ${valor_pago_diretamente.toFixed(2)}</td>
+                    <td>${noites_extra_7_dias}</td>
+                    <td>${noites_criancas}</td>
+                </tr>`;
+        });
+        detailsHtml += "</tbody></table></div>";
+        const div = document.createElement("div");
+        div.innerHTML = detailsHtml;
+        button.parentElement.appendChild(div);
+        button.textContent = 'Ocultar Detalhes';
+    }
 }
 
 /**
