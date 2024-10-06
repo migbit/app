@@ -6,6 +6,91 @@ document.addEventListener("DOMContentLoaded", () => {
     const requisitarButton = document.getElementById("requisitar");
     const confirmarEnvioButton = document.getElementById("confirmar-envio");
 
+    // Lista pré-definida de itens
+    const itensPreDefinidos = {
+        "produtos-limpeza": [
+            "Lixívia tradicional",
+            "Multiusos com Lixívia",
+            "Gel com Lixívia",
+            "CIF",
+            "Limpeza Chão (Lava Tudo)",
+            "Limpeza Chão (Madeira)",
+            "Limpa Vidros",
+            "Limpeza Potente",
+            "Limpeza Placas",
+            "Vinagre"
+        ],
+        "roupa": [
+            "Detergente Roupa",
+            "Amaciador",
+            "Lixívia Roupa Branca",
+            "Tira Nódoas",
+            "Tira Gorduras",
+            "Oxi Active",
+            "Branqueador"
+        ],
+        "wc": [
+            "Papel Higiénico",
+            "Gel WC Sanitas",
+            "Toalhitas",
+            "Toalhitas Desmaquilhantes",
+            "Blocos Sanitários",
+            "Anticalcário",
+            "Limpeza Chuveiro",
+            "Desentupidor de Canos",
+            "Manutenção Canos",
+            "Papel Higiénico Húmido"
+        ],
+        "cozinha": [
+            "Água 1.5l",
+            "Água 5l",
+            "Café",
+            "Rolo de Cozinha",
+            "Guardanapos",
+            "Bolachas",
+            "Chá",
+            "Lava-Loiça",
+            "Esfregões",
+            "Película Transparente",
+            "Papel Alumínio",
+            "Sacos congelação"
+        ],
+        "diversos": [
+            "Varetas Difusoras (Ambientador)"
+        ]
+    };
+
+    // Função para adicionar itens ao formulário
+    function adicionarItens() {
+        Object.keys(itensPreDefinidos).forEach(categoria => {
+            const secao = document.getElementById(categoria);
+            itensPreDefinidos[categoria].forEach(nomeItem => {
+                const divItem = document.createElement("div");
+                divItem.classList.add("item");
+
+                divItem.innerHTML = `
+                    <label>${nomeItem}</label>
+                    <input type="number" value="0" min="0">
+                    <button type="button" class="incrementar">+</button>
+                    <button type="button" class="decrementar">-</button>
+                    <button type="button" class="limpar">Limpar</button>
+                    <select class="local">
+                        <option value="local" selected>Local</option>
+                        <option value="123">123</option>
+                        <option value="1248">1248</option>
+                        <option value="escritorio">Escritório</option>
+                        <option value="lavandaria">Lavandaria</option>
+                        <option value="casa">Casa</option>
+                    </select>
+                `;
+
+                secao.appendChild(divItem);
+            });
+        });
+    }
+
+    adicionarItens();
+
     // Adiciona eventos de incrementar, decrementar e limpar
     form.querySelectorAll(".item").forEach(item => {
         const incrementarButton = item.querySelector(".incrementar");
