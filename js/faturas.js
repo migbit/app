@@ -89,7 +89,7 @@ function gerarRelatorioFaturacao(faturas) {
                 <td>€${totalFatura.toFixed(2)}</td>
                 <td>
                     <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, "\'")}'">Ver Detalhes</button>
-                    <button onclick="exportarPDFFaturacao('${key}')">Exportar PDF</button>
+                    <button onclick="exportarPDFFaturacao('${key}', '${JSON.stringify(grupo).replace(/'/g, "\'")}")">Exportar PDF</button>
                 </td>
             </tr>
         `;
@@ -313,13 +313,28 @@ function gerarHTMLDetalhesTMT(detalhes) {
     `;
 }
 
-window.exportarPDFFaturacao = function(key) {
+window.exportarPDFFaturacao = function(key, grupoJson) {
     import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(jsPDFModule => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
+        const grupo = JSON.parse(grupoJson);
+        
         doc.text('Relatório de Faturação - ' + key, 10, 10);
-        doc.text('Detalhes do Relatório', 10, 20);
-        // Adicione mais detalhes conforme necessário
+        doc.text('Detalhes do Relatório:', 10, 20);
+        
+        let yPosition = 30;
+        grupo.forEach(fatura => {
+            const faturaDetalhes = `
+                Fatura Nº: ${fatura.numeroFatura}
+                Data: ${new Date(fatura.timestamp.seconds * 1000).toLocaleDateString()}
+                Valor Transferência: €${fatura.valorTransferencia.toFixed(2)}
+                Taxa AirBnB: €${fatura.taxaAirbnb.toFixed(2)}
+                Total: €${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}
+            `;
+            doc.text(faturaDetalhes, 10, yPosition);
+            yPosition += 20;
+        });
+
         doc.save('relatorio-faturacao-' + key + '.pdf');
     }).catch(error => {
         console.error('Erro ao exportar PDF:', error);
