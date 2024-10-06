@@ -1,18 +1,19 @@
 // js/reparacoes.js
 
-import { db, enviarEmailUrgencia } from './script.js';
+import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Selecionar elementos do DOM
 const reparacoesForm = document.getElementById('reparacoes-form');
 const listaReparacoesDiv = document.getElementById('lista-reparacoes');
+const descricaoTextarea = document.getElementById('descricao');
 
 // Adicionar uma nova reparação
 reparacoesForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const apartamento = document.getElementById('apartamento').value;
-    const descricao = document.getElementById('descricao').value;
+    const descricao = descricaoTextarea.value;
     const urgencia = document.getElementById('urgencia').value;
 
     if (!apartamento || !descricao || !urgencia) {
@@ -31,14 +32,27 @@ reparacoesForm.addEventListener('submit', async (e) => {
         };
 
         await addDoc(collection(db, "reparacoes"), novaReparacao);
+        
+        if (urgencia === 'alta') {
+            // Enviar e-mail usando EmailJS
+            const templateParams = {
+                to_name: 'apartments.oporto@gmail.com',
+                from_name: "Apartments Oporto",
+                subject: 'Reparação Urgente Necessária',
+                message: `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
+            };
+            
+            emailjs.send('service_tuglp9h', 'default_template', templateParams)
+                .then(function(response) {
+                    console.log('E-mail enviado com sucesso!', response.status, response.text);
+                }, function(error) {
+                    console.error('Erro ao enviar e-mail:', error);
+                });
+        }
+
         alert('Reparação registrada com sucesso!');
         reparacoesForm.reset();
-        carregarReparacoes();
-
-        // Enviar e-mail de urgência se necessário
-        if (urgencia === 'alta') {
-            enviarEmailUrgencia('apartments.oporto@gmail.com', 'Reparação Urgente Necessária', `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`);
-        }
+        await carregarReparacoes();
     } catch (error) {
         console.error("Erro ao registrar reparação: ", error);
         alert('Ocorreu um erro ao registrar a reparação.');
@@ -59,17 +73,23 @@ async function carregarReparacoes() {
             const id = doc.id;
             const isConcluido = data.reparado;
             const classReparado = isConcluido ? 'reparado' : '';
+            const timestamp = data.timestamp.toDate();
+            const dataFormatada = timestamp.toLocaleString('pt-PT');
 
             const reparacaoHtml = `
                 <li class="${classReparado}">
-                    <strong>Apartamento ${data.apartamento}:</strong> ${data.descricao} - Urgência: ${data.urgencia}
+                    <strong>Apartamento ${data.apartamento}</strong> 
+                    <p>${data.descricao}</p>
+                    <p>Urgência: ${data.urgencia} | Data: ${dataFormatada}</p>
                     <div>
                         <label>
-                            <input type="checkbox" ${data.material_comprado ? 'checked' : ''} onchange="atualizarStatus('${id}', 'material_comprado', this.checked)">
+                            <input type="checkbox" ${data.material_comprado ? 'checked' : ''} 
+                                   onchange="atualizarStatus('${id}', 'material_comprado', this.checked)">
                             Material Comprado
                         </label>
                         <label>
-                            <input type="checkbox" ${data.reparado ? 'checked' : ''} onchange="atualizarStatus('${id}', 'reparado', this.checked)">
+                            <input type="checkbox" ${data.reparado ? 'checked' : ''} 
+                                   onchange="atualizarStatus('${id}', 'reparado', this.checked)">
                             Reparado
                         </label>
                     </div>
@@ -98,7 +118,7 @@ window.atualizarStatus = async (id, campo, valor) => {
     try {
         const reparacaoRef = doc(db, "reparacoes", id);
         await updateDoc(reparacaoRef, { [campo]: valor });
-        carregarReparacoes();
+        await carregarReparacoes();
     } catch (error) {
         console.error("Erro ao atualizar status da reparação: ", error);
         alert('Ocorreu um erro ao atualizar o status da reparação.');
@@ -106,6 +126,4 @@ window.atualizarStatus = async (id, campo, valor) => {
 };
 
 // Carregar reparações ao iniciar
-document.addEventListener('DOMContentLoaded', () => {
-    carregarReparacoes();
-});
+document.addEventListener('DOMContentLoaded', carregarReparacoes);
