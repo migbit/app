@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apartments Oporto - Reparações</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Apartments Oporto - Reparações</h1>
+        <nav>
+            <ul>
+                <li><a href="mensagens.html">Mensagens</a></li>
+                <li><a href="taxa-municipal.html">Taxa Municipal Turística</a></li>
+                <li><a href="caixa.html">Caixa</a></li>
+                <li><a href="modelo30.html">Modelo 30</a></li>
+                <li><a href="reparacoes.html">Reparações</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-section">
+            <h2>Registrar Reparação</h2>
+            <form id="reparacoes-form">
+                <div class="form-group">
+                    <label for="apartamento">Apartamento:</label>
+                    <select id="apartamento" required>
+                        <option value="">Selecionar Apartamento</option>
+                        <option value="123">Apartamento 123</option>
+                        <option value="1248">Apartamento 1248</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição da Reparação:</label>
+                    <textarea id="descricao" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="urgencia">Urgência:</label>
+                    <select id="urgencia" required>
+                        <option value="">Selecionar Urgência</option>
+                        <option value="baixa">Baixa</option>
+                        <option value="alta">Alta</option>
+                    </select>
+                </div>
+                <button type="submit">Registrar Reparação</button>
+            </form>
+        </section>
+
+        <section class="report-section">
+            <h2 class="centered">Lista de Reparações</h2>
+            <div id="lista-reparacoes">
+                <!-- Lista de reparações será exibida aqui -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Importar os scripts necessários -->
+    <script type="module" src="../js/script.js"></script>
+    <script type="module" src="../js/reparacoes.js"></script>
+</body>
+</html>
