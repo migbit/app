@@ -319,47 +319,64 @@ function gerarHTMLDetalhesTMT(detalhes) {
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
     import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(jsPDFModule => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        const grupo = JSON.parse(grupoJson);
-        
-        // Definir o título com o mês por extenso e centralizar
-        const [ano, mes] = key.split('-');
-        const meses = [
-            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-        ];
-        const titulo = `Relatório de Faturação - ${meses[mes - 1]} ${ano}`;
-        doc.setFontSize(16);
-        doc.text(titulo, 105, 10, { align: 'center' });
-
-        // Cabeçalho da Tabela em negrito e centralizado
-        let yPosition = 30;
-        const xPositions = [20, 60, 100, 140, 180]; // Posicionamentos ajustados para centralização
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "bold");
-        doc.text('Fatura Nº', xPositions[0], yPosition);
-        doc.text('Data', xPositions[1], yPosition);
-        doc.text('Valor Transferência (€)', xPositions[2], yPosition);
-        doc.text('Taxa AirBnB (€)', xPositions[3], yPosition);
-        doc.text('Total (€)', xPositions[4], yPosition);
-        
-        yPosition += 10;
-
-        // Dados das Faturas centralizados
-        doc.setFont("helvetica", "normal");
-        grupo.forEach(fatura => {
-            doc.text(fatura.numeroFatura, xPositions[0], yPosition);
-            doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], yPosition);
-            doc.text(`€${fatura.valorTransferencia.toFixed(2)}`, xPositions[2], yPosition);
-            doc.text(`€${fatura.taxaAirbnb.toFixed(2)}`, xPositions[3], yPosition);
-            doc.text(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, xPositions[4], yPosition);
-            yPosition += 10;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const grupo = JSON.parse(grupoJson);
+  
+      // Definir o título com o mês por extenso e centralizar
+      const [ano, mes] = key.split('-');
+      const meses = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ];
+      const titulo = `Relatório de Faturação - ${meses[mes - 1]} ${ano}`;
+      doc.setFontSize(16);
+      doc.text(titulo, doc.internal.pageSize.getWidth() / 2, 15, { align: 'center' });
+  
+      // Cabeçalho da Tabela em negrito e centralizado
+      const colunas = [
+        { header: 'Fatura Nº', dataKey: 'numeroFatura', width: 30 },
+        { header: 'Data', dataKey: 'dataFormatada', width: 40 },
+        { header: 'Valor Transferência (€)', dataKey: 'valorTransferencia', width: 50 },
+        { header: 'Taxa AirBnB (€)', dataKey: 'taxaAirbnb', width: 40 },
+        { header: 'Total (€)', dataKey: 'total', width: 40 }
+      ];
+      const linhaInicial = 30;
+      let yPosition = linhaInicial;
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+  
+      // Centralizar o cabeçalho
+      colunas.forEach((coluna, index) => {
+        const xPosition = coluna.width * index + (coluna.width / 2) + 10;
+        doc.text(coluna.header, xPosition, yPosition, { align: 'center' });
+      });
+  
+      yPosition += 10;
+      doc.setFont("helvetica", "normal");
+  
+      // Dados das Faturas centralizados
+      grupo.forEach(fatura => {
+        const dataFormatada = new Date(fatura.timestamp.seconds * 1000).toLocaleDateString();
+        const dadosFatura = {
+          ...fatura,
+          dataFormatada,
+          valorTransferencia: `€${fatura.valorTransferencia.toFixed(2)}`,
+          taxaAirbnb: `€${fatura.taxaAirbnb.toFixed(2)}`,
+          total: `€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`
+        };
+  
+        colunas.forEach((coluna, index) => {
+          const xPosition = coluna.width * index + (coluna.width / 2) + 10;
+          doc.text(dadosFatura[coluna.dataKey], xPosition, yPosition, { align: 'center' });
         });
-
-        // Salvar o PDF
-        doc.save(`relatorio-faturacao-${ano}-${meses[mes - 1]}.pdf`);
+  
+        yPosition += 10;
+      });
+  
+      // Salvar o PDF
+      doc.save(`relatorio-faturacao-${ano}-${meses[mes - 1]}.pdf`);
     }).catch(error => {
-        console.error('Erro ao exportar PDF:', error);
+      console.error('Erro ao exportar PDF:', error);
     });
-};
+  };
