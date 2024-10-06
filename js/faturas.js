@@ -314,14 +314,16 @@ function gerarHTMLDetalhesTMT(detalhes) {
 }
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
-    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(jsPDFModule => {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js';
+    script.onload = function() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const grupo = JSON.parse(grupoJson);
-        
+       
         doc.text('Relatório de Faturação - ' + key, 10, 10);
         doc.text('Detalhes do Relatório:', 10, 20);
-        
+       
         let yPosition = 30;
         grupo.forEach(fatura => {
             const faturaDetalhes = [
@@ -336,9 +338,10 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
             });
             yPosition += 50; // Ajusta o espaçamento para cada fatura
         });
-
         doc.save('relatorio-faturacao-' + key + '.pdf');
-    }).catch(error => {
-        console.error('Erro ao exportar PDF:', error);
-    });
+    };
+    script.onerror = function() {
+        console.error('Erro ao carregar a biblioteca jsPDF');
+    };
+    document.body.appendChild(script);
 };
