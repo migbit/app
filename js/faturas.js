@@ -323,7 +323,7 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
         const doc = new jsPDF();
         const grupo = JSON.parse(grupoJson);
         
-        // Definir o título com o mês por extenso e centralizar corretamente
+        // Definir o título com o mês por extenso e centralizar
         const [ano, mes] = key.split('-');
         const meses = [
             'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -331,49 +331,40 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
         ];
         const titulo = `Relatório de Faturação - ${meses[mes - 1]} ${ano}`;
         doc.setFontSize(16);
-        doc.text(titulo, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+        doc.text(titulo, 105, 15, { align: 'center' });
 
-        // Cabeçalho da Tabela em negrito e melhor alinhamento
+        // Cabeçalho da Tabela em negrito e centralizado
         let yPosition = 30;
-        const columnWidths = [40, 40, 60, 40, 40]; // Definindo larguras das colunas
-        const xPositions = [20, 60, 100, 140, 180]; // Posições iniciais das colunas
-
+        const xPositions = [20, 60, 100, 140, 180]; // Posicionamentos ajustados para centralização
+        const colWidths = [40, 40, 40, 40, 40]; // Larguras das colunas
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
-        doc.text('Fatura Nº', xPositions[0], yPosition);
-        doc.text('Data', xPositions[1], yPosition);
-        doc.text('Valor Transferência (€)', xPositions[2], yPosition, { align: 'right' }); // Alinhado à direita
-        doc.text('Taxa AirBnB (€)', xPositions[3], yPosition, { align: 'right' }); // Alinhado à direita
-        doc.text('Total (€)', xPositions[4], yPosition, { align: 'right' }); // Alinhado à direita
-        
+
+        // Função para escrever texto centralizado
+        function writeCenteredText(text, x, y, width) {
+            const textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+            const textX = x + (width - textWidth) / 2;
+            doc.text(text, textX, y);
+        }
+
+        // Escrever cabeçalhos centralizados
+        writeCenteredText('Fatura Nº', xPositions[0], yPosition, colWidths[0]);
+        writeCenteredText('Data', xPositions[1], yPosition, colWidths[1]);
+        writeCenteredText('Valor Transferência (€)', xPositions[2], yPosition, colWidths[2]);
+        writeCenteredText('Taxa AirBnB (€)', xPositions[3], yPosition, colWidths[3]);
+        writeCenteredText('Total (€)', xPositions[4], yPosition, colWidths[4]);
+
         yPosition += 10;
 
-        // Dados das Faturas com valores alinhados corretamente
+        // Dados das Faturas centralizados
         doc.setFont("helvetica", "normal");
         grupo.forEach(fatura => {
-            doc.text(fatura.numeroFatura, xPositions[0], yPosition);
-            doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], yPosition);
-            
-            // Valores alinhados à direita dentro das colunas
-            doc.text(`€${fatura.valorTransferencia.toFixed(2)}`, xPositions[2] + columnWidths[2] - 6, yPosition, { align: 'right' });
-            doc.text(`€${fatura.taxaAirbnb.toFixed(2)}`, xPositions[3] + columnWidths[3] - 6, yPosition, { align: 'right' });
-            doc.text(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, xPositions[4] + columnWidths[4] - 6, yPosition, { align: 'right' });
-            
+            writeCenteredText(fatura.numeroFatura, xPositions[0], yPosition, colWidths[0]);
+            writeCenteredText(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], yPosition, colWidths[1]);
+            writeCenteredText(`€${fatura.valorTransferencia.toFixed(2)}`, xPositions[2], yPosition, colWidths[2]);
+            writeCenteredText(`€${fatura.taxaAirbnb.toFixed(2)}`, xPositions[3], yPosition, colWidths[3]);
+            writeCenteredText(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, xPositions[4], yPosition, colWidths[4]);
             yPosition += 10;
-
-            // Ajusta o posicionamento da página caso ultrapasse o limite inferior
-            if (yPosition >= 270) { 
-                doc.addPage(); 
-                yPosition = 30; 
-                doc.setFont("helvetica", "bold");
-                doc.text('Fatura Nº', xPositions[0], yPosition);
-                doc.text('Data', xPositions[1], yPosition);
-                doc.text('Valor Transferência (€)', xPositions[2], yPosition, { align: 'right' });
-                doc.text('Taxa AirBnB (€)', xPositions[3], yPosition, { align: 'right' });
-                doc.text('Total (€)', xPositions[4], yPosition, { align: 'right' });
-                doc.setFont("helvetica", "normal");
-                yPosition += 10;
-            }
         });
 
         // Salvar o PDF
