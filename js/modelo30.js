@@ -55,15 +55,18 @@ async function loadReport() {
         const querySnapshot = await getDocs(q);
         
         const groupedData = {};
+        const allEntries = [];
 
         querySnapshot.forEach((doc) => {
             const { ano, mes, valor } = doc.data();
             const key = `${ano}-${mes}`;
             if (!groupedData[key]) {
-                groupedData[key] = { ano, mes, valor };
+                groupedData[key] = { ano, mes, valor, detalhes: [] };
             } else {
                 groupedData[key].valor += valor;
             }
+            groupedData[key].detalhes.push({ data: doc.data().timestamp.toDate().toLocaleDateString('pt-PT'), valor });
+            allEntries.push(doc.data());
         });
 
         const sortedData = Object.values(groupedData).sort((a, b) => {
@@ -88,16 +91,19 @@ function generateReportTable(data) {
                     <th>Ano</th>
                     <th>Mês</th>
                     <th>Valor Total (€)</th>
+                    <th>Detalhes</th>
                 </tr>
             </thead>
             <tbody>
     `;
-    data.forEach(({ ano, mes, valor }) => {
+    data.forEach(({ ano, mes, valor, detalhes }) => {
+        const detalhesJson = encodeURIComponent(JSON.stringify(detalhes));
         html += `
             <tr>
                 <td>${ano}</td>
                 <td>${getMonthName(mes)}</td>
                 <td>${valor.toFixed(2)}</td>
+                <td><button onclick="mostrarDetalhes(this)" data-detalhes="${detalhesJson}">Ver Detalhes</button></td>
             </tr>
         `;
     });

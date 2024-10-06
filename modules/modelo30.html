@@ -71,5 +71,41 @@
     <!-- Importar o script.js e modelo30.js como módulos -->
     <script type="module" src="../js/script.js"></script>
     <script type="module" src="../js/modelo30.js"></script>
+    <script>
+        /**
+         * Função para mostrar e ocultar detalhes das transações por mês.
+         */
+        function mostrarDetalhes(button) {
+            let detalhesDiv = button.nextElementSibling;
+            if (detalhesDiv && detalhesDiv.classList.contains('detalhes')) {
+                // Se os detalhes já estão visíveis, ocultá-los e mudar o texto do botão
+                if (detalhesDiv.style.display === 'none') {
+                    detalhesDiv.style.display = 'block';
+                    button.textContent = 'Ocultar Detalhes';
+                } else {
+                    detalhesDiv.style.display = 'none';
+                    button.textContent = 'Ver Detalhes';
+                }
+            } else {
+                // Caso contrário, adicionar os detalhes e mudar o texto do botão
+                const detalhes = JSON.parse(button.dataset.detalhes);
+                let detailsHtml = "<div class='detalhes'><table><thead><tr><th>Data</th><th>Valor (€)</th></tr></thead><tbody>";
+                detalhes.forEach(({ data, valor }) => {
+                    detailsHtml += `
+                        <tr>
+                            <td>${data}</td>
+                            <td>€ ${valor.toFixed(2)}</td>
+                        </tr>`;
+                });
+                detailsHtml += "</tbody></table></div>";
+                const div = document.createElement("div");
+                div.classList.add('detalhes');
+                div.style.display = 'block';
+                div.innerHTML = detailsHtml;
+                button.parentElement.appendChild(div);
+                button.textContent = 'Ocultar Detalhes';
+            }
+        }
+    </script>
 </body>
 </html>
