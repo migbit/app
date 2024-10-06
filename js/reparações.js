@@ -1,4 +1,4 @@
-// js/reparacoes.js
+// js/reparações.js
 
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
