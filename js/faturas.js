@@ -319,64 +319,62 @@ function gerarHTMLDetalhesTMT(detalhes) {
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
     import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(jsPDFModule => {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const grupo = JSON.parse(grupoJson);
-  
-      // Definir o título com o mês por extenso e centralizar
-      const [ano, mes] = key.split('-');
-      const meses = [
-        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-      ];
-      const titulo = `Relatório de Faturação - ${meses[mes - 1]} ${ano}`;
-      doc.setFontSize(16);
-      doc.text(titulo, doc.internal.pageSize.getWidth() / 2, 15, { align: 'center' });
-  
-      // Cabeçalho da Tabela em negrito e centralizado
-      const colunas = [
-        { header: 'Fatura Nº', dataKey: 'numeroFatura', width: 30 },
-        { header: 'Data', dataKey: 'dataFormatada', width: 40 },
-        { header: 'Valor Transferência (€)', dataKey: 'valorTransferencia', width: 50 },
-        { header: 'Taxa AirBnB (€)', dataKey: 'taxaAirbnb', width: 40 },
-        { header: 'Total (€)', dataKey: 'total', width: 40 }
-      ];
-      const linhaInicial = 30;
-      let yPosition = linhaInicial;
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-  
-      // Centralizar o cabeçalho
-      colunas.forEach((coluna, index) => {
-        const xPosition = coluna.width * index + (coluna.width / 2) + 10;
-        doc.text(coluna.header, xPosition, yPosition, { align: 'center' });
-      });
-  
-      yPosition += 10;
-      doc.setFont("helvetica", "normal");
-  
-      // Dados das Faturas centralizados
-      grupo.forEach(fatura => {
-        const dataFormatada = new Date(fatura.timestamp.seconds * 1000).toLocaleDateString();
-        const dadosFatura = {
-          ...fatura,
-          dataFormatada,
-          valorTransferencia: `€${fatura.valorTransferencia.toFixed(2)}`,
-          taxaAirbnb: `€${fatura.taxaAirbnb.toFixed(2)}`,
-          total: `€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`
-        };
-  
-        colunas.forEach((coluna, index) => {
-          const xPosition = coluna.width * index + (coluna.width / 2) + 10;
-          doc.text(dadosFatura[coluna.dataKey], xPosition, yPosition, { align: 'center' });
+        const jsPDF = jsPDFModule.jsPDF; // Correção: acessar jsPDF corretamente
+        const doc = new jsPDF();
+        const grupo = JSON.parse(grupoJson);
+
+        // Definir o título com o mês por extenso e centralizar
+        const [ano, mes] = key.split('-');
+        const meses = [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+        const titulo = `Relatório de Faturação - ${meses[parseInt(mes) - 1]} ${ano}`; // Corrigido: parseInt para converter mes para número
+        const tituloFontSize = 16;
+        const tituloYPos = 10;  // Posição Y para o título
+
+        doc.setFontSize(tituloFontSize);
+        doc.setFont('helvetica');
+        const tituloWidth = doc.getTextWidth(titulo);
+        const tituloXPos = (doc.internal.pageSize.getWidth() - tituloWidth) / 2;
+        doc.text(titulo, tituloXPos, tituloYPos, { align: 'center' });
+
+        // Cabeçalho da Tabela em negrito e centralizado
+        const yPosition = 30;
+        const xPositions = [20, 60, 100, 140, 180];
+        const fontSize = 12;
+        doc.setFontSize(fontSize);
+        doc.setFont("helvetica", "bold");
+
+        // Calcula o tamanho total do cabeçalho para centralização
+        const headerWidth = doc.getTextWidth(`Fatura Nº`);  // Calcula a largura do primeiro item do cabeçalho
+        const headerXPos = (doc.internal.pageSize.getWidth() - headerWidth) / 2;
+
+        // Posiciona cada item do cabeçalho centralizado
+        const headerItems = ['Fatura Nº', 'Data', 'Valor Transferência (€)', 'Taxa AirBnB (€)', 'Total (€)'];
+
+        headerItems.forEach((item, index) => {
+            const itemWidth = doc.getTextWidth(item)
+            const itemXPos = headerXPos + (index * (headerWidth / headerItems.length));
+            doc.text(item, itemXPos, yPosition);
         });
-  
-        yPosition += 10;
-      });
-  
-      // Salvar o PDF
-      doc.save(`relatorio-faturacao-${ano}-${meses[mes - 1]}.pdf`);
+        
+        
+        doc.setFont("helvetica", "normal");
+        let rowHeight = 10; // Altura padrão para linhas
+        let rowPosition = yPosition + rowHeight;
+
+        grupo.forEach(fatura => {
+          doc.text(fatura.numeroFatura, xPositions[0], rowPosition);
+          doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], rowPosition);
+          doc.text(`€${fatura.valorTransferencia.toFixed(2)}`, xPositions[2], rowPosition);
+          doc.text(`€${fatura.taxaAirbnb.toFixed(2)}`, xPositions[3], rowPosition);
+          doc.text(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, xPositions[4], rowPosition);
+          rowPosition += rowHeight;
+        });
+
+        doc.save(`relatorio-faturacao-${ano}-${meses[parseInt(mes) - 1]}.pdf`);
     }).catch(error => {
-      console.error('Erro ao exportar PDF:', error);
+        console.error('Erro ao exportar PDF:', error);
     });
-  };
+};
