@@ -79,6 +79,8 @@ function gerarRelatorioFaturacao(faturas) {
         const totalTaxaAirbnb = grupo.reduce((sum, f) => sum + f.taxaAirbnb, 0);
         const totalFatura = totalTransferencia + totalTaxaAirbnb;
 
+        const grupoJSON = JSON.stringify(grupo).replace(/"/g, '&quot;');
+
         html += `
             <tr>
                 <td>${ano}</td>
@@ -88,8 +90,8 @@ function gerarRelatorioFaturacao(faturas) {
                 <td>€${totalTaxaAirbnb.toFixed(2)}</td>
                 <td>€${totalFatura.toFixed(2)}</td>
                 <td>
-                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, "\'")}'">Ver Detalhes</button>
-                    <button onclick="exportarPDFFaturacao('${key}', '${JSON.stringify(grupo).replace(/'/g, "\'")}")">Exportar PDF</button>
+                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes="${grupoJSON}">Ver Detalhes</button>
+                    <button onclick="exportarPDFFaturacao('${key}', '${grupoJSON}')">Exportar PDF</button>
                 </td>
             </tr>
         `;
@@ -106,6 +108,7 @@ function gerarRelatorioModelo30(faturas) {
     Object.entries(faturasAgrupadas).forEach(([key, grupo]) => {
         const [ano, mes] = key.split('-');
         const totalTaxaAirbnb = grupo.reduce((sum, f) => sum + f.taxaAirbnb, 0);
+        const grupoJSON = JSON.stringify(grupo).replace(/"/g, '&quot;');
 
         html += `
             <tr>
@@ -113,7 +116,7 @@ function gerarRelatorioModelo30(faturas) {
                 <td>${obterNomeMes(parseInt(mes))}</td>
                 <td>€${totalTaxaAirbnb.toFixed(2)}</td>
                 <td>
-                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, "\'")}'">Ver Detalhes</button>
+                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes="${grupoJSON}">Ver Detalhes</button>
                 </td>
             </tr>
         `;
@@ -135,6 +138,7 @@ function gerarRelatorioTMT(faturas) {
             const [ano, trimestre] = keyTrimestre.split('-');
             const estadias = Math.round((dados.valorOperador + dados.valorDireto) / dados.valorTmt);
             const totalEstadias = estadias + dados.noitesExtra + dados.noitesCriancas;
+            const detalhesJSON = JSON.stringify(dados.detalhes).replace(/"/g, '&quot;');
 
             html += `
                 <tr>
@@ -145,7 +149,7 @@ function gerarRelatorioTMT(faturas) {
                     <td>${dados.noitesCriancas}</td>
                     <td>${totalEstadias}</td>
                     <td>
-                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes='${JSON.stringify(dados.detalhes).replace(/'/g, "\'")}'">Ver Detalhes</button>
+                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes="${detalhesJSON}">Ver Detalhes</button>
                     </td>
                 </tr>
             `;
@@ -201,17 +205,17 @@ function obterNomeMes(numeroMes) {
 
 // Funções de Detalhes e Exportação
 window.mostrarDetalhesFaturacao = function(key, button) {
-    const detalhes = JSON.parse(button.dataset.detalhes);
+    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
     toggleDetalhes(button, gerarHTMLDetalhesFaturacao(detalhes));
 }
 
 window.mostrarDetalhesModelo30 = function(key, button) {
-    const detalhes = JSON.parse(button.dataset.detalhes);
+    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
     toggleDetalhes(button, gerarHTMLDetalhesModelo30(detalhes));
 }
 
 window.mostrarDetalhesTMT = function(key, button) {
-    const detalhes = JSON.parse(button.dataset.detalhes);
+    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
     toggleDetalhes(button, gerarHTMLDetalhesTMT(detalhes));
 }
 
@@ -314,35 +318,20 @@ function gerarHTMLDetalhesTMT(detalhes) {
 }
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
-    // Validar se grupoJson é uma string válida ou um objeto
-    let grupo;
-    try {
-        grupo = typeof grupoJson === 'string' ? JSON.parse(grupoJson) : grupoJson;
-    } catch (e) {
-        console.error('Erro ao processar JSON:', e);
-        alert('Erro ao processar dados. Verifique se o formato está correto.');
-        return;
-    }
-
-    // Verificar se grupo é um array
-    if (!Array.isArray(grupo)) {
-        console.error('O grupo deve ser um array');
-        alert('Formato de dados inválido. É esperado um array de faturas.');
-        return;
-    }
-
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js';
+    
     script.onload = function() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-       
-        doc.text('Relatório de Faturação - ' + key, 10, 10);
-        doc.text('Detalhes do Relatório:', 10, 20);
-       
-        let yPosition = 30;
-        grupo.forEach((fatura, index) => {
-            try {
+        try {
+            const grupo = JSON.parse(grupoJson.replace(/&quot;/g, '"'));
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.text('Relatório de Faturação - ' + key, 10, 10);
+            doc.text('Detalhes do Relatório:', 10, 20);
+            
+            let yPosition = 30;
+            grupo.forEach((fatura, index) => {
                 const faturaDetalhes = [
                     `Fatura Nº: ${fatura.numeroFatura || 'N/A'}`,
                     `Data: ${fatura.timestamp?.seconds ? new Date(fatura.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}`,
@@ -355,17 +344,11 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
                     doc.text(linha, 10, yPosition + (lineIndex * 10));
                 });
                 yPosition += 50;
-            } catch (e) {
-                console.error(`Erro ao processar fatura ${index}:`, e);
-                doc.text(`Erro ao processar fatura ${index}`, 10, yPosition);
-                yPosition += 10;
-            }
-        });
-        
-        try {
-            doc.save('relatorio-faturacao-' + key + '.pdf');
+            });
+            
+            doc.save(`relatorio-faturacao-${key}.pdf`);
         } catch (e) {
-            console.error('Erro ao salvar PDF:', e);
+            console.error('Erro ao gerar PDF:', e);
             alert('Erro ao gerar o PDF. Por favor, tente novamente.');
         }
     };
@@ -376,18 +359,4 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
     };
     
     document.body.appendChild(script);
-};
-
-// Função auxiliar para teste
-window.testarExportacao = function() {
-    const dadosTeste = [
-        {
-            numeroFatura: "2024001",
-            timestamp: { seconds: 1633046400 },
-            valorTransferencia: 100.50,
-            taxaAirbnb: 15.75
-        }
-    ];
-    
-    exportarPDFFaturacao('teste', JSON.stringify(dadosTeste));
 };
