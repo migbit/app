@@ -333,26 +333,27 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
         doc.setFontSize(16);
         doc.text(titulo, 105, 10, { align: 'center' });
 
-        // Cabeçalho da Tabela em negrito
+        // Cabeçalho da Tabela em negrito e centralizado
         let yPosition = 30;
+        const xPositions = [20, 60, 100, 140, 180]; // Posicionamentos ajustados para centralização
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
-        doc.text('Fatura Nº', 10, yPosition);
-        doc.text('Data', 50, yPosition);
-        doc.text('Valor Transferência (€)', 90, yPosition);
-        doc.text('Taxa AirBnB (€)', 140, yPosition);
-        doc.text('Total (€)', 180, yPosition);
+        doc.text('Fatura Nº', xPositions[0], yPosition);
+        doc.text('Data', xPositions[1], yPosition);
+        doc.text('Valor Transferência (€)', xPositions[2], yPosition);
+        doc.text('Taxa AirBnB (€)', xPositions[3], yPosition);
+        doc.text('Total (€)', xPositions[4], yPosition);
         
         yPosition += 10;
 
-        // Dados das Faturas
+        // Dados das Faturas centralizados
         doc.setFont("helvetica", "normal");
         grupo.forEach(fatura => {
-            doc.text(fatura.numeroFatura, 10, yPosition);
-            doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), 50, yPosition);
-            doc.text(`€${fatura.valorTransferencia.toFixed(2)}`, 90, yPosition);
-            doc.text(`€${fatura.taxaAirbnb.toFixed(2)}`, 140, yPosition);
-            doc.text(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, 180, yPosition);
+            doc.text(fatura.numeroFatura, xPositions[0], yPosition);
+            doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], yPosition);
+            doc.text(`€${fatura.valorTransferencia.toFixed(2)}`, xPositions[2], yPosition);
+            doc.text(`€${fatura.taxaAirbnb.toFixed(2)}`, xPositions[3], yPosition);
+            doc.text(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, xPositions[4], yPosition);
             yPosition += 10;
         });
 
