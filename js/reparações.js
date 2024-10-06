@@ -1,4 +1,4 @@
-// js/reparacoes.js
+// js/reparações.js
 
 import { db, enviarEmailUrgencia } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
@@ -30,21 +30,14 @@ reparacoesForm.addEventListener('submit', async (e) => {
             timestamp: new Date()
         };
 
-        const docRef = await addDoc(collection(db, "reparacoes"), novaReparacao);
-        console.log("Reparação registrada com ID: ", docRef.id); // Log para verificar se o registro foi salvo com sucesso
-
+        await addDoc(collection(db, "reparacoes"), novaReparacao);
         alert('Reparação registrada com sucesso!');
         reparacoesForm.reset();
-        await carregarReparacoes();
+        carregarReparacoes();
 
         // Enviar e-mail de urgência se necessário
         if (urgencia === 'alta') {
-            console.log("Enviando e-mail de urgência...");
-            enviarEmailUrgencia(
-                'apartments.oporto@gmail.com',
-                'Reparação Urgente Necessária',
-                `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
-            );
+            enviarEmailUrgencia('apartments.oporto@gmail.com', 'Reparação Urgente Necessária', `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`);
         }
     } catch (error) {
         console.error("Erro ao registrar reparação: ", error);
@@ -66,23 +59,17 @@ async function carregarReparacoes() {
             const id = doc.id;
             const isConcluido = data.reparado;
             const classReparado = isConcluido ? 'reparado' : '';
-            const timestamp = data.timestamp.toDate();
-            const dataFormatada = timestamp.toLocaleString('pt-PT');
 
             const reparacaoHtml = `
                 <li class="${classReparado}">
-                    <strong>Apartamento ${data.apartamento}</strong> 
-                    <p>${data.descricao}</p>
-                    <p>Urgência: ${data.urgencia} | Data: ${dataFormatada}</p>
+                    <strong>Apartamento ${data.apartamento}:</strong> ${data.descricao} - Urgência: ${data.urgencia}
                     <div>
                         <label>
-                            <input type="checkbox" ${data.material_comprado ? 'checked' : ''} 
-                                   onchange="atualizarStatus('${id}', 'material_comprado', this.checked)">
+                            <input type="checkbox" ${data.material_comprado ? 'checked' : ''} onchange="atualizarStatus('${id}', 'material_comprado', this.checked)">
                             Material Comprado
                         </label>
                         <label>
-                            <input type="checkbox" ${data.reparado ? 'checked' : ''} 
-                                   onchange="atualizarStatus('${id}', 'reparado', this.checked)">
+                            <input type="checkbox" ${data.reparado ? 'checked' : ''} onchange="atualizarStatus('${id}', 'reparado', this.checked)">
                             Reparado
                         </label>
                     </div>
@@ -111,8 +98,7 @@ window.atualizarStatus = async (id, campo, valor) => {
     try {
         const reparacaoRef = doc(db, "reparacoes", id);
         await updateDoc(reparacaoRef, { [campo]: valor });
-        console.log(`Status da reparação atualizado: ${campo} = ${valor}`); // Log para verificar se o status foi atualizado corretamente
-        await carregarReparacoes();
+        carregarReparacoes();
     } catch (error) {
         console.error("Erro ao atualizar status da reparação: ", error);
         alert('Ocorreu um erro ao atualizar o status da reparação.');
@@ -120,4 +106,6 @@ window.atualizarStatus = async (id, campo, valor) => {
 };
 
 // Carregar reparações ao iniciar
-document.addEventListener('DOMContentLoaded', carregarReparacoes);
+document.addEventListener('DOMContentLoaded', () => {
+    carregarReparacoes();
+});
