@@ -324,15 +324,17 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
         
         let yPosition = 30;
         grupo.forEach(fatura => {
-            const faturaDetalhes = `
-                Fatura Nº: ${fatura.numeroFatura}
-                Data: ${new Date(fatura.timestamp.seconds * 1000).toLocaleDateString()}
-                Valor Transferência: €${fatura.valorTransferencia.toFixed(2)}
-                Taxa AirBnB: €${fatura.taxaAirbnb.toFixed(2)}
-                Total: €${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}
-            `;
-            doc.text(faturaDetalhes, 10, yPosition);
-            yPosition += 20;
+            const faturaDetalhes = [
+                `Fatura Nº: ${fatura.numeroFatura}`,
+                `Data: ${new Date(fatura.timestamp.seconds * 1000).toLocaleDateString()}`,
+                `Valor Transferência: €${fatura.valorTransferencia.toFixed(2)}`,
+                `Taxa AirBnB: €${fatura.taxaAirbnb.toFixed(2)}`,
+                `Total: €${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`
+            ];
+            faturaDetalhes.forEach((linha, index) => {
+                doc.text(linha, 10, yPosition + (index * 10));
+            });
+            yPosition += 50; // Ajusta o espaçamento para cada fatura
         });
 
         doc.save('relatorio-faturacao-' + key + '.pdf');
