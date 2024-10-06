@@ -1,4 +1,4 @@
-// js/reparações.js
+// js/reparacoes.js
 
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
@@ -31,12 +31,10 @@ reparacoesForm.addEventListener('submit', async (e) => {
         };
 
         await addDoc(collection(db, "reparacoes"), novaReparacao);
-        alert('Reparação registrada com sucesso!');
         reparacoesForm.reset();
         carregarReparacoes();
     } catch (error) {
         console.error("Erro ao registrar reparação: ", error);
-        alert('Ocorreu um erro ao registrar a reparação.');
     }
 });
 
@@ -46,29 +44,24 @@ async function carregarReparacoes() {
     try {
         const q = query(collection(db, "reparacoes"), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
-        let reparacoesPendentesHtml = '<h3>Reparações Pendentes</h3><ul>';
-        let reparacoesConcluidasHtml = '<h3>Reparações Concluídas</h3><ul>';
+        let reparacoesPendentesHtml = '<h3>Reparações Pendentes</h3><table><thead><tr><th>Apartamento</th><th>Descrição</th><th>Urgência</th><th>Material Comprado</th><th>Reparado</th></tr></thead><tbody>';
+        let reparacoesConcluidasHtml = '<h3>Reparações Concluídas</h3><table><thead><tr><th>Apartamento</th><th>Descrição</th><th>Urgência</th><th>Material Comprado</th><th>Reparado</th></tr></thead><tbody>';
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             const id = doc.id;
             const isConcluido = data.reparado;
             const classReparado = isConcluido ? 'reparado' : '';
+            const urgenciaClass = data.urgencia === 'alta' ? 'urgente' : '';
 
             const reparacaoHtml = `
-                <li class="${classReparado}">
-                    <strong>Apartamento ${data.apartamento}:</strong> ${data.descricao} - Urgência: ${data.urgencia}
-                    <div>
-                        <label>
-                            <input type="checkbox" ${data.material_comprado ? 'checked' : ''} onchange="atualizarStatus('${id}', 'material_comprado', this.checked)">
-                            Material Comprado
-                        </label>
-                        <label>
-                            <input type="checkbox" ${data.reparado ? 'checked' : ''} onchange="atualizarStatus('${id}', 'reparado', this.checked)">
-                            Reparado
-                        </label>
-                    </div>
-                </li>
+                <tr class="${classReparado} ${urgenciaClass}">
+                    <td><strong>Apartamento ${data.apartamento}</strong></td>
+                    <td>${data.descricao}</td>
+                    <td>${data.urgencia}</td>
+                    <td><input type="checkbox" ${data.material_comprado ? 'checked' : ''} onchange="atualizarStatus('${id}', 'material_comprado', this.checked)"></td>
+                    <td><input type="checkbox" ${data.reparado ? 'checked' : ''} onchange="atualizarStatus('${id}', 'reparado', this.checked)"></td>
+                </tr>
             `;
 
             if (isConcluido) {
@@ -78,8 +71,8 @@ async function carregarReparacoes() {
             }
         });
 
-        reparacoesPendentesHtml += '</ul>';
-        reparacoesConcluidasHtml += '</ul>';
+        reparacoesPendentesHtml += '</tbody></table>';
+        reparacoesConcluidasHtml += '</tbody></table>';
 
         listaReparacoesDiv.innerHTML = reparacoesPendentesHtml + reparacoesConcluidasHtml;
     } catch (error) {
@@ -96,7 +89,6 @@ window.atualizarStatus = async (id, campo, valor) => {
         carregarReparacoes();
     } catch (error) {
         console.error("Erro ao atualizar status da reparação: ", error);
-        alert('Ocorreu um erro ao atualizar o status da reparação.');
     }
 };
 
