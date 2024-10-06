@@ -314,34 +314,80 @@ function gerarHTMLDetalhesTMT(detalhes) {
 }
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
+    // Validar se grupoJson é uma string válida ou um objeto
+    let grupo;
+    try {
+        grupo = typeof grupoJson === 'string' ? JSON.parse(grupoJson) : grupoJson;
+    } catch (e) {
+        console.error('Erro ao processar JSON:', e);
+        alert('Erro ao processar dados. Verifique se o formato está correto.');
+        return;
+    }
+
+    // Verificar se grupo é um array
+    if (!Array.isArray(grupo)) {
+        console.error('O grupo deve ser um array');
+        alert('Formato de dados inválido. É esperado um array de faturas.');
+        return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js';
     script.onload = function() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        const grupo = JSON.parse(grupoJson);
        
         doc.text('Relatório de Faturação - ' + key, 10, 10);
         doc.text('Detalhes do Relatório:', 10, 20);
        
         let yPosition = 30;
-        grupo.forEach(fatura => {
-            const faturaDetalhes = [
-                `Fatura Nº: ${fatura.numeroFatura}`,
-                `Data: ${new Date(fatura.timestamp.seconds * 1000).toLocaleDateString()}`,
-                `Valor Transferência: €${fatura.valorTransferencia.toFixed(2)}`,
-                `Taxa AirBnB: €${fatura.taxaAirbnb.toFixed(2)}`,
-                `Total: €${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`
-            ];
-            faturaDetalhes.forEach((linha, index) => {
-                doc.text(linha, 10, yPosition + (index * 10));
-            });
-            yPosition += 50; // Ajusta o espaçamento para cada fatura
+        grupo.forEach((fatura, index) => {
+            try {
+                const faturaDetalhes = [
+                    `Fatura Nº: ${fatura.numeroFatura || 'N/A'}`,
+                    `Data: ${fatura.timestamp?.seconds ? new Date(fatura.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}`,
+                    `Valor Transferência: €${(fatura.valorTransferencia || 0).toFixed(2)}`,
+                    `Taxa AirBnB: €${(fatura.taxaAirbnb || 0).toFixed(2)}`,
+                    `Total: €${((fatura.valorTransferencia || 0) + (fatura.taxaAirbnb || 0)).toFixed(2)}`
+                ];
+                
+                faturaDetalhes.forEach((linha, lineIndex) => {
+                    doc.text(linha, 10, yPosition + (lineIndex * 10));
+                });
+                yPosition += 50;
+            } catch (e) {
+                console.error(`Erro ao processar fatura ${index}:`, e);
+                doc.text(`Erro ao processar fatura ${index}`, 10, yPosition);
+                yPosition += 10;
+            }
         });
-        doc.save('relatorio-faturacao-' + key + '.pdf');
+        
+        try {
+            doc.save('relatorio-faturacao-' + key + '.pdf');
+        } catch (e) {
+            console.error('Erro ao salvar PDF:', e);
+            alert('Erro ao gerar o PDF. Por favor, tente novamente.');
+        }
     };
+    
     script.onerror = function() {
         console.error('Erro ao carregar a biblioteca jsPDF');
+        alert('Erro ao carregar o gerador de PDF. Por favor, verifique sua conexão e tente novamente.');
     };
+    
     document.body.appendChild(script);
+};
+
+// Função auxiliar para teste
+window.testarExportacao = function() {
+    const dadosTeste = [
+        {
+            numeroFatura: "2024001",
+            timestamp: { seconds: 1633046400 },
+            valorTransferencia: 100.50,
+            taxaAirbnb: 15.75
+        }
+    ];
+    
+    exportarPDFFaturacao('teste', JSON.stringify(dadosTeste));
 };
