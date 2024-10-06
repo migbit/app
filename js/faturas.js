@@ -71,15 +71,13 @@ async function carregarFaturas() {
 
 function gerarRelatorioFaturacao(faturas) {
     const faturasAgrupadas = agruparPorAnoMes(faturas);
-    let html = '<table><thead><tr><th>Ano</th><th>Mês</th><th>Fatura Nº</th><th>Valor Transferência</th><th>Taxa AirBnB</th><th>Total Fatura</th><th>Ações</th></tr></thead><tbody>';
+    let html = '<table><thead><tr><th>Ano</th><th>Mês</th><th>Fatura Nº</th><th>Valor Transferência</th><th>Taxa AirBnB</th><th>Total</th><th>Ações</th></tr></thead><tbody>';
 
     Object.entries(faturasAgrupadas).forEach(([key, grupo]) => {
         const [ano, mes] = key.split('-');
         const totalTransferencia = grupo.reduce((sum, f) => sum + f.valorTransferencia, 0);
         const totalTaxaAirbnb = grupo.reduce((sum, f) => sum + f.taxaAirbnb, 0);
         const totalFatura = totalTransferencia + totalTaxaAirbnb;
-
-        const grupoJSON = JSON.stringify(grupo).replace(/"/g, '&quot;');
 
         html += `
             <tr>
@@ -90,8 +88,8 @@ function gerarRelatorioFaturacao(faturas) {
                 <td>€${totalTaxaAirbnb.toFixed(2)}</td>
                 <td>€${totalFatura.toFixed(2)}</td>
                 <td>
-                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes="${grupoJSON}">Ver Detalhes</button>
-                    <button onclick="exportarPDFFaturacao('${key}', '${grupoJSON}')">Exportar PDF</button>
+                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, "'")}'">Ver Detalhes</button>
+                    <button onclick="exportarPDFFaturacao('${key}', '${JSON.stringify(grupo).replace(/'/g, "'")}")">Exportar PDF</button>
                 </td>
             </tr>
         `;
@@ -108,7 +106,6 @@ function gerarRelatorioModelo30(faturas) {
     Object.entries(faturasAgrupadas).forEach(([key, grupo]) => {
         const [ano, mes] = key.split('-');
         const totalTaxaAirbnb = grupo.reduce((sum, f) => sum + f.taxaAirbnb, 0);
-        const grupoJSON = JSON.stringify(grupo).replace(/"/g, '&quot;');
 
         html += `
             <tr>
@@ -116,7 +113,7 @@ function gerarRelatorioModelo30(faturas) {
                 <td>${obterNomeMes(parseInt(mes))}</td>
                 <td>€${totalTaxaAirbnb.toFixed(2)}</td>
                 <td>
-                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes="${grupoJSON}">Ver Detalhes</button>
+                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, "'")}'">Ver Detalhes</button>
                 </td>
             </tr>
         `;
@@ -138,7 +135,6 @@ function gerarRelatorioTMT(faturas) {
             const [ano, trimestre] = keyTrimestre.split('-');
             const estadias = Math.round((dados.valorOperador + dados.valorDireto) / dados.valorTmt);
             const totalEstadias = estadias + dados.noitesExtra + dados.noitesCriancas;
-            const detalhesJSON = JSON.stringify(dados.detalhes).replace(/"/g, '&quot;');
 
             html += `
                 <tr>
@@ -149,7 +145,7 @@ function gerarRelatorioTMT(faturas) {
                     <td>${dados.noitesCriancas}</td>
                     <td>${totalEstadias}</td>
                     <td>
-                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes="${detalhesJSON}">Ver Detalhes</button>
+                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes='${JSON.stringify(dados.detalhes).replace(/'/g, "'")}'">Ver Detalhes</button>
                     </td>
                 </tr>
             `;
@@ -205,17 +201,17 @@ function obterNomeMes(numeroMes) {
 
 // Funções de Detalhes e Exportação
 window.mostrarDetalhesFaturacao = function(key, button) {
-    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
+    const detalhes = JSON.parse(button.dataset.detalhes);
     toggleDetalhes(button, gerarHTMLDetalhesFaturacao(detalhes));
 }
 
 window.mostrarDetalhesModelo30 = function(key, button) {
-    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
+    const detalhes = JSON.parse(button.dataset.detalhes);
     toggleDetalhes(button, gerarHTMLDetalhesModelo30(detalhes));
 }
 
 window.mostrarDetalhesTMT = function(key, button) {
-    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
+    const detalhes = JSON.parse(button.dataset.detalhes);
     toggleDetalhes(button, gerarHTMLDetalhesTMT(detalhes));
 }
 
@@ -350,9 +346,9 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
         // Escrever cabeçalhos centralizados
         writeCenteredText('Fatura Nº', xPositions[0], yPosition, colWidths[0]);
         writeCenteredText('Data', xPositions[1], yPosition, colWidths[1]);
-        writeCenteredText('Valor Transferência (€)', xPositions[2], yPosition, colWidths[2]);
-        writeCenteredText('Taxa AirBnB (€)', xPositions[3], yPosition, colWidths[3]);
-        writeCenteredText('Total (€)', xPositions[4], yPosition, colWidths[4]);
+        writeCenteredText('Transferência', xPositions[2], yPosition, colWidths[2]);
+        writeCenteredText('Taxa AirBnB', xPositions[3], yPosition, colWidths[3]);
+        writeCenteredText('Total', xPositions[4], yPosition, colWidths[4]);
 
         yPosition += 10;
 
