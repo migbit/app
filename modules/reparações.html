@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apartments Oporto - Reparações</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
 </head>
 <body>
     <header>
@@ -20,7 +22,6 @@
             </ul>
         </nav>
     </header>
-
     <main>
         <section class="form-section">
             <h2>Registrar Reparação</h2>
@@ -48,7 +49,6 @@
                 <button type="submit">Registrar Reparação</button>
             </form>
         </section>
-
         <section class="report-section">
             <h2 class="centered">Lista de Reparações</h2>
             <div id="lista-reparacoes">
@@ -56,12 +56,19 @@
             </div>
         </section>
     </main>
-
     <footer>
         <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- Importar os scripts necessários -->
+    <!-- Scripts -->
+    <script type="text/javascript">
+        // Inicializar EmailJS
+        (function() {
+            emailjs.init("service_tuglp9h"); // Substitua pelo seu User ID do EmailJS
+        })();
+    </script>
+    
+    <!-- Módulos Firebase e script da aplicação -->
     <script type="module" src="../js/script.js"></script>
     <script type="module" src="../js/reparacoes.js"></script>
 </body>
