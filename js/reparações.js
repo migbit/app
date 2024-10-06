@@ -3,11 +3,6 @@
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Inicializar EmailJS
-(function() {
-    emailjs.init("service_tuglp9h");
-})();
-
 // Selecionar elementos do DOM
 const reparacoesForm = document.getElementById('reparacoes-form');
 const listaReparacoesDiv = document.getElementById('lista-reparacoes');
@@ -39,23 +34,6 @@ reparacoesForm.addEventListener('submit', async (e) => {
         alert('Reparação registrada com sucesso!');
         reparacoesForm.reset();
         carregarReparacoes();
-
-        // Enviar e-mail de urgência se necessário
-        if (urgencia === 'alta') {
-            const templateParams = {
-                to_name: "apartments.oporto@gmail.com",
-                from_name: "Apartments Oporto",
-                subject: "Reparação Urgente Necessária",
-                message: `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
-            };
-
-            emailjs.send("service_tuglp9h", "template_default", templateParams)
-                .then(function(response) {
-                    console.log('E-mail enviado com sucesso!', response.status, response.text);
-                }, function(error) {
-                    console.error('Erro ao enviar e-mail:', error);
-                });
-        }
     } catch (error) {
         console.error("Erro ao registrar reparação: ", error);
         alert('Ocorreu um erro ao registrar a reparação.');
