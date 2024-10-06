@@ -1,9 +1,8 @@
 // js/script.js
 
-// Importar as funções necessárias do Firebase e EmailJS
+// Importar as funções necessárias do Firebase
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
 
 // Configuração do Firebase
 const firebaseConfig = {
@@ -43,14 +42,14 @@ function copiarMensagem(texto) {
 // Exportar a função se necessário
 export { copiarMensagem };
 
-// Inicializar EmailJS
+// Inicializar EmailJS (diretamente via script do navegador)
 (function() {
-    emailjs.init({
-        publicKey: "dRbsNarrwt7bsIiDK" // Use your actual public key here
-    });
+    emailjs.init("dRbsNarrwt7bsIiDK"); // Use o publicKey aqui
 })();
 
-// Função para enviar um e-mail de urgência usando EmailJS
+/**
+ * Função para enviar um e-mail de urgência usando EmailJS
+ */
 function enviarEmailUrgencia() {
     const templateParams = {
         to_name: "apartments.oporto@gmail.com",
