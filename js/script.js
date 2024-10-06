@@ -43,12 +43,12 @@ function copiarMensagem(texto) {
 export { copiarMensagem };
 
 // Função para enviar um e-mail de urgência usando EmailJS
-function enviarEmailUrgencia() {
+function enviarEmailUrgencia(apartamento, descricao) {
     const templateParams = {
         to_name: "apartments.oporto@gmail.com",
         from_name: "Apartments Oporto",
         subject: "Reparação Urgente Necessária",
-        message: "Teste de envio de e-mail para verificação do funcionamento do serviço."
+        message: `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
     };
 
     emailjs.send('service_tuglp9h', 'template_l516egr', templateParams)
