@@ -317,61 +317,68 @@ function gerarHTMLDetalhesTMT(detalhes) {
     `;
 }
 
-/**
- * Exporta um relatório de faturação em formato PDF.
- * 
- * @param {string} key - Chave no formato "ano-mês" (ex.: "2023-01").
- * @param {string} grupoJson - JSON contendo as informações de faturação.
- */
 window.exportarPDFFaturacao = function(key, grupoJson) {
-    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js')
-      .then(jsPDFModule => {
+    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(jsPDFModule => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const grupo = JSON.parse(grupoJson);
-  
-        // Definir o título com o mês por extenso e centralizar
+        
+        // Definir o título com o mês por extenso e centralizar corretamente
         const [ano, mes] = key.split('-');
         const meses = [
-          'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
         ];
         const titulo = `Relatório de Faturação - ${meses[mes - 1]} ${ano}`;
-  
-        // Configuração do título
         doc.setFontSize(16);
-        doc.text(titulo, 105, 10, { align: 'center' });
-  
-        // Cabeçalho da Tabela em negrito e centralizado
+        doc.text(titulo, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+
+        // Cabeçalho da Tabela em negrito e melhor alinhamento
         let yPosition = 30;
-        const xPositions = [20, 60, 100, 140, 180]; // Posicionamentos ajustados para centralização
-  
-        // Configuração do cabeçalho
+        const columnWidths = [40, 40, 60, 40, 40]; // Definindo larguras das colunas
+        const xPositions = [20, 60, 100, 140, 180]; // Posições iniciais das colunas
+
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
         doc.text('Fatura Nº', xPositions[0], yPosition);
         doc.text('Data', xPositions[1], yPosition);
-        doc.text('Valor Transferência (€)', xPositions[2], yPosition);
-        doc.text('Taxa AirBnB (€)', xPositions[3], yPosition);
-        doc.text('Total (€)', xPositions[4], yPosition);
-  
+        doc.text('Valor Transferência (€)', xPositions[2], yPosition, { align: 'right' }); // Alinhado à direita
+        doc.text('Taxa AirBnB (€)', xPositions[3], yPosition, { align: 'right' }); // Alinhado à direita
+        doc.text('Total (€)', xPositions[4], yPosition, { align: 'right' }); // Alinhado à direita
+        
         yPosition += 10;
-  
-        // Dados das Faturas centralizados
+
+        // Dados das Faturas com valores alinhados corretamente
         doc.setFont("helvetica", "normal");
         grupo.forEach(fatura => {
-          doc.text(fatura.numeroFatura, xPositions[0], yPosition);
-          doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], yPosition);
-          doc.text(`€${fatura.valorTransferencia.toFixed(2)}`, xPositions[2], yPosition);
-          doc.text(`€${fatura.taxaAirbnb.toFixed(2)}`, xPositions[3], yPosition);
-          doc.text(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, xPositions[4], yPosition);
-          yPosition += 10;
+            doc.text(fatura.numeroFatura, xPositions[0], yPosition);
+            doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], yPosition);
+            
+            // Valores alinhados à direita dentro das colunas
+            doc.text(`€${fatura.valorTransferencia.toFixed(2)}`, xPositions[2] + columnWidths[2] - 6, yPosition, { align: 'right' });
+            doc.text(`€${fatura.taxaAirbnb.toFixed(2)}`, xPositions[3] + columnWidths[3] - 6, yPosition, { align: 'right' });
+            doc.text(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, xPositions[4] + columnWidths[4] - 6, yPosition, { align: 'right' });
+            
+            yPosition += 10;
+
+            // Ajusta o posicionamento da página caso ultrapasse o limite inferior
+            if (yPosition >= 270) { 
+                doc.addPage(); 
+                yPosition = 30; 
+                doc.setFont("helvetica", "bold");
+                doc.text('Fatura Nº', xPositions[0], yPosition);
+                doc.text('Data', xPositions[1], yPosition);
+                doc.text('Valor Transferência (€)', xPositions[2], yPosition, { align: 'right' });
+                doc.text('Taxa AirBnB (€)', xPositions[3], yPosition, { align: 'right' });
+                doc.text('Total (€)', xPositions[4], yPosition, { align: 'right' });
+                doc.setFont("helvetica", "normal");
+                yPosition += 10;
+            }
         });
-  
+
         // Salvar o PDF
         doc.save(`relatorio-faturacao-${ano}-${meses[mes - 1]}.pdf`);
-      })
-      .catch(error => {
+    }).catch(error => {
         console.error('Erro ao exportar PDF:', error);
-      });
-  };
+    });
+};
