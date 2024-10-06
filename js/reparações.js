@@ -40,13 +40,13 @@ reparacoesForm.addEventListener('submit', async (e) => {
             console.log('Urgência alta detectada. Enviando e-mail...');
 
             // Enviar o e-mail com a descrição da reparação e o apartamento
-            const mensagem = `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`;
-            enviarEmailUrgencia({
+            const templateParams = {
                 to_name: "apartments.oporto@gmail.com",
                 from_name: "Apartments Oporto",
-                subject: "Reparação Urgente Necessária",
-                message: mensagem
-            });
+                message: `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
+            };
+
+            enviarEmailUrgencia(templateParams);
         }
     } catch (error) {
         console.error("Erro ao registrar reparação: ", error);
