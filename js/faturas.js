@@ -333,24 +333,26 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
         doc.setFontSize(16);
         doc.text(titulo, 105, 10, { align: 'center' });
 
-        // Cabeçalho da Tabela
+        // Cabeçalho da Tabela em negrito
         let yPosition = 30;
         doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
         doc.text('Fatura Nº', 10, yPosition);
         doc.text('Data', 40, yPosition);
-        doc.text('Valor Transferência (€)', 70, yPosition);
-        doc.text('Taxa AirBnB (€)', 120, yPosition);
-        doc.text('Total (€)', 160, yPosition);
+        doc.text('Valor Transferência (€)', 70, yPosition, { align: 'center' });
+        doc.text('Taxa AirBnB (€)', 120, yPosition, { align: 'center' });
+        doc.text('Total (€)', 160, yPosition, { align: 'center' });
         
         yPosition += 10;
 
         // Dados das Faturas
+        doc.setFont("helvetica", "normal");
         grupo.forEach(fatura => {
             doc.text(fatura.numeroFatura, 10, yPosition);
             doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), 40, yPosition);
-            doc.text(fatura.valorTransferencia.toFixed(2), 70, yPosition);
-            doc.text(fatura.taxaAirbnb.toFixed(2), 120, yPosition);
-            doc.text((fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2), 160, yPosition);
+            doc.text(`€${fatura.valorTransferencia.toFixed(2)}`, 70, yPosition, { align: 'center' });
+            doc.text(`€${fatura.taxaAirbnb.toFixed(2)}`, 120, yPosition, { align: 'center' });
+            doc.text(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, 160, yPosition, { align: 'center' });
             yPosition += 10;
         });
 
