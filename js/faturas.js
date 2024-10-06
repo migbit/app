@@ -62,7 +62,7 @@ async function carregarFaturas() {
     try {
         const q = query(collection(db, "faturas"), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
         console.error("Erro ao carregar faturas:", error);
         return [];
@@ -236,83 +236,3 @@ function toggleDetalhes(button, htmlContent) {
 
 function gerarHTMLDetalhesFaturacao(detalhes) {
     return `
-        <table class="detalhes-table">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Fatura Nº</th>
-                    <th>Valor Transferência</th>
-                    <th>Taxa AirBnB</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${detalhes.map(d => `
-                    <tr>
-                        <td>${new Date(d.timestamp.seconds * 1000).toLocaleDateString()}</td>
-                        <td>${d.numeroFatura}</td>
-                        <td>€${d.valorTransferencia.toFixed(2)}</td>
-                        <td>€${d.taxaAirbnb.toFixed(2)}</td>
-                        <td>€${(d.valorTransferencia + d.taxaAirbnb).toFixed(2)}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-function gerarHTMLDetalhesModelo30(detalhes) {
-    return `
-        <table class="detalhes-table">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Fatura Nº</th>
-                    <th>Taxa AirBnB</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${detalhes.map(d => `
-                    <tr>
-                        <td>${new Date(d.timestamp.seconds * 1000).toLocaleDateString()}</td>
-                        <td>${d.numeroFatura}</td>
-                        <td>€${d.taxaAirbnb.toFixed(2)}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-function gerarHTMLDetalhesTMT(detalhes) {
-    return `
-        <table class="detalhes-table">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Valor Operador</th>
-                    <th>Valor Direto</th>
-                    <th>Noites Extra</th>
-                    <th>Noites Crianças</th>
-                    <th>Valor TMT</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${detalhes.map(d => `
-                    <tr>
-                        <td>${new Date(d.timestamp.seconds * 1000).toLocaleDateString()}</td>
-                        <td>€${d.valorOperador.toFixed(2)}</td>
-                        <td>€${d.valorDireto.toFixed(2)}</td>
-                        <td>${d.noitesExtra}</td>
-                        <td>${d.noitesCriancas}</td>
-                        <td>€${d.valorTmt.toFixed(2)}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-window.exportarPDFFaturacao = function(key) {
-    alert('Funcionalidade de exportação PDF será implementada em breve.');
-}
