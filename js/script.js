@@ -43,21 +43,19 @@ function copiarMensagem(texto) {
 export { copiarMensagem };
 
 // Função para enviar um e-mail de urgência usando EmailJS
-function enviarEmailUrgencia(apartamento, descricao) {
-    const templateParams = {
+export function enviarEmailUrgencia(apartamento, descricao) {
+    emailjs.send('service_tuglp9h', 'template_l516egr', {
         to_name: "apartments.oporto@gmail.com",
         from_name: "Apartments Oporto",
         subject: "Reparação Urgente Necessária",
         message: `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
-    };
-
-    emailjs.send('service_tuglp9h', 'template_l516egr', templateParams)
-        .then(function(response) {
-            console.log('E-mail enviado com sucesso!', response.status, response.text);
-        }, function(error) {
-            console.error('Erro ao enviar e-mail:', error);
-        });
+    })
+    .then(function(response) {
+        console.log('E-mail enviado com sucesso!', response.status, response.text);
+    }, function(error) {
+        console.error('Erro ao enviar e-mail:', error);
+    });
 }
 
-// Attach the function to the window object to make it available globally
+// Attach the function to the window object if needed (for testing)
 window.enviarEmailUrgencia = enviarEmailUrgencia;

@@ -1,4 +1,4 @@
-// js/reparações.js
+// js/reparacoes.js
 
 import { db, enviarEmailUrgencia } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
