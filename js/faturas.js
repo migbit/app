@@ -335,7 +335,7 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
 
         // Cabeçalho da Tabela em negrito e centralizado
         let yPosition = 30;
-        const xPositions = [2, 35, 75, 130, 170]; // Ajustado para começar mais perto da margem esquerda
+        const xPositions = [2, 35, 80, 130, 170]; // Ajustado para começar mais perto da margem esquerda
         const colWidths = [40, 40, 40, 40, 40]; // Larguras das colunas
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
