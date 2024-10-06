@@ -88,7 +88,7 @@ function gerarRelatorioFaturacao(faturas) {
                 <td>€${totalTaxaAirbnb.toFixed(2)}</td>
                 <td>€${totalFatura.toFixed(2)}</td>
                 <td>
-                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, '&apos;')}'>Ver Detalhes</button>
+                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, "\'")}'">Ver Detalhes</button>
                     <button onclick="exportarPDFFaturacao('${key}')">Exportar PDF</button>
                 </td>
             </tr>
@@ -113,7 +113,7 @@ function gerarRelatorioModelo30(faturas) {
                 <td>${obterNomeMes(parseInt(mes))}</td>
                 <td>€${totalTaxaAirbnb.toFixed(2)}</td>
                 <td>
-                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, '&apos;')}'>Ver Detalhes</button>
+                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, "\'")}'">Ver Detalhes</button>
                 </td>
             </tr>
         `;
@@ -145,7 +145,7 @@ function gerarRelatorioTMT(faturas) {
                     <td>${dados.noitesCriancas}</td>
                     <td>${totalEstadias}</td>
                     <td>
-                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes='${JSON.stringify(dados.detalhes).replace(/'/g, '&apos;')}'>Ver Detalhes</button>
+                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes='${JSON.stringify(dados.detalhes).replace(/'/g, "\'")}'">Ver Detalhes</button>
                     </td>
                 </tr>
             `;
@@ -207,4 +207,120 @@ window.mostrarDetalhesFaturacao = function(key, button) {
 
 window.mostrarDetalhesModelo30 = function(key, button) {
     const detalhes = JSON.parse(button.dataset.detalhes);
-    toggleDetalhes(button, gerar
+    toggleDetalhes(button, gerarHTMLDetalhesModelo30(detalhes));
+}
+
+window.mostrarDetalhesTMT = function(key, button) {
+    const detalhes = JSON.parse(button.dataset.detalhes);
+    toggleDetalhes(button, gerarHTMLDetalhesTMT(detalhes));
+}
+
+function toggleDetalhes(button, htmlContent) {
+    let detalhesDiv = button.parentElement.querySelector('.detalhes');
+    if (detalhesDiv) {
+        if (detalhesDiv.style.display === 'none') {
+            detalhesDiv.style.display = 'block';
+            button.textContent = 'Ocultar Detalhes';
+        } else {
+            detalhesDiv.style.display = 'none';
+            button.textContent = 'Ver Detalhes';
+        }
+    } else {
+        detalhesDiv = document.createElement('div');
+        detalhesDiv.className = 'detalhes';
+        detalhesDiv.innerHTML = htmlContent;
+        button.parentElement.appendChild(detalhesDiv);
+        button.textContent = 'Ocultar Detalhes';
+    }
+}
+
+function gerarHTMLDetalhesFaturacao(detalhes) {
+    return `
+        <table class="detalhes-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Fatura Nº</th>
+                    <th>Valor Transferência</th>
+                    <th>Taxa AirBnB</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${detalhes.map(d => `
+                    <tr>
+                        <td>${new Date(d.timestamp.seconds * 1000).toLocaleDateString()}</td>
+                        <td>${d.numeroFatura}</td>
+                        <td>€${d.valorTransferencia.toFixed(2)}</td>
+                        <td>€${d.taxaAirbnb.toFixed(2)}</td>
+                        <td>€${(d.valorTransferencia + d.taxaAirbnb).toFixed(2)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
+function gerarHTMLDetalhesModelo30(detalhes) {
+    return `
+        <table class="detalhes-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Fatura Nº</th>
+                    <th>Taxa AirBnB</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${detalhes.map(d => `
+                    <tr>
+                        <td>${new Date(d.timestamp.seconds * 1000).toLocaleDateString()}</td>
+                        <td>${d.numeroFatura}</td>
+                        <td>€${d.taxaAirbnb.toFixed(2)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
+function gerarHTMLDetalhesTMT(detalhes) {
+    return `
+        <table class="detalhes-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Valor Operador</th>
+                    <th>Valor Direto</th>
+                    <th>Noites Extra</th>
+                    <th>Noites Crianças</th>
+                    <th>Valor TMT</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${detalhes.map(d => `
+                    <tr>
+                        <td>${new Date(d.timestamp.seconds * 1000).toLocaleDateString()}</td>
+                        <td>€${d.valorOperador.toFixed(2)}</td>
+                        <td>€${d.valorDireto.toFixed(2)}</td>
+                        <td>${d.noitesExtra}</td>
+                        <td>${d.noitesCriancas}</td>
+                        <td>€${d.valorTmt.toFixed(2)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
+window.exportarPDFFaturacao = function(key) {
+    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(({ jsPDF }) => {
+        const doc = new jsPDF();
+        doc.text('Relatório de Faturação - ' + key, 10, 10);
+        doc.text('Detalhes do Relatório', 10, 20);
+        // Adicione mais detalhes conforme necessário
+        doc.save('relatorio-faturacao-' + key + '.pdf');
+    }).catch(error => {
+        console.error('Erro ao exportar PDF:', error);
+    });
+};
