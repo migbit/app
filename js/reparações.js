@@ -1,12 +1,13 @@
-// Import necessary modules
-import { db } from './script.js';
+// js/reparações.js
+
+import { db, enviarEmailUrgencia } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Select DOM elements
+// Selecionar elementos do DOM
 const reparacoesForm = document.getElementById('reparacoes-form');
 const listaReparacoesDiv = document.getElementById('lista-reparacoes');
 
-// Add a new repair entry
+// Adicionar uma nova reparação
 reparacoesForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -34,12 +35,13 @@ reparacoesForm.addEventListener('submit', async (e) => {
         reparacoesForm.reset();
         carregarReparacoes();
 
-        // Send email if urgency is "alta"
+        // Enviar e-mail se a urgência for "alta"
         if (urgencia === 'alta') {
-            console.log('Urgência alta detectada. Enviando e-mail...');  // Debugging statement
+            console.log('Urgência alta detectada. Enviando e-mail...');
 
-            // Send the email
-            enviarEmailUrgencia();
+            // Enviar o e-mail com a descrição da reparação e o apartamento
+            const mensagem = `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`;
+            enviarEmailUrgencia(mensagem);
         }
     } catch (error) {
         console.error("Erro ao registrar reparação: ", error);
@@ -47,7 +49,7 @@ reparacoesForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Load and display repairs
+// Carregar e exibir as reparações
 async function carregarReparacoes() {
     listaReparacoesDiv.innerHTML = '<p>Carregando reparações...</p>';
     try {
@@ -90,7 +92,7 @@ async function carregarReparacoes() {
     }
 }
 
-// Function to update the status of the repair
+// Função para atualizar o status da reparação
 window.atualizarStatus = async (id, campo, valor) => {
     try {
         const reparacaoRef = doc(db, "reparacoes", id);
@@ -102,7 +104,7 @@ window.atualizarStatus = async (id, campo, valor) => {
     }
 };
 
-// Load repairs on startup
+// Carregar reparações ao iniciar
 document.addEventListener('DOMContentLoaded', () => {
     carregarReparacoes();
 });
