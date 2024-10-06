@@ -1,19 +1,18 @@
 // js/reparacoes.js
 
-import { db } from './script.js';
+import { db, enviarEmailUrgencia } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Selecionar elementos do DOM
 const reparacoesForm = document.getElementById('reparacoes-form');
 const listaReparacoesDiv = document.getElementById('lista-reparacoes');
-const descricaoTextarea = document.getElementById('descricao');
 
 // Adicionar uma nova reparação
 reparacoesForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const apartamento = document.getElementById('apartamento').value;
-    const descricao = descricaoTextarea.value;
+    const descricao = document.getElementById('descricao').value;
     const urgencia = document.getElementById('urgencia').value;
 
     if (!apartamento || !descricao || !urgencia) {
@@ -34,20 +33,11 @@ reparacoesForm.addEventListener('submit', async (e) => {
         await addDoc(collection(db, "reparacoes"), novaReparacao);
         
         if (urgencia === 'alta') {
-            // Enviar e-mail usando EmailJS
-            const templateParams = {
-                to_name: 'apartments.oporto@gmail.com',
-                from_name: "Apartments Oporto",
-                subject: 'Reparação Urgente Necessária',
-                message: `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
-            };
-            
-            emailjs.send('service_tuglp9h', 'default_template', templateParams)
-                .then(function(response) {
-                    console.log('E-mail enviado com sucesso!', response.status, response.text);
-                }, function(error) {
-                    console.error('Erro ao enviar e-mail:', error);
-                });
+            enviarEmailUrgencia(
+                'apartments.oporto@gmail.com',
+                'Reparação Urgente Necessária',
+                `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
+            );
         }
 
         alert('Reparação registrada com sucesso!');
