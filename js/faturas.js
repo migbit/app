@@ -318,45 +318,45 @@ function gerarHTMLDetalhesTMT(detalhes) {
 }
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js';
-    
-    script.onload = function() {
-        try {
-            const grupo = JSON.parse(grupoJson.replace(/&quot;/g, '"'));
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            doc.text('Relatório de Faturação - ' + key, 10, 10);
-            doc.text('Detalhes do Relatório:', 10, 20);
-            
-            let yPosition = 30;
-            grupo.forEach((fatura, index) => {
-                const faturaDetalhes = [
-                    `Fatura Nº: ${fatura.numeroFatura || 'N/A'}`,
-                    `Data: ${fatura.timestamp?.seconds ? new Date(fatura.timestamp.seconds * 1000).toLocaleDateString() : 'N/A'}`,
-                    `Valor Transferência: €${(fatura.valorTransferencia || 0).toFixed(2)}`,
-                    `Taxa AirBnB: €${(fatura.taxaAirbnb || 0).toFixed(2)}`,
-                    `Total: €${((fatura.valorTransferencia || 0) + (fatura.taxaAirbnb || 0)).toFixed(2)}`
-                ];
-                
-                faturaDetalhes.forEach((linha, lineIndex) => {
-                    doc.text(linha, 10, yPosition + (lineIndex * 10));
-                });
-                yPosition += 50;
-            });
-            
-            doc.save(`relatorio-faturacao-${key}.pdf`);
-        } catch (e) {
-            console.error('Erro ao gerar PDF:', e);
-            alert('Erro ao gerar o PDF. Por favor, tente novamente.');
-        }
-    };
-    
-    script.onerror = function() {
-        console.error('Erro ao carregar a biblioteca jsPDF');
-        alert('Erro ao carregar o gerador de PDF. Por favor, verifique sua conexão e tente novamente.');
-    };
-    
-    document.body.appendChild(script);
+    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(jsPDFModule => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const grupo = JSON.parse(grupoJson);
+        
+        // Definir o título com o mês por extenso e centralizar
+        const [ano, mes] = key.split('-');
+        const meses = [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+        const titulo = `Relatório de Faturação - ${meses[mes - 1]} ${ano}`;
+        doc.setFontSize(16);
+        doc.text(titulo, 105, 10, { align: 'center' });
+
+        // Cabeçalho da Tabela
+        let yPosition = 30;
+        doc.setFontSize(12);
+        doc.text('Fatura Nº', 10, yPosition);
+        doc.text('Data', 40, yPosition);
+        doc.text('Valor Transferência (€)', 70, yPosition);
+        doc.text('Taxa AirBnB (€)', 120, yPosition);
+        doc.text('Total (€)', 160, yPosition);
+        
+        yPosition += 10;
+
+        // Dados das Faturas
+        grupo.forEach(fatura => {
+            doc.text(fatura.numeroFatura, 10, yPosition);
+            doc.text(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), 40, yPosition);
+            doc.text(fatura.valorTransferencia.toFixed(2), 70, yPosition);
+            doc.text(fatura.taxaAirbnb.toFixed(2), 120, yPosition);
+            doc.text((fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2), 160, yPosition);
+            yPosition += 10;
+        });
+
+        // Salvar o PDF
+        doc.save(`relatorio-faturacao-${ano}-${meses[mes - 1]}.pdf`);
+    }).catch(error => {
+        console.error('Erro ao exportar PDF:', error);
+    });
 };
