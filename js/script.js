@@ -1,9 +1,8 @@
 // js/script.js
 
-// Importar as funções necessárias do Firebase e EmailJS
+// Importar as funções necessárias do Firebase
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import emailjs from "https://cdn.emailjs.com/dist/email.min.js";
 
 // Configuração do Firebase
 const firebaseConfig = {
@@ -42,30 +41,3 @@ function copiarMensagem(texto) {
 
 // Exportar a função se necessário
 export { copiarMensagem };
-
-// Inicializar EmailJS
-(function() {
-    emailjs.init("service_tuglp9h"); // Substitua por seu Service ID obtido no EmailJS Dashboard
-})();
-
-/**
- * Função para enviar um e-mail de urgência usando EmailJS
- * @param {string} email - O e-mail de destino
- * @param {string} assunto - Assunto do e-mail
- * @param {string} mensagem - Conteúdo do e-mail
- */
-export function enviarEmailUrgencia(email, assunto, mensagem) {
-    const templateParams = {
-        to_name: email,
-        from_name: "Apartments Oporto",
-        subject: assunto,
-        message: mensagem
-    };
-
-    emailjs.send('service_tuglp9h', 'default_template', templateParams)
-        .then(function(response) {
-            console.log('E-mail enviado com sucesso!', response.status, response.text);
-        }, function(error) {
-            console.error('Erro ao enviar e-mail:', error);
-        });
-}
