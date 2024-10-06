@@ -44,11 +44,9 @@ function copiarMensagem(texto) {
 export { copiarMensagem };
 
 // Inicializar EmailJS
-(function() {
-    emailjs.init({
-        publicKey: "dRbsNarrwt7bsIiDK" // Use your actual public key here
-    });
-})();
+document.addEventListener('DOMContentLoaded', () => {
+    emailjs.init("dRbsNarrwt7bsIiDK");
+});
 
 // Função para enviar um e-mail de urgência usando EmailJS
 function enviarEmailUrgencia() {
