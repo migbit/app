@@ -93,10 +93,10 @@ async function carregarRelatorio() {
         });
         html += '</table>';
 
-        // Adicionar o total em caixa
+        // Adicionar o total em caixa centralizado
         const totalClass = totalCaixa >= 0 ? 'valor-positivo' : 'valor-negativo';
         const formattedTotal = formatNumber(Math.abs(totalCaixa));
-        html += `<div class="total-caixa">Total em caixa: <span class="${totalClass} formatted-number">${totalCaixa >= 0 ? '+' : '-'}€${formattedTotal}</span></div>`;
+        html += `<div class="total-caixa centered">Total em caixa: <span class="${totalClass} formatted-number">${totalCaixa >= 0 ? '+' : '-'}€${formattedTotal}</span></div>`;
 
         relatorioCaixaDiv.innerHTML = html;
     } catch (e) {
