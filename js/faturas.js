@@ -315,7 +315,7 @@ function gerarHTMLDetalhesTMT(detalhes) {
 
 window.exportarPDFFaturacao = function(key) {
     import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(jsPDFModule => {
-        const { jsPDF } = jsPDFModule;
+        const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         doc.text('Relatório de Faturação - ' + key, 10, 10);
         doc.text('Detalhes do Relatório', 10, 20);
