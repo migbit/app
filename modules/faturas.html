@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Faturas / Relatórios</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <h1>Faturas / Relatórios</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Início</a></li>
+                <li><a href="mensagens.html">Mensagens</a></li>
+                <li><a href="faturas.html">Faturas / Relatórios</a></li>
+                <li><a href="caixa.html">Caixa</a></li>
+                <li><a href="reparacoes.html">Reparações</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Formulário de Entrada -->
+        <section class="form-section">
+            <h2>Registrar Fatura</h2>
+            <form id="fatura-form">
+                <div class="form-group">
+                    <label for="apartamento">Apartamento:</label>
+                    <select id="apartamento" required>
+                        <option value="">Selecionar Apartamento</option>
+                        <option value="123">Apartamento 123</option>
+                        <option value="1248">Apartamento 1248</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ano">Ano:</label>
+                    <input type="number" id="ano" required>
+                </div>
+                <div class="form-group">
+                    <label for="mes">Mês:</label>
+                    <select id="mes" required>
+                        <option value="">Selecionar Mês</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="numero-fatura">Número da Fatura:</label>
+                    <input type="text" id="numero-fatura" required>
+                </div>
+                <div class="form-group">
+                    <label for="taxa-airbnb">Taxa Airbnb (€):</label>
+                    <input type="number" id="taxa-airbnb" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="valor-transferencia">Valor da Transferência (€):</label>
+                    <input type="number" id="valor-transferencia" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="valor-pago-operador">Valor Pago Operador Turístico (€):</label>
+                    <input type="number" id="valor-pago-operador" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="noites-extra">Noites Extra 7 dias:</label>
+                    <input type="number" id="noites-extra" step="1" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="noites-criancas">Noites Crianças:</label>
+                    <input type="number" id="noites-criancas" step="1" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="valor-pago-diretamente">Valor Pago Diretamente (€):</label>
+                    <input type="number" id="valor-pago-diretamente" step="0.01" value="0.00" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="valor-tmt">Valor T.M.T por noite (€):</label>
+                    <input type="number" id="valor-tmt" step="0.01" value="2.00" required>
+                </div>
+                <button type="submit">Registrar Fatura</button>
+            </form>
+        </section>
+
+        <!-- Relatórios -->
+        <section class="report-section">
+            <h2 class="centered">Relatórios</h2>
+
+            <!-- Primeiro Relatório - Faturação -->
+            <section id="relatorio-faturacao">
+                <h3>Relatório de Faturação</h3>
+                <div id="relatorio-faturacao-conteudo">
+                    <!-- Conteúdo do relatório será carregado aqui -->
+                </div>
+            </section>
+
+            <!-- Segundo Relatório - Modelo 30 -->
+            <section id="relatorio-modelo30">
+                <h3>Relatório Modelo 30</h3>
+                <div id="relatorio-modelo30-conteudo">
+                    <!-- Conteúdo do relatório será carregado aqui -->
+                </div>
+            </section>
+
+            <!-- Terceiro Relatório - Taxa Municipal Turística -->
+            <section id="relatorio-tmt">
+                <h3>Relatório Taxa Municipal Turística</h3>
+                <div id="relatorio-tmt-conteudo">
+                    <!-- Conteúdo do relatório será carregado aqui -->
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="../js/script.js"></script>
+    <script type="module" src="../js/faturas.js"></script>
+</body>
+</html>
