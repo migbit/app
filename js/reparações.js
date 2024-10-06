@@ -30,19 +30,22 @@ reparacoesForm.addEventListener('submit', async (e) => {
             timestamp: new Date()
         };
 
-        await addDoc(collection(db, "reparacoes"), novaReparacao);
-        
+        const docRef = await addDoc(collection(db, "reparacoes"), novaReparacao);
+        console.log("Reparação registrada com ID: ", docRef.id); // Log para verificar se o registro foi salvo com sucesso
+
+        alert('Reparação registrada com sucesso!');
+        reparacoesForm.reset();
+        await carregarReparacoes();
+
+        // Enviar e-mail de urgência se necessário
         if (urgencia === 'alta') {
+            console.log("Enviando e-mail de urgência...");
             enviarEmailUrgencia(
                 'apartments.oporto@gmail.com',
                 'Reparação Urgente Necessária',
                 `Uma nova reparação urgente foi registrada no apartamento ${apartamento}: ${descricao}`
             );
         }
-
-        alert('Reparação registrada com sucesso!');
-        reparacoesForm.reset();
-        await carregarReparacoes();
     } catch (error) {
         console.error("Erro ao registrar reparação: ", error);
         alert('Ocorreu um erro ao registrar a reparação.');
@@ -108,6 +111,7 @@ window.atualizarStatus = async (id, campo, valor) => {
     try {
         const reparacaoRef = doc(db, "reparacoes", id);
         await updateDoc(reparacaoRef, { [campo]: valor });
+        console.log(`Status da reparação atualizado: ${campo} = ${valor}`); // Log para verificar se o status foi atualizado corretamente
         await carregarReparacoes();
     } catch (error) {
         console.error("Erro ao atualizar status da reparação: ", error);
