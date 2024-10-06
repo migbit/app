@@ -88,7 +88,7 @@ function gerarRelatorioFaturacao(faturas) {
                 <td>€${totalTaxaAirbnb.toFixed(2)}</td>
                 <td>€${totalFatura.toFixed(2)}</td>
                 <td>
-                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes='${JSON.stringify(grupo)}'>Ver Detalhes</button>
+                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, '&apos;')}'>Ver Detalhes</button>
                     <button onclick="exportarPDFFaturacao('${key}')">Exportar PDF</button>
                 </td>
             </tr>
@@ -113,7 +113,7 @@ function gerarRelatorioModelo30(faturas) {
                 <td>${obterNomeMes(parseInt(mes))}</td>
                 <td>€${totalTaxaAirbnb.toFixed(2)}</td>
                 <td>
-                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes='${JSON.stringify(grupo)}'>Ver Detalhes</button>
+                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes='${JSON.stringify(grupo).replace(/'/g, '&apos;')}'>Ver Detalhes</button>
                 </td>
             </tr>
         `;
@@ -145,7 +145,7 @@ function gerarRelatorioTMT(faturas) {
                     <td>${dados.noitesCriancas}</td>
                     <td>${totalEstadias}</td>
                     <td>
-                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes='${JSON.stringify(dados.detalhes)}'>Ver Detalhes</button>
+                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes='${JSON.stringify(dados.detalhes).replace(/'/g, '&apos;')}'>Ver Detalhes</button>
                     </td>
                 </tr>
             `;
@@ -207,32 +207,4 @@ window.mostrarDetalhesFaturacao = function(key, button) {
 
 window.mostrarDetalhesModelo30 = function(key, button) {
     const detalhes = JSON.parse(button.dataset.detalhes);
-    toggleDetalhes(button, gerarHTMLDetalhesModelo30(detalhes));
-}
-
-window.mostrarDetalhesTMT = function(key, button) {
-    const detalhes = JSON.parse(button.dataset.detalhes);
-    toggleDetalhes(button, gerarHTMLDetalhesTMT(detalhes));
-}
-
-function toggleDetalhes(button, htmlContent) {
-    let detalhesDiv = button.parentElement.querySelector('.detalhes');
-    if (detalhesDiv) {
-        if (detalhesDiv.style.display === 'none') {
-            detalhesDiv.style.display = 'block';
-            button.textContent = 'Ocultar Detalhes';
-        } else {
-            detalhesDiv.style.display = 'none';
-            button.textContent = 'Ver Detalhes';
-        }
-    } else {
-        detalhesDiv = document.createElement('div');
-        detalhesDiv.className = 'detalhes';
-        detalhesDiv.innerHTML = htmlContent;
-        button.parentElement.appendChild(detalhesDiv);
-        button.textContent = 'Ocultar Detalhes';
-    }
-}
-
-function gerarHTMLDetalhesFaturacao(detalhes) {
-    return `
+    toggleDetalhes(button, gerar
