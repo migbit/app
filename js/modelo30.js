@@ -102,7 +102,7 @@ function generateReportTable(data) {
             <tr>
                 <td>${ano}</td>
                 <td>${getMonthName(mes)}</td>
-                <td>${valor.toFixed(2)}</td>
+                <td>€ ${valor.toFixed(2)}</td>
                 <td><button onclick="mostrarDetalhes(this)" data-detalhes="${detalhesJson}">Ver Detalhes</button></td>
             </tr>
         `;
