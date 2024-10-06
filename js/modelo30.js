@@ -120,6 +120,39 @@ function getMonthName(monthNumber) {
     return months[monthNumber - 1] || 'Mês Inválido';
 }
 
+// Show or hide details
+window.mostrarDetalhes = function(button) {
+    let detalhesDiv = button.nextElementSibling;
+    if (detalhesDiv && detalhesDiv.classList.contains('detalhes')) {
+        // If details are already visible, hide them and change button text
+        if (detalhesDiv.style.display === 'none') {
+            detalhesDiv.style.display = 'block';
+            button.textContent = 'Ocultar Detalhes';
+        } else {
+            detalhesDiv.style.display = 'none';
+            button.textContent = 'Ver Detalhes';
+        }
+    } else {
+        // Otherwise, add details and change button text
+        const detalhes = JSON.parse(decodeURIComponent(button.dataset.detalhes));
+        let detailsHtml = "<div class='detalhes'><table><thead><tr><th>Data</th><th>Valor (€)</th></tr></thead><tbody>";
+        detalhes.forEach(({ data, valor }) => {
+            detailsHtml += `
+                <tr>
+                    <td>${data}</td>
+                    <td>€ ${valor.toFixed(2)}</td>
+                </tr>`;
+        });
+        detailsHtml += "</tbody></table></div>";
+        const div = document.createElement("div");
+        div.classList.add('detalhes');
+        div.style.display = 'block';
+        div.innerHTML = detailsHtml;
+        button.parentElement.appendChild(div);
+        button.textContent = 'Ocultar Detalhes';
+    }
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     initializeForm();
