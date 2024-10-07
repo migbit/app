@@ -1,10 +1,7 @@
-// compras.js
-
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("lista-compras");
     const resumoLista = document.getElementById("resumo-lista");
     const requisitarButton = document.getElementById("requisitar");
-    const confirmarEnvioButton = document.getElementById("confirmar-envio");
 
     // Lista pré-definida de itens
     const itensPreDefinidos = {
@@ -64,34 +61,35 @@ document.addEventListener("DOMContentLoaded", () => {
     function adicionarItens() {
         Object.keys(itensPreDefinidos).forEach(categoria => {
             const secao = document.getElementById(categoria);
-            if (secao) {
-                itensPreDefinidos[categoria].forEach(nomeItem => {
-                    const divItem = document.createElement("div");
-                    divItem.classList.add("item");
-
-                    divItem.innerHTML = `
-                        <label>${nomeItem}</label>
-                        <input type="number" value="0" min="0">
-                        <button type="button" class="incrementar">+</button>
-                        <button type="button" class="decrementar">-</button>
-                        <button type="button" class="limpar">Limpar</button>
-                        <select class="local">
-                            <option value="local" selected>Local</option>
-                            <option value="123">123</option>
-                            <option value="1248">1248</option>
-                            <option value="escritorio">Escritório</option>
-                            <option value="lavandaria">Lavandaria</option>
-                            <option value="casa">Casa</option>
-                        </select>
-                    `;
-
-                    secao.appendChild(divItem);
-                });
+            if (!secao) {
+                console.error(`Secção ${categoria} não encontrada`);
+                return;
             }
+            
+            itensPreDefinidos[categoria].forEach(nomeItem => {
+                const divItem = document.createElement("div");
+                divItem.classList.add("item");
+
+                divItem.innerHTML = `
+                    <label>${nomeItem}</label>
+                    <input type="number" value="0" min="0">
+                    <button type="button" class="incrementar">+</button>
+                    <button type="button" class="decrementar">-</button>
+                    <button type="button" class="limpar">Limpar</button>
+                    <select class="local">
+                        <option value="local" selected>Local</option>
+                        <option value="123">123</option>
+                        <option value="1248">1248</option>
+                        <option value="escritorio">Escritório</option>
+                        <option value="lavandaria">Lavandaria</option>
+                        <option value="casa">Casa</option>
+                    </select>
+                `;
+
+                secao.appendChild(divItem);
+            });
         });
     }
-
-    adicionarItens();
 
     // Adiciona eventos de incrementar, decrementar e limpar
     function adicionarEventosItem(item) {
@@ -105,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         decrementarButton.addEventListener("click", () => {
-            if (quantidadeInput.value > 0) {
+            if (parseInt(quantidadeInput.value) > 0) {
                 quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
             }
         });
@@ -116,6 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Inicialização
+    adicionarItens();
+
+    // Adicionar eventos a todos os itens
     form.querySelectorAll(".item").forEach(item => {
         adicionarEventosItem(item);
     });
@@ -126,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const itens = form.querySelectorAll(".item");
 
         itens.forEach(item => {
-            const nomeItem = item.querySelector("input[type='text']")?.value || item.querySelector("label")?.innerText;
+            const nomeItem = item.querySelector("label")?.innerText;
             const quantidade = parseInt(item.querySelector("input[type='number']").value);
             const local = item.querySelector(".local").value;
 
@@ -137,27 +139,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-
-    // Confirmação e envio do email
-    confirmarEnvioButton.addEventListener("click", () => {
-        const resumo = Array.from(resumoLista.children).map(li => li.textContent).join("\n");
-        if (resumo) {
-            enviarEmailListaCompras(resumo);
-        } else {
-            alert("Nenhum item selecionado para requisitar.");
-        }
-    });
-
-    // Função para enviar email usando EmailJS
-    function enviarEmailListaCompras(resumo) {
-        emailjs.send("service_tuglp9h", "template_4micnki", {
-            message: resumo
-        }).then(function(response) {
-            console.log("E-mail enviado com sucesso!", response.status, response.text);
-            alert("Resumo enviado com sucesso!");
-        }, function(error) {
-            console.error("Erro ao enviar e-mail:", error);
-            alert("Erro ao enviar o e-mail. Tente novamente mais tarde.");
-        });
-    }
 });
