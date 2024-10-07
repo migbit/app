@@ -1,4 +1,4 @@
-// js/lista-compras.js
+// js/compras.js
 import { enviarEmailUrgencia } from './script.js';
 
 // Estrutura de dados para a lista de compras
@@ -27,7 +27,6 @@ const listaCompras = {
     ]
 };
 
-// Função para criar a lista de compras no DOM
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
     
@@ -65,19 +64,25 @@ function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
     itemDiv.innerHTML = `
-        <span class="item-nome">${item}</span>
-        <input type="number" value="0" min="0" class="item-quantidade">
-        <button type="button" class="btn-aumentar">+</button>
-        <button type="button" class="btn-diminuir">-</button>
-        <select class="item-local">
-            <option value="Local">Local</option>
-            <option value="123">123</option>
-            <option value="1248">1248</option>
-            <option value="Escritório">Escritório</option>
-            <option value="Lavandaria">Lavandaria</option>
-            <option value="Casa">Casa</option>
-        </select>
-        <button type="button" class="btn-limpar">Limpar</button>
+        <div class="item-info">
+            <span class="item-nome">${item}</span>
+            <div class="item-controles">
+                <input type="number" value="0" min="0" class="item-quantidade">
+                <button type="button" class="btn-aumentar">+</button>
+                <button type="button" class="btn-diminuir">-</button>
+            </div>
+        </div>
+        <div class="item-acoes">
+            <select class="item-local">
+                <option value="Local">Local</option>
+                <option value="123">123</option>
+                <option value="1248">1248</option>
+                <option value="Escritório">Escritório</option>
+                <option value="Lavandaria">Lavandaria</option>
+                <option value="Casa">Casa</option>
+            </select>
+            <button type="button" class="btn-limpar">Limpar</button>
+        </div>
     `;
     return itemDiv;
 }
@@ -86,19 +91,25 @@ function criarItemCompraEmBranco() {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
     itemDiv.innerHTML = `
-        <input type="text" class="item-nome-custom" placeholder="Novo item">
-        <input type="number" value="0" min="0" class="item-quantidade">
-        <button type="button" class="btn-aumentar">+</button>
-        <button type="button" class="btn-diminuir">-</button>
-        <select class="item-local">
-            <option value="Local">Local</option>
-            <option value="123">123</option>
-            <option value="1248">1248</option>
-            <option value="Escritório">Escritório</option>
-            <option value="Lavandaria">Lavandaria</option>
-            <option value="Casa">Casa</option>
-        </select>
-        <button type="button" class="btn-limpar">Limpar</button>
+        <div class="item-info">
+            <input type="text" class="item-nome-custom" placeholder="Novo item">
+            <div class="item-controles">
+                <input type="number" value="0" min="0" class="item-quantidade">
+                <button type="button" class="btn-aumentar">+</button>
+                <button type="button" class="btn-diminuir">-</button>
+            </div>
+        </div>
+        <div class="item-acoes">
+            <select class="item-local">
+                <option value="Local">Local</option>
+                <option value="123">123</option>
+                <option value="1248">1248</option>
+                <option value="Escritório">Escritório</option>
+                <option value="Lavandaria">Lavandaria</option>
+                <option value="Casa">Casa</option>
+            </select>
+            <button type="button" class="btn-limpar">Limpar</button>
+        </div>
     `;
     return itemDiv;
 }
