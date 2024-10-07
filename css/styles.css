@@ -405,7 +405,7 @@ ul li small {
     background-color: #e74c3c;
     color: white;
     border: none;
-    height: 20px; /* Especifica a altura do botão */
+    height: 10px; /* Especifica a altura do botão */
     padding: 1px 10px;
     cursor: pointer;
     border-radius: 5px;
