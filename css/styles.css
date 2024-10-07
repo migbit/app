@@ -1,32 +1,27 @@
 /* Reset and Base Styles */
-*,
-*::before,
-*::after {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    font-family: 'Roboto', sans-serif;
+    background-color: #ecf0f1;
+    color: #2c3e50;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    font-size: 16px; /* Consistent font size */
-    line-height: 1.6; /* Improved line height */
+    line-height: 1.6;
 }
 
 /* Header Styles */
 header {
-    background-color: #2c3e50;
-    padding: 20px 0; /* Added padding-top and padding-bottom */
-    color: #fff; /* Use a more readable white */
+    background-color: #34495e;
+    padding: 20px;
+    color: white;
     text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 1; /* Ensure header stays on top */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 nav ul {
@@ -35,25 +30,21 @@ nav ul {
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 10px;
-    padding: 0;
 }
 
 nav ul li {
-    margin: 5px 15px;
+    margin: 0 15px;
 }
 
 nav ul li a {
-    color: #fff;
+    color: white;
     text-decoration: none;
-    font-weight: bold;
-    padding: 8px 15px; /* Added padding for better visual separation*/
-    border-radius: 3px;
-    transition: background-color 0.3s, color 0.3s; /* More specific transition */
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
 nav ul li a:hover {
-    background-color: #ddd;
-    color: #2c3e50;
+    color: #1abc9c;
 }
 
 /* Main Content Styles */
@@ -62,100 +53,325 @@ main {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    background-color: #fff; /*Added background to main content area for better separation*/
-    overflow: hidden;
 }
 
 .form-section, .report-section {
-    background-color: #fff; /* Added background for better visual separation */
+    background-color: white;
     padding: 20px;
     margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Slightly adjusted shadow */
-    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 /* Form Styles */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
-    font-size: 0.9em;
+    font-size: 1em;
+    color: #34495e;
 }
 
 input[type="number"],
 select,
-input[type="checkbox"],
-input[type="text"],
-textarea {
+input[type="checkbox"] {
     width: 100%;
-    padding: 10px; /* Increased padding */
-    border: 1px solid #ccc;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
     border-radius: 4px;
     max-width: 300px;
     font-size: 1em;
-    margin-bottom: 10px; /* Added margin for better spacing*/
-}
-
-input[type="checkbox"] {
-    width: auto;
 }
 
 button {
-    padding: 10px 20px;  /* Increased padding*/
-    background-color: #2c3e50;
+    padding: 10px 20px;
+    background-color: #1abc9c;
     border: none;
-    color: #fff;
+    color: white;
     cursor: pointer;
     border-radius: 5px;
     font-size: 1em;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #555;
-    color: #fff;
+    background-color: #16a085;
 }
 
-/* Table Styles (Improved) */
+/* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    margin-bottom: 30px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
 }
 
 th, td {
-    padding: 10px;
+    padding: 12px 15px;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #2c3e50;
-    color: #fff;
+    background-color: #34495e;
+    color: white;
     font-weight: bold;
     text-transform: uppercase;
 }
 
 tr:nth-child(even) {
-    background-color: #f8f8f8;
+    background-color: #fafafa;
 }
 
 tr:hover {
     background-color: #f1f1f1;
 }
 
+/* Estilos Específicos para Caixa */
+#relatorio-caixa h3 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
 
-/* ... rest of your styles */
+#relatorio-caixa > div {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+}
 
+#relatorio-caixa > div:last-child {
+    border-bottom: none;
+}
 
-/* General improvements and readability */
-/* ... */
+.btn-entrada, .btn-saida {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-entrada {
+    background-color: #ecf0f1;
+    color: #333;
+}
+
+.btn-saida {
+    background-color: #ecf0f1;
+    color: #333;
+}
+
+.btn-entrada.btn-active {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-saida.btn-active {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.valor-positivo {
+    color: #2ecc71;
+}
+
+.valor-negativo {
+    color: #e74c3c;
+}
+
+.total-caixa {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #fafafa;
+    border-radius: 5px;
+}
+
+/* Novos estilos para formatação de números */
+.formatted-number {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+/* Utility Classes */
+.centered {
+    text-align: center;
+}
+
+#mensagem {
+    white-space: pre-wrap;
+    font-size: 1em;
+    color: #7f8c8d;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #34495e;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* T.M.T. Report Specific Styles */
+#relatorio-tmt h3 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+#relatorio-tmt h4 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    color: #555;
+}
+
+#relatorio-tmt > div {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+}
+
+#relatorio-tmt > div:last-child {
+    border-bottom: none;
+}
+
+/* Reparações Styles */
+.urgente {
+    background-color: #ffe4e1;
+    color: #d9534f;
+}
+
+.reparado {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
+/* Adjustments to the existing table styles for better presentation */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
+}
+
+td, th {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #2c3e50;
+    color: white;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    transform: scale(1.3);
+}
+
+/* Estilos específicos para a Lista de Compras */
+.categoria {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+}
+
+.categoria h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.item-compra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.item-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.item-nome, .item-nome-custom {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.item-nome-custom {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.item-controles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-quantidade {
+    width: 50px;
+    text-align: center;
+    margin: 0 5px;
+}
+
+.btn-aumentar, .btn-diminuir {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 1;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.item-acoes {
+    display: flex;
+    align-items: center;
+}
+
+.item-local {
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.btn-limpar {
+    background-color: #e74c3c;
+    color: white
