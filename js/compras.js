@@ -1,7 +1,6 @@
 // js/compras.js
 import { db } from './script.js';
 import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import { enviarEmailUrgencia } from './script.js';
 
 // Estrutura de dados para a lista de compras
 const listaCompras = {
