@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to initialize selectors and events
 function initializeMessageSelectors(mensagens) {
-    // Selecionar elementos do DOM
+    // Select DOM elements
     const idiomaSelect = document.getElementById('idioma');
     const categoriaDiv = document.getElementById('categoria-div');
     const categoriaSelect = document.getElementById('categoria');
