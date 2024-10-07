@@ -1,4 +1,6 @@
 // js/compras.js
+<script type="module" src="../js/script.js"></script>
+<script type="module" src="../js/compras.js"></script>
 import { db } from './script.js';
 import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
