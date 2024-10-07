@@ -1,7 +1,10 @@
 // js/compras.js
 import { db } from './script.js';
 import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import { enviarEmailUrgencia } from './script.js';
+import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+
+// Inicialização do EmailJS
+emailjs.init("dRbsNarrwt7bsIiDK");
 
 // Estrutura de dados para a lista de compras
 const listaCompras = {
@@ -247,8 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('compras-form').addEventListener('change', (e) => {
-        if (e.target.classList.contains('item-quantidade') || 
-            e.target.classList.contains('item-local') || 
+        if (e.target.classList.contains('item-quantidade') ||
+            e.target.classList.contains('item-local') ||
             e.target.classList.contains('item-nome-custom')) {
             salvarListaCompras();
         }
