@@ -1,102 +1,133 @@
 {
-    "Antes Reserva": {
-      "Baixar Preço": {
-        "Português": "Aqui está a mensagem para Baixar Preço em Português.",
-        "Inglês": "Here is the message for Baixar Preço in English.",
-        "Espanhol": "Aquí está el mensaje para Baixar Preço en Español.",
-        "Francês": "Voici le message pour Baixar Preço en Français.",
-        "Alemão": "Hier ist die Nachricht für Baixar Preço auf Deutsch.",
-        "Italiano": "Ecco il messaggio per Baixar Preço in Italiano."
-      },
-      "Estacionamento 123": {
-        "Português": "Mensagem para Estacionamento 123 em Português.",
-        "Inglês": "Message for Estacionamento 123 in English.",
-        "Espanhol": "Mensaje para Estacionamento 123 en Español.",
-        "Francês": "Message pour Estacionamento 123 en Français.",
-        "Alemão": "Nachricht für Estacionamento 123 auf Deutsch.",
-        "Italiano": "Messaggio per Estacionamento 123 in Italiano."
-      },
-      "Estacionamento 1248": {
-        "Português": "Mensagem para Estacionamento 1248 em Português.",
-        "Inglês": "Message for Estacionamento 1248 in English.",
-        "Espanhol": "Mensaje para Estacionamento 1248 en Español.",
-        "Francês": "Message pour Estacionamento 1248 en Français.",
-        "Alemão": "Nachricht für Estacionamento 1248 auf Deutsch.",
-        "Italiano": "Messaggio per Estacionamento 1248 in Italiano."
-      },
-      "Escadas 123": {
-        "Português": "Mensagem para Escadas 123 em Português.",
-        "Inglês": "Message for Escadas 123 in English.",
-        "Espanhol": "Mensaje para Escadas 123 en Español.",
-        "Francês": "Message pour Escadas 123 en Français.",
-        "Alemão": "Nachricht für Escadas 123 auf Deutsch.",
-        "Italiano": "Messaggio per Escadas 123 in Italiano."
-      },
-      "Escadas 1248": {
-        "Português": "Mensagem para Escadas 1248 em Português.",
-        "Inglês": "Message for Escadas 1248 in English.",
-        "Espanhol": "Mensaje para Escadas 1248 en Español.",
-        "Francês": "Message pour Escadas 1248 en Français.",
-        "Alemão": "Nachricht für Escadas 1248 auf Deutsch.",
-        "Italiano": "Messaggio per Escadas 1248 in Italiano."
-      },
-      "Localização": {
-        "Português": "Mensagem para Localização em Português.",
-        "Inglês": "Message for Localização in English.",
-        "Espanhol": "Mensaje para Localização en Español.",
-        "Francês": "Message pour Localização en Français.",
-        "Alemão": "Nachricht für Localização auf Deutsch.",
-        "Italiano": "Messaggio per Localização in Italiano."
-      },
-      "Check-In cedo sem hóspedes": {
-        "Português": "Mensagem para Check-In cedo sem hóspedes em Português.",
-        "Inglês": "Message for Check-In cedo sem hóspedes in English.",
-        "Espanhol": "Mensaje para Check-In cedo sem hóspedes en Español.",
-        "Francês": "Message pour Check-In cedo sem hóspedes en Français.",
-        "Alemão": "Nachricht für Check-In cedo sem hóspedes auf Deutsch.",
-        "Italiano": "Messaggio per Check-In cedo sem hóspedes in Italiano."
-      },
-      "Check-In cedo com hóspedes 123": {
-        "Português": "Mensagem para Check-In cedo com hóspedes 123 em Português.",
-        "Inglês": "Message for Check-In cedo com hóspedes 123 in English.",
-        "Espanhol": "Mensaje para Check-In cedo com hóspedes 123 en Español.",
-        "Francês": "Message pour Check-In cedo com hóspedes 123 en Français.",
-        "Alemão": "Nachricht für Check-In cedo com hóspedes 123 auf Deutsch.",
-        "Italiano": "Messaggio per Check-In cedo com hóspedes 123 in Italiano."
-      },
-      "Check-In cedo com hóspedes 1248": {
-        "Português": "Mensagem para Check-In cedo com hóspedes 1248 em Português.",
-        "Inglês": "Message for Check-In cedo com hóspedes 1248 in English.",
-        "Espanhol": "Mensaje para Check-In cedo com hóspedes 1248 en Español.",
-        "Francês": "Message pour Check-In cedo com hóspedes 1248 en Français.",
-        "Alemão": "Nachricht für Check-In cedo com hóspedes 1248 auf Deutsch.",
-        "Italiano": "Messaggio per Check-In cedo com hóspedes 1248 in Italiano."
-      },
-      "Check-in tardio": {
-        "Português": "Mensagem para Check-in tardio em Português.",
-        "Inglês": "Message for Check-in tardio in English.",
-        "Espanhol": "Mensaje para Check-in tardio en Español.",
-        "Francês": "Message pour Check-in tardio en Français.",
-        "Alemão": "Nachricht für Check-in tardio auf Deutsch.",
-        "Italiano": "Messaggio per Check-in tardio in Italiano."
-      }
+  "Antes Reserva": {
+    "Baixar Preço": {
+      "Português": "<p><strong>Olá [Guest Name]!</strong> Para baixar o preço, siga este link:</p>\n<a href=\"[link]\" target=\"_blank\">Clique aqui para baixar o preço</a>",
+      "Inglês": "<p><strong>Hello [Guest Name]!</strong> To lower the price, follow this link:</p>\n<a href=\"[link]\" target=\"_blank\">Click here to lower the price</a>",
+      "Espanhol": "<p><strong>¡Hola [Guest Name]!</strong> Para bajar el precio, sigue este enlace:</p>\n<a href=\"[link]\" target=\"_blank\">Haz clic aquí para bajar el precio</a>"
     },
-    "Antes do Check-in": {
-      "Segunda-feira": {
-        "Português": "Informações para o check-in na segunda-feira.",
-        "Inglês": "Check-in information for Monday.",
-        "Espanhol": "Información de check-in para el lunes.",
-        "Francês": "Informations de check-in pour lundi.",
-        "Alemão": "Check-in-Informationen für Montag.",
-        "Italiano": "Informazioni per il check-in lunedì."
-      },
-      "Quando Chegam?": {
-        "Português": "Quando chegam no Idioma Português.",
-        "Inglês": "Hello [Guest's Name],\n\nI hope you’re doing well!\n\nI just wanted to check in and see if you have an estimated time of arrival for this [Week Day]. If there’s anything you need or any questions before your stay, please don’t hesitate to reach out! Wishing you safe travels, and we can’t wait to welcome you.\n\nKind regards,\nMiguel",
-        "Espanhol": "Quando chegam no Idioma Espanhol.",
-        "Francês": "Quando chegam no Idioma Francês.",
-        "Alemão": "Quando chegam no Idioma Alemão.",
-        "Italiano": "Quando chegam no Idioma Italiano."
-      }
+    "Estacionamento 123": {
+      "Português": "<p><strong>Estacionamento 123 [Guest Name]</strong> está disponível para sua reserva na [week day].</p>",
+      "Inglês": "<p><strong>Parking 123 [Guest Name]</strong> is available for your reservation on [week day].</p>",
+      "Espanhol": "<p><strong>El estacionamiento 123 [Guest Name]</strong> está disponible para su reserva el [week day].</p>"
+    },
+    "Estacionamento 1248": {
+      "Português": "Mensagem para Estacionamento 1248 em Português.",
+      "Inglês": "Message for Estacionamento 1248 in English.",
+      "Espanhol": "Mensaje para Estacionamento 1248 en Español.",
+      "Francês": "Message pour Estacionamento 1248 en Français.",
+      "Alemão": "Nachricht für Estacionamento 1248 auf Deutsch.",
+      "Italiano": "Messaggio per Estacionamento 1248 in Italiano."
+    },
+    "Escadas 123": {
+      "Português": "Mensagem para Escadas 123 em Português.",
+      "Inglês": "Message for Escadas 123 in English.",
+      "Espanhol": "Mensaje para Escadas 123 en Español.",
+      "Francês": "Message pour Escadas 123 en Français.",
+      "Alemão": "Nachricht für Escadas 123 auf Deutsch.",
+      "Italiano": "Messaggio per Escadas 123 in Italiano."
+    },
+    "Escadas 1248": {
+      "Português": "Mensagem para Escadas 1248 em Português.",
+      "Inglês": "Message for Escadas 1248 in English.",
+      "Espanhol": "Mensaje para Escadas 1248 en Español.",
+      "Francês": "Message pour Escadas 1248 en Français.",
+      "Alemão": "Nachricht für Escadas 1248 auf Deutsch.",
+      "Italiano": "Messaggio per Escadas 1248 in Italiano."
+    },
+    "Localização": {
+      "Português": "Mensagem para Localização em Português.",
+      "Inglês": "Message for Localização in English.",
+      "Espanhol": "Mensaje para Localização en Español.",
+      "Francês": "Message pour Localização en Français.",
+      "Alemão": "Nachricht für Localização auf Deutsch.",
+      "Italiano": "Messaggio per Localização in Italiano."
+    },
+    "Check-In cedo sem hóspedes": {
+      "Português": "Mensagem para Check-In cedo sem hóspedes em Português.",
+      "Inglês": "Message for Check-In cedo sem hóspedes in English.",
+      "Espanhol": "Mensaje para Check-In cedo sem hóspedes en Español.",
+      "Francês": "Message pour Check-In cedo sem hóspedes en Français.",
+      "Alemão": "Nachricht für Check-In cedo sem hóspedes auf Deutsch.",
+      "Italiano": "Messaggio per Check-In cedo sem hóspedes in Italiano."
+    },
+    "Check-In cedo com hóspedes 123": {
+      "Português": "Mensagem para Check-In cedo com hóspedes 123 em Português.",
+      "Inglês": "Message for Check-In cedo com hóspedes 123 in English.",
+      "Espanhol": "Mensaje para Check-In cedo com hóspedes 123 en Español.",
+      "Francês": "Message pour Check-In cedo com hóspedes 123 en Français.",
+      "Alemão": "Nachricht für Check-In cedo com hóspedes 123 auf Deutsch.",
+      "Italiano": "Messaggio per Check-In cedo com hóspedes 123 in Italiano."
+    },
+    "Check-In cedo com hóspedes 1248": {
+      "Português": "Mensagem para Check-In cedo com hóspedes 1248 em Português.",
+      "Inglês": "Message for Check-In cedo com hóspedes 1248 in English.",
+      "Espanhol": "Mensaje para Check-In cedo com hóspedes 1248 en Español.",
+      "Francês": "Message pour Check-In cedo com hóspedes 1248 en Français.",
+      "Alemão": "Nachricht für Check-In cedo com hóspedes 1248 auf Deutsch.",
+      "Italiano": "Messaggio per Check-In cedo com hóspedes 1248 in Italiano."
+    },
+    "Check-in tardio": {
+      "Português": "Mensagem para Check-in tardio em Português.",
+      "Inglês": "Message for Check-in tardio in English.",
+      "Espanhol": "Mensaje para Check-in tardio en Español.",
+      "Francês": "Message pour Check-in tardio en Français.",
+      "Alemão": "Nachricht für Check-in tardio auf Deutsch.",
+      "Italiano": "Messaggio per Check-in tardio in Italiano."
+    }
+  },
+  "Antes do Check-in": {
+    "Segunda-feira": {
+      "Português": "<p>Informações para o <strong>check-in [Guest Name]</strong> na segunda-feira [week day].</p>",
+      "Inglês": "<p>Check-in information for <strong>Monday [Guest Name]</strong> on [week day].</p>",
+      "Espanhol": "<p>Información de <strong>check-in [Guest Name]</strong> para el lunes [week day].</p>"
+    },
+    "Quando Chegam?": {
+      "Português": "Quando chegam no Idioma Português.",
+      "Inglês": "Hello [Guest's Name],\n\nI hope you’re doing well!\n\nI just wanted to check in and see if you have an estimated time of arrival for this [Week Day]. If there’s anything you need or any questions before your stay, please don’t hesitate to reach out! Wishing you safe travels, and we can’t wait to welcome you.\n\nKind regards,\nMiguel",
+      "Espanhol": "Quando chegam no Idioma Espanhol.",
+      "Francês": "Quando chegam no Idioma Francês.",
+      "Alemão": "Quando chegam no Idioma Alemão.",
+      "Italiano": "Quando chegam no Idioma Italiano."
+    }
+  },
+  "Chegada ao Porto": {
+    "Instruções metro aeroporto": {
+      "Português": "Siga as instruções do metrô para chegar ao aeroporto.",
+      "Inglês": "Follow the metro instructions to reach the airport.",
+      "Espanhol": "Siga las instrucciones del metro para llegar al aeropuerto.",
+      "Francês": "Suivez les instructions du métro pour arriver à l'aéroport.",
+      "Alemão": "Folgen Sie den Metroanweisungen, um den Flughafen zu erreichen.",
+      "Italiano": "Segui le istruzioni della metro per raggiungere l'aeroporto."
+    }
+  },
+  "Durante a Estadia": {
+    "Papel Higiénico 123": {
+      "Português": "O papel higiênico 123 está disponível.",
+      "Inglês": "Toilet paper 123 is available.",
+      "Espanhol": "El papel higiénico 123 está disponible.",
+      "Francês": "Le papier toilette 123 est disponible.",
+      "Alemão": "Toilettenpapier 123 ist verfügbar.",
+      "Italiano": "La carta igienica 123 è disponibile."
+    }
+  },
+  "Check-Out": {
+    "Agradecimento": {
+      "Português": "Obrigado por se hospedar conosco!",
+      "Inglês": "Thank you for staying with us!",
+      "Espanhol": "¡Gracias por hospedarse con nosotros!",
+      "Francês": "Merci d'avoir séjourné avec nous!",
+      "Alemão": "Danke, dass Sie bei uns übernachtet haben!",
+      "Italiano": "Grazie per aver soggiornato con noi!"
+    }
+  },
+  "Comentário": {
+    "Feedback": {
+      "Português": "Gostaríamos de saber como foi sua estadia.",
+      "Inglês": "We would love to hear about your stay.",
+      "Espanhol": "Nos encantaría saber cómo fue su estadía.",
+      "Francês": "Nous aimerions savoir comment s'est déroulé votre séjour.",
+      "Alemão": "Wir würden gerne erfahren, wie Ihr Aufenthalt war.",
+      "Italiano": "Ci piacerebbe sapere com'è stato il vostro soggiorno."
     }
   }
+}
