@@ -37,14 +37,18 @@ nav ul li {
 }
 
 nav ul li a {
-    color: white;
+    color: #34495e;
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 nav ul li a:hover {
-    color: #1abc9c;
+    background-color: #1abc9c;
+    color: white;
 }
 
 /* Main Content Styles */
