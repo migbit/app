@@ -1,3 +1,5 @@
+// js/mensagens.js
+
 // Load the JSON data
 document.addEventListener('DOMContentLoaded', () => {
     fetch('./mensagensData.json')
@@ -17,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to initialize selectors and events
 function initializeMessageSelectors(mensagens) {
-    // Select DOM elements
+    // Selecionar elementos do DOM
     const idiomaSelect = document.getElementById('idioma');
     const categoriaDiv = document.getElementById('categoria-div');
     const categoriaSelect = document.getElementById('categoria');
@@ -25,10 +27,8 @@ function initializeMessageSelectors(mensagens) {
     const opcaoSelect = document.getElementById('opcao');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    const variablesDiv = document.getElementById('variables-div');
-
-    // Hide the variables section initially
-    variablesDiv.style.display = 'none';
+    const guestNameInput = document.getElementById('guest-name');
+    const weekDayInput = document.getElementById('week-day');
 
     // Evento para quando o idioma for selecionado
     idiomaSelect.addEventListener('change', () => {
@@ -38,12 +38,14 @@ function initializeMessageSelectors(mensagens) {
             opcaoDiv.style.display = 'none';
             opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
             mensagemSecao.style.display = 'none';
-            variablesDiv.style.display = 'none';
+            guestNameInput.style.display = 'none';
+            weekDayInput.style.display = 'none';
         } else {
             categoriaDiv.style.display = 'none';
             opcaoDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
-            variablesDiv.style.display = 'none';
+            guestNameInput.style.display = 'none';
+            weekDayInput.style.display = 'none';
         }
     });
 
@@ -65,7 +67,8 @@ function initializeMessageSelectors(mensagens) {
         } else {
             opcaoDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
-            variablesDiv.style.display = 'none';
+            guestNameInput.style.display = 'none';
+            weekDayInput.style.display = 'none';
         }
     });
 
@@ -74,30 +77,20 @@ function initializeMessageSelectors(mensagens) {
         const idioma = idiomaSelect.value;
         const categoria = categoriaSelect.value;
         const opcao = opcaoSelect.value;
-
         if (opcao) {
-            if (opcao === "Quando Chegam?") {
-                // Show input fields for Guest Name and Week Day when "Quando Chegam?" is selected
-                variablesDiv.style.display = 'block';
+            if (opcao === 'Quando Chegam?') {
+                guestNameInput.style.display = 'block';
+                weekDayInput.style.display = 'block';
             } else {
-                // Hide input fields if not "Quando Chegam?"
-                variablesDiv.style.display = 'none';
+                guestNameInput.style.display = 'none';
+                weekDayInput.style.display = 'none';
             }
 
             if (mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
                 let mensagem = mensagens[categoria][opcao][idioma];
-
-                // Replace placeholders if present and if inputs are available
-                if (opcao === "Quando Chegam?") {
-                    const guestNameInput = document.getElementById('guest-name');
-                    const weekDayInput = document.getElementById('week-day');
-
-                    const guestName = guestNameInput.value || '[Guest\'s Name]';
-                    const weekDay = weekDayInput.value || '[Week Day]';
-                    mensagem = mensagem.replace(/\[Guest's Name\]/g, guestName)
-                                       .replace(/\[Week Day\]/g, weekDay);
-                }
-
+                const guestName = guestNameInput.value;
+                const weekDay = weekDayInput.value;
+                mensagem = mensagem.replace('[Guest's Name]', guestName).replace('[Week Day]', weekDay);
                 mensagemContainer.innerHTML = mensagem;
             } else {
                 mensagemContainer.innerHTML = "<p>Mensagem não encontrada para esta seleção.</p>";
@@ -105,7 +98,8 @@ function initializeMessageSelectors(mensagens) {
             mensagemSecao.style.display = 'block';
         } else {
             mensagemSecao.style.display = 'none';
-            variablesDiv.style.display = 'none';
+            guestNameInput.style.display = 'none';
+            weekDayInput.style.display = 'none';
         }
     });
 
