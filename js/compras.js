@@ -1,6 +1,7 @@
 // js/compras.js
 import { db } from './script.js';
 import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { enviarEmailUrgencia } from './script.js';
 
 // Estrutura de dados para a lista de compras
 const listaCompras = {
@@ -185,7 +186,7 @@ function gerarResumo() {
         const local = item.querySelector('.item-local').value;
 
         if (nome && parseInt(quantidade) > 0) {
-            resumo += `${nome}: ${quantidade} (${local})<br>`;
+            resumo += `${nome}: ${quantidade} (${local})\n`;
         }
     });
 
@@ -195,22 +196,17 @@ function gerarResumo() {
 async function exibirResumoESalvar() {
     const resumo = gerarResumo();
     const resumoConteudo = document.getElementById('resumo-conteudo');
-    resumoConteudo.innerHTML = resumo; // Usar innerHTML para quebras de linha <br> funcionarem
+    resumoConteudo.innerHTML = resumo.replace(/\n/g, '<br>');
     document.getElementById('resumo').style.display = 'block';
 
     // Salvar no Firebase
     await salvarListaCompras();
+
+    // Enviar e-mail com o resumo
+    enviarEmailListaCompras(resumo);
 }
 
-function enviarEmail() {
-    if (typeof emailjs === 'undefined') {
-        console.error('EmailJS não está definido. Verifique se o script foi carregado corretamente.');
-        alert('Ocorreu um erro ao tentar enviar o e-mail. Por favor, tente novamente mais tarde.');
-        return;
-    }
-
-    const resumo = gerarResumo();
-    
+function enviarEmailListaCompras(resumo) {
     emailjs.send('service_tuglp9h', 'template_4micnki', {
         to_name: "apartments.oporto@gmail.com",
         from_name: "Apartments Oporto",
@@ -259,5 +255,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('btn-requisitar').addEventListener('click', exibirResumoESalvar);
-    document.getElementById('btn-enviar-email').addEventListener('click', enviarEmail);
+    document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
 });
