@@ -200,9 +200,6 @@ async function exibirResumoESalvar() {
 
     // Salvar no Firebase
     await salvarListaCompras();
-
-    // Enviar e-mail com o resumo
-    enviarEmailListaCompras(resumo);
 }
 
 function enviarEmailListaCompras(resumo) {
