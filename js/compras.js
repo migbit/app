@@ -82,7 +82,7 @@ function criarItemCompra(item) {
                 <option value="Escritório">Escritório</option>
                 <option value="Lavandaria">Lavandaria</option>
                 <option value="Casa">Casa</option>
-                <option value="Casa">Apartamento e Casa</option>
+                <option value="Apartamento e Casa">Apartamento e Casa</option>
             </select>
             <button type="button" class="btn-limpar">Limpar</button>
         </div>
@@ -111,7 +111,7 @@ function criarItemCompraEmBranco() {
                 <option value="Escritório">Escritório</option>
                 <option value="Lavandaria">Lavandaria</option>
                 <option value="Casa">Casa</option>
-                <option value="Casa">Apartamento e Casa</option>
+                <option value="Apartamento e Casa">Apartamento e Casa</option>
             </select>
             <button type="button" class="btn-limpar">Limpar</button>
         </div>
