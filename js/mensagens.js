@@ -1,20 +1,16 @@
-// js/mensagens.js
+// Updated mensagens.js
+import { mensagens } from './mensagensData.json';
 
 // Load the JSON data
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('./mensagensData.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            initializeMessageSelectors(data);
-        })
-        .catch(error => {
-            console.error('Error fetching the JSON data:', error);
-        });
+    const guestNameInput = document.getElementById('guestNameInput');
+    const weekDayInput = document.getElementById('weekDayInput');
+
+    if (guestNameInput && weekDayInput) {
+        initializeMessageSelectors(mensagens);
+    } else {
+        console.error('Guest name or week day input fields are missing in the DOM.');
+    }
 });
 
 // Function to initialize selectors and events
@@ -27,8 +23,7 @@ function initializeMessageSelectors(mensagens) {
     const opcaoSelect = document.getElementById('opcao');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    const guestNameInput = document.getElementById('guest-name');
-    const weekDayInput = document.getElementById('week-day');
+    const inputsDiv = document.getElementById('inputs-div');
 
     // Evento para quando o idioma for selecionado
     idiomaSelect.addEventListener('change', () => {
@@ -36,11 +31,13 @@ function initializeMessageSelectors(mensagens) {
         if (idioma) {
             categoriaDiv.style.display = 'block';
             opcaoDiv.style.display = 'none';
+            inputsDiv.style.display = 'none';
             opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
             mensagemSecao.style.display = 'none';
         } else {
             categoriaDiv.style.display = 'none';
             opcaoDiv.style.display = 'none';
+            inputsDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
         }
     });
@@ -51,6 +48,7 @@ function initializeMessageSelectors(mensagens) {
         if (categoria) {
             opcaoDiv.style.display = 'block';
             mensagemSecao.style.display = 'none';
+            inputsDiv.style.display = 'none';
             opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
 
             const opcoes = Object.keys(mensagens[categoria]);
@@ -62,6 +60,7 @@ function initializeMessageSelectors(mensagens) {
             });
         } else {
             opcaoDiv.style.display = 'none';
+            inputsDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
         }
     });
@@ -72,17 +71,27 @@ function initializeMessageSelectors(mensagens) {
         const categoria = categoriaSelect.value;
         const opcao = opcaoSelect.value;
         if (opcao) {
-            if (mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
-                let mensagem = mensagens[categoria][opcao][idioma];
-                const guestName = guestNameInput.value;
-                const weekDay = weekDayInput.value;
-                mensagem = mensagem.replace('[Guest Name]', guestName).replace('[week day]', weekDay);
-                mensagemContainer.innerHTML = mensagem;
-            } else {
-                mensagemContainer.innerHTML = "<p>Mensagem não encontrada para esta seleção.</p>";
-            }
+            inputsDiv.style.display = 'block';
+            mensagemSecao.style.display = 'none';
+
+            const mensagemTemplate = mensagens[categoria]?.[opcao]?.[idioma] || "Mensagem não encontrada para esta seleção.";
+            let mensagemFinal = mensagemTemplate;
+
+            // Substituir variáveis quando disponíveis
+            guestNameInput.addEventListener('input', () => {
+                mensagemFinal = replaceVariables(mensagemTemplate);
+                mensagemContainer.innerHTML = mensagemFinal;
+            });
+
+            weekDayInput.addEventListener('input', () => {
+                mensagemFinal = replaceVariables(mensagemTemplate);
+                mensagemContainer.innerHTML = mensagemFinal;
+            });
+
+            mensagemContainer.innerHTML = mensagemFinal;
             mensagemSecao.style.display = 'block';
         } else {
+            inputsDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
         }
     });
@@ -100,4 +109,14 @@ function copiarMensagem() {
     }).catch(err => {
         console.error('Erro ao copiar a mensagem: ', err);
     });
+}
+
+// Função para substituir as variáveis na mensagem
+function replaceVariables(template) {
+    const guestName = document.getElementById('guestNameInput').value;
+    const weekDay = document.getElementById('weekDayInput').value;
+    let message = template;
+    message = message.replace('[Guest's Name]', guestName || '[Guest's Name]');
+    message = message.replace('[Week Day]', weekDay || '[Week Day]');
+    return message;
 }
