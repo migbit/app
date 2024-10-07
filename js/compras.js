@@ -54,6 +54,29 @@ const itensPreDefinidos = {
     ]
 };
 
+// Função para adicionar eventos aos itens
+function adicionarEventosItem(item) {
+    const incrementarButton = item.querySelector(".incrementar");
+    const decrementarButton = item.querySelector(".decrementar");
+    const limparButton = item.querySelector(".limpar");
+    const quantidadeInput = item.querySelector("input[type='number']");
+
+    incrementarButton.addEventListener("click", () => {
+        quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
+    });
+
+    decrementarButton.addEventListener("click", () => {
+        if (quantidadeInput.value > 0) {
+            quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
+        }
+    });
+
+    limparButton.addEventListener("click", () => {
+        quantidadeInput.value = 0;
+        item.querySelector(".local").value = "local";
+    });
+}
+
 // Função para adicionar itens ao formulário
 function adicionarItens() {
     console.log("Adicionando itens ao formulário...");
@@ -81,6 +104,7 @@ function adicionarItens() {
                 `;
 
                 secao.appendChild(divItem);
+                adicionarEventosItem(divItem); // Adiciona eventos ao item criado
                 console.log(`Item "${nomeItem}" adicionado na seção "${categoria}"`);
             });
         } else {
@@ -97,34 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const requisitarButton = document.getElementById("requisitar");
 
     adicionarItens();
-
-    // Adiciona eventos de incrementar, decrementar e limpar
-    function adicionarEventosItem(item) {
-        const incrementarButton = item.querySelector(".incrementar");
-        const decrementarButton = item.querySelector(".decrementar");
-        const limparButton = item.querySelector(".limpar");
-        const quantidadeInput = item.querySelector("input[type='number']");
-
-        incrementarButton.addEventListener("click", () => {
-            quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
-        });
-
-        decrementarButton.addEventListener("click", () => {
-            if (quantidadeInput.value > 0) {
-                quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
-            }
-        });
-
-        limparButton.addEventListener("click", () => {
-            quantidadeInput.value = 0;
-            item.querySelector(".local").value = "local";
-        });
-    }
-
-    // Adiciona os eventos para os itens após serem adicionados ao DOM
-    form.querySelectorAll(".item").forEach(item => {
-        adicionarEventosItem(item);
-    });
 
     // Gera o resumo da lista de compras
     requisitarButton.addEventListener("click", () => {
