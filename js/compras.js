@@ -116,6 +116,7 @@ function criarItemCompraEmBranco() {
     return itemDiv;
 }
 
+// Modificar a função salvarListaCompras
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
@@ -131,7 +132,6 @@ async function salvarListaCompras() {
     });
 
     try {
-        // Usar um documento fixo para a lista de compras
         await setDoc(doc(db, "listas_compras", "lista_atual"), {
             itens: listaParaSalvar,
             ultimaAtualizacao: Timestamp.now()
@@ -144,6 +144,7 @@ async function salvarListaCompras() {
     }
 }
 
+// Modificar a função carregarListaCompras
 async function carregarListaCompras() {
     try {
         const docRef = doc(db, "listas_compras", "lista_atual");
@@ -154,10 +155,22 @@ async function carregarListaCompras() {
             const itens = data.itens;
 
             document.querySelectorAll('.item-compra').forEach(item => {
-                const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+                const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
+                const nome = nomeElement.textContent || nomeElement.value;
                 if (itens[nome]) {
                     item.querySelector('.item-quantidade').value = itens[nome].quantidade;
                     item.querySelector('.item-local').value = itens[nome].local;
+                }
+            });
+
+            // Adicionar itens personalizados que não estão na lista predefinida
+            Object.entries(itens).forEach(([nome, dados]) => {
+                if (!document.querySelector(`.item-nome:contains('${nome}'), .item-nome-custom[value='${nome}']`)) {
+                    const itemDiv = criarItemCompraEmBranco();
+                    itemDiv.querySelector('.item-nome-custom').value = nome;
+                    itemDiv.querySelector('.item-quantidade').value = dados.quantidade;
+                    itemDiv.querySelector('.item-local').value = dados.local;
+                    document.querySelector('.categoria:last-child').appendChild(itemDiv);
                 }
             });
         }
@@ -193,7 +206,14 @@ async function exibirResumoESalvar() {
     await salvarListaCompras();
 }
 
+// Modificar a função enviarEmail
 function enviarEmail() {
+    if (typeof emailjs === 'undefined') {
+        console.error('EmailJS não está definido. Verifique se o script foi carregado corretamente.');
+        alert('Ocorreu um erro ao tentar enviar o e-mail. Por favor, tente novamente mais tarde.');
+        return;
+    }
+
     const resumo = gerarResumo();
     
     emailjs.send('service_tuglp9h', 'template_4micnki', {
@@ -212,22 +232,16 @@ function enviarEmail() {
 }
 
 // Event listeners
+
 document.addEventListener('DOMContentLoaded', () => {
     criarListaCompras();
     carregarListaCompras();
 
-    document.getElementById('compras-form').addEventListener('click', (e) => {
-        if (e.target.classList.contains('btn-aumentar')) {
-            e.target.previousElementSibling.value = parseInt(e.target.previousElementSibling.value) + 1;
-        } else if (e.target.classList.contains('btn-diminuir')) {
-            const input = e.target.previousElementSibling.previousElementSibling;
-            input.value = Math.max(0, parseInt(input.value) - 1);
-        } else if (e.target.classList.contains('btn-limpar')) {
-            const itemDiv = e.target.closest('.item-compra');
-            itemDiv.querySelector('.item-quantidade').value = 0;
-            itemDiv.querySelector('.item-local').value = 'Local';
-            const nomeCustom = itemDiv.querySelector('.item-nome-custom');
-            if (nomeCustom) nomeCustom.value = '';
+    document.getElementById('compras-form').addEventListener('change', (e) => {
+        if (e.target.classList.contains('item-quantidade') || 
+            e.target.classList.contains('item-local') || 
+            e.target.classList.contains('item-nome-custom')) {
+            salvarListaCompras();
         }
     });
 
