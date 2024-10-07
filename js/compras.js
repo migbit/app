@@ -1,6 +1,8 @@
 // compras.js
 
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM totalmente carregado e analisado");
+
     const form = document.getElementById("lista-compras");
     const resumoLista = document.getElementById("resumo-lista");
     const requisitarButton = document.getElementById("requisitar");
@@ -61,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Função para adicionar itens ao formulário
     function adicionarItens() {
+        console.log("Adicionando itens ao formulário...");
         Object.keys(itensPreDefinidos).forEach(categoria => {
             const secao = document.getElementById(categoria);
             if (secao) {
@@ -85,7 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     `;
 
                     secao.appendChild(divItem);
+                    console.log(`Item "${nomeItem}" adicionado na seção "${categoria}"`);
                 });
+            } else {
+                console.error(`Seção "${categoria}" não encontrada no DOM.`);
             }
         });
     }
