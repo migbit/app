@@ -363,7 +363,6 @@ input[type="checkbox"] {
     margin: 0 5px; /* Adjust the value as needed */
 }
 
-
 .item-acoes {
     display: flex;
     align-items: center;
@@ -376,10 +375,20 @@ input[type="checkbox"] {
 
 .btn-limpar {
     background-color: #e74c3c;
-    color: white
+    color: white;
+    border: none;
+    height: 25px; /* Adjusted height */
+    padding: 5px 10px; /* Adjusted padding */
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.8em;
+}
+
+.btn-limpar:hover {
+    background-color: #c0392b;
+}
 
 /* Estilos específicos para a página de Tarefas */
-
 ul {
     list-style-type: none;
     padding: 0;
@@ -400,18 +409,6 @@ ul li {
 ul li small {
     color: #7f8c8d;
 }
-
-.btn-limpar {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    height: 10px; /* Especifica a altura do botão */
-    padding: 1px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 0.8em;
-}
-
 
 .btn-limpar:hover {
     background-color: #c0392b;
