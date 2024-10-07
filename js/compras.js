@@ -64,35 +64,37 @@ document.addEventListener("DOMContentLoaded", () => {
     function adicionarItens() {
         Object.keys(itensPreDefinidos).forEach(categoria => {
             const secao = document.getElementById(categoria);
-            itensPreDefinidos[categoria].forEach(nomeItem => {
-                const divItem = document.createElement("div");
-                divItem.classList.add("item");
+            if (secao) {
+                itensPreDefinidos[categoria].forEach(nomeItem => {
+                    const divItem = document.createElement("div");
+                    divItem.classList.add("item");
 
-                divItem.innerHTML = `
-                    <label>${nomeItem}</label>
-                    <input type="number" value="0" min="0">
-                    <button type="button" class="incrementar">+</button>
-                    <button type="button" class="decrementar">-</button>
-                    <button type="button" class="limpar">Limpar</button>
-                    <select class="local">
-                        <option value="local" selected>Local</option>
-                        <option value="123">123</option>
-                        <option value="1248">1248</option>
-                        <option value="escritorio">Escritório</option>
-                        <option value="lavandaria">Lavandaria</option>
-                        <option value="casa">Casa</option>
-                    </select>
-                `;
+                    divItem.innerHTML = `
+                        <label>${nomeItem}</label>
+                        <input type="number" value="0" min="0">
+                        <button type="button" class="incrementar">+</button>
+                        <button type="button" class="decrementar">-</button>
+                        <button type="button" class="limpar">Limpar</button>
+                        <select class="local">
+                            <option value="local" selected>Local</option>
+                            <option value="123">123</option>
+                            <option value="1248">1248</option>
+                            <option value="escritorio">Escritório</option>
+                            <option value="lavandaria">Lavandaria</option>
+                            <option value="casa">Casa</option>
+                        </select>
+                    `;
 
-                secao.appendChild(divItem);
-            });
+                    secao.appendChild(divItem);
+                });
+            }
         });
     }
 
     adicionarItens();
 
     // Adiciona eventos de incrementar, decrementar e limpar
-    form.querySelectorAll(".item").forEach(item => {
+    function adicionarEventosItem(item) {
         const incrementarButton = item.querySelector(".incrementar");
         const decrementarButton = item.querySelector(".decrementar");
         const limparButton = item.querySelector(".limpar");
@@ -112,6 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
             quantidadeInput.value = 0;
             item.querySelector(".local").value = "local";
         });
+    }
+
+    form.querySelectorAll(".item").forEach(item => {
+        adicionarEventosItem(item);
     });
 
     // Gera o resumo da lista de compras
