@@ -1,112 +1,47 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Compras com Firebase</title>
+    <title>Lista de Compras</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script type="module" defer src="../js/script.js"></script>
 </head>
 <body>
     <header>
-        <h1>Compras com Firebase</h1>
+        <h1>Lista de Compras</h1>
         <nav>
             <ul>
                 <li><a href="mensagens.html">Mensagens</a></li>
                 <li><a href="compras.html">Compras</a></li>
                 <li><a href="faturas.html">Faturas / Relatórios</a></li>
                 <li><a href="caixa.html">Caixa</a></li>
-                <li><a href="reparacoes.html">Reparações</a></li>
+                <li><a href="reparações.html">Reparações</a></li>
             </ul>
         </nav>
     </header>
 
-    <h1>Lista de Compras</h1>
-
-    <form id="lista-compras">
-        <section id="produtos-limpeza">
-            <h2>Produtos de Limpeza</h2>
-            <ul>
-                <li>Lixívia tradicional</li>
-                <li>Multiusos com Lixívia</li>
-                <li>Gel com Lixívia</li>
-                <li>CIF</li>
-                <li>Limpeza Chão (Lava Tudo)</li>
-                <li>Limpeza Chão (Madeira)</li>
-                <li>Limpa Vidros</li>
-                <li>Limpeza Potente</li>
-                <li>Limpeza Placas</li>
-                <li>Vinagre</li>
-            </ul>
+    <main>
+        <section id="lista-compras">
+            <h2>Itens para Compra</h2>
+            <form id="compras-form">
+                <!-- Categorias e itens serão inseridos aqui via JavaScript -->
+            </form>
+            <button id="btn-requisitar">Requisitar</button>
         </section>
 
-        <section id="roupa">
-            <h2>Roupa</h2>
-            <ul>
-                <li>Detergente Roupa</li>
-                <li>Amaciador</li>
-                <li>Lixívia Roupa Branca</li>
-                <li>Tira Nódoas</li>
-                <li>Tira Gorduras</li>
-                <li>Oxi Active</li>
-                <li>Branqueador</li>
-            </ul>
+        <section id="resumo" style="display: none;">
+            <h2>Resumo da Lista de Compras</h2>
+            <div id="resumo-conteudo"></div>
+            <button id="btn-enviar-email">Enviar por E-mail</button>
         </section>
+    </main>
 
-        <section id="wc">
-            <h2>WC</h2>
-            <ul>
-                <li>Papel Higiénico</li>
-                <li>Gel WC Sanitas</li>
-                <li>Toalhitas</li>
-                <li>Toalhitas Desmaquilhantes</li>
-                <li>Blocos Sanitários</li>
-                <li>Anticalcário</li>
-                <li>Limpeza Chuveiro</li>
-                <li>Desentupidor de Canos</li>
-                <li>Manutenção Canos</li>
-                <li>Papel Higiénico Húmido</li>
-            </ul>
-        </section>
+    <footer>
+        <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
+    </footer>
 
-        <section id="cozinha">
-            <h2>Cozinha</h2>
-            <ul>
-                <li>Água 1.5l</li>
-                <li>Água 5l</li>
-                <li>Café</li>
-                <li>Rolo de Cozinha</li>
-                <li>Guardanapos</li>
-                <li>Bolachas</li>
-                <li>Chá</li>
-                <li>Lava-Loiça</li>
-                <li>Esfregões</li>
-                <li>Película Transparente</li>
-                <li>Papel Alumínio</li>
-                <li>Sacos congelação</li>
-            </ul>
-        </section>
-
-        <section id="diversos">
-            <h2>Diversos</h2>
-            <ul>
-                <li>Varetas Difusoras (Ambientador)</li>
-            </ul>
-        </section>
-    </form>
-
-    <h2>Adicionar Novo Item</h2>
-    <form id="add-item-form">
-        <label for="item-nome">Nome do Item:</label>
-        <input type="text" id="item-nome" required>
-
-        <label for="item-quantidade">Quantidade:</label>
-        <input type="number" id="item-quantidade" value="0" min="0" required>
-
-        <button type="submit">Adicionar Item</button>
-    </form>
-
+    <script type="module" src="../js/script.js"></script>
+    <script type="module" src="../js/lista-compras.js"></script>
 </body>
 </html>

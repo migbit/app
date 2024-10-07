@@ -1,47 +1,161 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Compras</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-</head>
-<body>
-    <header>
-        <h1>Lista de Compras</h1>
-        <nav>
-            <ul>
-                <li><a href="mensagens.html">Mensagens</a></li>
-                <li><a href="compras.html">Compras</a></li>
-                <li><a href="faturas.html">Faturas / Relatórios</a></li>
-                <li><a href="caixa.html">Caixa</a></li>
-                <li><a href="reparações.html">Reparações</a></li>
-            </ul>
-        </nav>
-    </header>
+// js/lista-compras.js
+import { enviarEmailUrgencia } from './script.js';
 
-    <main>
-        <section id="lista-compras">
-            <h2>Itens para Compra</h2>
-            <form id="compras-form">
-                <!-- Categorias e itens serão inseridos aqui via JavaScript -->
-            </form>
-            <button id="btn-requisitar">Requisitar</button>
-        </section>
+// Estrutura de dados para a lista de compras
+const listaCompras = {
+    "Produtos Limpeza": [
+        "Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF",
+        "Limpeza Chão (Lava Tudo)", "Limpeza Chão (Madeira)", "Limpa Vidros",
+        "Limpeza Potente", "Limpeza Placas", "Vinagre"
+    ],
+    "Roupa": [
+        "Detergente Roupa", "Amaciador", "Lixívia Roupa Branca", "Tira Nódoas",
+        "Tira Gorduras", "Oxi Active", "Branqueador"
+    ],
+    "WC": [
+        "Papel Higiénico", "Gel WC Sanitas", "Toalhitas", "Toalhitas Desmaquilhantes",
+        "Blocos Sanitários", "Anticalcário", "Limpeza Chuveiro", "Desentupidor de Canos",
+        "Manutenção Canos", "Papel Higiénico Húmido"
+    ],
+    "Cozinha": [
+        "Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas",
+        "Chá", "Lava-Loiça", "Esfregões", "Película Transparente", "Papel Alumínio",
+        "Sacos congelação"
+    ],
+    "Diversos": [
+        "Varetas Difusoras (Ambientador)"
+    ]
+};
 
-        <section id="resumo" style="display: none;">
-            <h2>Resumo da Lista de Compras</h2>
-            <div id="resumo-conteudo"></div>
-            <button id="btn-enviar-email">Enviar por E-mail</button>
-        </section>
-    </main>
+// Função para criar a lista de compras no DOM
+function criarListaCompras() {
+    const form = document.getElementById('compras-form');
+    
+    for (const [categoria, itens] of Object.entries(listaCompras)) {
+        const categoriaDiv = document.createElement('div');
+        categoriaDiv.className = 'categoria';
+        categoriaDiv.innerHTML = `<h3>${categoria}</h3>`;
+        
+        itens.forEach(item => {
+            const itemDiv = criarItemCompra(item);
+            categoriaDiv.appendChild(itemDiv);
+        });
+        
+        // Adicionar campos em branco para itens adicionais
+        for (let i = 0; i < 3; i++) {
+            const itemDiv = criarItemCompraEmBranco();
+            categoriaDiv.appendChild(itemDiv);
+        }
+        
+        form.appendChild(categoriaDiv);
+    }
+    
+    // Adicionar campos em branco extras no final
+    const diversosDiv = document.createElement('div');
+    diversosDiv.className = 'categoria';
+    diversosDiv.innerHTML = '<h3>Itens Adicionais</h3>';
+    for (let i = 0; i < 10; i++) {
+        const itemDiv = criarItemCompraEmBranco();
+        diversosDiv.appendChild(itemDiv);
+    }
+    form.appendChild(diversosDiv);
+}
 
-    <footer>
-        <p>&copy; 2024 Seu Nome. Todos os direitos reservados Clau.</p>
-    </footer>
+function criarItemCompra(item) {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'item-compra';
+    itemDiv.innerHTML = `
+        <span class="item-nome">${item}</span>
+        <input type="number" value="0" min="0" class="item-quantidade">
+        <button type="button" class="btn-aumentar">+</button>
+        <button type="button" class="btn-diminuir">-</button>
+        <select class="item-local">
+            <option value="Local">Local</option>
+            <option value="123">123</option>
+            <option value="1248">1248</option>
+            <option value="Escritório">Escritório</option>
+            <option value="Lavandaria">Lavandaria</option>
+            <option value="Casa">Casa</option>
+        </select>
+        <button type="button" class="btn-limpar">Limpar</button>
+    `;
+    return itemDiv;
+}
 
-    <script type="module" src="../js/script.js"></script>
-    <script type="module" src="../js/lista-compras.js"></script>
-</body>
-</html>
+function criarItemCompraEmBranco() {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'item-compra';
+    itemDiv.innerHTML = `
+        <input type="text" class="item-nome-custom" placeholder="Novo item">
+        <input type="number" value="0" min="0" class="item-quantidade">
+        <button type="button" class="btn-aumentar">+</button>
+        <button type="button" class="btn-diminuir">-</button>
+        <select class="item-local">
+            <option value="Local">Local</option>
+            <option value="123">123</option>
+            <option value="1248">1248</option>
+            <option value="Escritório">Escritório</option>
+            <option value="Lavandaria">Lavandaria</option>
+            <option value="Casa">Casa</option>
+        </select>
+        <button type="button" class="btn-limpar">Limpar</button>
+    `;
+    return itemDiv;
+}
+
+// Função para gerar o resumo da lista de compras
+function gerarResumo() {
+    const itens = document.querySelectorAll('.item-compra');
+    let resumo = '';
+
+    itens.forEach(item => {
+        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        const quantidade = item.querySelector('.item-quantidade').value;
+        const local = item.querySelector('.item-local').value;
+
+        if (nome && quantidade > 0) {
+            resumo += `${nome}: ${quantidade} (${local})\n`;
+        }
+    });
+
+    return resumo;
+}
+
+// Função para exibir o resumo
+function exibirResumo() {
+    const resumo = gerarResumo();
+    const resumoConteudo = document.getElementById('resumo-conteudo');
+    resumoConteudo.textContent = resumo;
+    document.getElementById('resumo').style.display = 'block';
+}
+
+// Função para enviar e-mail (a ser implementada)
+function enviarEmail() {
+    const resumo = gerarResumo();
+    // Implementar a lógica de envio de e-mail aqui
+    console.log("Enviando e-mail com o resumo:", resumo);
+    // Use a função enviarEmailUrgencia ou crie uma nova função específica para este propósito
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    criarListaCompras();
+
+    document.getElementById('compras-form').addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-aumentar')) {
+            e.target.previousElementSibling.value = parseInt(e.target.previousElementSibling.value) + 1;
+        } else if (e.target.classList.contains('btn-diminuir')) {
+            const input = e.target.previousElementSibling.previousElementSibling;
+            input.value = Math.max(0, parseInt(input.value) - 1);
+        } else if (e.target.classList.contains('btn-limpar')) {
+            const itemDiv = e.target.closest('.item-compra');
+            itemDiv.querySelector('.item-quantidade').value = 0;
+            itemDiv.querySelector('.item-local').value = 'Local';
+            const nomeCustom = itemDiv.querySelector('.item-nome-custom');
+            if (nomeCustom) nomeCustom.value = '';
+        }
+    });
+
+    document.getElementById('btn-requisitar').addEventListener('click', exibirResumo);
+    document.getElementById('btn-enviar-email').addEventListener('click', enviarEmail);
+});
