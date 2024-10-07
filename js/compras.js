@@ -19,11 +19,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    console.log("Iniciando a obtenção dos itens do Firestore...");
+
     try {
         // Fetch existing items from Firestore
         const querySnapshot = await getDocs(collection(db, "compras"));
+        console.log(`Foram encontrados ${querySnapshot.size} itens no Firestore.`);
+
         querySnapshot.forEach((doc) => {
             const data = doc.data();
+            console.log("Dados do item:", data);
+
             const itemDiv = document.createElement("div");
             itemDiv.classList.add("item");
 
@@ -44,25 +50,40 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             incrementarButton.addEventListener("click", async () => {
                 quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
-                await updateDoc(doc(db, "compras", doc.id), {
-                    quantidade: parseInt(quantidadeInput.value)
-                });
+                try {
+                    await updateDoc(doc(db, "compras", doc.id), {
+                        quantidade: parseInt(quantidadeInput.value)
+                    });
+                    console.log(`Quantidade do item '${data.nome}' atualizada para ${quantidadeInput.value}`);
+                } catch (e) {
+                    console.error("Erro ao atualizar quantidade: ", e);
+                }
             });
 
             decrementarButton.addEventListener("click", async () => {
                 if (quantidadeInput.value > 0) {
                     quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
-                    await updateDoc(doc(db, "compras", doc.id), {
-                        quantidade: parseInt(quantidadeInput.value)
-                    });
+                    try {
+                        await updateDoc(doc(db, "compras", doc.id), {
+                            quantidade: parseInt(quantidadeInput.value)
+                        });
+                        console.log(`Quantidade do item '${data.nome}' atualizada para ${quantidadeInput.value}`);
+                    } catch (e) {
+                        console.error("Erro ao atualizar quantidade: ", e);
+                    }
                 }
             });
 
             limparButton.addEventListener("click", async () => {
                 quantidadeInput.value = 0;
-                await updateDoc(doc(db, "compras", doc.id), {
-                    quantidade: 0
-                });
+                try {
+                    await updateDoc(doc(db, "compras", doc.id), {
+                        quantidade: 0
+                    });
+                    console.log(`Quantidade do item '${data.nome}' foi resetada para 0.`);
+                } catch (e) {
+                    console.error("Erro ao resetar quantidade: ", e);
+                }
             });
         });
     } catch (e) {
@@ -79,6 +100,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert("Por favor, insira um nome e uma quantidade válida.");
             return;
         }
+
+        console.log(`Tentando adicionar o item: ${itemName} com quantidade: ${itemQuantidade}`);
 
         try {
             await addDoc(collection(db, "compras"), {
