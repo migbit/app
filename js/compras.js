@@ -78,7 +78,7 @@ function criarItemCompra(item) {
                 <option value="Local">Local</option>
                 <option value="123">123</option>
                 <option value="1248">1248</option>
-                <option value="Casa">123 e 1248</option>
+                <option value="123 e 1248">123 e 1248</option>
                 <option value="Escritório">Escritório</option>
                 <option value="Lavandaria">Lavandaria</option>
                 <option value="Casa">Casa</option>
@@ -107,7 +107,7 @@ function criarItemCompraEmBranco() {
                 <option value="Local">Local</option>
                 <option value="123">123</option>
                 <option value="1248">1248</option>
-                <option value="Casa">123 e 1248</option>
+                <option value="123 e 1248">123 e 1248</option>
                 <option value="Escritório">Escritório</option>
                 <option value="Lavandaria">Lavandaria</option>
                 <option value="Casa">Casa</option>
