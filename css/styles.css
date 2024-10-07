@@ -13,29 +13,38 @@
     --background-color: #ecf0f1;
     --text-color: #2c3e50;
     --white-color: #ffffff;
-    --light-gray: #fafafa;
+    --light-gray: #f5f5f5;
     --gray: #bdc3c7;
     --dark-gray: #7f8c8d;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
 }
 
 /* Base Styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     line-height: 1.6;
+    font-size: 16px;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.5em;
+    font-weight: 600;
 }
 
 /* Header Styles */
 header {
     background-color: var(--primary-color);
-    padding: 20px;
+    padding: 1rem;
     color: var(--white-color);
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
 }
 
 nav ul {
@@ -43,32 +52,32 @@ nav ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin-top: 0.5rem;
 }
 
 nav ul li {
-    margin: 0 15px;
+    margin: 0.5rem;
 }
 
 nav ul li a {
     color: var(--white-color);
     text-decoration: none;
     font-weight: 500;
-    padding: 10px 15px;
+    transition: var(--transition);
+    padding: 0.5rem 1rem;
     border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 nav ul li a:hover {
-    background-color: #1abc9c;
-    color: var(--white-color);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Main Content Styles */
 main {
     flex: 1;
-    padding: 20px;
+    padding: 2rem;
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -76,79 +85,94 @@ main {
 .form-section,
 .report-section {
     background-color: var(--white-color);
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
 }
 
 /* Form Styles */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    font-size: 1em;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
     color: var(--primary-color);
 }
 
 input[type="number"],
+input[type="text"],
 select {
     width: 100%;
-    padding: 10px;
+    padding: 0.75rem;
     border: 1px solid var(--gray);
     border-radius: 4px;
-    max-width: 300px;
-    font-size: 1em;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
 }
 
 input[type="checkbox"] {
     width: auto;
-    transform: scale(1.3);
+    margin-right: 0.5rem;
 }
 
-/* General Button Styles */
-.button-action {
-    padding: 10px 20px;
+button {
+    padding: 0.75rem 1.5rem;
     background-color: var(--secondary-color);
     border: none;
     color: var(--white-color);
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: var(--transition);
 }
 
-.button-action:hover {
+button:hover {
     background-color: #16a085;
 }
 
 /* Table Styles */
 table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    margin-bottom: 30px;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
     background-color: var(--white-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 1em;
+    box-shadow: var(--shadow);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th,
 td {
-    padding: 12px 15px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--light-gray);
 }
 
 th {
     background-color: var(--primary-color);
     color: var(--white-color);
-    font-weight: bold;
+    font-weight: 600;
     text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+tr:last-child td {
+    border-bottom: none;
 }
 
 tr:nth-child(even) {
@@ -161,18 +185,18 @@ tr:hover {
 
 /* Specific Styles for 'Caixa' Report */
 #relatorio-caixa h3 {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    color: #333;
-    border-bottom: 2px solid #333;
-    padding-bottom: 10px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
 }
 
 #relatorio-caixa > div {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 30px;
-    margin-bottom: 30px;
+    border-bottom: 1px solid var(--gray);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 #relatorio-caixa > div:last-child {
@@ -181,15 +205,15 @@ tr:hover {
 
 .btn-entrada,
 .btn-saida {
-    padding: 10px 20px;
-    margin: 5px;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
     border: none;
     cursor: pointer;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-    background-color: var(--background-color);
-    color: #333;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: var(--transition);
+    background-color: var(--light-gray);
+    color: var(--text-color);
 }
 
 .btn-entrada.btn-active {
@@ -204,25 +228,27 @@ tr:hover {
 
 .valor-positivo {
     color: #2ecc71;
+    font-weight: 600;
 }
 
 .valor-negativo {
     color: var(--accent-color);
+    font-weight: 600;
 }
 
 .total-caixa {
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-top: 20px;
-    padding: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    padding: 1rem;
     background-color: var(--light-gray);
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 /* Formatted Numbers */
 .formatted-number {
     font-family: 'Courier New', Courier, monospace;
-    font-weight: bold;
+    font-weight: 700;
 }
 
 /* Utility Classes */
@@ -232,8 +258,12 @@ tr:hover {
 
 #mensagem {
     white-space: pre-wrap;
-    font-size: 1em;
+    font-size: 1rem;
     color: var(--dark-gray);
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: 4px;
 }
 
 /* Footer Styles */
@@ -241,19 +271,58 @@ footer {
     background-color: var(--primary-color);
     color: var(--white-color);
     text-align: center;
-    padding: 15px 0;
+    padding: 1rem 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* T.M.T. Report Specific Styles */
+#relatorio-tmt h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+#relatorio-tmt h4 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+#relatorio-tmt > div {
+    border-bottom: 1px solid var(--gray);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#relatorio-tmt > div:last-child {
+    border-bottom: none;
+}
+
+/* Repairs Styles */
+.urgente {
+    background-color: #ffe4e1;
+    color: #d9534f;
+    font-weight: 600;
+}
+
+.reparado {
+    text-decoration: line-through;
+    color: var(--gray);
 }
 
 /* Specific Styles for Shopping List */
 .categoria {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray);
+    padding-bottom: 1.5rem;
 }
 
 .categoria h3 {
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
     color: var(--primary-color);
 }
 
@@ -261,10 +330,15 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    padding: 10px;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
     background-color: var(--light-gray);
-    border-radius: 5px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.item-compra:hover {
+    background-color: #e8e8e8;
 }
 
 .item-info {
@@ -276,25 +350,28 @@ footer {
 .item-nome,
 .item-nome-custom {
     flex: 1;
-    margin-right: 10px;
+    margin-right: 1rem;
 }
 
 .item-nome-custom {
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 3px;
+    border: 1px solid var(--gray);
+    padding: 0.5rem;
+    border-radius: 4px;
 }
 
 .item-controles {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .item-quantidade {
     width: 50px;
     text-align: center;
-    margin: 0 5px;
+    margin: 0 0.5rem;
+    padding: 0.25rem;
+    border: 1px solid var(--gray);
+    border-radius: 4px;
 }
 
 .btn-aumentar,
@@ -304,14 +381,20 @@ footer {
     justify-content: center;
     width: 30px;
     height: 30px;
-    font-size: 18px;
+    font-size: 1.2rem;
     line-height: 1;
     background-color: var(--primary-color);
     color: var(--white-color);
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    margin: 0 5px;
+    margin: 0 0.25rem;
+    transition: var(--transition);
+}
+
+.btn-aumentar:hover,
+.btn-diminuir:hover {
+    background-color: var(--secondary-color);
 }
 
 .item-acoes {
@@ -320,19 +403,22 @@ footer {
 }
 
 .item-local {
-    margin-right: 10px;
-    padding: 5px;
+    margin-right: 1rem;
+    padding: 0.5rem;
+    background-color: var(--white-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
 }
 
 .btn-limpar {
     background-color: var(--accent-color);
     color: var(--white-color);
     border: none;
-    padding: 5px 10px;
+    padding: 0.5rem 1rem;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: var(--transition);
 }
 
 .btn-limpar:hover {
@@ -351,58 +437,111 @@ ul li {
     justify-content: space-between;
     align-items: center;
     background-color: var(--light-gray);
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0.75rem 0;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+ul li:hover {
+    background-color: #e8e8e8;
 }
 
 ul li small {
     color: var(--dark-gray);
+    font-size: 0.8rem;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    nav ul li {
-        margin: 10px 0;
+    body {
+        font-size: 14px;
     }
 
     main {
-        padding: 10px;
+        padding: 1rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 0.5rem 0;
     }
 
     .form-group label,
     .form-group input,
     .form-group select {
         width: 100%;
-        max-width: 100%;
     }
 
-    table th,
-    table td {
-        padding: 10px;
+    table {
+        font-size: 0.9rem;
     }
 
-    .item-compra,
+    th,
+    td {
+        padding: 0.75rem;
+    }
+
+    .item-compra {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .item-info,
+    .item-controles,
+    .item-acoes {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .item-controles {
+        justify-content: flex-start;
+    }
+
+    .btn-aumentar,
+    .btn-diminuir {
+        width: 36px;
+        height: 36px;
+    }
+
     ul li {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .item-controles,
-    .item-acoes {
-        margin-top: 10px;
+    ul li small {
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 13px;
     }
 
-    .btn-aumentar,
-    .btn-diminuir {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
+    main {
+        padding: 0.75rem;
+    }
+
+    .form-section,
+    .report-section {
+        padding: 1rem;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    th,
+    td {
+        padding: 0.5rem;
     }
 }
