@@ -405,11 +405,13 @@ ul li small {
     background-color: #e74c3c;
     color: white;
     border: none;
-    padding: 1px 10px; /* Ajusta a altura e largura do botão */
+    height: 20px; /* Especifica a altura do botão */
+    padding: 1px 10px;
     cursor: pointer;
     border-radius: 5px;
-    font-size: 0.8em; /* Reduz o tamanho da fonte */
+    font-size: 0.8em;
 }
+
 
 .btn-limpar:hover {
     background-color: #c0392b;
