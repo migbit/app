@@ -36,6 +36,9 @@ header {
     color: var(--white-color);
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 2em;  /* Restaurando o tamanho maior do título */
+    font-weight: bold;  /* Adicionando peso para o título */
+    letter-spacing: normal; /* Removendo espaçamento adicional */
 }
 
 nav ul {
@@ -54,6 +57,7 @@ nav ul li a {
     color: var(--white-color);
     text-decoration: none;
     font-weight: 500;
+    font-size: 1.1em;  /* Restaurando o tamanho maior dos links */
     transition: color 0.3s ease;
 }
 
