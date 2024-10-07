@@ -7,6 +7,7 @@
     <title>Modelo 30</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script defer src="compras.js"></script>
 </head>
 <body>
     <header>
@@ -28,42 +29,23 @@
     <form id="lista-compras">
         <section id="produtos-limpeza">
             <h2>Produtos de Limpeza</h2>
-            <div class="item">
-                <label for="lixivia">Lixívia tradicional</label>
-                <input type="number" id="lixivia" value="0" min="0">
-                <button type="button" class="incrementar">+</button>
-                <button type="button" class="decrementar">-</button>
-                <button type="button" class="limpar">Limpar</button>
-                <select class="local">
-                    <option value="local" selected>Local</option>
-                    <option value="123">123</option>
-                    <option value="1248">1248</option>
-                    <option value="escritorio">Escritório</option>
-                    <option value="lavandaria">Lavandaria</option>
-                    <option value="casa">Casa</option>
-                </select>
-            </div>
-            <!-- Repetir a estrutura acima para cada item -->
-            <!-- Espaços extras para itens personalizados -->
-            <div class="item">
-                <input type="text" placeholder="Item personalizado">
-                <input type="number" value="0" min="0">
-                <button type="button" class="incrementar">+</button>
-                <button type="button" class="decrementar">-</button>
-                <button type="button" class="limpar">Limpar</button>
-                <select class="local">
-                    <option value="local" selected>Local</option>
-                    <option value="123">123</option>
-                    <option value="1248">1248</option>
-                    <option value="escritorio">Escritório</option>
-                    <option value="lavandaria">Lavandaria</option>
-                    <option value="casa">Casa</option>
-                </select>
-            </div>
-            <!-- 3 campos personalizados por categoria -->
         </section>
 
-        <!-- Repetir para outras categorias como Roupa, WC, Cozinha, Diversos -->
+        <section id="roupa">
+            <h2>Roupa</h2>
+        </section>
+
+        <section id="wc">
+            <h2>WC</h2>
+        </section>
+
+        <section id="cozinha">
+            <h2>Cozinha</h2>
+        </section>
+
+        <section id="diversos">
+            <h2>Diversos</h2>
+        </section>
 
         <section id="itens-adicionais">
             <h2>Itens Adicionais</h2>
