@@ -13,38 +13,29 @@
     --background-color: #ecf0f1;
     --text-color: #2c3e50;
     --white-color: #ffffff;
-    --light-gray: #f5f5f5;
+    --light-gray: #fafafa;
     --gray: #bdc3c7;
     --dark-gray: #7f8c8d;
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
 }
 
 /* Base Styles */
 body {
-    font-family: 'Roboto', Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     line-height: 1.6;
-    font-size: 16px;
-}
-
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-    margin-bottom: 0.5em;
-    font-weight: 600;
 }
 
 /* Header Styles */
 header {
     background-color: var(--primary-color);
-    padding: 1rem;
+    padding: 20px;
     color: var(--white-color);
     text-align: center;
-    box-shadow: var(--shadow);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 nav ul {
@@ -52,32 +43,29 @@ nav ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 0.5rem;
+    margin-top: 10px;
 }
 
 nav ul li {
-    margin: 0.5rem;
+    margin: 0 15px;
 }
 
 nav ul li a {
     color: var(--white-color);
     text-decoration: none;
     font-weight: 500;
-    transition: var(--transition);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    transition: color 0.3s ease;
 }
 
 nav ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--secondary-color);
 }
 
 /* Main Content Styles */
 main {
     flex: 1;
-    padding: 2rem;
+    padding: 20px;
     max-width: 1200px;
-    width: 100%;
     margin: 0 auto;
 }
 
@@ -85,58 +73,49 @@ main {
 .form-section,
 .report-section {
     background-color: var(--white-color);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: 20px;
+    margin-bottom: 20px;
     border-radius: 8px;
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Styles */
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1em;
     color: var(--primary-color);
 }
 
 input[type="number"],
-input[type="text"],
 select {
     width: 100%;
-    padding: 0.75rem;
+    padding: 10px;
     border: 1px solid var(--gray);
     border-radius: 4px;
-    font-size: 1rem;
-    transition: var(--transition);
-}
-
-input[type="number"]:focus,
-input[type="text"]:focus,
-select:focus {
-    outline: none;
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+    max-width: 300px;
+    font-size: 1em;
 }
 
 input[type="checkbox"] {
     width: auto;
-    margin-right: 0.5rem;
+    transform: scale(1.3);
 }
 
 button {
-    padding: 0.75rem 1.5rem;
+    padding: 10px 20px;
     background-color: var(--secondary-color);
     border: none;
     color: var(--white-color);
     cursor: pointer;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: var(--transition);
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -146,33 +125,26 @@ button:hover {
 /* Table Styles */
 table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 30px;
     background-color: var(--white-color);
-    box-shadow: var(--shadow);
-    border-radius: 8px;
-    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
 }
 
 th,
 td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--light-gray);
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
 }
 
 th {
     background-color: var(--primary-color);
     color: var(--white-color);
-    font-weight: 600;
+    font-weight: bold;
     text-transform: uppercase;
-    font-size: 0.9rem;
-}
-
-tr:last-child td {
-    border-bottom: none;
 }
 
 tr:nth-child(even) {
@@ -185,18 +157,18 @@ tr:hover {
 
 /* Specific Styles for 'Caixa' Report */
 #relatorio-caixa h3 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.5rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
 }
 
 #relatorio-caixa > div {
-    border-bottom: 1px solid var(--gray);
-    padding-bottom: 1.5rem;
-    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 #relatorio-caixa > div:last-child {
@@ -205,15 +177,15 @@ tr:hover {
 
 .btn-entrada,
 .btn-saida {
-    padding: 0.5rem 1rem;
-    margin: 0.25rem;
+    padding: 10px 20px;
+    margin: 5px;
     border: none;
     cursor: pointer;
-    font-weight: 600;
-    border-radius: 4px;
-    transition: var(--transition);
-    background-color: var(--light-gray);
-    color: var(--text-color);
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: var(--background-color);
+    color: #333;
 }
 
 .btn-entrada.btn-active {
@@ -228,27 +200,25 @@ tr:hover {
 
 .valor-positivo {
     color: #2ecc71;
-    font-weight: 600;
 }
 
 .valor-negativo {
     color: var(--accent-color);
-    font-weight: 600;
 }
 
 .total-caixa {
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-top: 1rem;
-    padding: 1rem;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 20px;
+    padding: 10px;
     background-color: var(--light-gray);
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 /* Formatted Numbers */
 .formatted-number {
     font-family: 'Courier New', Courier, monospace;
-    font-weight: 700;
+    font-weight: bold;
 }
 
 /* Utility Classes */
@@ -258,12 +228,8 @@ tr:hover {
 
 #mensagem {
     white-space: pre-wrap;
-    font-size: 1rem;
+    font-size: 1em;
     color: var(--dark-gray);
-    margin-top: 1rem;
-    padding: 1rem;
-    background-color: var(--light-gray);
-    border-radius: 4px;
 }
 
 /* Footer Styles */
@@ -271,31 +237,31 @@ footer {
     background-color: var(--primary-color);
     color: var(--white-color);
     text-align: center;
-    padding: 1rem 0;
+    padding: 15px 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* T.M.T. Report Specific Styles */
 #relatorio-tmt h3 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.5rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
 }
 
 #relatorio-tmt h4 {
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    color: var(--text-color);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    color: #555;
 }
 
 #relatorio-tmt > div {
-    border-bottom: 1px solid var(--gray);
-    padding-bottom: 1.5rem;
-    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 #relatorio-tmt > div:last-child {
@@ -306,23 +272,54 @@ footer {
 .urgente {
     background-color: #ffe4e1;
     color: #d9534f;
-    font-weight: 600;
 }
 
 .reparado {
     text-decoration: line-through;
-    color: var(--gray);
+    color: #95a5a6;
+}
+
+/* Adjustments to the existing table styles for better presentation */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--white-color);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
+}
+
+td,
+th {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    transform: scale(1.3);
 }
 
 /* Specific Styles for Shopping List */
 .categoria {
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--gray);
-    padding-bottom: 1.5rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
 }
 
 .categoria h3 {
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
     color: var(--primary-color);
 }
 
@@ -330,15 +327,10 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
-    padding: 0.75rem;
+    margin-bottom: 10px;
+    padding: 10px;
     background-color: var(--light-gray);
-    border-radius: 4px;
-    transition: var(--transition);
-}
-
-.item-compra:hover {
-    background-color: #e8e8e8;
+    border-radius: 5px;
 }
 
 .item-info {
@@ -350,28 +342,25 @@ footer {
 .item-nome,
 .item-nome-custom {
     flex: 1;
-    margin-right: 1rem;
+    margin-right: 10px;
 }
 
 .item-nome-custom {
-    border: 1px solid var(--gray);
-    padding: 0.5rem;
-    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 3px;
 }
 
 .item-controles {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .item-quantidade {
     width: 50px;
     text-align: center;
-    margin: 0 0.5rem;
-    padding: 0.25rem;
-    border: 1px solid var(--gray);
-    border-radius: 4px;
+    margin: 0 5px;
 }
 
 .btn-aumentar,
@@ -381,20 +370,14 @@ footer {
     justify-content: center;
     width: 30px;
     height: 30px;
-    font-size: 1.2rem;
+    font-size: 18px;
     line-height: 1;
     background-color: var(--primary-color);
     color: var(--white-color);
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    margin: 0 0.25rem;
-    transition: var(--transition);
-}
-
-.btn-aumentar:hover,
-.btn-diminuir:hover {
-    background-color: var(--secondary-color);
+    margin: 0 5px;
 }
 
 .item-acoes {
@@ -403,22 +386,19 @@ footer {
 }
 
 .item-local {
-    margin-right: 1rem;
-    padding: 0.5rem;
-    background-color: var(--white-color);
-    border-radius: 4px;
-    font-size: 0.9rem;
+    margin-right: 10px;
+    padding: 5px;
 }
 
 .btn-limpar {
     background-color: var(--accent-color);
     color: var(--white-color);
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 5px 10px;
     cursor: pointer;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    transition: var(--transition);
+    border-radius: 5px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
 }
 
 .btn-limpar:hover {
@@ -437,111 +417,73 @@ ul li {
     justify-content: space-between;
     align-items: center;
     background-color: var(--light-gray);
-    margin: 0.75rem 0;
-    padding: 1rem;
-    border-radius: 4px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-}
-
-ul li:hover {
-    background-color: #e8e8e8;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 ul li small {
     color: var(--dark-gray);
-    font-size: 0.8rem;
+}
+
+.btn-limpar {
+    background-color: var(--accent-color);
+    color: var(--white-color);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.8em;
+    transition: background-color 0.3s ease;
+}
+
+.btn-limpar:hover {
+    background-color: #c0392b;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    body {
-        font-size: 14px;
-    }
-
-    main {
-        padding: 1rem;
-    }
-
     nav ul {
         flex-direction: column;
+        align-items: center;
     }
 
     nav ul li {
-        margin: 0.5rem 0;
+        margin: 10px 0;
+    }
+
+    main {
+        padding: 10px;
     }
 
     .form-group label,
     .form-group input,
     .form-group select {
         width: 100%;
+        max-width: 100%;
     }
 
-    table {
-        font-size: 0.9rem;
+    table th,
+    table td {
+        padding: 10px;
     }
 
-    th,
-    td {
-        padding: 0.75rem;
-    }
-
-    .item-compra {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .item-info,
-    .item-controles,
-    .item-acoes {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-
-    .item-controles {
-        justify-content: flex-start;
-    }
-
-    .btn-aumentar,
-    .btn-diminuir {
-        width: 36px;
-        height: 36px;
-    }
-
+    .item-compra,
     ul li {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    ul li small {
-        margin-top: 0.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        font-size: 13px;
+    .item-controles,
+    .item-acoes {
+        margin-top: 10px;
     }
 
-    main {
-        padding: 0.75rem;
-    }
-
-    .form-section,
-    .report-section {
-        padding: 1rem;
-    }
-
-    button {
-        width: 100%;
-    }
-
-    table {
-        font-size: 0.8rem;
-    }
-
-    th,
-    td {
-        padding: 0.5rem;
+    .btn-aumentar,
+    .btn-diminuir {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
     }
 }
