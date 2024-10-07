@@ -1,7 +1,6 @@
 // js/compras.js
 import { db } from './script.js';
 import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import { enviarEmailUrgencia } from './script.js';
 
 // Estrutura de dados para a lista de compras
 const listaCompras = {
@@ -116,7 +115,6 @@ function criarItemCompraEmBranco() {
     return itemDiv;
 }
 
-// Modificar a função salvarListaCompras
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
@@ -137,14 +135,12 @@ async function salvarListaCompras() {
             ultimaAtualizacao: Timestamp.now()
         });
         console.log("Lista de compras atualizada com sucesso!");
-        alert('Lista de compras atualizada com sucesso!');
     } catch (e) {
         console.error("Erro ao salvar a lista de compras: ", e);
         alert('Ocorreu um erro ao salvar a lista de compras.');
     }
 }
 
-// Modificar a função carregarListaCompras
 async function carregarListaCompras() {
     try {
         const docRef = doc(db, "listas_compras", "lista_atual");
@@ -165,7 +161,7 @@ async function carregarListaCompras() {
 
             // Adicionar itens personalizados que não estão na lista predefinida
             Object.entries(itens).forEach(([nome, dados]) => {
-                if (!document.querySelector(`.item-nome:contains('${nome}'), .item-nome-custom[value='${nome}']`)) {
+                if (!Array.from(document.querySelectorAll('.item-nome, .item-nome-custom')).some(el => el.textContent === nome || el.value === nome)) {
                     const itemDiv = criarItemCompraEmBranco();
                     itemDiv.querySelector('.item-nome-custom').value = nome;
                     itemDiv.querySelector('.item-quantidade').value = dados.quantidade;
@@ -188,7 +184,7 @@ function gerarResumo() {
         const quantidade = item.querySelector('.item-quantidade').value;
         const local = item.querySelector('.item-local').value;
 
-        if (nome && quantidade > 0) {
+        if (nome && parseInt(quantidade) > 0) {
             resumo += `${nome}: ${quantidade} (${local})\n`;
         }
     });
@@ -206,7 +202,6 @@ async function exibirResumoESalvar() {
     await salvarListaCompras();
 }
 
-// Modificar a função enviarEmail
 function enviarEmail() {
     if (typeof emailjs === 'undefined') {
         console.error('EmailJS não está definido. Verifique se o script foi carregado corretamente.');
@@ -232,10 +227,28 @@ function enviarEmail() {
 }
 
 // Event listeners
-
 document.addEventListener('DOMContentLoaded', () => {
     criarListaCompras();
     carregarListaCompras();
+
+    document.getElementById('compras-form').addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-aumentar')) {
+            const input = e.target.previousElementSibling;
+            input.value = parseInt(input.value) + 1;
+            salvarListaCompras();
+        } else if (e.target.classList.contains('btn-diminuir')) {
+            const input = e.target.previousElementSibling.previousElementSibling;
+            input.value = Math.max(0, parseInt(input.value) - 1);
+            salvarListaCompras();
+        } else if (e.target.classList.contains('btn-limpar')) {
+            const itemDiv = e.target.closest('.item-compra');
+            itemDiv.querySelector('.item-quantidade').value = 0;
+            itemDiv.querySelector('.item-local').value = 'Local';
+            const nomeCustom = itemDiv.querySelector('.item-nome-custom');
+            if (nomeCustom) nomeCustom.value = '';
+            salvarListaCompras();
+        }
+    });
 
     document.getElementById('compras-form').addEventListener('change', (e) => {
         if (e.target.classList.contains('item-quantidade') || 
