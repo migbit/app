@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const querySnapshot = await getDocs(collection(db, "compras"));
         console.log(`Foram encontrados ${querySnapshot.size} itens no Firestore.`);
 
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
+        querySnapshot.forEach((documento) => {
+            const data = documento.data();
             console.log("Dados do item:", data);
 
             const itemDiv = document.createElement("div");
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             itemDiv.innerHTML = `
                 <label>${data.nome}</label>
-                <input type="number" value="${data.quantidade}" min="0" data-id="${doc.id}">
+                <input type="number" value="${data.quantidade}" min="0" data-id="${documento.id}">
                 <button type="button" class="incrementar">+</button>
                 <button type="button" class="decrementar">-</button>
                 <button type="button" class="limpar">Limpar</button>
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             incrementarButton.addEventListener("click", async () => {
                 quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
                 try {
-                    await updateDoc(doc(db, "compras", doc.id), {
+                    await updateDoc(doc(db, "compras", documento.id), {
                         quantidade: parseInt(quantidadeInput.value)
                     });
                     console.log(`Quantidade do item '${data.nome}' atualizada para ${quantidadeInput.value}`);
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (quantidadeInput.value > 0) {
                     quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
                     try {
-                        await updateDoc(doc(db, "compras", doc.id), {
+                        await updateDoc(doc(db, "compras", documento.id), {
                             quantidade: parseInt(quantidadeInput.value)
                         });
                         console.log(`Quantidade do item '${data.nome}' atualizada para ${quantidadeInput.value}`);
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             limparButton.addEventListener("click", async () => {
                 quantidadeInput.value = 0;
                 try {
-                    await updateDoc(doc(db, "compras", doc.id), {
+                    await updateDoc(doc(db, "compras", documento.id), {
                         quantidade: 0
                     });
                     console.log(`Quantidade do item '${data.nome}' foi resetada para 0.`);
