@@ -1,10 +1,23 @@
-// js/firebase_script.js
+// js/compras.js
 
-import { db } from "./script.js";
-import { collection, getDocs, addDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { db } from './script.js';
+import { collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+    console.log("DOM totalmente carregado e analisado");
+    
     const listaCompras = document.getElementById("lista-compras");
+    const addItemForm = document.getElementById("add-item-form");
+
+    if (!listaCompras) {
+        console.error("Elemento 'lista-compras' não encontrado no DOM.");
+        return;
+    }
+    
+    if (!addItemForm) {
+        console.error("Formulário 'add-item-form' não encontrado no DOM.");
+        return;
+    }
 
     try {
         // Fetch existing items from Firestore
@@ -57,7 +70,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // Adicionar um novo item à lista de compras
-    const addItemForm = document.getElementById("add-item-form");
     addItemForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const itemName = document.getElementById("item-nome").value;
