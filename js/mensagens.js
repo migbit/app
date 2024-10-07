@@ -110,9 +110,8 @@ function initializeMessageSelectors(mensagens) {
         }
     });
 
-    // Evento do botão copiar
-    const btnCopiar = document.getElementById('btn-copiar');
-    btnCopiar.addEventListener('click', copiarMensagem);
+    // Evento para copiar mensagem ao clicar no container
+    mensagemContainer.addEventListener('click', copiarMensagem);
 }
 
 // Função para copiar a mensagem para a área de transferência

@@ -59,20 +59,20 @@
                 </select>
             </div>
 
-            <!-- Input fields for variables (Guest Name, Week Day) -->
-            <div id="variables-div" style="display: none;">
-                <label for="guest-name">Guest Name:</label>
-                <input type="text" id="guest-name" placeholder="Enter Guest Name">
+            <div class="input-field" id="guest-name" style="display: none;">
+                <label for="guestName">Guest Name:</label>
+                <input type="text" id="guestName" placeholder="Digite o nome do hóspede">
+            </div>
 
-                <label for="week-day">Week Day:</label>
-                <input type="text" id="week-day" placeholder="Enter Week Day">
+            <div class="input-field" id="week-day" style="display: none;">
+                <label for="weekDay">Week Day:</label>
+                <input type="text" id="weekDay" placeholder="Digite o dia da semana">
             </div>
         </section>
 
         <section id="mensagem-secao" style="display: none;">
             <h2>Mensagem Selecionada:</h2>
-            <div id="mensagem-container" onclick="copiarMensagem()" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
-            <button id="btn-copiar">Copiar Mensagem</button>
+            <div id="mensagem-container" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
         </section>
     </main>
 
