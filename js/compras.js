@@ -185,7 +185,7 @@ function gerarResumo() {
         const local = item.querySelector('.item-local').value;
 
         if (nome && parseInt(quantidade) > 0) {
-            resumo += `${nome}: ${quantidade} (${local})\n`;
+            resumo += `${nome}: ${quantidade} (${local})<br>`;
         }
     });
 
@@ -195,7 +195,7 @@ function gerarResumo() {
 async function exibirResumoESalvar() {
     const resumo = gerarResumo();
     const resumoConteudo = document.getElementById('resumo-conteudo');
-    resumoConteudo.textContent = resumo;
+    resumoConteudo.innerHTML = resumo; // Usar innerHTML para quebras de linha <br> funcionarem
     document.getElementById('resumo').style.display = 'block';
 
     // Salvar no Firebase
