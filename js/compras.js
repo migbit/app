@@ -83,6 +83,7 @@ function adicionarItens() {
     Object.keys(itensPreDefinidos).forEach(categoria => {
         const secao = document.getElementById(categoria);
         if (secao) {
+            console.log(`Seção encontrada: ${categoria}`);
             itensPreDefinidos[categoria].forEach(nomeItem => {
                 const divItem = document.createElement("div");
                 divItem.classList.add("item");
@@ -117,8 +118,28 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM totalmente carregado e analisado");
 
     const form = document.getElementById("lista-compras");
+    if (!form) {
+        console.error("Formulário 'lista-compras' não encontrado no DOM.");
+        return;
+    } else {
+        console.log("Formulário 'lista-compras' encontrado no DOM.");
+    }
+
     const resumoLista = document.getElementById("resumo-lista");
+    if (!resumoLista) {
+        console.error("Elemento 'resumo-lista' não encontrado no DOM.");
+        return;
+    } else {
+        console.log("Elemento 'resumo-lista' encontrado no DOM.");
+    }
+
     const requisitarButton = document.getElementById("requisitar");
+    if (!requisitarButton) {
+        console.error("Botão 'requisitar' não encontrado no DOM.");
+        return;
+    } else {
+        console.log("Botão 'requisitar' encontrado no DOM.");
+    }
 
     adicionarItens();
 
