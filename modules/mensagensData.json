@@ -1,14 +1,14 @@
 {
   "Antes Reserva": {
     "Baixar Preço": {
-      "Português": "<p><strong>Olá [Guest Name]!</strong> Para baixar o preço, siga este link:</p>\n<a href=\"[link]\" target=\"_blank\">Clique aqui para baixar o preço</a>",
-      "Inglês": "<p><strong>Hello [Guest Name]!</strong> To lower the price, follow this link:</p>\n<a href=\"[link]\" target=\"_blank\">Click here to lower the price</a>",
-      "Espanhol": "<p><strong>¡Hola [Guest Name]!</strong> Para bajar el precio, sigue este enlace:</p>\n<a href=\"[link]\" target=\"_blank\">Haz clic aquí para bajar el precio</a>"
+      "Português": "<p><strong>Olá !Para baixar o preço",
+      "Inglês": "<p><strong>Hello !To lower the pric>",
+      "Espanhol": "<p><strong>¡Hola !Para bajar el preci"
     },
     "Estacionamento 123": {
-      "Português": "<p><strong>Estacionamento 123 [Guest Name]</strong> está disponível para sua reserva na [week day].</p>",
-      "Inglês": "<p><strong>Parking 123 [Guest Name]</strong> is available for your reservation on [week day].</p>",
-      "Espanhol": "<p><strong>El estacionamiento 123 [Guest Name]</strong> está disponible para su reserva el [week day].</p>"
+      "Português": "<p><strong>Estacionamento 123 ",
+      "Inglês": "<p><strong>Parking 123 ",
+      "Espanhol": "<p><strong>El estacionamiento 123"
     },
     "Estacionamento 1248": {
       "Português": "Mensagem para Estacionamento 1248 em Português.",
@@ -76,11 +76,6 @@
     }
   },
   "Antes do Check-in": {
-    "Segunda-feira": {
-      "Português": "<p>Informações para o <strong>check-in [Guest Name]</strong> na segunda-feira [week day].</p>",
-      "Inglês": "<p>Check-in information for <strong>Monday [Guest Name]</strong> on [week day].</p>",
-      "Espanhol": "<p>Información de <strong>check-in [Guest Name]</strong> para el lunes [week day].</p>"
-    },
     "Quando Chegam?": {
       "Português": "Quando chegam no Idioma Português.",
       "Inglês": "Hello [Guest's Name],\n\nI hope you’re doing well!\n\nI just wanted to check in and see if you have an estimated time of arrival for this [Week Day]. If there’s anything you need or any questions before your stay, please don’t hesitate to reach out! Wishing you safe travels, and we can’t wait to welcome you.\n\nKind regards,\nMiguel",
@@ -120,14 +115,5 @@
       "Italiano": "Grazie per aver soggiornato con noi!"
     }
   },
-  "Comentário": {
-    "Feedback": {
-      "Português": "Gostaríamos de saber como foi sua estadia.",
-      "Inglês": "We would love to hear about your stay.",
-      "Espanhol": "Nos encantaría saber cómo fue su estadía.",
-      "Francês": "Nous aimerions savoir comment s'est déroulé votre séjour.",
-      "Alemão": "Wir würden gerne erfahren, wie Ihr Aufenthalt war.",
-      "Italiano": "Ci piacerebbe sapere com'è stato il vostro soggiorno."
-    }
-  }
+  "Comentário": {}
 }
