@@ -18,7 +18,7 @@
                 <li><a href="compras.html">Compras</a></li>
                 <li><a href="faturas.html">Faturas / Relatórios</a></li>
                 <li><a href="caixa.html">Caixa</a></li>
-                <li><a href="reparações.html">Reparações</a></li>
+                <li><a href="reparacoes.html">Reparações</a></li>
             </ul>
         </nav>
     </header>
@@ -96,5 +96,17 @@
             </ul>
         </section>
     </form>
+
+    <h2>Adicionar Novo Item</h2>
+    <form id="add-item-form">
+        <label for="item-nome">Nome do Item:</label>
+        <input type="text" id="item-nome" required>
+
+        <label for="item-quantidade">Quantidade:</label>
+        <input type="number" id="item-quantidade" value="0" min="0" required>
+
+        <button type="submit">Adicionar Item</button>
+    </form>
+
 </body>
 </html>
