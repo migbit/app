@@ -1,4 +1,6 @@
 // js/compras.js
+import { db } from './script.js';
+import { collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 import { enviarEmailUrgencia } from './script.js';
 
 // Estrutura de dados para a lista de compras
@@ -114,6 +116,43 @@ function criarItemCompraEmBranco() {
     return itemDiv;
 }
 
+// Função para salvar a lista de compras no Firebase
+async function salvarListaCompras() {
+    const itens = document.querySelectorAll('.item-compra');
+    let listaParaSalvar = [];
+
+    itens.forEach(item => {
+        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        const quantidade = parseInt(item.querySelector('.item-quantidade').value);
+        const local = item.querySelector('.item-local').value;
+
+        if (nome && quantidade > 0) {
+            listaParaSalvar.push({
+                nome,
+                quantidade,
+                local
+            });
+        }
+    });
+
+    if (listaParaSalvar.length === 0) {
+        alert('Não há itens para salvar.');
+        return;
+    }
+
+    try {
+        const docRef = await addDoc(collection(db, "listas_compras"), {
+            itens: listaParaSalvar,
+            dataRequisicao: Timestamp.now()
+        });
+        console.log("Lista de compras salva com ID: ", docRef.id);
+        alert('Lista de compras salva com sucesso!');
+    } catch (e) {
+        console.error("Erro ao salvar a lista de compras: ", e);
+        alert('Ocorreu um erro ao salvar a lista de compras.');
+    }
+}
+
 // Função para gerar o resumo da lista de compras
 function gerarResumo() {
     const itens = document.querySelectorAll('.item-compra');
@@ -132,20 +171,36 @@ function gerarResumo() {
     return resumo;
 }
 
-// Função para exibir o resumo
-function exibirResumo() {
+// Função para exibir o resumo e salvar no Firebase
+async function exibirResumoESalvar() {
     const resumo = gerarResumo();
     const resumoConteudo = document.getElementById('resumo-conteudo');
     resumoConteudo.textContent = resumo;
     document.getElementById('resumo').style.display = 'block';
+
+    // Salvar no Firebase
+    await salvarListaCompras();
 }
 
 // Função para enviar e-mail (a ser implementada)
 function enviarEmail() {
     const resumo = gerarResumo();
-    // Implementar a lógica de envio de e-mail aqui
+    // Implementar a lógica de envio de e-mail aqui usando o EmailJS
     console.log("Enviando e-mail com o resumo:", resumo);
-    // Use a função enviarEmailUrgencia ou crie uma nova função específica para este propósito
+    
+    emailjs.send('service_tuglp9h', 'template_4micnki', {
+        to_name: "apartments.oporto@gmail.com",
+        from_name: "Apartments Oporto",
+        subject: "Lista de Compras",
+        message: resumo
+    })
+    .then(function(response) {
+        console.log('E-mail enviado com sucesso!', response.status, response.text);
+        alert('E-mail enviado com sucesso!');
+    }, function(error) {
+        console.error('Erro ao enviar e-mail:', error);
+        alert('Ocorreu um erro ao enviar o e-mail.');
+    });
 }
 
 // Event listeners
@@ -167,6 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.getElementById('btn-requisitar').addEventListener('click', exibirResumo);
+    document.getElementById('btn-requisitar').addEventListener('click', exibirResumoESalvar);
     document.getElementById('btn-enviar-email').addEventListener('click', enviarEmail);
 });
