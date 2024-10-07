@@ -329,7 +329,8 @@ footer {
     background-color: #e74c3c;
     color: #ffffff;
     border: none;
-    padding: 5px 15px;
+    height: 10px; /* Especifica a altura do botão */
+    padding: 1px 10px;
     cursor: pointer;
     border-radius: 5px;
     font-size: 0.8em;
