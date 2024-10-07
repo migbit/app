@@ -1,139 +1,132 @@
-// script.js
-const itensPreDefinidos = {
-    "produtos-limpeza": [
-        "Lixívia tradicional",
-        "Multiusos com Lixívia",
-        "Gel com Lixívia",
-        "CIF",
-        "Limpeza Chão (Lava Tudo)",
-        "Limpeza Chão (Madeira)",
-        "Limpa Vidros",
-        "Limpeza Potente",
-        "Limpeza Placas",
-        "Vinagre"
-    ],
-    "roupa": [
-        "Detergente Roupa",
-        "Amaciador",
-        "Lixívia Roupa Branca",
-        "Tira Nódoas",
-        "Tira Gorduras",
-        "Oxi Active",
-        "Branqueador"
-    ],
-    "wc": [
-        "Papel Higiénico",
-        "Gel WC Sanitas",
-        "Toalhitas",
-        "Toalhitas Desmaquilhantes",
-        "Blocos Sanitários",
-        "Anticalcário",
-        "Limpeza Chuveiro",
-        "Desentupidor de Canos",
-        "Manutenção Canos",
-        "Papel Higiénico Húmido"
-    ],
-    "cozinha": [
-        "Água 1.5l",
-        "Água 5l",
-        "Café",
-        "Rolo de Cozinha",
-        "Guardanapos",
-        "Bolachas",
-        "Chá",
-        "Lava-Loiça",
-        "Esfregões",
-        "Película Transparente",
-        "Papel Alumínio",
-        "Sacos congelação"
-    ],
-    "diversos": [
-        "Varetas Difusoras (Ambientador)"
-    ]
-};
+// compras.js
 
-function createItemElement(nomeItem) {
-    const divItem = document.createElement("div");
-    divItem.classList.add("item");
-
-    divItem.innerHTML = `
-        <label>${nomeItem}</label>
-        <input type="number" value="0" min="0">
-        <button type="button" class="incrementar">+</button>
-        <button type="button" class="decrementar">-</button>
-        <button type="button" class="limpar">Limpar</button>
-        <select class="local">
-            <option value="local" selected>Local</option>
-            <option value="123">123</option>
-            <option value="1248">1248</option>
-            <option value="escritorio">Escritório</option>
-            <option value="lavandaria">Lavandaria</option>
-            <option value="casa">Casa</option>
-        </select>
-    `;
-
-    return divItem;
-}
-
-function addEventListeners(itemElement) {
-    const incrementarButton = itemElement.querySelector(".incrementar");
-    const decrementarButton = itemElement.querySelector(".decrementar");
-    const limparButton = itemElement.querySelector(".limpar");
-    const quantidadeInput = itemElement.querySelector("input[type='number']");
-
-    incrementarButton.addEventListener("click", () => {
-        quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
-    });
-
-    decrementarButton.addEventListener("click", () => {
-        if (parseInt(quantidadeInput.value) > 0) {
-            quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
-        }
-    });
-
-    limparButton.addEventListener("click", () => {
-        quantidadeInput.value = 0;
-        itemElement.querySelector(".local").value = "local";
-    });
-}
-
-function initializeShoppingList() {
-    Object.entries(itensPreDefinidos).forEach(([categoria, items]) => {
-        const section = document.getElementById(categoria);
-        if (!section) {
-            console.error(`Section ${categoria} not found`);
-            return;
-        }
-
-        items.forEach(item => {
-            const itemElement = createItemElement(item);
-            addEventListeners(itemElement);
-            section.appendChild(itemElement);
-        });
-    });
-
-    const requisitarButton = document.getElementById("requisitar");
-    if (requisitarButton) {
-        requisitarButton.addEventListener("click", generateSummary);
-    }
-}
-
-function generateSummary() {
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("lista-compras");
     const resumoLista = document.getElementById("resumo-lista");
-    if (!resumoLista) {
-        console.error("Resumo lista element not found");
-        return;
+    const requisitarButton = document.getElementById("requisitar");
+
+    // Lista pré-definida de itens
+    const itensPreDefinidos = {
+        "produtos-limpeza": [
+            "Lixívia tradicional",
+            "Multiusos com Lixívia",
+            "Gel com Lixívia",
+            "CIF",
+            "Limpeza Chão (Lava Tudo)",
+            "Limpeza Chão (Madeira)",
+            "Limpa Vidros",
+            "Limpeza Potente",
+            "Limpeza Placas",
+            "Vinagre"
+        ],
+        "roupa": [
+            "Detergente Roupa",
+            "Amaciador",
+            "Lixívia Roupa Branca",
+            "Tira Nódoas",
+            "Tira Gorduras",
+            "Oxi Active",
+            "Branqueador"
+        ],
+        "wc": [
+            "Papel Higiénico",
+            "Gel WC Sanitas",
+            "Toalhitas",
+            "Toalhitas Desmaquilhantes",
+            "Blocos Sanitários",
+            "Anticalcário",
+            "Limpeza Chuveiro",
+            "Desentupidor de Canos",
+            "Manutenção Canos",
+            "Papel Higiénico Húmido"
+        ],
+        "cozinha": [
+            "Água 1.5l",
+            "Água 5l",
+            "Café",
+            "Rolo de Cozinha",
+            "Guardanapos",
+            "Bolachas",
+            "Chá",
+            "Lava-Loiça",
+            "Esfregões",
+            "Película Transparente",
+            "Papel Alumínio",
+            "Sacos congelação"
+        ],
+        "diversos": [
+            "Varetas Difusoras (Ambientador)"
+        ]
+    };
+
+    // Função para adicionar itens ao formulário
+    function adicionarItens() {
+        Object.keys(itensPreDefinidos).forEach(categoria => {
+            const secao = document.getElementById(categoria);
+            if (secao) {
+                itensPreDefinidos[categoria].forEach(nomeItem => {
+                    const divItem = document.createElement("div");
+                    divItem.classList.add("item");
+
+                    divItem.innerHTML = `
+                        <label>${nomeItem}</label>
+                        <input type="number" value="0" min="0">
+                        <button type="button" class="incrementar">+</button>
+                        <button type="button" class="decrementar">-</button>
+                        <button type="button" class="limpar">Limpar</button>
+                        <select class="local">
+                            <option value="local" selected>Local</option>
+                            <option value="123">123</option>
+                            <option value="1248">1248</option>
+                            <option value="escritorio">Escritório</option>
+                            <option value="lavandaria">Lavandaria</option>
+                            <option value="casa">Casa</option>
+                        </select>
+                    `;
+
+                    secao.appendChild(divItem);
+                });
+            }
+        });
     }
 
-    resumoLista.innerHTML = "";
+    adicionarItens();
 
-    Object.keys(itensPreDefinidos).forEach(categoria => {
-        const section = document.getElementById(categoria);
-        if (!section) return;
+    // Adiciona eventos de incrementar, decrementar e limpar
+    function adicionarEventosItem(item) {
+        const incrementarButton = item.querySelector(".incrementar");
+        const decrementarButton = item.querySelector(".decrementar");
+        const limparButton = item.querySelector(".limpar");
+        const quantidadeInput = item.querySelector("input[type='number']");
 
-        const items = section.querySelectorAll(".item");
-        items.forEach(item => {
-            const nomeItem = item.querySelector("label").textContent;
+        incrementarButton.addEventListener("click", () => {
+            quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
+        });
+
+        decrementarButton.addEventListener("click", () => {
+            if (quantidadeInput.value > 0) {
+                quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
+            }
+        });
+
+        limparButton.addEventListener("click", () => {
+            quantidadeInput.value = 0;
+            item.querySelector(".local").value = "local";
+        });
+    }
+
+    // Adiciona os eventos para os itens após serem adicionados ao DOM
+    form.querySelectorAll(".item").forEach(item => {
+        adicionarEventosItem(item);
+    });
+
+    // Gera o resumo da lista de compras
+    requisitarButton.addEventListener("click", () => {
+        resumoLista.innerHTML = ""; // Limpar resumo anterior
+        const itens = form.querySelectorAll(".item");
+
+        itens.forEach(item => {
+            const nomeItem = item.querySelector("label")?.innerText;
             const quantidade = parseInt(item.querySelector("input[type='number']").value);
             const local = item.querySelector(".local").value;
 
@@ -144,10 +137,4 @@ function generateSummary() {
             }
         });
     });
-}
-
-// Initialize when DOM is loaded
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("Initializing shopping list...");
-    initializeShoppingList();
 });
