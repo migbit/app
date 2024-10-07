@@ -90,7 +90,14 @@ function initializeMessageSelectors(mensagens) {
                 let mensagem = mensagens[categoria][opcao][idioma];
                 const guestName = guestNameInput.value;
                 const weekDay = weekDayInput.value;
-                mensagem = mensagem.replace('[Guest's Name]', guestName).replace('[Week Day]', weekDay);
+                mensagem = mensagem.replace("[Guest's Name]", guestName).replace("[Week Day]", weekDay);
+
+                // Adiciona links para download se a opção for "Instruções metro aeroporto"
+                if (opcao === 'Instruções metro aeroporto') {
+                    mensagem += '<br><a href="./maps/123.jpeg" download>Download Mapa 123</a>';
+                    mensagem += '<br><a href="./maps/1248.jpeg" download>Download Mapa 1248</a>';
+                }
+
                 mensagemContainer.innerHTML = mensagem;
             } else {
                 mensagemContainer.innerHTML = "<p>Mensagem não encontrada para esta seleção.</p>";
