@@ -1,6 +1,6 @@
 // js/compras.js
 import { db } from './script.js';
-import { collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 import { enviarEmailUrgencia } from './script.js';
 
 // Estrutura de dados para a lista de compras
@@ -116,10 +116,9 @@ function criarItemCompraEmBranco() {
     return itemDiv;
 }
 
-// Função para salvar a lista de compras no Firebase
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
-    let listaParaSalvar = [];
+    let listaParaSalvar = {};
 
     itens.forEach(item => {
         const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
@@ -127,33 +126,46 @@ async function salvarListaCompras() {
         const local = item.querySelector('.item-local').value;
 
         if (nome && quantidade > 0) {
-            listaParaSalvar.push({
-                nome,
-                quantidade,
-                local
-            });
+            listaParaSalvar[nome] = { quantidade, local };
         }
     });
 
-    if (listaParaSalvar.length === 0) {
-        alert('Não há itens para salvar.');
-        return;
-    }
-
     try {
-        const docRef = await addDoc(collection(db, "listas_compras"), {
+        // Usar um documento fixo para a lista de compras
+        await setDoc(doc(db, "listas_compras", "lista_atual"), {
             itens: listaParaSalvar,
-            dataRequisicao: Timestamp.now()
+            ultimaAtualizacao: Timestamp.now()
         });
-        console.log("Lista de compras salva com ID: ", docRef.id);
-        alert('Lista de compras salva com sucesso!');
+        console.log("Lista de compras atualizada com sucesso!");
+        alert('Lista de compras atualizada com sucesso!');
     } catch (e) {
         console.error("Erro ao salvar a lista de compras: ", e);
         alert('Ocorreu um erro ao salvar a lista de compras.');
     }
 }
 
-// Função para gerar o resumo da lista de compras
+async function carregarListaCompras() {
+    try {
+        const docRef = doc(db, "listas_compras", "lista_atual");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            const itens = data.itens;
+
+            document.querySelectorAll('.item-compra').forEach(item => {
+                const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+                if (itens[nome]) {
+                    item.querySelector('.item-quantidade').value = itens[nome].quantidade;
+                    item.querySelector('.item-local').value = itens[nome].local;
+                }
+            });
+        }
+    } catch (e) {
+        console.error("Erro ao carregar a lista de compras: ", e);
+    }
+}
+
 function gerarResumo() {
     const itens = document.querySelectorAll('.item-compra');
     let resumo = '';
@@ -171,7 +183,6 @@ function gerarResumo() {
     return resumo;
 }
 
-// Função para exibir o resumo e salvar no Firebase
 async function exibirResumoESalvar() {
     const resumo = gerarResumo();
     const resumoConteudo = document.getElementById('resumo-conteudo');
@@ -182,11 +193,8 @@ async function exibirResumoESalvar() {
     await salvarListaCompras();
 }
 
-// Função para enviar e-mail (a ser implementada)
 function enviarEmail() {
     const resumo = gerarResumo();
-    // Implementar a lógica de envio de e-mail aqui usando o EmailJS
-    console.log("Enviando e-mail com o resumo:", resumo);
     
     emailjs.send('service_tuglp9h', 'template_4micnki', {
         to_name: "apartments.oporto@gmail.com",
@@ -206,6 +214,7 @@ function enviarEmail() {
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     criarListaCompras();
+    carregarListaCompras();
 
     document.getElementById('compras-form').addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-aumentar')) {
