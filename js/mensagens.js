@@ -1,5 +1,3 @@
-// js/mensagens.js
-
 // Load the JSON data
 document.addEventListener('DOMContentLoaded', () => {
     fetch('./mensagensData.json')
@@ -27,8 +25,13 @@ function initializeMessageSelectors(mensagens) {
     const opcaoSelect = document.getElementById('opcao');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    const guestNameInput = document.getElementById('guestName');
-    const weekDayInput = document.getElementById('weekDay');
+    const guestNameInput = document.getElementById('guest-name');
+    const weekDayInput = document.getElementById('week-day');
+
+    // Botões para modificar a mensagem
+    const smsButton = document.getElementById('sms-button');
+    const bebeButton = document.getElementById('bebe-button');
+    const estaSemanaButton = document.getElementById('esta-semana-button');
 
     // Evento para quando o idioma for selecionado
     idiomaSelect.addEventListener('change', () => {
@@ -92,17 +95,12 @@ function initializeMessageSelectors(mensagens) {
                 const weekDay = weekDayInput.value;
                 mensagem = mensagem.replace("[Guest's Name]", guestName).replace("[Week Day]", weekDay);
 
-                // Adiciona links para download se a opção for "Instruções metro aeroporto"
-                if (opcao === 'Instruções metro aeroporto') {
-                    mensagem += '<br><a href="https://migbit.github.io/app/maps/123.jpeg" download>Download Mapa 123</a>';
-                    mensagem += '<br><a href="https://migbit.github.io/app/maps/1248.jpeg" download>Download Mapa 1248</a>';
-                }
-
                 mensagemContainer.innerHTML = mensagem;
+                mensagemSecao.style.display = 'block';
             } else {
                 mensagemContainer.innerHTML = "<p>Mensagem não encontrada para esta seleção.</p>";
+                mensagemSecao.style.display = 'block';
             }
-            mensagemSecao.style.display = 'block';
         } else {
             mensagemSecao.style.display = 'none';
             guestNameInput.style.display = 'none';
@@ -110,12 +108,40 @@ function initializeMessageSelectors(mensagens) {
         }
     });
 
-    // Evento para copiar mensagem ao clicar no container
-    mensagemContainer.addEventListener('click', (event) => {
-        if (!event.target.closest('a')) { // Evita copiar ao clicar nos links
-            copiarMensagem();
-        }
+    // Eventos para os botões
+    smsButton.addEventListener('click', () => {
+        modifyMessage('sms');
     });
+
+    bebeButton.addEventListener('click', () => {
+        modifyMessage('bebe');
+    });
+
+    estaSemanaButton.addEventListener('click', () => {
+        modifyMessage('esta-semana');
+    });
+
+    // Função para modificar a mensagem de acordo com os botões
+    function modifyMessage(type) {
+        let mensagem = mensagemContainer.innerHTML;
+
+        switch (type) {
+            case 'sms':
+                mensagem += '<br><strong>Enviar via SMS:</strong> Lembre-se de responder rapidamente.';
+                break;
+            case 'bebe':
+                mensagem += '<br><strong>Bebé:</strong> Gostaria de saber se precisará de um berço ou cadeira de alimentação.';
+                break;
+            case 'esta-semana':
+                mensagem += '<br><strong>Esta Semana:</strong> Estamos muito felizes em receber você nesta semana!';
+                break;
+        }
+
+        mensagemContainer.innerHTML = mensagem;
+    }
+
+    // Evento para copiar mensagem ao clicar no container
+    mensagemContainer.addEventListener('click', copiarMensagem);
 }
 
 // Função para copiar a mensagem para a área de transferência
