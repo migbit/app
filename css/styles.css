@@ -36,9 +36,6 @@ header {
     color: var(--white-color);
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 2em;  /* Restaurando o tamanho maior do título */
-    font-weight: bold;  /* Adicionando peso para o título */
-    letter-spacing: normal; /* Removendo espaçamento adicional */
 }
 
 nav ul {
@@ -57,12 +54,14 @@ nav ul li a {
     color: var(--white-color);
     text-decoration: none;
     font-weight: 500;
-    font-size: 1.1em;  /* Restaurando o tamanho maior dos links */
-    transition: color 0.3s ease;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 nav ul li a:hover {
-    color: var(--secondary-color);
+    background-color: #1abc9c;
+    color: var(--white-color);
 }
 
 /* Main Content Styles */
@@ -111,7 +110,8 @@ input[type="checkbox"] {
     transform: scale(1.3);
 }
 
-button {
+/* General Button Styles */
+.button-action {
     padding: 10px 20px;
     background-color: var(--secondary-color);
     border: none;
@@ -122,7 +122,7 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.button-action:hover {
     background-color: #16a085;
 }
 
@@ -245,76 +245,6 @@ footer {
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* T.M.T. Report Specific Styles */
-#relatorio-tmt h3 {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    color: #333;
-    border-bottom: 2px solid #333;
-    padding-bottom: 10px;
-}
-
-#relatorio-tmt h4 {
-    margin-top: 30px;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-    color: #555;
-}
-
-#relatorio-tmt > div {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 30px;
-    margin-bottom: 30px;
-}
-
-#relatorio-tmt > div:last-child {
-    border-bottom: none;
-}
-
-/* Repairs Styles */
-.urgente {
-    background-color: #ffe4e1;
-    color: #d9534f;
-}
-
-.reparado {
-    text-decoration: line-through;
-    color: #95a5a6;
-}
-
-/* Adjustments to the existing table styles for better presentation */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: var(--white-color);
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-    font-size: 1em;
-}
-
-td,
-th {
-    padding: 15px;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-
-th {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    font-weight: bold;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-input[type="checkbox"] {
-    width: auto;
-    transform: scale(1.3);
-}
-
 /* Specific Styles for Shopping List */
 .categoria {
     margin-bottom: 20px;
@@ -429,21 +359,6 @@ ul li {
 
 ul li small {
     color: var(--dark-gray);
-}
-
-.btn-limpar {
-    background-color: var(--accent-color);
-    color: var(--white-color);
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 0.8em;
-    transition: background-color 0.3s ease;
-}
-
-.btn-limpar:hover {
-    background-color: #c0392b;
 }
 
 /* Responsive Styles */
