@@ -401,9 +401,10 @@ ul li small {
     background-color: #e74c3c;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 3px 10px; /* Ajusta a altura e largura do botão */
     cursor: pointer;
     border-radius: 5px;
+    font-size: 0.8em; /* Reduz o tamanho da fonte */
 }
 
 .btn-limpar:hover {
