@@ -27,8 +27,8 @@ function initializeMessageSelectors(mensagens) {
     const opcaoSelect = document.getElementById('opcao');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    const guestNameInput = document.getElementById('guest-name');
-    const weekDayInput = document.getElementById('week-day');
+    const guestNameInput = document.getElementById('guestName');
+    const weekDayInput = document.getElementById('weekDay');
 
     // Evento para quando o idioma for selecionado
     idiomaSelect.addEventListener('change', () => {
@@ -94,8 +94,8 @@ function initializeMessageSelectors(mensagens) {
 
                 // Adiciona links para download se a opção for "Instruções metro aeroporto"
                 if (opcao === 'Instruções metro aeroporto') {
-                    mensagem += '<br><a href="./maps/123.jpeg" download>Download Mapa 123</a>';
-                    mensagem += '<br><a href="./maps/1248.jpeg" download>Download Mapa 1248</a>';
+                    mensagem += '<br><a href="https://migbit.github.io/app/maps/123.jpeg" download>Download Mapa 123</a>';
+                    mensagem += '<br><a href="https://migbit.github.io/app/maps/1248.jpeg" download>Download Mapa 1248</a>';
                 }
 
                 mensagemContainer.innerHTML = mensagem;
@@ -111,7 +111,11 @@ function initializeMessageSelectors(mensagens) {
     });
 
     // Evento para copiar mensagem ao clicar no container
-    mensagemContainer.addEventListener('click', copiarMensagem);
+    mensagemContainer.addEventListener('click', (event) => {
+        if (!event.target.closest('a')) { // Evita copiar ao clicar nos links
+            copiarMensagem();
+        }
+    });
 }
 
 // Função para copiar a mensagem para a área de transferência
