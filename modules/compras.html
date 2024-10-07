@@ -7,7 +7,7 @@
     <title>Lista de Compras</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script type="module" defer src="../js/script.js"></script>
+    <script defer src="../js/script.js"></script>
 </head>
 <body>
     <header>
@@ -28,51 +28,73 @@
     <form id="lista-compras">
         <section id="produtos-limpeza">
             <h2>Produtos de Limpeza</h2>
+            <ul>
+                <li>Lixívia tradicional</li>
+                <li>Multiusos com Lixívia</li>
+                <li>Gel com Lixívia</li>
+                <li>CIF</li>
+                <li>Limpeza Chão (Lava Tudo)</li>
+                <li>Limpeza Chão (Madeira)</li>
+                <li>Limpa Vidros</li>
+                <li>Limpeza Potente</li>
+                <li>Limpeza Placas</li>
+                <li>Vinagre</li>
+            </ul>
         </section>
 
         <section id="roupa">
             <h2>Roupa</h2>
+            <ul>
+                <li>Detergente Roupa</li>
+                <li>Amaciador</li>
+                <li>Lixívia Roupa Branca</li>
+                <li>Tira Nódoas</li>
+                <li>Tira Gorduras</li>
+                <li>Oxi Active</li>
+                <li>Branqueador</li>
+            </ul>
         </section>
 
         <section id="wc">
             <h2>WC</h2>
+            <ul>
+                <li>Papel Higiénico</li>
+                <li>Gel WC Sanitas</li>
+                <li>Toalhitas</li>
+                <li>Toalhitas Desmaquilhantes</li>
+                <li>Blocos Sanitários</li>
+                <li>Anticalcário</li>
+                <li>Limpeza Chuveiro</li>
+                <li>Desentupidor de Canos</li>
+                <li>Manutenção Canos</li>
+                <li>Papel Higiénico Húmido</li>
+            </ul>
         </section>
 
         <section id="cozinha">
             <h2>Cozinha</h2>
+            <ul>
+                <li>Água 1.5l</li>
+                <li>Água 5l</li>
+                <li>Café</li>
+                <li>Rolo de Cozinha</li>
+                <li>Guardanapos</li>
+                <li>Bolachas</li>
+                <li>Chá</li>
+                <li>Lava-Loiça</li>
+                <li>Esfregões</li>
+                <li>Película Transparente</li>
+                <li>Papel Alumínio</li>
+                <li>Sacos congelação</li>
+            </ul>
         </section>
 
         <section id="diversos">
             <h2>Diversos</h2>
+            <ul>
+                <li>Varetas Difusoras (Ambientador)</li>
+            </ul>
         </section>
-
-        <section id="itens-adicionais">
-            <h2>Itens Adicionais</h2>
-            <!-- 10 espaços adicionais para itens personalizados -->
-            <div class="item">
-                <input type="text" placeholder="Item adicional">
-                <input type="number" value="0" min="0">
-                <button type="button" class="incrementar">+</button>
-                <button type="button" class="decrementar">-</button>
-                <button type="button" class="limpar">Limpar</button>
-                <select class="local">
-                    <option value="local" selected>Local</option>
-                    <option value="123">123</option>
-                    <option value="1248">1248</option>
-                    <option value="escritorio">Escritório</option>
-                    <option value="lavandaria">Lavandaria</option>
-                    <option value="casa">Casa</option>
-                </select>
-            </div>
-        </section>
-
-        <button type="button" id="requisitar">Requisitar</button>
     </form>
-
-    <div id="resumo">
-        <h2>Resumo da Lista de Compras</h2>
-        <ul id="resumo-lista"></ul>
-    </div>
-
 </body>
 </html>
