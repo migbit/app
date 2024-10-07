@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("Script started");
+
     const form = document.getElementById("lista-compras");
-    const resumoLista = document.getElementById("resumo-lista");
-    const requisitarButton = document.getElementById("requisitar");
+    if (!form) {
+        console.error("Form not found!");
+        return;
+    }
+    console.log("Form found");
 
     // Lista pré-definida de itens
     const itensPreDefinidos = {
@@ -10,47 +15,22 @@ document.addEventListener("DOMContentLoaded", () => {
             "Multiusos com Lixívia",
             "Gel com Lixívia",
             "CIF",
-            "Limpeza Chão (Lava Tudo)",
-            "Limpeza Chão (Madeira)",
-            "Limpa Vidros",
-            "Limpeza Potente",
-            "Limpeza Placas",
-            "Vinagre"
+            "Limpeza Chão (Lava Tudo)"
         ],
         "roupa": [
             "Detergente Roupa",
             "Amaciador",
-            "Lixívia Roupa Branca",
-            "Tira Nódoas",
-            "Tira Gorduras",
-            "Oxi Active",
-            "Branqueador"
+            "Lixívia Roupa Branca"
         ],
         "wc": [
             "Papel Higiénico",
             "Gel WC Sanitas",
-            "Toalhitas",
-            "Toalhitas Desmaquilhantes",
-            "Blocos Sanitários",
-            "Anticalcário",
-            "Limpeza Chuveiro",
-            "Desentupidor de Canos",
-            "Manutenção Canos",
-            "Papel Higiénico Húmido"
+            "Toalhitas"
         ],
         "cozinha": [
             "Água 1.5l",
             "Água 5l",
-            "Café",
-            "Rolo de Cozinha",
-            "Guardanapos",
-            "Bolachas",
-            "Chá",
-            "Lava-Loiça",
-            "Esfregões",
-            "Película Transparente",
-            "Papel Alumínio",
-            "Sacos congelação"
+            "Café"
         ],
         "diversos": [
             "Varetas Difusoras (Ambientador)"
@@ -59,12 +39,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Função para adicionar itens ao formulário
     function adicionarItens() {
+        console.log("Starting to add items");
         Object.keys(itensPreDefinidos).forEach(categoria => {
+            console.log(`Processing category: ${categoria}`);
             const secao = document.getElementById(categoria);
+            
             if (!secao) {
-                console.error(`Secção ${categoria} não encontrada`);
+                console.error(`Section not found: ${categoria}`);
                 return;
             }
+            
+            console.log(`Found section: ${categoria}`);
             
             itensPreDefinidos[categoria].forEach(nomeItem => {
                 const divItem = document.createElement("div");
@@ -87,56 +72,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
 
                 secao.appendChild(divItem);
+                console.log(`Added item: ${nomeItem} to ${categoria}`);
             });
         });
     }
 
-    // Adiciona eventos de incrementar, decrementar e limpar
-    function adicionarEventosItem(item) {
-        const incrementarButton = item.querySelector(".incrementar");
-        const decrementarButton = item.querySelector(".decrementar");
-        const limparButton = item.querySelector(".limpar");
-        const quantidadeInput = item.querySelector("input[type='number']");
-
-        incrementarButton.addEventListener("click", () => {
-            quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
-        });
-
-        decrementarButton.addEventListener("click", () => {
-            if (parseInt(quantidadeInput.value) > 0) {
-                quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
-            }
-        });
-
-        limparButton.addEventListener("click", () => {
-            quantidadeInput.value = 0;
-            item.querySelector(".local").value = "local";
-        });
+    // Tentar adicionar itens
+    try {
+        adicionarItens();
+        console.log("Items added successfully");
+    } catch (error) {
+        console.error("Error adding items:", error);
     }
-
-    // Inicialização
-    adicionarItens();
-
-    // Adicionar eventos a todos os itens
-    form.querySelectorAll(".item").forEach(item => {
-        adicionarEventosItem(item);
-    });
-
-    // Gera o resumo da lista de compras
-    requisitarButton.addEventListener("click", () => {
-        resumoLista.innerHTML = ""; // Limpar resumo anterior
-        const itens = form.querySelectorAll(".item");
-
-        itens.forEach(item => {
-            const nomeItem = item.querySelector("label")?.innerText;
-            const quantidade = parseInt(item.querySelector("input[type='number']").value);
-            const local = item.querySelector(".local").value;
-
-            if (quantidade > 0) {
-                const li = document.createElement("li");
-                li.textContent = `${nomeItem}: ${quantidade} (Local: ${local})`;
-                resumoLista.appendChild(li);
-            }
-        });
-    });
 });
