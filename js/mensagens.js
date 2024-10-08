@@ -103,7 +103,7 @@ function initializeMessageSelectors(mensagens) {
                 guestNameInput.style.display = 'none';
                 weekTypeSelect.style.display = 'none';
                 weekDaySelect.style.display = 'none';
-                btnGerarMensagem.style.display = 'block';
+                btnGerarMensagem.style.display = 'none';
                 btnSMS.style.display = 'none';
                 btnBaby.style.display = 'none';
             }
