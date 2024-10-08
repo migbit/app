@@ -55,7 +55,6 @@
                 <label for="opcao">Opção:</label>
                 <select id="opcao">
                     <option value="">Selecionar Opção</option>
-                    <!-- As opções serão carregadas dinamicamente -->
                 </select>
             </div>
 
@@ -64,15 +63,15 @@
                 <input type="text" id="guestName" placeholder="Digite o nome do hóspede">
             </div>
 
-            <div class="dropdowns" id="week-type" style="display: none;">
+            <div class="input-field" id="week-type" style="display: none;">
                 <label for="weekType">Semana:</label>
                 <select id="weekType">
-                    <option value="esta">Esta semana</option>
-                    <option value="próxima">Próxima semana</option>
+                    <option value="Esta semana">Esta semana</option>
+                    <option value="Próxima semana">Próxima semana</option>
                 </select>
             </div>
 
-            <div class="dropdowns" id="week-day" style="display: none;">
+            <div class="input-field" id="week-day" style="display: none;">
                 <label for="weekDay">Dia da Semana:</label>
                 <select id="weekDay">
                     <option value="segunda-feira">Segunda-feira</option>
@@ -85,10 +84,13 @@
                 </select>
             </div>
 
-            <div class="buttons" id="modifiers" style="display: none;">
+            <div id="modifiers" style="display: none;">
                 <button id="btn-sms">SMS</button>
                 <button id="btn-baby">Bebé</button>
             </div>
+
+            <button id="btn-gerar-mensagem" style="display: none;">Gerar Mensagem</button>
+
         </section>
 
         <section id="mensagem-secao" style="display: none;">

@@ -163,17 +163,26 @@ function getWeekDayInLanguage(weekDay, idioma) {
 // Função para adicionar introdução SMS
 function addSMSIntroduction() {
     const mensagemContainer = document.getElementById('mensagem-container');
-    const smsIntro = "I’m Miguel, your Porto Airbnb host.";
-    mensagemContainer.innerHTML = smsIntro + "\n\n" + mensagemContainer.innerHTML;
+    let mensagem = mensagemContainer.innerHTML;
+
+    if (!mensagem.includes("I’m Miguel")) {
+        const smsIntro = "Olá [Hospede],\n\nI’m Miguel, your Porto Airbnb host.";
+        mensagem = mensagem.replace(/Olá \[Hospede\],/, smsIntro);
+        mensagemContainer.innerHTML = mensagem;
+    }
 }
 
 // Função para adicionar a solicitação de bebê
 function addBabyRequest() {
     const mensagemContainer = document.getElementById('mensagem-container');
-    const babyRequest = "Additionally, I’d like to know if you need a baby bed and/or a feeding chair.";
-    mensagemContainer.innerHTML = mensagemContainer.innerHTML.replace("Melhores cumprimentos", babyRequest + "\n\nMelhores cumprimentos");
-}
+    let mensagem = mensagemContainer.innerHTML;
 
+    if (!mensagem.includes("baby bed and/or a feeding chair")) {
+        const babyRequest = "Additionally, I’d like to know if you need a baby bed and/or a feeding chair.";
+        mensagem = mensagem.replace(/Melhores cumprimentos|Kind regards|Un saludo|Cordialement|Mit freundlichen Grüßen|Cordiali saluti/, babyRequest + "\n\n$&");
+        mensagemContainer.innerHTML = mensagem;
+    }
+}
 // Função para copiar a mensagem para a área de transferência
 function copiarMensagem() {
     const mensagem = document.getElementById('mensagem-container').textContent;
