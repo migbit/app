@@ -60,26 +60,40 @@
             </div>
 
             <div class="input-field" id="guest-name" style="display: none;">
-                <label for="guestName">Guest Name:</label>
+                <label for="guestName">Nome do Hóspede:</label>
                 <input type="text" id="guestName" placeholder="Digite o nome do hóspede">
             </div>
 
-            <div class="input-field" id="week-day" style="display: none;">
-                <label for="weekDay">Week Day:</label>
-                <input type="text" id="weekDay" placeholder="Digite o dia da semana">
+            <div class="dropdowns" id="week-type" style="display: none;">
+                <label for="weekType">Semana:</label>
+                <select id="weekType">
+                    <option value="esta">Esta semana</option>
+                    <option value="próxima">Próxima semana</option>
+                </select>
+            </div>
+
+            <div class="dropdowns" id="week-day" style="display: none;">
+                <label for="weekDay">Dia da Semana:</label>
+                <select id="weekDay">
+                    <option value="segunda-feira">Segunda-feira</option>
+                    <option value="terça-feira">Terça-feira</option>
+                    <option value="quarta-feira">Quarta-feira</option>
+                    <option value="quinta-feira">Quinta-feira</option>
+                    <option value="sexta-feira">Sexta-feira</option>
+                    <option value="sábado">Sábado</option>
+                    <option value="domingo">Domingo</option>
+                </select>
+            </div>
+
+            <div class="buttons" id="modifiers" style="display: none;">
+                <button id="btn-sms">SMS</button>
+                <button id="btn-baby">Bebé</button>
             </div>
         </section>
 
         <section id="mensagem-secao" style="display: none;">
             <h2>Mensagem Selecionada:</h2>
             <div id="mensagem-container" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
-        
-            <!-- Novos Botões -->
-            <div id="message-options" style="margin-top: 10px;">
-                <button id="sms-button" style="margin-right: 10px;">SMS</button>
-                <button id="bebe-button" style="margin-right: 10px;">Bebé</button>
-                <button id="esta-semana-button">Esta Semana</button>
-            </div>
         </section>
     </main>
 
