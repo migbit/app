@@ -32,6 +32,17 @@ function initializeMessageSelectors(mensagens) {
     const btnSMS = document.getElementById('btn-sms');
     const btnBaby = document.getElementById('btn-baby');
 
+    // Inicializar estado inicial dos elementos
+    categoriaDiv.style.display = 'none';
+    opcaoDiv.style.display = 'none';
+    guestNameInput.style.display = 'none';
+    weekTypeSelect.style.display = 'none';
+    weekDaySelect.style.display = 'none';
+    btnGerarMensagem.style.display = 'none';
+    btnSMS.style.display = 'none';
+    btnBaby.style.display = 'none';
+    mensagemSecao.style.display = 'none';
+
     // Evento para quando o idioma for selecionado
     idiomaSelect.addEventListener('change', () => {
         const idioma = idiomaSelect.value;
@@ -40,6 +51,12 @@ function initializeMessageSelectors(mensagens) {
             opcaoDiv.style.display = 'none';
             opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
             mensagemSecao.style.display = 'none';
+            guestNameInput.style.display = 'none';
+            weekTypeSelect.style.display = 'none';
+            weekDaySelect.style.display = 'none';
+            btnGerarMensagem.style.display = 'none';
+            btnSMS.style.display = 'none';
+            btnBaby.style.display = 'none';
         } else {
             categoriaDiv.style.display = 'none';
             opcaoDiv.style.display = 'none';
