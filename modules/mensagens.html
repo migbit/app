@@ -59,12 +59,12 @@
                 </select>
             </div>
 
-            <div class="input-field" id="guest-name-div" style="display: none;">
+            <div class="input-field" id="guest-name" style="display: none;">
                 <label for="guestName">Nome do Hóspede:</label>
                 <input type="text" id="guestName" placeholder="Digite o nome do hóspede">
             </div>
 
-            <div class="input-field" id="week-type-div" style="display: none;">
+            <div class="input-field" id="week-type" style="display: none;">
                 <label for="weekType">Semana:</label>
                 <select id="weekType">
                     <option value="Esta semana">Esta semana</option>
@@ -72,7 +72,7 @@
                 </select>
             </div>
 
-            <div class="input-field" id="week-day-div" style="display: none;">
+            <div class="input-field" id="week-day" style="display: none;">
                 <label for="weekDay">Dia da Semana:</label>
                 <select id="weekDay">
                     <option value="Segunda-feira">Segunda-feira</option>
@@ -84,15 +84,12 @@
                     <option value="Domingo">Domingo</option>
                 </select>
             </div>
-
-            <div id="btn-section" style="display: none;">
-                <button id="btn-gerar-mensagem">Gerar Mensagem</button>
-                <button id="btn-sms">SMS</button>
-                <button id="btn-baby">Bebé</button>
-            </div>
         </section>
 
         <section id="mensagem-secao" style="display: none;">
+            <button id="btn-gerar-mensagem" style="display: none;">Gerar Mensagem</button>
+            <button id="btn-sms" style="display: none;">SMS</button>
+            <button id="btn-baby" style="display: none;">Bebé</button>
             <h2>Mensagem Selecionada:</h2>
             <div id="mensagem-container" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
         </section>
