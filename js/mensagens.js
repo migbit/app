@@ -28,10 +28,9 @@ function initializeMessageSelectors(mensagens) {
     const guestNameInput = document.getElementById('guestName');
     const weekTypeSelect = document.getElementById('weekType');
     const weekDaySelect = document.getElementById('weekDay');
-    const modifiersDiv = document.getElementById('modifiers');
+    const btnGerarMensagem = document.getElementById('btn-gerar-mensagem');
     const btnSMS = document.getElementById('btn-sms');
     const btnBaby = document.getElementById('btn-baby');
-    const btnGerarMensagem = document.getElementById('btn-gerar-mensagem');
 
     // Evento para quando o idioma for selecionado
     idiomaSelect.addEventListener('change', () => {
@@ -39,21 +38,12 @@ function initializeMessageSelectors(mensagens) {
         if (idioma) {
             categoriaDiv.style.display = 'block';
             opcaoDiv.style.display = 'none';
+            opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
             mensagemSecao.style.display = 'none';
-            guestNameInput.parentElement.style.display = 'none';
-            weekTypeSelect.parentElement.style.display = 'none';
-            weekDaySelect.parentElement.style.display = 'none';
-            modifiersDiv.style.display = 'none';
-            btnGerarMensagem.style.display = 'none';
         } else {
             categoriaDiv.style.display = 'none';
             opcaoDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
-            guestNameInput.parentElement.style.display = 'none';
-            weekTypeSelect.parentElement.style.display = 'none';
-            weekDaySelect.parentElement.style.display = 'none';
-            modifiersDiv.style.display = 'none';
-            btnGerarMensagem.style.display = 'none';
         }
     });
 
@@ -75,11 +65,6 @@ function initializeMessageSelectors(mensagens) {
         } else {
             opcaoDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
-            guestNameInput.parentElement.style.display = 'none';
-            weekTypeSelect.parentElement.style.display = 'none';
-            weekDaySelect.parentElement.style.display = 'none';
-            modifiersDiv.style.display = 'none';
-            btnGerarMensagem.style.display = 'none';
         }
     });
 
@@ -88,33 +73,63 @@ function initializeMessageSelectors(mensagens) {
         const idioma = idiomaSelect.value;
         const categoria = categoriaSelect.value;
         const opcao = opcaoSelect.value;
+
         if (opcao) {
             if (opcao === 'Quando Chegam?') {
-                guestNameInput.parentElement.style.display = 'block';
-                weekTypeSelect.parentElement.style.display = 'block';
-                weekDaySelect.parentElement.style.display = 'block';
-                modifiersDiv.style.display = 'block';
+                guestNameInput.style.display = 'block';
+                weekTypeSelect.style.display = 'block';
+                weekDaySelect.style.display = 'block';
                 btnGerarMensagem.style.display = 'block';
+                btnSMS.style.display = 'block';
+                btnBaby.style.display = 'block';
             } else {
-                guestNameInput.parentElement.style.display = 'none';
-                weekTypeSelect.parentElement.style.display = 'none';
-                weekDaySelect.parentElement.style.display = 'none';
-                modifiersDiv.style.display = 'none';
-                btnGerarMensagem.style.display = 'none';
+                guestNameInput.style.display = 'none';
+                weekTypeSelect.style.display = 'none';
+                weekDaySelect.style.display = 'none';
+                btnGerarMensagem.style.display = 'block';
+                btnSMS.style.display = 'none';
+                btnBaby.style.display = 'none';
             }
+        } else {
+            mensagemSecao.style.display = 'none';
+            guestNameInput.style.display = 'none';
+            weekTypeSelect.style.display = 'none';
+            weekDaySelect.style.display = 'none';
+            btnGerarMensagem.style.display = 'none';
+            btnSMS.style.display = 'none';
+            btnBaby.style.display = 'none';
         }
     });
 
-    // Evento para gerar a mensagem quando o botão for clicado
+    // Evento para gerar a mensagem
     btnGerarMensagem.addEventListener('click', () => {
-        generateMessage(mensagens);
+        const idioma = idiomaSelect.value;
+        const categoria = categoriaSelect.value;
+        const opcao = opcaoSelect.value;
+        const guestName = guestNameInput.value;
+        const weekType = weekTypeSelect.value;
+        const weekDay = weekDaySelect.value;
+
+        if (mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
+            let mensagem = mensagens[categoria][opcao][idioma];
+            mensagem = mensagem.replace('[Hospede]', guestName)
+                               .replace('[Semana]', weekType)
+                               .replace('[Dia Semana]', weekDay);
+
+            mensagemContainer.innerHTML = mensagem;
+            mensagemSecao.style.display = 'block';
+        } else {
+            mensagemContainer.innerHTML = "<p>Mensagem não encontrada para esta seleção.</p>";
+            mensagemSecao.style.display = 'block';
+        }
     });
 
-    // Funções para os botões SMS e Bebé
+    // Evento para modificar a mensagem com SMS
     btnSMS.addEventListener('click', () => {
         addSMSIntroduction();
     });
 
+    // Evento para modificar a mensagem com informação do Bebé
     btnBaby.addEventListener('click', () => {
         addBabyRequest();
     });
@@ -123,41 +138,14 @@ function initializeMessageSelectors(mensagens) {
     mensagemContainer.addEventListener('click', copiarMensagem);
 }
 
-// Função para gerar a mensagem com as variáveis
-function generateMessage(mensagens) {
-    const idioma = document.getElementById('idioma').value;
-    const categoria = document.getElementById('categoria').value;
-    const opcao = document.getElementById('opcao').value;
-    const guestName = document.getElementById('guestName').value;
-    const weekType = document.getElementById('weekType').value;
-    const weekDay = document.getElementById('weekDay').value;
-    const mensagemContainer = document.getElementById('mensagem-container');
-
-    if (mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
-        let mensagem = mensagens[categoria][opcao][idioma];
-        mensagem = mensagem.replace("[Hospede]", guestName)
-            .replace("[Semana]", weekType)
-            .replace("[Dia Semana]", getWeekDayInLanguage(weekDay, idioma));
-
-        mensagemContainer.innerHTML = mensagem;
-        document.getElementById('mensagem-secao').style.display = 'block';
-    }
-}
-
-// Função para obter o dia da semana no idioma correto
-function getWeekDayInLanguage(weekDay, idioma) {
-    const weekDays = {
-        "segunda-feira": {
-            "Português": "segunda-feira",
-            "Inglês": "Monday",
-            "Espanhol": "lunes",
-            "Francês": "lundi",
-            "Alemão": "Montag",
-            "Italiano": "lunedì"
-        },
-        // Restante dias da semana...
-    };
-    return weekDays[weekDay] ? weekDays[weekDay][idioma] : weekDay;
+// Função para copiar a mensagem para a área de transferência
+function copiarMensagem() {
+    const mensagem = document.getElementById('mensagem-container').textContent;
+    navigator.clipboard.writeText(mensagem).then(() => {
+        alert('Mensagem copiada para a área de transferência!');
+    }).catch(err => {
+        console.error('Erro ao copiar a mensagem: ', err);
+    });
 }
 
 // Função para adicionar introdução SMS
@@ -166,8 +154,8 @@ function addSMSIntroduction() {
     let mensagem = mensagemContainer.innerHTML;
 
     if (!mensagem.includes("I’m Miguel")) {
-        const smsIntro = "Olá [Hospede],\n\nI’m Miguel, your Porto Airbnb host.";
-        mensagem = mensagem.replace(/Olá \[Hospede\],/, smsIntro);
+        const smsIntro = "I’m Miguel, your Porto Airbnb host.";
+        mensagem = mensagem.replace(/(Olá [^\n]+,)/, `$1\n\n${smsIntro}`);
         mensagemContainer.innerHTML = mensagem;
     }
 }
@@ -179,16 +167,7 @@ function addBabyRequest() {
 
     if (!mensagem.includes("baby bed and/or a feeding chair")) {
         const babyRequest = "Additionally, I’d like to know if you need a baby bed and/or a feeding chair.";
-        mensagem = mensagem.replace(/Melhores cumprimentos|Kind regards|Un saludo|Cordialement|Mit freundlichen Grüßen|Cordiali saluti/, babyRequest + "\n\n$&");
+        mensagem = mensagem.replace(/(Melhores cumprimentos|Kind regards|Un saludo|Cordialement|Mit freundlichen Grüßen|Cordiali saluti)/, `${babyRequest}\n\n$1`);
         mensagemContainer.innerHTML = mensagem;
     }
-}
-// Função para copiar a mensagem para a área de transferência
-function copiarMensagem() {
-    const mensagem = document.getElementById('mensagem-container').textContent;
-    navigator.clipboard.writeText(mensagem).then(() => {
-        alert('Mensagem copiada para a área de transferência!');
-    }).catch(err => {
-        console.error('Erro ao copiar a mensagem: ', err);
-    });
 }
