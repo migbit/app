@@ -1,5 +1,3 @@
-// js/mensagens.js
-
 // Load the JSON data
 document.addEventListener('DOMContentLoaded', () => {
     fetch('./mensagensData.json')
@@ -27,15 +25,12 @@ function initializeMessageSelectors(mensagens) {
     const opcaoSelect = document.getElementById('opcao');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    const guestNameInput = document.getElementById('guest-name');
-    const weekDaySelect = document.getElementById('week-day');
-    const weekSelect = document.getElementById('week');
-    const btnBebe = document.getElementById('btn-bebe');
-    const btnSms = document.getElementById('btn-sms');
-    const btnGerarMensagem = document.getElementById('btn-gerar-mensagem');
-
-    let addBebeMessage = false;
-    let addSmsMessage = false;
+    const guestNameInput = document.getElementById('guestName');
+    const weekTypeSelect = document.getElementById('weekType');
+    const weekDaySelect = document.getElementById('weekDay');
+    const modifiersDiv = document.getElementById('modifiers');
+    const btnSMS = document.getElementById('btn-sms');
+    const btnBaby = document.getElementById('btn-baby');
 
     // Evento para quando o idioma for selecionado
     idiomaSelect.addEventListener('change', () => {
@@ -43,18 +38,19 @@ function initializeMessageSelectors(mensagens) {
         if (idioma) {
             categoriaDiv.style.display = 'block';
             opcaoDiv.style.display = 'none';
-            opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
             mensagemSecao.style.display = 'none';
-            guestNameInput.style.display = 'none';
-            weekDaySelect.style.display = 'none';
-            weekSelect.style.display = 'none';
+            guestNameInput.parentElement.style.display = 'none';
+            weekTypeSelect.parentElement.style.display = 'none';
+            weekDaySelect.parentElement.style.display = 'none';
+            modifiersDiv.style.display = 'none';
         } else {
             categoriaDiv.style.display = 'none';
             opcaoDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
-            guestNameInput.style.display = 'none';
-            weekDaySelect.style.display = 'none';
-            weekSelect.style.display = 'none';
+            guestNameInput.parentElement.style.display = 'none';
+            weekTypeSelect.parentElement.style.display = 'none';
+            weekDaySelect.parentElement.style.display = 'none';
+            modifiersDiv.style.display = 'none';
         }
     });
 
@@ -76,9 +72,10 @@ function initializeMessageSelectors(mensagens) {
         } else {
             opcaoDiv.style.display = 'none';
             mensagemSecao.style.display = 'none';
-            guestNameInput.style.display = 'none';
-            weekDaySelect.style.display = 'none';
-            weekSelect.style.display = 'none';
+            guestNameInput.parentElement.style.display = 'none';
+            weekTypeSelect.parentElement.style.display = 'none';
+            weekDaySelect.parentElement.style.display = 'none';
+            modifiersDiv.style.display = 'none';
         }
     });
 
@@ -89,74 +86,52 @@ function initializeMessageSelectors(mensagens) {
         const opcao = opcaoSelect.value;
         if (opcao) {
             if (opcao === 'Quando Chegam?') {
-                guestNameInput.style.display = 'block';
-                weekDaySelect.style.display = 'block';
-                weekSelect.style.display = 'block';
-                btnGerarMensagem.style.display = 'block';
+                guestNameInput.parentElement.style.display = 'block';
+                weekTypeSelect.parentElement.style.display = 'block';
+                weekDaySelect.parentElement.style.display = 'block';
+                modifiersDiv.style.display = 'block';
             } else {
-                guestNameInput.style.display = 'none';
-                weekDaySelect.style.display = 'none';
-                weekSelect.style.display = 'none';
-                btnGerarMensagem.style.display = 'none';
+                guestNameInput.parentElement.style.display = 'none';
+                weekTypeSelect.parentElement.style.display = 'none';
+                weekDaySelect.parentElement.style.display = 'none';
+                modifiersDiv.style.display = 'none';
             }
 
             if (mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
-                mensagemContainer.innerHTML = mensagens[categoria][opcao][idioma];
+                let mensagem = mensagens[categoria][opcao][idioma];
+                const guestName = guestNameInput.value;
+                const weekType = weekTypeSelect.value;
+                const weekDay = weekDaySelect.value;
+
+                mensagem = mensagem.replace("[Hospede]", guestName)
+                    .replace("[Semana]", weekType)
+                    .replace("[Dia Semana]", getWeekDayInLanguage(weekDay, idioma));
+
+                mensagemContainer.innerHTML = mensagem;
             } else {
                 mensagemContainer.innerHTML = "<p>Mensagem não encontrada para esta seleção.</p>";
             }
             mensagemSecao.style.display = 'block';
         } else {
             mensagemSecao.style.display = 'none';
-            guestNameInput.style.display = 'none';
-            weekDaySelect.style.display = 'none';
-            weekSelect.style.display = 'none';
-            btnGerarMensagem.style.display = 'none';
+            guestNameInput.parentElement.style.display = 'none';
+            weekTypeSelect.parentElement.style.display = 'none';
+            weekDaySelect.parentElement.style.display = 'none';
+            modifiersDiv.style.display = 'none';
         }
-    });
-
-    // Evento do botão Bebé
-    btnBebe.addEventListener('click', () => {
-        addBebeMessage = !addBebeMessage;
-        btnBebe.classList.toggle('active');
-    });
-
-    // Evento do botão SMS
-    btnSms.addEventListener('click', () => {
-        addSmsMessage = !addSmsMessage;
-        btnSms.classList.toggle('active');
-    });
-
-    // Evento do botão Gerar Mensagem
-    btnGerarMensagem.addEventListener('click', () => {
-        const idioma = idiomaSelect.value;
-        const categoria = categoriaSelect.value;
-        const opcao = opcaoSelect.value;
-        if (mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
-            let mensagem = mensagens[categoria][opcao][idioma];
-            const guestName = guestNameInput.value;
-            const weekDay = weekDaySelect.value;
-            const week = weekSelect.value;
-
-            mensagem = mensagem.replace('[Hospede]', guestName).replace('[Dia Semana]', weekDay).replace('[Semana]', week);
-
-            if (addSmsMessage) {
-                mensagem = `I’m Miguel, your Porto Airbnb host.\n\n` + mensagem;
-            }
-
-            if (addBebeMessage) {
-                mensagem += '\n\nAdditionally, I’d like to know if you need a baby bed and/or a feeding chair.';
-            }
-
-            mensagemContainer.innerHTML = mensagem;
-        } else {
-            mensagemContainer.innerHTML = "<p>Mensagem não encontrada para esta seleção.</p>";
-        }
-        mensagemSecao.style.display = 'block';
     });
 
     // Evento para copiar mensagem ao clicar no container
     mensagemContainer.addEventListener('click', copiarMensagem);
+
+    // Funções para os botões SMS e Bebé
+    btnSMS.addEventListener('click', () => {
+        addSMSIntroduction();
+    });
+
+    btnBaby.addEventListener('click', () => {
+        addBabyRequest();
+    });
 }
 
 // Função para copiar a mensagem para a área de transferência
@@ -167,4 +142,34 @@ function copiarMensagem() {
     }).catch(err => {
         console.error('Erro ao copiar a mensagem: ', err);
     });
+}
+
+// Função para obter o dia da semana no idioma correto
+function getWeekDayInLanguage(weekDay, idioma) {
+    const weekDays = {
+        "segunda-feira": {
+            "Português": "segunda-feira",
+            "Inglês": "Monday",
+            "Espanhol": "lunes",
+            "Francês": "lundi",
+            "Alemão": "Montag",
+            "Italiano": "lunedì"
+        },
+        // Restante dias da semana...
+    };
+    return weekDays[weekDay] ? weekDays[weekDay][idioma] : weekDay;
+}
+
+// Função para adicionar introdução SMS
+function addSMSIntroduction() {
+    const mensagemContainer = document.getElementById('mensagem-container');
+    const smsIntro = "I’m Miguel, your Porto Airbnb host.";
+    mensagemContainer.innerHTML = smsIntro + "\n\n" + mensagemContainer.innerHTML;
+}
+
+// Função para adicionar a solicitação de bebê
+function addBabyRequest() {
+    const mensagemContainer = document.getElementById('mensagem-container');
+    const babyRequest = "Additionally, I’d like to know if you need a baby bed and/or a feeding chair.";
+    mensagemContainer.innerHTML = mensagemContainer.innerHTML + "\n\n" + babyRequest;
 }
