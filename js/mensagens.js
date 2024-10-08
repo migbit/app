@@ -31,6 +31,7 @@ function initializeMessageSelectors(mensagens) {
     const modifiersDiv = document.getElementById('modifiers');
     const btnSMS = document.getElementById('btn-sms');
     const btnBaby = document.getElementById('btn-baby');
+    const btnGerarMensagem = document.getElementById('btn-gerar-mensagem');
 
     // Evento para quando o idioma for selecionado
     idiomaSelect.addEventListener('change', () => {
@@ -43,6 +44,7 @@ function initializeMessageSelectors(mensagens) {
             weekTypeSelect.parentElement.style.display = 'none';
             weekDaySelect.parentElement.style.display = 'none';
             modifiersDiv.style.display = 'none';
+            btnGerarMensagem.style.display = 'none';
         } else {
             categoriaDiv.style.display = 'none';
             opcaoDiv.style.display = 'none';
@@ -51,6 +53,7 @@ function initializeMessageSelectors(mensagens) {
             weekTypeSelect.parentElement.style.display = 'none';
             weekDaySelect.parentElement.style.display = 'none';
             modifiersDiv.style.display = 'none';
+            btnGerarMensagem.style.display = 'none';
         }
     });
 
@@ -76,6 +79,7 @@ function initializeMessageSelectors(mensagens) {
             weekTypeSelect.parentElement.style.display = 'none';
             weekDaySelect.parentElement.style.display = 'none';
             modifiersDiv.style.display = 'none';
+            btnGerarMensagem.style.display = 'none';
         }
     });
 
@@ -90,39 +94,21 @@ function initializeMessageSelectors(mensagens) {
                 weekTypeSelect.parentElement.style.display = 'block';
                 weekDaySelect.parentElement.style.display = 'block';
                 modifiersDiv.style.display = 'block';
+                btnGerarMensagem.style.display = 'block';
             } else {
                 guestNameInput.parentElement.style.display = 'none';
                 weekTypeSelect.parentElement.style.display = 'none';
                 weekDaySelect.parentElement.style.display = 'none';
                 modifiersDiv.style.display = 'none';
+                btnGerarMensagem.style.display = 'none';
             }
-
-            if (mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
-                let mensagem = mensagens[categoria][opcao][idioma];
-                const guestName = guestNameInput.value;
-                const weekType = weekTypeSelect.value;
-                const weekDay = weekDaySelect.value;
-
-                mensagem = mensagem.replace("[Hospede]", guestName)
-                    .replace("[Semana]", weekType)
-                    .replace("[Dia Semana]", getWeekDayInLanguage(weekDay, idioma));
-
-                mensagemContainer.innerHTML = mensagem;
-            } else {
-                mensagemContainer.innerHTML = "<p>Mensagem não encontrada para esta seleção.</p>";
-            }
-            mensagemSecao.style.display = 'block';
-        } else {
-            mensagemSecao.style.display = 'none';
-            guestNameInput.parentElement.style.display = 'none';
-            weekTypeSelect.parentElement.style.display = 'none';
-            weekDaySelect.parentElement.style.display = 'none';
-            modifiersDiv.style.display = 'none';
         }
     });
 
-    // Evento para copiar mensagem ao clicar no container
-    mensagemContainer.addEventListener('click', copiarMensagem);
+    // Evento para gerar a mensagem quando o botão for clicado
+    btnGerarMensagem.addEventListener('click', () => {
+        generateMessage(mensagens);
+    });
 
     // Funções para os botões SMS e Bebé
     btnSMS.addEventListener('click', () => {
@@ -132,16 +118,30 @@ function initializeMessageSelectors(mensagens) {
     btnBaby.addEventListener('click', () => {
         addBabyRequest();
     });
+
+    // Evento para copiar mensagem ao clicar no container
+    mensagemContainer.addEventListener('click', copiarMensagem);
 }
 
-// Função para copiar a mensagem para a área de transferência
-function copiarMensagem() {
-    const mensagem = document.getElementById('mensagem-container').textContent;
-    navigator.clipboard.writeText(mensagem).then(() => {
-        alert('Mensagem copiada para a área de transferência!');
-    }).catch(err => {
-        console.error('Erro ao copiar a mensagem: ', err);
-    });
+// Função para gerar a mensagem com as variáveis
+function generateMessage(mensagens) {
+    const idioma = document.getElementById('idioma').value;
+    const categoria = document.getElementById('categoria').value;
+    const opcao = document.getElementById('opcao').value;
+    const guestName = document.getElementById('guestName').value;
+    const weekType = document.getElementById('weekType').value;
+    const weekDay = document.getElementById('weekDay').value;
+    const mensagemContainer = document.getElementById('mensagem-container');
+
+    if (mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
+        let mensagem = mensagens[categoria][opcao][idioma];
+        mensagem = mensagem.replace("[Hospede]", guestName)
+            .replace("[Semana]", weekType)
+            .replace("[Dia Semana]", getWeekDayInLanguage(weekDay, idioma));
+
+        mensagemContainer.innerHTML = mensagem;
+        document.getElementById('mensagem-secao').style.display = 'block';
+    }
 }
 
 // Função para obter o dia da semana no idioma correto
@@ -171,5 +171,15 @@ function addSMSIntroduction() {
 function addBabyRequest() {
     const mensagemContainer = document.getElementById('mensagem-container');
     const babyRequest = "Additionally, I’d like to know if you need a baby bed and/or a feeding chair.";
-    mensagemContainer.innerHTML = mensagemContainer.innerHTML + "\n\n" + babyRequest;
+    mensagemContainer.innerHTML = mensagemContainer.innerHTML.replace("Melhores cumprimentos", babyRequest + "\n\nMelhores cumprimentos");
+}
+
+// Função para copiar a mensagem para a área de transferência
+function copiarMensagem() {
+    const mensagem = document.getElementById('mensagem-container').textContent;
+    navigator.clipboard.writeText(mensagem).then(() => {
+        alert('Mensagem copiada para a área de transferência!');
+    }).catch(err => {
+        console.error('Erro ao copiar a mensagem: ', err);
+    });
 }
