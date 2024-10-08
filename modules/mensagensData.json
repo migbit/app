@@ -75,7 +75,9 @@
       "Italiano": "Messaggio per Check-in tardio in Italiano."
     }
   },
-  "Antes do Check-in": {
+
+},
+"Antes do Check-in": {
   "Quando Chegam?": {
     "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo!\n\nGostaria apenas de confirmar a sua hora prevista de chegada para [Semana] [Dia Semana]. Caso necessite de alguma informação adicional ou tenha questões antes da sua estadia, não hesite em contactar-nos.\n\nDesejamos-lhe uma viagem segura e estamos ansiosos por recebê-lo(a).\n\nMelhores cumprimentos",
     "Inglês": "Hello [Hospede],\n\nI hope you’re doing well!\n\nI just wanted to check in and see if you have an estimated time of arrival for [Semana] [Dia Semana]. If there’s anything you need or any questions before your stay, please don’t hesitate to reach out! Wishing you safe travels, and we can’t wait to welcome you.\n\nKind regards",
@@ -84,7 +86,6 @@
     "Alemão": "Hallo [Hospede],\n\nIch hoffe, es geht Ihnen gut!\n\nIch wollte nur nachfragen, ob Sie eine voraussichtliche Ankunftszeit für [Semana] [Dia Semana] haben. Wenn Sie etwas benötigen oder Fragen haben, zögern Sie bitte nicht, mich zu kontaktieren. Wir wünschen Ihnen eine gute Reise und freuen uns darauf, Sie willkommen zu heißen.\n\nMit freundlichen Grüßen",
     "Italiano": "Ciao [Hospede],\n\nSpero che tu stia bene!\n\nVolevo solo sapere se hai un orario di arrivo previsto per [Semana] [Dia Semana]. Se hai bisogno di qualcosa o hai domande prima del tuo soggiorno, non esitare a contattarmi. Ti auguriamo un buon viaggio e non vediamo l'ora di darti il benvenuto.\n\nCordiali saluti"
   }
-}
   },
   "Chegada ao Porto": {
     "Instruções metro aeroporto": {
