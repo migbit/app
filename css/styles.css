@@ -38,22 +38,15 @@ nav ul li {
 }
 
 nav ul li a {
-    display: block;
-    padding: 10px 15px;
-    background-color: transparent; /* Fundo transparente */
-    color: white; /* Cor do texto branca */
+    color: white;
     text-decoration: none;
     font-weight: 500;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border-radius: 5px;
-    text-align: center;
-    border: 2px solid rgba(255, 255, 255, 0.3); /* Borda leve para realçar os botões */
+    transition: color 0.3s ease;
+    font-size: 1em;
 }
 
 nav ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Leve destaque ao passar o mouse */
     color: #1abc9c; /* Cor do texto no hover */
-    border-color: #1abc9c; /* Cor da borda no hover */
 }
 
 /* Main Content Styles */
