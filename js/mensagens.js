@@ -1,80 +1,71 @@
-// js/mensagens.js
+// Import Firestore from Firebase
+import { db } from './script.js';
+import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Load the JSON data
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('./mensagensData.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            initializeMessageSelectors(data);
-        })
-        .catch(error => {
-            console.error('Error fetching the JSON data:', error);
-        });
-});
-
-// Function to initialize selectors and events
-function initializeMessageSelectors(mensagens) {
-    // Selecionar elementos do DOM
+// Function to manage missing messages in Firestore
+async function manageMissingMessages() {
     const idiomaSelect = document.getElementById('idioma');
-    const categoriaDiv = document.getElementById('categoria-div');
-    const categoriaSelect = document.getElementById('categoria');
-    const opcaoDiv = document.getElementById('opcao-div');
-    const opcaoSelect = document.getElementById('opcao');
-    const mensagemSecao = document.getElementById('mensagem-secao');
-    const mensagemContainer = document.getElementById('mensagem-container');
+    const missingMessagesContainer = document.getElementById('missing-messages-container');
 
-    // Evento para quando o idioma for selecionado
-    idiomaSelect.addEventListener('change', () => {
+    // Load missing messages from Firestore
+    async function loadMissingMessages() {
+        missingMessagesContainer.innerHTML = '<p>Carregando mensagens pendentes...</p>';
+        try {
+            const q = query(collection(db, "mensagensPendentes"), orderBy("timestamp", "desc"));
+            const querySnapshot = await getDocs(q);
+            let messages = [];
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                messages.push({ ...data, id: doc.id });
+            });
+
+            // Create HTML for displaying missing messages
+            let html = '<ul>';
+            messages.forEach((m) => {
+                html += `<li>
+                    ${m.descricao} 
+                    <button class="btn-limpar" onclick="removeMessage('${m.id}')">Limpar</button>
+                </li>`;
+            });
+            html += '</ul>';
+
+            missingMessagesContainer.innerHTML = html;
+        } catch (e) {
+            console.error("Erro ao carregar mensagens pendentes: ", e);
+            missingMessagesContainer.innerHTML = '<p>Ocorreu um erro ao carregar as mensagens pendentes.</p>';
+        }
+    }
+
+    // Add new missing message
+    idiomaSelect.addEventListener('change', async () => {
         const idioma = idiomaSelect.value;
         if (idioma) {
-            categoriaDiv.style.display = 'block';
-            opcaoDiv.style.display = 'none';
-            opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
-            mensagemSecao.style.display = 'none';
-        } else {
-            categoriaDiv.style.display = 'none';
-            opcaoDiv.style.display = 'none';
-            mensagemSecao.style.display = 'none';
+            try {
+                await addDoc(collection(db, "mensagensPendentes"), {
+                    descricao: `Falta adicionar mensagem para o idioma: ${idioma}`,
+                    timestamp: new Date()
+                });
+                loadMissingMessages();
+            } catch (e) {
+                console.error("Erro ao adicionar mensagem pendente: ", e);
+            }
         }
     });
 
-    // Evento para quando a categoria for selecionada
-    categoriaSelect.addEventListener('change', () => {
-        const categoria = categoriaSelect.value;
-        if (categoria) {
-            opcaoDiv.style.display = 'block';
-            mensagemSecao.style.display = 'none';
-            opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
-
-            const opcoes = Object.keys(mensagens[categoria]);
-            opcoes.forEach(opcao => {
-                const option = document.createElement('option');
-                option.value = opcao;
-                option.textContent = opcao;
-                opcaoSelect.appendChild(option);
-            });
-        } else {
-            opcaoDiv.style.display = 'none';
-            mensagemSecao.style.display = 'none';
+    // Remove a message from Firestore
+    window.removeMessage = async (id) => {
+        try {
+            await deleteDoc(doc(db, "mensagensPendentes", id));
+            loadMissingMessages();
+        } catch (e) {
+            console.error("Erro ao remover mensagem pendente: ", e);
         }
-    });
+    };
 
-    // Evento para quando a opção for selecionada
-    opcaoSelect.addEventListener('change', () => {
-        const idioma = idiomaSelect.value;
-        const categoria = categoriaSelect.value;
-        const opcao = opcaoSelect.value;
-        if (opcao && mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
-            const mensagem = mensagens[categoria][opcao][idioma];
-            mensagemContainer.innerHTML = mensagem;
-            mensagemSecao.style.display = 'block';
-        } else {
-            mensagemSecao.style.display = 'none';
-        }
-    });
+    // Load the missing messages when the page loads
+    document.addEventListener('DOMContentLoaded', loadMissingMessages);
 }
+
+// Initialize the missing message management
+manageMissingMessages();
