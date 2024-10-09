@@ -203,36 +203,23 @@ select.item-local {
 
 
 /* Responsiveness */
-@media (max-width: 768px) {
+@media (min-width: 768px) {
     .item-compra {
-        flex-direction: column; /* Faz com que cada item fique em linha separada */
-        align-items: stretch;
+        flex-wrap: nowrap;
     }
 
-    .item-info, .item-acoes {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 5px; /* Adiciona um pequeno espaço entre os elementos */
+    .item-nome {
+        flex: 1;
+        margin-bottom: 0;
+        margin-right: 20px;
     }
 
     .item-controles {
-        width: 100%;
-        justify-content: space-around; /* Centraliza os controles horizontalmente */
-        gap: 10px;
+        flex: 0 0 auto;
     }
 
-    .item-quantidade,
-    .btn-aumentar, .btn-diminuir, .btn-zero,
-    select.item-local {
-        width: 100%;
-        max-width: none;
-    }
-
-    select.item-local {
-        height: 40px;
-        margin-top: 5px; /* Ajusta a posição do select para melhor espaçamento */
+    select {
+        margin-left: auto; /* Empurra o select para a direita */
     }
 }
 
