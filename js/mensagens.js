@@ -79,12 +79,17 @@ function initializeMessageSelectors(mensagens) {
     });
 
     // Evento para copiar a mensagem ao clicar no container
-    mensagemContainer.addEventListener('click', () => {
-        const mensagem = mensagemContainer.innerText;
-        navigator.clipboard.writeText(mensagem).then(() => {
-            alert('Mensagem copiada para a área de transferência!');
-        }).catch(err => {
+    mensagemContainer.addEventListener('click', async () => {
+        const mensagemHTML = mensagemContainer.innerHTML;
+        try {
+            await navigator.clipboard.write([
+                new ClipboardItem({
+                    'text/html': new Blob([mensagemHTML], { type: 'text/html' })
+                })
+            ]);
+            alert('Mensagem copiada para a área de transferência com formatação!');
+        } catch (err) {
             console.error('Erro ao copiar a mensagem: ', err);
-        });
+        }
     });
 }
