@@ -223,3 +223,80 @@ footer {
     padding: 15px 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-section, .report-section {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .item-compra {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .item-info, .item-acoes {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .item-controles {
+        justify-content: space-between;
+    }
+
+    .item-quantidade {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .btn-aumentar, .btn-diminuir, .btn-zero, .btn-local-a, .btn-local-c {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+    body {
+        font-size: 16px;
+        padding: 20px;
+    }
+
+    nav ul {
+        flex-direction: row;
+    }
+
+    .form-section, .report-section {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .item-compra {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .item-info {
+        flex: 1;
+    }
+
+    .item-controles {
+        gap: 10px;
+    }
+
+    .btn-aumentar, .btn-diminuir, .btn-zero {
+        width: 35px;
+        height: 35px;
+    }
+}
