@@ -173,3 +173,19 @@ footer {
         width: auto;
     }
 }
+
+/* Estilos específicos para os botões Apagar */
+.btn-apagar {
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    padding: 5px 10px; /* Ajuste o padding para controlar o tamanho */
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em; /* Ajuste o tamanho da fonte se necessário */
+    transition: background-color 0.3s ease;
+}
+
+.btn-apagar:hover {
+    background-color: #16a085;
+}
