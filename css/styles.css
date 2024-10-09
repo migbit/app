@@ -164,36 +164,37 @@ tr:hover {
     border-radius: 3px;
 }
 
+/* Ajustes de Estilo para Responsividade dos Controles */
 .item-controles {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
+    gap: 10px; /* Adiciona um espaço entre os elementos */
+    flex-wrap: wrap;
 }
 
 .item-quantidade {
-    width: 60px;
+    flex-grow: 1;
+    min-width: 60px; /* Define uma largura mínima para o campo numérico */
+    max-width: 100px; /* Define uma largura máxima para evitar que fique muito grande */
     text-align: center;
-    margin-right: 5px;
 }
 
 .btn-aumentar, .btn-diminuir {
     flex-shrink: 0;
-    width: 30px;
-    height: 30px;
+    width: 40px; /* Aumenta a largura para melhorar a área de toque */
+    height: 40px; /* Aumenta a altura para melhorar a área de toque */
     background-color: #2c3e50;
     color: white;
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    margin: 0 5px;
 }
 
 /* Responsiveness */
 @media (max-width: 768px) {
     .item-compra {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch; /* Alinha os itens ao longo da largura disponível */
     }
 
     .item-info, .item-acoes {
@@ -208,8 +209,9 @@ tr:hover {
     }
 
     .btn-aumentar, .btn-diminuir {
-        width: 100%;
-        margin: 5px 0;
+        width: 100%; /* Deixa os botões ocuparem toda a largura disponível */
+        max-width: 100px; /* Evita que fiquem muito grandes */
+        margin: 5px 0; /* Espaço entre os botões */
     }
 }
 
