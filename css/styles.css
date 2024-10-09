@@ -163,7 +163,7 @@ tr:hover {
     text-align: center;
 }
 
-.btn-aumentar, .btn-diminuir {
+.btn-aumentar, .btn-diminuir, .btn-zero {
     width: 30px;
     height: 30px;
     background-color: #2c3e50;
@@ -177,14 +177,12 @@ tr:hover {
     justify-content: center;
 }
 
-.btn-limpar {
-    background-color: #1abc9c;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 0.9em;
+.btn-zero {
+    background-color: #e74c3c; /* Cor diferente para destacar o botão zero */
+}
+
+.btn-zero:hover {
+    background-color: #c0392b; /* Cor mais escura no hover */
 }
 
 select {
@@ -214,8 +212,6 @@ select {
         margin-left: auto; /* Empurra o select para a direita */
     }
 }
-
-/* Outros estilos permanecem inalterados */
 
 /* Footer Styles */
 footer {
