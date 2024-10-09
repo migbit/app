@@ -1,75 +1,71 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Mensagens</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-</head>
-<body>
-    <header>
-        <h1>Envio de Mensagens</h1>
-        <nav>
-            <ul>
-                <li><a href="mensagens.html">Mensagens</a></li>
-                <li><a href="compras.html">Compras</a></li>
-                <li><a href="faturas.html">Faturas / Relatórios</a></li>
-                <li><a href="caixa.html">Caixa</a></li>
-                <li><a href="reparacoes.html">Reparações</a></li>
-                <li><a href="tarefas.html">Tarefas</a></li>
-            </ul>
-        </nav>
-    </header>
+// Import Firestore from Firebase
+import { db } from './script.js';
+import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-    <main>
-        <section>
-            <div class="dropdowns">
-                <label for="idioma">Idioma:</label>
-                <select id="idioma">
-                    <option value="">Selecionar Idioma</option>
-                    <option value="Português">Português</option>
-                    <option value="Inglês">Inglês</option>
-                    <option value="Espanhol">Espanhol</option>
-                    <option value="Francês">Francês</option>
-                    <option value="Alemão">Alemão</option>
-                    <option value="Italiano">Italiano</option>
-                </select>
-            </div>
+// Function to manage missing messages in Firestore
+async function manageMissingMessages() {
+    const idiomaSelect = document.getElementById('idioma');
+    const missingMessagesContainer = document.getElementById('missing-messages-container');
 
-            <div class="dropdowns" id="categoria-div" style="display: none;">
-                <label for="categoria">Categoria:</label>
-                <select id="categoria">
-                    <option value="">Selecionar Categoria</option>
-                    <option value="Antes Reserva">Antes Reserva</option>
-                    <option value="Antes do Check-in">Antes do Check-in</option>
-                    <option value="Chegada ao Porto">Chegada ao Porto</option>
-                    <option value="Durante a Estadia">Durante a Estadia</option>
-                    <option value="Check-Out">Check-Out</option>
-                    <option value="Comentário">Comentário</option>
-                </select>
-            </div>
+    // Load missing messages from Firestore
+    async function loadMissingMessages() {
+        missingMessagesContainer.innerHTML = '<p>Carregando mensagens pendentes...</p>';
+        try {
+            const q = query(collection(db, "mensagensPendentes"), orderBy("timestamp", "desc"));
+            const querySnapshot = await getDocs(q);
+            let messages = [];
 
-            <div class="dropdowns" id="opcao-div" style="display: none;">
-                <label for="opcao">Opção:</label>
-                <select id="opcao">
-                    <option value="">Selecionar Opção</option>
-                    <!-- As opções serão carregadas dinamicamente -->
-                </select>
-            </div>
-        </section>
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                messages.push({ ...data, id: doc.id });
+            });
 
-        <section id="mensagem-secao" style="display: none;">
-            <h2>Mensagem Selecionada:</h2>
-            <div id="mensagem-container" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
-        </section>
-    </main>
+            // Create HTML for displaying missing messages
+            let html = '<ul>';
+            messages.forEach((m) => {
+                html += `<li>
+                    ${m.descricao} 
+                    <button class="btn-limpar" onclick="removeMessage('${m.id}')">Limpar</button>
+                </li>`;
+            });
+            html += '</ul>';
 
-    <footer>
-        <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
-    </footer>
+            missingMessagesContainer.innerHTML = html;
+        } catch (e) {
+            console.error("Erro ao carregar mensagens pendentes: ", e);
+            missingMessagesContainer.innerHTML = '<p>Ocorreu um erro ao carregar as mensagens pendentes.</p>';
+        }
+    }
 
-    <script type="module" src="../js/mensagens.js"></script>
-</body>
-</html>
+    // Add new missing message
+    idiomaSelect.addEventListener('change', async () => {
+        const idioma = idiomaSelect.value;
+        if (idioma) {
+            try {
+                await addDoc(collection(db, "mensagensPendentes"), {
+                    descricao: `Falta adicionar mensagem para o idioma: ${idioma}`,
+                    timestamp: new Date()
+                });
+                loadMissingMessages();
+            } catch (e) {
+                console.error("Erro ao adicionar mensagem pendente: ", e);
+            }
+        }
+    });
+
+    // Remove a message from Firestore
+    window.removeMessage = async (id) => {
+        try {
+            await deleteDoc(doc(db, "mensagensPendentes", id));
+            loadMissingMessages();
+        } catch (e) {
+            console.error("Erro ao remover mensagem pendente: ", e);
+        }
+    };
+
+    // Load the missing messages when the page loads
+    document.addEventListener('DOMContentLoaded', loadMissingMessages);
+}
+
+// Initialize the missing message management
+manageMissingMessages();
