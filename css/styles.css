@@ -155,18 +155,20 @@ tr:hover {
 
 .item-acoes {
     display: flex;
-    align-items: center;
+    align-items: center; /* Alinha o select verticalmente ao centro */
     flex-grow: 1;
+    justify-content: flex-end; /* Empurra o select para o final */
 }
 
 .item-quantidade {
     width: 60px;
+    height: 40px; /* Altura ajustada para uniformizar com os botões */
     text-align: center;
 }
 
 .btn-aumentar, .btn-diminuir, .btn-zero {
-    width: 30px;
-    height: 30px;
+    width: 40px; /* Ajustar para maior área de clique */
+    height: 40px;
     background-color: #2c3e50;
     color: white;
     border: none;
@@ -190,12 +192,11 @@ select.item-local {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    height: 30px; /* Reduced from 40px to match button height */
+    height: 40px; /* Mesma altura que os botões */
     max-width: 150px;
     margin-left: 10px;
-    display: flex;
-    align-items: center;
 }
+
 
 /* Responsiveness */
 @media (min-width: 768px) {
