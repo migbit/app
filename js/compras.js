@@ -75,16 +75,8 @@ function criarItemCompra(item) {
             </div>
         </div>
         <div class="item-acoes">
-            <select class="item-local">
-                <option value="Local">Local</option>
-                <option value="123">123</option>
-                <option value="1248">1248</option>
-                <option value="123 e 1248">123 e 1248</option>
-                <option value="Escritório">Escritório</option>
-                <option value="Lavandaria">Lavandaria</option>
-                <option value="Casa">Casa</option>
-                <option value="Apartamento e Casa">Apartamento e Casa</option>
-            </select>
+            <button type="button" class="btn-local-a">A</button>
+            <button type="button" class="btn-local-c">C</button>
         </div>
     `;
     return itemDiv;
@@ -104,16 +96,8 @@ function criarItemCompraEmBranco() {
             </div>
         </div>
         <div class="item-acoes">
-            <select class="item-local">
-                <option value="Local">Local</option>
-                <option value="123">123</option>
-                <option value="1248">1248</option>
-                <option value="123 e 1248">123 e 1248</option>
-                <option value="Escritório">Escritório</option>
-                <option value="Lavandaria">Lavandaria</option>
-                <option value="Casa">Casa</option>
-                <option value="Apartamento e Casa">Apartamento e Casa</option>
-            </select>
+            <button type="button" class="btn-local-a">A</button>
+            <button type="button" class="btn-local-c">C</button>
         </div>
     `;
     return itemDiv;
@@ -126,7 +110,7 @@ async function salvarListaCompras() {
     itens.forEach(item => {
         const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
         const quantidade = parseInt(item.querySelector('.item-quantidade').value);
-        const local = item.querySelector('.item-local').value;
+        const local = item.getAttribute('data-local') || 'Não definido';
 
         if (nome && quantidade > 0) {
             listaParaSalvar[nome] = { quantidade, local };
@@ -159,7 +143,7 @@ async function carregarListaCompras() {
                 const nome = nomeElement.textContent || nomeElement.value;
                 if (itens[nome]) {
                     item.querySelector('.item-quantidade').value = itens[nome].quantidade;
-                    item.querySelector('.item-local').value = itens[nome].local;
+                    item.setAttribute('data-local', itens[nome].local);
                 }
             });
 
@@ -169,7 +153,7 @@ async function carregarListaCompras() {
                     const itemDiv = criarItemCompraEmBranco();
                     itemDiv.querySelector('.item-nome-custom').value = nome;
                     itemDiv.querySelector('.item-quantidade').value = dados.quantidade;
-                    itemDiv.querySelector('.item-local').value = dados.local;
+                    itemDiv.setAttribute('data-local', dados.local);
                     document.querySelector('.categoria:last-child').appendChild(itemDiv);
                 }
             });
@@ -186,7 +170,7 @@ function gerarResumo() {
     itens.forEach(item => {
         const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
         const quantidade = item.querySelector('.item-quantidade').value;
-        const local = item.querySelector('.item-local').value;
+        const local = item.getAttribute('data-local') || 'Não definido';
 
         if (nome && parseInt(quantidade) > 0) {
             resumo += `${nome}: ${quantidade} (${local})\n`;
@@ -240,13 +224,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const input = e.target.previousElementSibling.previousElementSibling.previousElementSibling;
             input.value = 0;
             salvarListaCompras();
-        }
-    });
-
-    document.getElementById('compras-form').addEventListener('change', (e) => {
-        if (e.target.classList.contains('item-quantidade') || 
-            e.target.classList.contains('item-local') || 
-            e.target.classList.contains('item-nome-custom')) {
+        } else if (e.target.classList.contains('btn-local-a')) {
+            e.target.closest('.item-compra').setAttribute('data-local', 'A');
+            salvarListaCompras();
+        } else if (e.target.classList.contains('btn-local-c')) {
+            e.target.closest('.item-compra').setAttribute('data-local', 'C');
             salvarListaCompras();
         }
     });
