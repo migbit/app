@@ -147,15 +147,16 @@ tr:hover {
     margin-bottom: 15px;
 }
 
-.item-nome {
-    flex: 1 1 100%;
-    margin-bottom: 10px;
-}
-
 .item-controles {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.item-acoes {
+    display: flex;
+    align-items: center; /* Alinha o select verticalmente ao centro */
+    flex-grow: 1; /* Para ocupar espaço e permitir que o select fique alinhado */
 }
 
 .item-quantidade {
@@ -185,11 +186,13 @@ tr:hover {
     background-color: #c0392b; /* Cor mais escura no hover */
 }
 
-select {
+select.item-local {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    height: 30px; /* Ajustar para a mesma altura dos outros elementos */
+    height: 40px; /* Ajuste a altura para alinhar melhor com os botões */
+    max-width: 150px; /* Limita a largura do select para evitar que se estenda demais */
+    margin-left: 10px;
 }
 
 /* Responsiveness */
