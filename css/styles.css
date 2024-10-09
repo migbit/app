@@ -29,12 +29,11 @@ nav ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
     margin-top: 10px;
 }
 
 nav ul li {
-    margin: 10px 15px;
+    margin: 0 15px;
 }
 
 nav ul li a {
@@ -52,7 +51,7 @@ nav ul li a:hover {
 main {
     flex: 1;
     padding: 20px;
-    max-width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -64,32 +63,122 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Item Purchase Styles */
+/* Generic Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1em;
+    color: #34495e;
+}
+
+input[type="number"],
+select,
+input[type="checkbox"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    max-width: 300px;
+    font-size: 1em;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #1abc9c;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #16a085;
+}
+
+/* Specific Styles for Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Styles Specific to Shopping List Page */
+#compras-form {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.categoria {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+}
+
+.categoria h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
 .item-compra {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    padding: 15px;
+    margin-bottom: 10px;
+    padding: 10px;
     background-color: #f9f9f9;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 15px;
 }
 
 .item-info {
     display: flex;
-    flex: 1;
     align-items: center;
-    gap: 10px;
+    flex: 1;
+}
+
+.item-nome, .item-nome-custom {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.item-nome-custom {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 3px;
 }
 
 .item-controles {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.item-acoes {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -109,6 +198,7 @@ main {
     border: none;
     border-radius: 50%;
     cursor: pointer;
+    font-size: 1em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -126,9 +216,10 @@ main {
     background-color: #3498db;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+    height: 40px;
     font-size: 1em;
 }
 
@@ -136,7 +227,7 @@ main {
     background-color: #2980b9;
 }
 
-/* Responsiveness */
+/* Responsive Adjustments for Shopping List */
 @media (max-width: 768px) {
     .item-compra {
         flex-direction: column;
@@ -145,12 +236,22 @@ main {
 
     .item-info, .item-acoes {
         width: 100%;
+        display: flex;
         justify-content: space-between;
     }
 
     .item-controles {
         justify-content: space-between;
-        gap: 5px;
+    }
+
+    .item-quantidade {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .btn-aumentar, .btn-diminuir, .btn-zero, .btn-local-a, .btn-local-c {
+        width: 100%;
+        margin: 5px 0;
     }
 }
 
