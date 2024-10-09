@@ -155,8 +155,8 @@ tr:hover {
 
 .item-acoes {
     display: flex;
-    align-items: center; /* Alinha o select verticalmente ao centro */
-    flex-grow: 1; /* Para ocupar espaço e permitir que o select fique alinhado */
+    align-items: center; /* This ensures vertical centering */
+    flex-grow: 1;
 }
 
 .item-quantidade {
@@ -190,10 +190,12 @@ select.item-local {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    height: 40px; /* Ajuste a altura para alinhar melhor com os botões */
-    max-width: 150px; /* Limita a largura do select para evitar que se estenda demais */
+    height: 40px;
+    max-width: 150px;
     margin-left: 10px;
+    align-self: center; /* This ensures the dropdown is centered vertically */
 }
+
 
 /* Responsiveness */
 @media (min-width: 768px) {
