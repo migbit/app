@@ -123,6 +123,36 @@ async function salvarListaCompras() {
     }
 }
 
+async function carregarListaCompras() {
+    try {
+        const docRef = doc(db, "listas_compras", "lista_atual");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            const itens = data.itens;
+
+            document.querySelectorAll('.item-compra').forEach(item => {
+                const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
+                const nome = nomeElement.textContent || nomeElement.value;
+                if (itens[nome]) {
+                    item.querySelector('.item-quantidade').value = itens[nome].quantidade;
+                    item.setAttribute('data-local', itens[nome].local);
+                    
+                    if (itens[nome].local.includes('A')) {
+                        item.querySelector('.btn-local-a').classList.add('active');
+                    }
+                    if (itens[nome].local.includes('C')) {
+                        item.querySelector('.btn-local-c').classList.add('active');
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        console.error("Erro ao carregar a lista de compras: ", e);
+    }
+}
+
 function updateLocalData(item) {
     const localA = item.querySelector('.btn-local-a').classList.contains('active') ? 'A' : '';
     const localC = item.querySelector('.btn-local-c').classList.contains('active') ? 'C' : '';
@@ -154,7 +184,6 @@ async function exibirResumoESalvar() {
     resumoConteudo.innerHTML = resumo.replace(/\n/g, '<br>');
     document.getElementById('resumo').style.display = 'block';
 
-    // Salvar no Firebase
     await salvarListaCompras();
 }
 
