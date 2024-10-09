@@ -41,20 +41,14 @@ function criarListaCompras() {
             categoriaDiv.appendChild(itemDiv);
         });
         
-        // Adicionar campos em branco para itens adicionais
-        for (let i = 0; i < 3; i++) {
-            const itemDiv = criarItemCompraEmBranco();
-            categoriaDiv.appendChild(itemDiv);
-        }
-        
         form.appendChild(categoriaDiv);
     }
     
-    // Adicionar campos em branco extras no final
+    // Adicionar campos em branco para itens adicionais
     const diversosDiv = document.createElement('div');
     diversosDiv.className = 'categoria';
     diversosDiv.innerHTML = '<h3>Itens Adicionais</h3>';
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
         const itemDiv = criarItemCompraEmBranco();
         diversosDiv.appendChild(itemDiv);
     }
@@ -129,38 +123,12 @@ async function salvarListaCompras() {
     }
 }
 
-async function carregarListaCompras() {
-    try {
-        const docRef = doc(db, "listas_compras", "lista_atual");
-        const docSnap = await getDoc(docRef);
+function updateLocalData(item) {
+    const localA = item.querySelector('.btn-local-a').classList.contains('active') ? 'A' : '';
+    const localC = item.querySelector('.btn-local-c').classList.contains('active') ? 'C' : '';
+    const locaisSelecionados = [localA, localC].filter(Boolean).join(', ');
 
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            const itens = data.itens;
-
-            document.querySelectorAll('.item-compra').forEach(item => {
-                const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-                const nome = nomeElement.textContent || nomeElement.value;
-                if (itens[nome]) {
-                    item.querySelector('.item-quantidade').value = itens[nome].quantidade;
-                    item.setAttribute('data-local', itens[nome].local);
-                }
-            });
-
-            // Adicionar itens personalizados que não estão na lista predefinida
-            Object.entries(itens).forEach(([nome, dados]) => {
-                if (!Array.from(document.querySelectorAll('.item-nome, .item-nome-custom')).some(el => el.textContent === nome || el.value === nome)) {
-                    const itemDiv = criarItemCompraEmBranco();
-                    itemDiv.querySelector('.item-nome-custom').value = nome;
-                    itemDiv.querySelector('.item-quantidade').value = dados.quantidade;
-                    itemDiv.setAttribute('data-local', dados.local);
-                    document.querySelector('.categoria:last-child').appendChild(itemDiv);
-                }
-            });
-        }
-    } catch (e) {
-        console.error("Erro ao carregar a lista de compras: ", e);
-    }
+    item.setAttribute('data-local', locaisSelecionados || 'Não definido');
 }
 
 function gerarResumo() {
@@ -190,22 +158,6 @@ async function exibirResumoESalvar() {
     await salvarListaCompras();
 }
 
-function enviarEmailListaCompras(resumo) {
-    emailjs.send('service_tuglp9h', 'template_4micnki', {
-        to_name: "apartments.oporto@gmail.com",
-        from_name: "Apartments Oporto",
-        subject: "Lista de Compras",
-        message: resumo
-    })
-    .then(function(response) {
-        console.log('E-mail enviado com sucesso!', response.status, response.text);
-        alert('E-mail enviado com sucesso!');
-    }, function(error) {
-        console.error('Erro ao enviar e-mail:', error);
-        alert('Ocorreu um erro ao enviar o e-mail.');
-    });
-}
-
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     criarListaCompras();
@@ -225,10 +177,12 @@ document.addEventListener('DOMContentLoaded', () => {
             input.value = 0;
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-local-a')) {
-            e.target.closest('.item-compra').setAttribute('data-local', 'A');
+            e.target.classList.toggle('active');
+            updateLocalData(e.target.closest('.item-compra'));
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-local-c')) {
-            e.target.closest('.item-compra').setAttribute('data-local', 'C');
+            e.target.classList.toggle('active');
+            updateLocalData(e.target.closest('.item-compra'));
             salvarListaCompras();
         }
     });
