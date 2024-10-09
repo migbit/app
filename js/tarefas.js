@@ -52,7 +52,7 @@ async function carregarTarefas() {
             const date = t.timestamp.toDate().toLocaleDateString('pt-PT');
             html += `<li>
                 ${t.descricao} <small>(${date})</small>
-                <button class="btn-limpar" onclick="removerTarefa('${t.id}')">Limpar</button>
+                <button class="btn-apagar" onclick="removerTarefa('${t.id}')">Apagar</button>
             </li>`;
         });
         html += '</ul>';
