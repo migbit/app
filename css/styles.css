@@ -137,14 +137,20 @@ tr:hover {
 /* Item Purchase Styles */
 .item-compra {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    align-items: center; /* Alinha todos os itens verticalmente ao centro */
     gap: 10px;
     padding: 15px;
     background-color: #f9f9f9;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
+}
+
+.item-info {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 10px;
 }
 
 .item-controles {
@@ -156,8 +162,7 @@ tr:hover {
 .item-acoes {
     display: flex;
     align-items: center; /* Alinha o select verticalmente ao centro */
-    flex-grow: 1;
-    justify-content: flex-end; /* Empurra o select para o final */
+    justify-content: flex-end;
 }
 
 .item-quantidade {
@@ -194,7 +199,6 @@ select.item-local {
     border: 1px solid #ccc;
     height: 40px; /* Mesma altura que os botões */
     max-width: 150px;
-    margin-left: 10px;
 }
 
 
