@@ -77,4 +77,14 @@ function initializeMessageSelectors(mensagens) {
             mensagemSecao.style.display = 'none';
         }
     });
+
+    // Evento para copiar a mensagem ao clicar no container
+    mensagemContainer.addEventListener('click', () => {
+        const mensagem = mensagemContainer.innerText;
+        navigator.clipboard.writeText(mensagem).then(() => {
+            alert('Mensagem copiada para a área de transferência!');
+        }).catch(err => {
+            console.error('Erro ao copiar a mensagem: ', err);
+        });
+    });
 }
