@@ -155,8 +155,8 @@ tr:hover {
 
 .item-acoes {
     display: flex;
-    align-items: center; /* Alinha o select verticalmente ao centro */
-    flex-grow: 1; /* Para ocupar espaço e permitir que o select fique alinhado */
+    align-items: center;
+    flex-grow: 1;
 }
 
 .item-quantidade {
@@ -179,19 +179,19 @@ tr:hover {
 }
 
 .btn-zero {
-    background-color: #e74c3c; /* Cor diferente para destacar o botão zero */
+    background-color: #e74c3c;
 }
 
 .btn-zero:hover {
-    background-color: #c0392b; /* Cor mais escura no hover */
+    background-color: #c0392b;
 }
 
 select.item-local {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    height: 40px; /* Ajuste a altura para alinhar melhor com os botões */
-    max-width: 150px; /* Limita a largura do select para evitar que se estenda demais */
+    height: 30px;
+    max-width: 150px;
     margin-left: 10px;
 }
 
@@ -212,7 +212,7 @@ select.item-local {
     }
 
     select {
-        margin-left: auto; /* Empurra o select para a direita */
+        margin-left: auto;
     }
 }
 
