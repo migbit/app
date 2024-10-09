@@ -71,6 +71,7 @@ function criarItemCompra(item) {
                 <input type="number" value="0" min="0" class="item-quantidade">
                 <button type="button" class="btn-aumentar">+</button>
                 <button type="button" class="btn-diminuir">-</button>
+                <button type="button" class="btn-zero">0</button>
             </div>
         </div>
         <div class="item-acoes">
@@ -84,7 +85,6 @@ function criarItemCompra(item) {
                 <option value="Casa">Casa</option>
                 <option value="Apartamento e Casa">Apartamento e Casa</option>
             </select>
-            <button type="button" class="btn-limpar">Limpar</button>
         </div>
     `;
     return itemDiv;
@@ -100,6 +100,7 @@ function criarItemCompraEmBranco() {
                 <input type="number" value="0" min="0" class="item-quantidade">
                 <button type="button" class="btn-aumentar">+</button>
                 <button type="button" class="btn-diminuir">-</button>
+                <button type="button" class="btn-zero">0</button>
             </div>
         </div>
         <div class="item-acoes">
@@ -113,7 +114,6 @@ function criarItemCompraEmBranco() {
                 <option value="Casa">Casa</option>
                 <option value="Apartamento e Casa">Apartamento e Casa</option>
             </select>
-            <button type="button" class="btn-limpar">Limpar</button>
         </div>
     `;
     return itemDiv;
@@ -236,12 +236,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const input = e.target.previousElementSibling.previousElementSibling;
             input.value = Math.max(0, parseInt(input.value) - 1);
             salvarListaCompras();
-        } else if (e.target.classList.contains('btn-limpar')) {
-            const itemDiv = e.target.closest('.item-compra');
-            itemDiv.querySelector('.item-quantidade').value = 0;
-            itemDiv.querySelector('.item-local').value = 'Local';
-            const nomeCustom = itemDiv.querySelector('.item-nome-custom');
-            if (nomeCustom) nomeCustom.value = '';
+        } else if (e.target.classList.contains('btn-zero')) {
+            const input = e.target.previousElementSibling.previousElementSibling.previousElementSibling;
+            input.value = 0;
             salvarListaCompras();
         }
     });
