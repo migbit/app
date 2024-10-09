@@ -24,14 +24,13 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Navegação do Header */
 nav ul {
     list-style: none;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 10px;
-    gap: 10px; /* Adiciona espaçamento entre os links */
+    gap: 10px; /* Espaçamento entre os botões */
 }
 
 nav ul li {
@@ -42,17 +41,19 @@ nav ul li a {
     display: block;
     padding: 10px 15px;
     background-color: transparent; /* Fundo transparente */
-    color: white; /* Cor do texto branco */
+    color: white; /* Cor do texto branca */
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s ease, background-color 0.3s ease;
-    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
     border-radius: 5px;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.3); /* Borda leve para realçar os botões */
 }
 
 nav ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Fundo levemente branco ao passar o mouse */
-    color: #1abc9c; /* Cor de destaque para o texto ao passar o mouse */
+    background-color: rgba(255, 255, 255, 0.1); /* Leve destaque ao passar o mouse */
+    color: #1abc9c; /* Cor do texto no hover */
+    border-color: #1abc9c; /* Cor da borda no hover */
 }
 
 /* Main Content Styles */
@@ -142,55 +143,6 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Estilos específicos para a lista de tarefas */
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-ul li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f9f9f9;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-ul li small {
-    color: #7f8c8d;
-    margin-left: 10px;
-}
-
-.btn-apagar {
-    background-color: #1abc9c;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-}
-
-.btn-apagar:hover {
-    background-color: #16a085;
-}
-
-/* Utility Classes */
-.centered {
-    text-align: center;
-}
-
-#mensagem {
-    white-space: pre-wrap;
-    font-size: 1em;
-    color: #7f8c8d;
-}
-
 /* Footer Styles */
 footer {
     background-color: #34495e;
@@ -208,23 +160,13 @@ footer {
     }
 
     nav ul li a {
-        width: 100%; /* Faz com que os links ocupem toda a largura */
+        width: 100%; /* Links ocupam a largura total */
         margin: 5px 0;
     }
 
     .form-section, .report-section {
         padding: 15px;
         margin-bottom: 15px;
-    }
-
-    ul li {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .btn-apagar {
-        align-self: flex-end;
-        margin-top: 10px;
     }
 }
 
@@ -236,13 +178,5 @@ footer {
 
     nav ul li a {
         width: auto;
-    }
-
-    ul li {
-        flex-direction: row;
-    }
-
-    .btn-apagar {
-        margin-left: 10px;
     }
 }
