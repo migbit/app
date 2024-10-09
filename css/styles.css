@@ -300,3 +300,10 @@ footer {
         height: 35px;
     }
 }
+
+/* Estilos para reparações urgentes */
+.urgente {
+    background-color: #ffe4e1; /* Fundo levemente rosado para destaque */
+    color: #d9534f; /* Vermelho para indicar urgência */
+    font-weight: bold; /* Negrito para maior destaque */
+}
