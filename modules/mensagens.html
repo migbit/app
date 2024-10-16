@@ -38,15 +38,7 @@
         <!-- Category selection buttons, hidden by default -->
         <section id="categoria-div" style="display: none;">
             <h2>Escolha a Categoria:</h2>
-            <div id="categoria-container" class="category-buttons"></div>
-        </section>
-
-        <!-- Options section to be dynamically updated based on category, hidden by default -->
-        <section id="opcao-div" style="display: none;">
-            <h2>Escolha uma Opção:</h2>
-            <select id="opcao">
-                <option value="">Selecionar Opção</option>
-            </select>
+            <div id="categoria-container" class="language-buttons-vertical"></div> <!-- Reuse vertical button layout -->
         </section>
 
         <!-- Display the selected message, hidden by default -->
@@ -54,9 +46,6 @@
             <h2>Mensagem Selecionada:</h2>
             <div id="mensagem-container" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
         </section>
-
-        <!-- Back button, hidden by default -->
-        <button id="back-btn" style="display: none;">Voltar</button>
     </main>
 
     <footer>
