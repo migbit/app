@@ -147,12 +147,15 @@ function initializeMessageSelectors(mensagens) {
         updateBreadcrumb();
     }
 
-    // Function to reset to category selection
-    function resetToCategorySelection() {
-        selectedSubCategoria = "";
-        mensagemSecao.style.display = 'none'; // Hide the message section
-        categoriaContainer.style.display = 'block'; // Show the category container
-        showSubCategoryMenu(mensagens[selectedCategoria]); // Recreate the sub-categories for the current category
-        updateBreadcrumb();
-    }
+ // Function to reset to category selection
+function resetToCategorySelection() {
+    selectedSubCategoria = "";  // Reset the selected sub-category
+    mensagemSecao.style.display = 'none';  // Hide the message section
+    categoriaContainer.style.display = 'block';  // Show the category container again
+    categoriaDiv.style.display = 'block';  // Show the category div again
+    
+    // Show the sub-categories for the currently selected category
+    showSubCategoryMenu(mensagens[selectedCategoria]);  // Recreate the sub-categories
+    updateBreadcrumb();  // Update the breadcrumb to reflect the change
+}
 }
