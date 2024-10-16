@@ -19,9 +19,9 @@ function initializeMessageSelectors(mensagens) {
     const languageButtonsDiv = document.querySelector('.language-buttons-vertical');
     const categoriaDiv = document.getElementById('categoria-div');
     const categoriaContainer = document.getElementById('categoria-container');
-    const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
     const breadcrumbDiv = document.createElement('div'); // Create breadcrumb navigation
+    breadcrumbDiv.classList.add('breadcrumb');
     languageButtonsDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
 
     let selectedIdioma = "";
@@ -30,10 +30,12 @@ function initializeMessageSelectors(mensagens) {
 
     // Event listener for each language button
     document.querySelectorAll('.language-btn').forEach(button => {
-        button.addEventListener('click', (event) => {
+        button.addEventListener('click', () => {
             selectedIdioma = button.value;
             categoriaDiv.style.display = 'block';
             languageButtonsDiv.style.display = 'none'; // Hide language buttons
+            mensagemContainer.innerHTML = ''; // Clear any previous message
+            categoriaContainer.style.display = 'block'; // Show categories again
 
             updateBreadcrumb(); // Update breadcrumb
             createCategoryMenu(Object.keys(mensagens));
@@ -78,12 +80,22 @@ function initializeMessageSelectors(mensagens) {
         categoriaContainer.appendChild(ul);
     }
 
-    // Function to display the selected message
+    // Function to display the selected message and handle copying
     function displayMessage(messageObj) {
         const selectedMessage = messageObj[selectedIdioma];
         mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
-        categoriaContainer.style.display = 'none'; // Hide sub-categories
-        mensagemSecao.style.display = 'block'; // Show the message section
+        categoriaContainer.style.display = 'none'; // Hide the category container
+        mensagemContainer.style.display = 'block'; // Show the message
+
+        // Set up the click event to copy the message
+        mensagemContainer.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(mensagemContainer.innerText);
+                alert('Mensagem Copiada');
+            } catch (err) {
+                console.error('Failed to copy message:', err);
+            }
+        });
     }
 
     // Function to update breadcrumb navigation
@@ -133,7 +145,7 @@ function initializeMessageSelectors(mensagens) {
         selectedSubCategoria = "";
         categoriaDiv.style.display = 'none';
         languageButtonsDiv.style.display = 'block'; // Show language buttons
-        mensagemSecao.style.display = 'none'; // Hide the message section
+        mensagemContainer.style.display = 'none'; // Hide the message section
         updateBreadcrumb();
     }
 
@@ -141,8 +153,8 @@ function initializeMessageSelectors(mensagens) {
     function resetToCategorySelection() {
         selectedCategoria = "";
         selectedSubCategoria = "";
-        mensagemSecao.style.display = 'none'; // Hide the message section
-        showSubCategoryMenu(mensagens[selectedCategoria]);
+        categoriaContainer.style.display = 'block'; // Show the categories
+        mensagemContainer.style.display = 'none'; // Hide the message section
         updateBreadcrumb();
     }
 }
