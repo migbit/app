@@ -280,6 +280,19 @@ tr:hover {
     color: #e74c3c; /* Red for negative numbers */
 }
 
+.total-em-caixa {
+    text-align: right;
+    font-weight: bold;
+    color: #2ecc71; /* Green for positive total */
+}
+
+/* Reparações */
+/* Urgência alta */
+.urgencia-alta {
+    color: #e74c3c; /* Red for high urgency */
+    font-weight: bold;
+}
+
 /* Footer Styles */
 footer {
     background-color: #34495e;
