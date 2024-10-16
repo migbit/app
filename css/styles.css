@@ -94,7 +94,7 @@ input[type="checkbox"] {
 
 button {
     padding: 10px 20px;
-    background-color: #34495e;
+    background-color: #1abc9c;
     border: none;
     color: white;
     cursor: pointer;
@@ -104,7 +104,7 @@ button {
 }
 
 button:hover {
-    background-color: #34495e; /* Alterei do verde 16a085
+    background-color: #16a085;
 }
 
 /* Table Styles */
@@ -139,7 +139,7 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/*                                                                      Compras */
+/*                                                                      Estilos Específicos para Lista de Compras */
 .categoria {
     margin-bottom: 20px;
     border-bottom: 1px solid #ccc;
@@ -429,5 +429,4 @@ footer {
     text-align: center;
     padding: 15px 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-}
 }
