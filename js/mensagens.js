@@ -102,11 +102,13 @@ function initializeMessageSelectors(mensagens) {
         categoriaContainer.style.display = 'none'; // Hide sub-categories
         mensagemSecao.style.display = 'block'; // Show the message section
 
-        // Copy message to clipboard and display alert
-        navigator.clipboard.writeText(selectedMessage).then(() => {
-            alert("Mensagem Copiada");
-        }).catch(err => {
-            console.error('Failed to copy message:', err);
+        // Add event listener to copy message on click
+        mensagemContainer.addEventListener('click', () => {
+            navigator.clipboard.writeText(selectedMessage).then(() => {
+                alert("Mensagem Copiada");
+            }).catch(err => {
+                console.error('Failed to copy message:', err);
+            });
         });
     }
 
