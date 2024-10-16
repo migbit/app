@@ -19,14 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to initialize selectors and events
 function initializeMessageSelectors(mensagens) {
-    // Language buttons
+    // Language buttons (Italian and German removed)
     const buttons = {
         "btn-portugues": "Português",
         "btn-ingles": "Inglês",
         "btn-espanhol": "Espanhol",
-        "btn-frances": "Francês",
-        "btn-alemao": "Alemão",
-        "btn-italiano": "Italiano"
+        "btn-frances": "Francês"
     };
 
     const categoriaDiv = document.getElementById('categoria-div');
