@@ -296,6 +296,45 @@ tr:hover {
     color: #95a5a6;
 }
 
+/* Mensagens */
+/* Ensure buttons are displayed vertically */
+.language-buttons-vertical {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: flex-start; /* Align buttons to the left */
+    margin-top: 20px;
+}
+
+.language-btn {
+    display: block;
+    width: 100%; /* Make buttons full width */
+    margin: 10px 0; /* Add spacing between buttons */
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff; /* Primary button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.language-btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.language-btn.active {
+    background-color: #28a745; /* Green color to indicate active button */
+}
+
+.language-btn:focus {
+    outline: none; /* Remove default focus outline */
+}
+
+.language-btn:disabled {
+    background-color: #cccccc; /* Disabled state styling */
+    cursor: not-allowed;
+}
+
 
 /* Footer Styles */
 footer {
