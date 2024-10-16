@@ -212,6 +212,7 @@ tr:hover {
 
 .btn-zero:hover {
     background-color: #c0392b;
+    margin-right: 10px; /* Add space between the '0' button and others */
 }
 
 .item-acoes {
@@ -230,6 +231,8 @@ tr:hover {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
+    margin-left: 10px; /* This will add space between the buttons */
+    margin-top: 0; /* Ensure vertical alignment */
 }
 
 .btn-local-a.active, .btn-local-c.active {
@@ -266,6 +269,15 @@ tr:hover {
         width: 100%;
         margin: 5px 0;
     }
+}
+
+/* Caixa */
+.valor-positivo {
+    color: #2ecc71; /* Green for positive numbers */
+}
+
+.valor-negativo {
+    color: #e74c3c; /* Red for negative numbers */
 }
 
 /* Footer Styles */
