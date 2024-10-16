@@ -98,36 +98,9 @@ function initializeMessageSelectors(mensagens) {
     // Function to display the selected message
     function displayMessage(messageObj) {
         const selectedMessage = messageObj[selectedIdioma];
-        mensagemContainer.innerHTML = `<p class="copyable-message">${selectedMessage}</p>`;
+        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
         categoriaContainer.style.display = 'none'; // Hide sub-categories
         mensagemSecao.style.display = 'block'; // Show the message section
-
-        // Add click event listener to the message
-        const messageElement = mensagemContainer.querySelector('.copyable-message');
-        messageElement.addEventListener('click', () => copyMessageToClipboard(selectedMessage));
-    }
-
-     // Function to copy message to clipboard and show notification
-     function copyMessageToClipboard(message) {
-        navigator.clipboard.writeText(message).then(() => {
-            showNotification('Mensagem Copiada');
-        }).catch(err => {
-            console.error('Failed to copy message: ', err);
-            showNotification('Falha ao copiar mensagem', 'error');
-        });
-    }
-
-     // Function to show notification
-     function showNotification(message, type = 'success') {
-        const notification = document.createElement('div');
-        notification.textContent = message;
-        notification.className = `notification ${type}`;
-        document.body.appendChild(notification);
-
-        // Remove the notification after 3 seconds
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
     }
 
     // Function to update breadcrumb navigation
