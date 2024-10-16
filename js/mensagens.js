@@ -34,9 +34,10 @@ function initializeMessageSelectors(mensagens) {
             selectedIdioma = button.value;
             categoriaDiv.style.display = 'block';
             languageButtonsDiv.style.display = 'none'; // Hide language buttons
+            mensagemSecao.style.display = 'none'; // Hide the message section
 
             updateBreadcrumb(); // Update breadcrumb
-            createCategoryMenu(Object.keys(mensagens));
+            createCategoryMenu(Object.keys(mensagens)); // Show categories for the selected language
         });
     });
 
@@ -139,10 +140,9 @@ function initializeMessageSelectors(mensagens) {
 
     // Function to reset to category selection
     function resetToCategorySelection() {
-        selectedCategoria = "";
         selectedSubCategoria = "";
         mensagemSecao.style.display = 'none'; // Hide the message section
-        showSubCategoryMenu(mensagens[selectedCategoria]);
+        createCategoryMenu(Object.keys(mensagens)); // Recreate the categories for the current language
         updateBreadcrumb();
     }
 }
