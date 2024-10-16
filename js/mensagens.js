@@ -15,13 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-// Main function to initialize dropdowns and message display logic
 function initializeMessageSelectors(mensagens) {
     const languageDropdown = document.getElementById('language-select');
     const categoriaDiv = document.getElementById('categoria-div');
     const categoriaDropdown = document.getElementById('categoria-select');
     const subcategoriaDiv = document.getElementById('subcategoria-div');
     const subcategoriaDropdown = document.getElementById('subcategoria-select');
+    const nameInputContainer = document.getElementById('name-input-container');
+    const guestNameInput = document.getElementById('guest-name');
+    const weekdayDropdownContainer = document.getElementById('weekday-dropdown-container');
+    const weekdayDropdown = document.getElementById('weekday-select');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
 
@@ -29,30 +32,18 @@ function initializeMessageSelectors(mensagens) {
     let selectedCategoria = "";
     let selectedSubCategoria = "";
 
-    // Reset all dropdowns and hide elements when needed
+    // Updated logic for resetting all dropdowns
     function resetDropdowns() {
-        categoriaDiv.style.display = 'none'; // Hide category dropdown
-        subcategoriaDiv.style.display = 'none'; // Hide subcategory dropdown
-        mensagemSecao.style.display = 'none'; // Hide message section
-        categoriaDropdown.innerHTML = '<option value="">Selecionar Categoria</option>'; // Clear category options
-        subcategoriaDropdown.innerHTML = '<option value="">Selecionar Subcategoria</option>'; // Clear subcategory options
+        categoriaDiv.style.display = 'none';
+        subcategoriaDiv.style.display = 'none';
+        nameInputContainer.style.display = 'none';
+        weekdayDropdownContainer.style.display = 'none';
+        mensagemSecao.style.display = 'none';
+        categoriaDropdown.innerHTML = '<option value="">Selecionar Categoria</option>'; // Reset category dropdown
+        subcategoriaDropdown.innerHTML = '<option value="">Selecionar Subcategoria</option>'; // Reset subcategory dropdown
     }
 
-    // Function to populate the category dropdown based on selected language
-    function populateCategoriaDropdown(categories) {
-        categoriaDropdown.innerHTML = '<option value="">Selecionar Categoria</option>'; // Reset options
-
-        categories.forEach(categoria => {
-            const option = document.createElement('option');
-            option.value = categoria;
-            option.textContent = categoria;
-            categoriaDropdown.appendChild(option);
-        });
-
-        categoriaDiv.style.display = 'block'; // Show category dropdown
-    }
-
-    // Function to populate the subcategory dropdown based on selected category
+    // Populate `subcategoriaDropdown`
     function populateSubcategoriaDropdown(subCategories) {
         subcategoriaDropdown.innerHTML = '<option value="">Selecionar Subcategoria</option>'; // Reset options
 
@@ -63,47 +54,102 @@ function initializeMessageSelectors(mensagens) {
             subcategoriaDropdown.appendChild(option);
         });
 
-        subcategoriaDiv.style.display = 'block'; // Show subcategory dropdown
+        subcategoriaDropdown.addEventListener('change', () => {
+            selectedSubCategoria = subcategoriaDropdown.value;
+            if (selectedSubCategoria) {
+                handleSubcategoryChange(selectedSubCategoria);
+            } else {
+                mensagemSecao.style.display = 'none';
+            }
+        });
     }
 
-    // Function to display the selected message
+    // Handle the subcategory logic
+    function handleSubcategoryChange(subCategory) {
+        if (subCategory === 'Quando Chegam?') {
+            nameInputContainer.style.display = 'block';
+            weekdayDropdownContainer.style.display = 'block';
+        } else {
+            nameInputContainer.style.display = 'none';
+            weekdayDropdownContainer.style.display = 'none';
+        }
+
+        const subCategoryData = mensagens[selectedCategoria][subCategory];
+        if (subCategory === 'Quando Chegam?') {
+            weekdayDropdown.addEventListener('change', () => {
+                const selectedWeekday = weekdayDropdown.value;
+                if (selectedWeekday && subCategoryData[selectedWeekday]) {
+                    displayMessage(subCategoryData[selectedWeekday]);
+                } else {
+                    mensagemSecao.style.display = 'none';
+                }
+            });
+        } else {
+            displayMessage(subCategoryData);
+        }
+    }
+
+    // Display the selected message
     function displayMessage(messageObj) {
         const selectedMessage = messageObj[selectedIdioma];
-        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
-        mensagemSecao.style.display = 'block'; // Show the message section
+        const guestName = guestNameInput.value.trim();
+        let finalMessage = selectedMessage;
+
+        if (guestName && selectedMessage.includes('[Hospede]')) {
+            finalMessage = selectedMessage.replace('[Hospede]', guestName);
+        }
+
+        mensagemContainer.innerHTML = `<p>${finalMessage}</p>`;
+        mensagemSecao.style.display = 'block';
+
+        // Copy to clipboard when clicked
+        mensagemContainer.addEventListener('click', () => {
+            copyMessageToClipboard(finalMessage);
+        });
     }
 
-    // Event listener for language selection
+    // Copy the message to the clipboard
+    function copyMessageToClipboard(text) {
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = text;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        alert('Mensagem copiada para a área de transferência');
+    }
+
+    // Populate `categoriaDropdown`
+    function populateCategoriaDropdown(categories) {
+        categoriaDropdown.innerHTML = '<option value="">Selecionar Categoria</option>'; // Reset options
+
+        categories.forEach(categoria => {
+            const option = document.createElement('option');
+            option.value = categoria;
+            option.textContent = categoria;
+            categoriaDropdown.appendChild(option);
+        });
+
+        categoriaDropdown.addEventListener('change', () => {
+            selectedCategoria = categoriaDropdown.value;
+            if (selectedCategoria) {
+                populateSubcategoriaDropdown(Object.keys(mensagens[selectedCategoria]));
+                subcategoriaDiv.style.display = 'block'; // Show subcategory dropdown
+            } else {
+                subcategoriaDiv.style.display = 'none';
+                mensagemSecao.style.display = 'none';
+            }
+        });
+    }
+
+    // Populate `languageDropdown`
     languageDropdown.addEventListener('change', () => {
         selectedIdioma = languageDropdown.value;
         if (selectedIdioma) {
-            resetDropdowns(); // Reset all dropdowns and hide unnecessary elements
-            populateCategoriaDropdown(Object.keys(mensagens)); // Populate categories for selected language
+            populateCategoriaDropdown(Object.keys(mensagens));
+            categoriaDiv.style.display = 'block'; // Show category dropdown
         } else {
-            resetDropdowns(); // Reset everything if no language is selected
-        }
-    });
-
-    // Event listener for category selection
-    categoriaDropdown.addEventListener('change', () => {
-        selectedCategoria = categoriaDropdown.value;
-        if (selectedCategoria) {
-            subcategoriaDiv.style.display = 'none'; // Hide subcategory dropdown initially
-            mensagemSecao.style.display = 'none'; // Hide message section initially
-            populateSubcategoriaDropdown(Object.keys(mensagens[selectedCategoria])); // Populate subcategories for selected category
-        } else {
-            subcategoriaDiv.style.display = 'none'; // Reset if no category is selected
-            mensagemSecao.style.display = 'none'; // Reset if no category is selected
-        }
-    });
-
-    // Event listener for subcategory selection
-    subcategoriaDropdown.addEventListener('change', () => {
-        selectedSubCategoria = subcategoriaDropdown.value;
-        if (selectedSubCategoria) {
-            displayMessage(mensagens[selectedCategoria][selectedSubCategoria]); // Show message for selected subcategory
-        } else {
-            mensagemSecao.style.display = 'none'; // Reset if no subcategory is selected
+            resetDropdowns();
         }
     });
 }
