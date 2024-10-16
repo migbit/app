@@ -104,7 +104,7 @@ button {
 }
 
 button:hover {
-    background-color: #16a085;
+    background-color: #34495e; /* Alterei do verde 16a085
 }
 
 /* Table Styles */
@@ -429,4 +429,5 @@ footer {
     text-align: center;
     padding: 15px 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
 }
