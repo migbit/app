@@ -142,6 +142,7 @@ function initializeMessageSelectors(mensagens) {
     function resetToCategorySelection() {
         selectedSubCategoria = "";
         mensagemSecao.style.display = 'none'; // Hide the message section
+        categoriaContainer.style.display = 'block'; // Show the category container
         showSubCategoryMenu(mensagens[selectedCategoria]); // Recreate the sub-categories for the current category
         updateBreadcrumb();
     }
