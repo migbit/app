@@ -21,6 +21,8 @@ function initializeMessageSelectors(mensagens) {
     const categoriaContainer = document.getElementById('categoria-container');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
+    const guestNameContainer = document.getElementById('guest-name-container');
+    const guestNameInput = document.getElementById('guest-name');
     const breadcrumbDiv = document.createElement('div'); // Create breadcrumb navigation
     languageButtonsDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
 
@@ -98,32 +100,28 @@ function initializeMessageSelectors(mensagens) {
     // Function to display the selected message
     function displayMessage(messageObj) {
         const selectedMessage = messageObj[selectedIdioma];
-        const mensagemContainer = document.getElementById('mensagem-container');
-        const guestNameContainer = document.getElementById('guest-name-container');
-        const guestNameInput = document.getElementById('guest-name');
-    
+        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+
         if (selectedSubCategoria === 'Quando Chegam?') {
-            // Show the guest name input field if the sub-category is "Quando Chegam?"
+            // Show guest name input only for "Quando Chegam?"
             guestNameContainer.style.display = 'block';
-    
-            // Listen for changes in the input field
+
+            // Replace [Hospede] with guest's name as they type
             guestNameInput.addEventListener('input', () => {
-                const guestName = guestNameInput.value;
-                let personalizedMessage = selectedMessage.replace('[Hospede]', guestName || '[Hospede]');
+                const guestName = guestNameInput.value || '[Hospede]';
+                let personalizedMessage = selectedMessage.replace('[Hospede]', guestName);
                 mensagemContainer.innerHTML = `<p>${personalizedMessage}</p>`;
             });
-    
-            // Initial message with placeholder if no name is provided
+
+            // Initially show the message without the guest name
             mensagemContainer.innerHTML = `<p>${selectedMessage.replace('[Hospede]', '[Hospede]')}</p>`;
         } else {
-            // Hide the guest name input field for other messages
-            guestNameContainer.style.display = 'none';
-            mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+            guestNameContainer.style.display = 'none'; // Hide guest name input for other messages
         }
-    
+
         categoriaContainer.style.display = 'none'; // Hide sub-categories
         mensagemSecao.style.display = 'block'; // Show the message section
-    
+
         // Add event listener to copy the message on click
         mensagemContainer.addEventListener('click', () => {
             navigator.clipboard.writeText(mensagemContainer.textContent).then(() => {
@@ -133,7 +131,7 @@ function initializeMessageSelectors(mensagens) {
             });
         });
     }
-    
+
     // Function to update breadcrumb navigation
     function updateBreadcrumb() {
         breadcrumbDiv.innerHTML = ''; // Clear previous breadcrumb
