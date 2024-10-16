@@ -286,11 +286,16 @@ tr:hover {
 }
 
 /* Reparações */
-/* Urgência alta */
-tr.urgencia-alta {
-    background-color: #ffe4e1; /* Light red background for the whole row */
-    color: #e74c3c; /* Red text for the row */
+.urgente {
+    background-color: #ffe4e1;
+    color: #d9534f;
 }
+
+.reparado {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
 
 /* Footer Styles */
 footer {
