@@ -95,14 +95,24 @@ function initializeMessageSelectors(mensagens) {
         categoriaContainer.appendChild(ul);
     }
 
-    // Function to display the selected message
+    // Function to display the selected message and handle copying to clipboard
     function displayMessage(messageObj) {
-        const selectedMessage = messageObj[selectedIdioma];
-        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
-        categoriaContainer.style.display = 'none'; // Hide sub-categories
-        mensagemSecao.style.display = 'block'; // Show the message section
-    }
+    const selectedMessage = messageObj[selectedIdioma];
+    mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+    categoriaContainer.style.display = 'none'; // Hide sub-categories
+    mensagemSecao.style.display = 'block'; // Show the message section
 
+    // Add the clipboard functionality
+    mensagemContainer.addEventListener('click', async () => {
+        try {
+            // Copy the message text to clipboard
+            await navigator.clipboard.writeText(selectedMessage);
+            alert('Mensagem Copiada'); // Display notification
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+        }
+    });
+}
     // Function to update breadcrumb navigation
     function updateBreadcrumb() {
         breadcrumbDiv.innerHTML = ''; // Clear previous breadcrumb
