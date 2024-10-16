@@ -18,142 +18,87 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeMessageSelectors(mensagens) {
     const languageDropdown = document.getElementById('language-select');
     const categoriaDiv = document.getElementById('categoria-div');
-    const categoriaContainer = document.getElementById('categoria-container');
+    const categoriaDropdown = document.getElementById('categoria-select');
+    const subcategoriaDiv = document.getElementById('subcategoria-div');
+    const subcategoriaDropdown = document.getElementById('subcategoria-select');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    const guestNameInput = document.getElementById('guest-name');
-    const weekdayDropdown = document.getElementById('weekday-select');
-    const breadcrumbDiv = document.createElement('div');
-    categoriaDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
 
     let selectedIdioma = "";
     let selectedCategoria = "";
     let selectedSubCategoria = "";
 
-    // Language selection logic
+    // Event listener for language selection
     languageDropdown.addEventListener('change', () => {
         selectedIdioma = languageDropdown.value;
-        categoriaDiv.style.display = 'block'; // Show categories after language is selected
-        createCategoryMenu(Object.keys(mensagens)); // Show categories for the selected language
+
+        if (selectedIdioma) {
+            populateCategoriaDropdown(Object.keys(mensagens));
+            categoriaDiv.style.display = 'block'; // Show the category dropdown
+            subcategoriaDiv.style.display = 'none'; // Hide subcategory until category is selected
+            mensagemSecao.style.display = 'none'; // Hide the message until a subcategory is selected
+        } else {
+            resetDropdowns();
+        }
     });
 
-    // Function to create the category menu
-    function createCategoryMenu(categories) {
-        categoriaContainer.innerHTML = ''; // Clear previous categories
+    // Populate category dropdown
+    function populateCategoriaDropdown(categories) {
+        categoriaDropdown.innerHTML = '<option value="">Selecionar Categoria</option>'; // Reset options
 
-        const categoriaHeading = document.getElementById('categoria-heading');
-        if (categoriaHeading) {
-            categoriaHeading.style.display = 'block';
-        }
-
-        const ul = document.createElement('ul');
         categories.forEach(categoria => {
-            const li = document.createElement('li');
-            li.textContent = categoria;
-            ul.appendChild(li);
-
-            // Event listener to display sub-categories
-            li.addEventListener('click', () => {
-                selectedCategoria = categoria;
-                updateBreadcrumb();
-                showSubCategoryMenu(mensagens[categoria]); // Show sub-categories for the selected category
-            });
+            const option = document.createElement('option');
+            option.value = categoria;
+            option.textContent = categoria;
+            categoriaDropdown.appendChild(option);
         });
-        categoriaContainer.appendChild(ul);
+
+        categoriaDropdown.addEventListener('change', () => {
+            selectedCategoria = categoriaDropdown.value;
+            if (selectedCategoria) {
+                populateSubcategoriaDropdown(Object.keys(mensagens[selectedCategoria]));
+                subcategoriaDiv.style.display = 'block'; // Show subcategory dropdown
+            } else {
+                subcategoriaDiv.style.display = 'none';
+                mensagemSecao.style.display = 'none';
+            }
+        });
     }
 
-    // Function to hide the category heading
-    function hideCategoriaHeading() {
-        const categoriaHeading = document.getElementById('categoria-heading');
-        if (categoriaHeading) {
-            categoriaHeading.style.display = 'none';
-        }
-    }
+    // Populate subcategory dropdown
+    function populateSubcategoriaDropdown(subCategories) {
+        subcategoriaDropdown.innerHTML = '<option value="">Selecionar Subcategoria</option>'; // Reset options
 
-    // Function to show sub-categories as a menu
-    function showSubCategoryMenu(subCategories) {
-        categoriaContainer.innerHTML = ''; // Clear previous sub-categories
-
-        // Special case for "Quando Chegam?"
-        if (selectedCategoria === "Antes do Check-in" && subCategories["Quando Chegam?"]) {
-            weekdayDropdown.style.display = 'block'; // Show the day of the week dropdown
-            weekdayDropdown.addEventListener('change', () => {
-                const selectedDay = weekdayDropdown.value;
-                if (subCategories["Quando Chegam?"][selectedDay]) {
-                    selectedSubCategoria = selectedDay;
-                    updateBreadcrumb();
-                    displayMessage(subCategories["Quando Chegam?"][selectedDay]);
-                }
-            });
-            return;
-        }
-
-        hideCategoriaHeading(); // Hide the "Escolha a Categoria:" text
-        const ul = document.createElement('ul');
-        Object.keys(subCategories).forEach(subCategory => {
-            const li = document.createElement('li');
-            li.textContent = subCategory;
-            ul.appendChild(li);
-
-            // Event listener to display the message
-            li.addEventListener('click', () => {
-                selectedSubCategoria = subCategory;
-                updateBreadcrumb();
-                displayMessage(subCategories[subCategory]);
-            });
+        subCategories.forEach(subCategory => {
+            const option = document.createElement('option');
+            option.value = subCategory;
+            option.textContent = subCategory;
+            subcategoriaDropdown.appendChild(option);
         });
-        categoriaContainer.appendChild(ul);
+
+        subcategoriaDropdown.addEventListener('change', () => {
+            selectedSubCategoria = subcategoriaDropdown.value;
+            if (selectedSubCategoria) {
+                displayMessage(mensagens[selectedCategoria][selectedSubCategoria]);
+            } else {
+                mensagemSecao.style.display = 'none';
+            }
+        });
     }
 
     // Function to display the selected message
     function displayMessage(messageObj) {
-        const guestName = guestNameInput ? guestNameInput.value : "[Hospede]";
-        let selectedMessage = messageObj[selectedIdioma];
-
-        // Replace placeholders with actual values
-        selectedMessage = selectedMessage.replace("[Hospede]", guestName);
+        const selectedMessage = messageObj[selectedIdioma];
         mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
-        categoriaContainer.style.display = 'none'; // Hide sub-categories
         mensagemSecao.style.display = 'block'; // Show the message section
     }
 
-    // Function to update breadcrumb navigation
-    function updateBreadcrumb() {
-        breadcrumbDiv.innerHTML = ''; // Clear previous breadcrumb
-        const breadcrumb = [];
-
-        // Add category
-        if (selectedCategoria) {
-            const categoryCrumb = document.createElement('span');
-            categoryCrumb.textContent = ` > ${selectedCategoria}`;
-            categoryCrumb.style.cursor = 'pointer';
-            categoryCrumb.addEventListener('click', () => {
-                resetToCategorySelection();
-            });
-            breadcrumb.push(categoryCrumb);
-        }
-
-        // Add sub-category
-        if (selectedSubCategoria) {
-            const subCategoryCrumb = document.createElement('span');
-            subCategoryCrumb.textContent = ` > ${selectedSubCategoria}`;
-            breadcrumb.push(subCategoryCrumb); // No need for clickable, this is the last step
-        }
-
-        // Append the breadcrumb elements
-        breadcrumb.forEach(item => {
-            breadcrumbDiv.appendChild(item);
-        });
-    }
-
-    // Function to reset to category selection
-    function resetToCategorySelection() {
-        selectedSubCategoria = "";  // Reset the selected sub-category
-        mensagemSecao.style.display = 'none';  // Hide the message section
-        categoriaContainer.style.display = 'block';  // Show the category container again
-        categoriaDiv.style.display = 'block';  // Show the category div again
-
-        showSubCategoryMenu(mensagens[selectedCategoria]);  // Recreate the sub-categories
-        updateBreadcrumb();  // Update the breadcrumb to reflect the change
+    // Reset all dropdowns when needed
+    function resetDropdowns() {
+        categoriaDiv.style.display = 'none';
+        subcategoriaDiv.style.display = 'none';
+        mensagemSecao.style.display = 'none';
+        categoriaDropdown.innerHTML = '<option value="">Selecionar Categoria</option>'; // Reset category dropdown
+        subcategoriaDropdown.innerHTML = '<option value="">Selecionar Subcategoria</option>'; // Reset subcategory dropdown
     }
 }
