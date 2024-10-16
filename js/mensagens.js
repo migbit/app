@@ -21,84 +21,95 @@ function initializeMessageSelectors(mensagens) {
     const categoriaContainer = document.getElementById('categoria-container');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    const guestNameContainer = document.getElementById('guest-name-container');
     const guestNameInput = document.getElementById('guest-name');
-    const weekdayButtonsContainer = document.createElement('div');  // Container for weekday buttons
-    const breadcrumbDiv = document.createElement('div');
+    const guestNameContainer = document.getElementById('guest-name-container');
+    const breadcrumbDiv = document.createElement('div'); // Create breadcrumb navigation
     languageButtonsDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
 
     let selectedIdioma = "";
     let selectedCategoria = "";
     let selectedSubCategoria = "";
-    let selectedDay = "";
-
-    // Create weekday buttons
-    const daysOfWeek = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
-    daysOfWeek.forEach(day => {
-        const dayButton = document.createElement('button');
-        dayButton.textContent = day;
-        dayButton.classList.add('menu-btn');
-        dayButton.addEventListener('click', () => {
-            selectedDay = day;  // Store the selected day
-            displayMessage(mensagens[selectedCategoria][selectedSubCategoria][selectedDay]);
-        });
-        weekdayButtonsContainer.appendChild(dayButton);
-    });
-
-    // Append weekday buttons container after the guest name input field
-    guestNameContainer.insertAdjacentElement('afterend', weekdayButtonsContainer);
 
     // Event listener for each language button
     document.querySelectorAll('.language-btn').forEach(button => {
         button.addEventListener('click', (event) => {
             selectedIdioma = button.value;
             categoriaDiv.style.display = 'block';
-            languageButtonsDiv.style.display = 'none';
-            mensagemSecao.style.display = 'none';
+            languageButtonsDiv.style.display = 'none'; // Hide language buttons
+            mensagemSecao.style.display = 'none'; // Hide the message section
 
-            updateBreadcrumb();
-            createCategoryMenu(Object.keys(mensagens));
+            updateBreadcrumb(); // Update breadcrumb
+            createCategoryMenu(Object.keys(mensagens)); // Show categories for the selected language
         });
     });
 
     // Function to create the category menu
     function createCategoryMenu(categories) {
-        categoriaContainer.innerHTML = '';
+        categoriaContainer.innerHTML = ''; // Clear previous categories
+        
+        // Show the "Escolha a Categoria:" text again
+        const categoriaHeading = document.getElementById('categoria-heading');
+        if (categoriaHeading) {
+            categoriaHeading.style.display = 'block';
+        }
+
         const ul = document.createElement('ul');
         categories.forEach(categoria => {
             const li = document.createElement('li');
             li.textContent = categoria;
             ul.appendChild(li);
 
+            // Event listener to display sub-categories
             li.addEventListener('click', () => {
                 selectedCategoria = categoria;
                 updateBreadcrumb();
-                showSubCategoryMenu(mensagens[categoria]);
+                showSubCategoryMenu(mensagens[categoria]); // Show sub-categories for the selected category
             });
         });
         categoriaContainer.appendChild(ul);
     }
 
-    // Function to show sub-categories
+    // Function to hide the category heading
+    function hideCategoriaHeading() {
+        const categoriaHeading = document.getElementById('categoria-heading');
+        if (categoriaHeading) {
+            categoriaHeading.style.display = 'none';
+        }
+    }
+
+    // Function to show sub-categories as a menu
     function showSubCategoryMenu(subCategories) {
-        categoriaContainer.innerHTML = '';
+        categoriaContainer.innerHTML = ''; // Clear previous sub-categories
+
+        // Special case for "Quando Chegam?"
+        if (selectedCategoria === "Antes do Check-in" && subCategories["Quando Chegam?"]) {
+            guestNameContainer.style.display = 'block'; // Show the guest name input field
+            const weekDays = Object.keys(subCategories["Quando Chegam?"]);
+            weekDays.forEach(day => {
+                const li = document.createElement('li');
+                li.textContent = day;
+                li.addEventListener('click', () => {
+                    selectedSubCategoria = day;
+                    updateBreadcrumb();
+                    displayMessage(subCategories["Quando Chegam?"][day]);
+                });
+                categoriaContainer.appendChild(li);
+            });
+            return;
+        }
+
+        hideCategoriaHeading(); // Hide the "Escolha a Categoria:" text
         const ul = document.createElement('ul');
         Object.keys(subCategories).forEach(subCategory => {
             const li = document.createElement('li');
             li.textContent = subCategory;
             ul.appendChild(li);
 
+            // Event listener to display the message
             li.addEventListener('click', () => {
                 selectedSubCategoria = subCategory;
                 updateBreadcrumb();
-                // Show guest name input and day buttons only for "Quando Chegam?"
-                if (selectedSubCategoria === 'Quando Chegam?') {
-                    guestNameContainer.style.display = 'block';
-                    weekdayButtonsContainer.style.display = 'block';  // Show the weekday buttons
-                } else {
-                    guestNameContainer.style.display = 'none';
-                    weekdayButtonsContainer.style.display = 'none';
-                }
+                displayMessage(subCategories[subCategory]);
             });
         });
         categoriaContainer.appendChild(ul);
@@ -106,41 +117,54 @@ function initializeMessageSelectors(mensagens) {
 
     // Function to display the selected message
     function displayMessage(messageObj) {
-        const guestName = guestNameInput.value || '[Hospede]';  // Replace placeholder if needed
-        const personalizedMessage = messageObj[selectedIdioma].replace('[Hospede]', guestName);
-        mensagemContainer.innerHTML = `<p>${personalizedMessage}</p>`;
-        categoriaContainer.style.display = 'none';  // Hide sub-categories
-        mensagemSecao.style.display = 'block';  // Show the message section
+        const guestName = guestNameInput.value || "[Hospede]";
+        let selectedMessage = messageObj[selectedIdioma];
+
+        // Replace placeholders with actual values
+        selectedMessage = selectedMessage.replace("[Hospede]", guestName);
+        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+        categoriaContainer.style.display = 'none'; // Hide sub-categories
+        mensagemSecao.style.display = 'block'; // Show the message section
     }
 
     // Function to update breadcrumb navigation
     function updateBreadcrumb() {
-        breadcrumbDiv.innerHTML = '';
+        breadcrumbDiv.innerHTML = ''; // Clear previous breadcrumb
         const breadcrumb = [];
 
+        // Add language
         if (selectedIdioma) {
             const langCrumb = document.createElement('span');
             langCrumb.textContent = selectedIdioma;
             langCrumb.style.cursor = 'pointer';
-            langCrumb.addEventListener('click', resetToLanguageSelection);
+            langCrumb.addEventListener('click', () => {
+                resetToLanguageSelection();
+            });
             breadcrumb.push(langCrumb);
         }
 
+        // Add category
         if (selectedCategoria) {
             const categoryCrumb = document.createElement('span');
             categoryCrumb.textContent = ` > ${selectedCategoria}`;
             categoryCrumb.style.cursor = 'pointer';
-            categoryCrumb.addEventListener('click', resetToCategorySelection);
+            categoryCrumb.addEventListener('click', () => {
+                resetToCategorySelection();
+            });
             breadcrumb.push(categoryCrumb);
         }
 
+        // Add sub-category
         if (selectedSubCategoria) {
             const subCategoryCrumb = document.createElement('span');
             subCategoryCrumb.textContent = ` > ${selectedSubCategoria}`;
-            breadcrumb.push(subCategoryCrumb);
+            breadcrumb.push(subCategoryCrumb); // No need for clickable, this is the last step
         }
 
-        breadcrumb.forEach(item => breadcrumbDiv.appendChild(item));
+        // Append the breadcrumb elements
+        breadcrumb.forEach(item => {
+            breadcrumbDiv.appendChild(item);
+        });
     }
 
     // Function to reset to language selection
@@ -149,18 +173,27 @@ function initializeMessageSelectors(mensagens) {
         selectedCategoria = "";
         selectedSubCategoria = "";
         categoriaDiv.style.display = 'none';
-        languageButtonsDiv.style.display = 'block';
-        mensagemSecao.style.display = 'none';
+        languageButtonsDiv.style.display = 'block'; // Show language buttons
+        mensagemSecao.style.display = 'none'; // Hide the message section
+        
+        // Show the "Escolha a Categoria:" text again
+        const categoriaHeading = document.getElementById('categoria-heading');
+        if (categoriaHeading) {
+            categoriaHeading.style.display = 'block';
+        }
+
         updateBreadcrumb();
     }
 
     // Function to reset to category selection
     function resetToCategorySelection() {
-        selectedSubCategoria = "";
-        mensagemSecao.style.display = 'none';
-        categoriaContainer.style.display = 'block';
-        categoriaDiv.style.display = 'block';
-        showSubCategoryMenu(mensagens[selectedCategoria]);
-        updateBreadcrumb();
+        selectedSubCategoria = "";  // Reset the selected sub-category
+        mensagemSecao.style.display = 'none';  // Hide the message section
+        categoriaContainer.style.display = 'block';  // Show the category container again
+        categoriaDiv.style.display = 'block';  // Show the category div again
+        
+        // Show the sub-categories for the currently selected category
+        showSubCategoryMenu(mensagens[selectedCategoria]);  // Recreate the sub-categories
+        updateBreadcrumb();  // Update the breadcrumb to reflect the change
     }
 }
