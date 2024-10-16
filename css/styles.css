@@ -141,12 +141,12 @@ label {
     font-weight: bold;
     font-size: 1em;
     color: #34495e;
-    margin-top: 20px; /* Add space above the label */
+    margin-top: 2px; /* Add space above the label */
 }
 
 /* Additional spacing for message container */
 #mensagem-container {
-    margin-top: 20px; /* Space between dropdown and message container */
+    margin-top: 2px; /* Space between dropdown and message container */
     padding: 15px;
     background-color: #f0f0f0;
     border-radius: 5px;
@@ -156,11 +156,11 @@ label {
 
 /* Spacing for guest name input and weekday dropdown */
 #name-input-container, #weekday-dropdown-container {
-    margin-top: 20px;
+    margin-top: 5px;
 }
 
 #guest-name, #weekday-select {
-    padding: 10px;
+    padding: 5px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
