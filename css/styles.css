@@ -94,7 +94,7 @@ input[type="checkbox"] {
 
 button {
     padding: 10px 20px;
-    background-color: #34495e; /* Changed to match the language buttons */
+    background-color: #1abc9c;
     border: none;
     color: white;
     cursor: pointer;
@@ -104,16 +104,7 @@ button {
 }
 
 button:hover {
-    background-color: #28333f; /* Same hover effect as language buttons */
-}
-
-button:active {
-    background-color: #28a745; /* Green color to indicate active button */
-}
-
-button:disabled {
-    background-color: #cccccc; /* Disabled state styling */
-    cursor: not-allowed;
+    background-color: #16a085;
 }
 
 /* Table Styles */
@@ -290,46 +281,37 @@ tr:hover {
     margin-top: 20px;
 }
 
-/* General button styling for consistency */
-button,
 .language-btn,
 .menu-btn {
     display: block;
-    width: 100%; /* Make buttons full width */
+    width: 100%;
     margin: 10px 0;
     padding: 10px;
     font-size: 16px;
-    background-color: #34495e; /* Primary button color */
+    background-color: #34495e;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-button:hover,
 .language-btn:hover,
 .menu-btn:hover {
-    background-color: #28333f; /* Darker shade on hover */
+    background-color: #28333f;
 }
 
-button:active,
-.language-btn.active,
-.menu-btn.active {
-    background-color: #28a745; /* Green color to indicate active button */
+.language-btn.active {
+    background-color: #28a745;
 }
 
-button:focus,
 .language-btn:focus,
 .menu-btn:focus {
     outline: none;
-    background-color: #28333f; /* Same hover effect for focused buttons */
 }
 
-button:disabled,
 .language-btn:disabled,
 .menu-btn:disabled {
-    background-color: #cccccc; /* Disabled state styling */
+    background-color: #cccccc;
     cursor: not-allowed;
 }
 
