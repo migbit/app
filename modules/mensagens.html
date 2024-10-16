@@ -24,14 +24,16 @@
     </header>
 
     <main>
-        <!-- Language selection buttons -->
+        <!-- Language selection dropdown -->
         <section>
-            <div class="language-buttons-vertical">
-                <label>Selecione o Idioma:</label>
-                <button class="language-btn" id="btn-portugues" value="Português">Português</button>
-                <button class="language-btn" id="btn-ingles" value="Inglês">Inglês</button>
-                <button class="language-btn" id="btn-espanhol" value="Espanhol">Espanhol</button>
-                <button class="language-btn" id="btn-frances" value="Francês">Francês</button>
+            <div>
+                <label for="language-select">Selecione o Idioma:</label>
+                <select id="language-select">
+                    <option value="Português">Português</option>
+                    <option value="Inglês">Inglês</option>
+                    <option value="Espanhol">Espanhol</option>
+                    <option value="Francês">Francês</option>
+                </select>
             </div>
         </section>
 
@@ -41,12 +43,11 @@
             <div id="categoria-container" class="category-menu"></div>
         </section>
 
-        <!-- Display the selected message and day of the week dropdown -->
+        <!-- Weekday dropdown, hidden by default -->
         <section id="mensagem-secao" style="display: none;">
             <h2>Mensagem Selecionada:</h2>
 
-            <!-- Dropdown for selecting the day of the week -->
-            <div id="weekday-dropdown-container" style="display: block;">
+            <div id="weekday-dropdown-container" style="display: none;">
                 <label for="weekday-select">Selecione o Dia da Semana:</label>
                 <select id="weekday-select">
                     <option value="Segunda-feira">Segunda-feira</option>
@@ -59,7 +60,6 @@
                 </select>
             </div>
 
-            <!-- Display the selected message -->
             <div id="mensagem-container" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
         </section>
     </main>
