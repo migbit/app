@@ -281,7 +281,8 @@ tr:hover {
 }
 
 .total-caixa {
-    text-align: right;
+    text-align: center;
+    font-size: 1.5em; /* Adjust this value as needed */
 }
 
 /* Reparações */
