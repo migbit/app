@@ -14,16 +14,19 @@ body {
     line-height: 1.6;
 }
 
-/* Header Specific Styles */
+/* Header Menu - Remove White Background and Adjust Alignment */
 header nav ul li a {
-    background-color: transparent !important; /* Ensure no background for header links */
+    background-color: transparent; /* No background for header links */
     color: white; /* Keep the text white */
-    border: none; /* Remove any borders */
+    border: none;
+    padding: 10px;
+    text-align: center;
 }
 
 header nav ul li a:hover {
-    background-color: #1abc9c; /* Add hover effect for clarity */
+    background-color: #1abc9c; /* Add hover effect for visibility */
 }
+
 
 /* Main Content Styles */
 main {
@@ -263,10 +266,11 @@ ul li small {
     border-radius: 5px;
 }
 
-.item-controles {
+.item-controles, .item-acoes {
     display: flex;
-    gap: 10px; /* Adds space between the buttons */
     align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between the buttons */
 }
 
 .item-quantidade {
@@ -317,6 +321,7 @@ ul li small {
 .item-acoes {
     display: flex;
     gap: 10px; /* Horizontal gap between the buttons */
+    flex-direction: row; /* Ensure horizontal alignment for A and C buttons */
     align-items: center; /* Vertically center align the buttons */
     justify-content: flex-start; /* Align buttons to the left */
 }
