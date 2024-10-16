@@ -335,6 +335,25 @@ tr:hover {
     cursor: not-allowed;
 }
 
+/* Style the menu */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    background-color: #34495e;
+    color: white;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+li:hover {
+    background-color: #28333f;
+}
+
 
 /* Footer Styles */
 footer {

@@ -1,5 +1,3 @@
-// js/mensagens.js
-
 // Load the JSON data
 document.addEventListener('DOMContentLoaded', () => {
     fetch('./mensagensData.json')
@@ -38,46 +36,49 @@ function initializeMessageSelectors(mensagens) {
             // Display the selected language
             languageDisplay.textContent = `Idioma: ${selectedIdioma}`;
 
-            // Create category buttons dynamically
-            createCategoryButtons(Object.keys(mensagens));
+            // Create category menu dynamically
+            createCategoryMenu(Object.keys(mensagens));
         });
     });
 
-    // Function to create category buttons
-    function createCategoryButtons(categories) {
-        categoriaContainer.innerHTML = ''; // Clear previous category buttons
+    // Function to create the category menu
+    function createCategoryMenu(categories) {
+        categoriaContainer.innerHTML = ''; // Clear previous categories
+        const ul = document.createElement('ul'); // Create a menu
         categories.forEach(categoria => {
-            const categoryButton = document.createElement('button');
-            categoryButton.textContent = categoria;
-            categoryButton.classList.add('language-btn'); // Reusing the language button class for styling
-            categoriaContainer.appendChild(categoryButton);
+            const li = document.createElement('li');
+            li.textContent = categoria;
+            ul.appendChild(li);
 
-            // Add event listener to each category button
-            categoryButton.addEventListener('click', () => {
-                // Handle displaying options for the selected category
-                showOptionsForCategory(mensagens[categoria]);
+            // Event listener to display sub-categories
+            li.addEventListener('click', () => {
+                showSubCategoryMenu(mensagens[categoria], categoria);
             });
         });
+        categoriaContainer.appendChild(ul);
     }
 
-    // Function to show options for a category
-    function showOptionsForCategory(categoryOptions) {
-        // Clear any previously displayed message
-        mensagemContainer.innerHTML = '';
+    // Function to show sub-categories as a menu
+    function showSubCategoryMenu(subCategories, categoria) {
+        categoriaContainer.innerHTML = ''; // Clear previous sub-categories
+        const ul = document.createElement('ul');
+        Object.keys(subCategories).forEach(subCategory => {
+            const li = document.createElement('li');
+            li.textContent = subCategory;
+            ul.appendChild(li);
 
-        // Display each option in the selected category
-        Object.keys(categoryOptions).forEach(option => {
-            const optionButton = document.createElement('button');
-            optionButton.textContent = option;
-            optionButton.classList.add('language-btn');
-            mensagemContainer.appendChild(optionButton);
-
-            // Display the message for the selected option
-            optionButton.addEventListener('click', () => {
-                const selectedMessage = categoryOptions[option][selectedIdioma];
-                mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
-                mensagemSecao.style.display = 'block'; // Show the message section
+            // Event listener to display the message
+            li.addEventListener('click', () => {
+                displayMessage(subCategories[subCategory], categoria);
             });
         });
+        categoriaContainer.appendChild(ul);
+    }
+
+    // Function to display the selected message
+    function displayMessage(messageObj, categoria) {
+        const selectedMessage = messageObj[selectedIdioma]; // Get the message in the selected language
+        mensagemContainer.innerHTML = `<h3>${categoria}</h3><p>${selectedMessage}</p>`;
+        mensagemSecao.style.display = 'block'; // Show the message section
     }
 }
