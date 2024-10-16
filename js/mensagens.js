@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to initialize selectors and events
 function initializeMessageSelectors(mensagens) {
-    // Language buttons (Italian and German removed)
+    // Language buttons
     const buttons = {
         "btn-portugues": "Português",
         "btn-ingles": "Inglês",
@@ -27,50 +27,78 @@ function initializeMessageSelectors(mensagens) {
         "btn-frances": "Francês"
     };
 
+    const languageButtonsDiv = document.querySelector('.language-buttons-vertical');
     const categoriaDiv = document.getElementById('categoria-div');
-    const categoriaSelect = document.getElementById('categoria');
+    const categoriaContainer = document.getElementById('categoria-container'); // New container for category buttons
     const opcaoDiv = document.getElementById('opcao-div');
     const opcaoSelect = document.getElementById('opcao');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    
+    const backButton = document.createElement('button'); // Create Back button
+
     let selectedIdioma = "";  // Store selected language
 
     // Event listener for each language button
     Object.keys(buttons).forEach(buttonId => {
         document.getElementById(buttonId).addEventListener('click', (event) => {
             selectedIdioma = buttons[buttonId];  // Store the selected language
-            categoriaDiv.style.display = 'block';
+            categoriaDiv.style.display = 'block';  // Show categories
             opcaoDiv.style.display = 'none';
-            opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
             mensagemSecao.style.display = 'none';
+            languageButtonsDiv.style.display = 'none'; // Hide language buttons
 
             // Remove active class from other buttons and add to the clicked one
             document.querySelectorAll('.language-buttons button').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+
+            // Create category buttons dynamically based on available categories
+            createCategoryButtons(Object.keys(mensagens));
         });
     });
 
-    // Event for when a category is selected
-    categoriaSelect.addEventListener('change', () => {
-        const categoria = categoriaSelect.value;
-        if (categoria) {
-            opcaoDiv.style.display = 'block';
-            mensagemSecao.style.display = 'none';
-            opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
+    // Function to create category buttons
+    function createCategoryButtons(categories) {
+        categoriaContainer.innerHTML = ''; // Clear previous category buttons
+        categories.forEach(categoria => {
+            const categoryButton = document.createElement('button');
+            categoryButton.textContent = categoria;
+            categoryButton.classList.add('category-btn');
+            categoriaContainer.appendChild(categoryButton);
 
-            const opcoes = Object.keys(mensagens[categoria]);
-            opcoes.forEach(opcao => {
-                const option = document.createElement('option');
-                option.value = opcao;
-                option.textContent = opcao;
-                opcaoSelect.appendChild(option);
+            // Add event listener to each category button
+            categoryButton.addEventListener('click', () => {
+                opcaoDiv.style.display = 'block';
+                categoriaDiv.style.display = 'none'; // Hide category buttons
+                opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
+
+                // Add options for the selected category
+                const opcoes = Object.keys(mensagens[categoria]);
+                opcoes.forEach(opcao => {
+                    const option = document.createElement('option');
+                    option.value = opcao;
+                    option.textContent = opcao;
+                    opcaoSelect.appendChild(option);
+                });
+
+                // Show the Back button
+                showBackButton();
             });
-        } else {
-            opcaoDiv.style.display = 'none';
-            mensagemSecao.style.display = 'none';
-        }
-    });
+        });
+    }
+
+    // Function to show the Back button and allow returning to categories
+    function showBackButton() {
+        backButton.textContent = 'Voltar';  // Set the text of the button
+        backButton.classList.add('back-btn');
+        document.body.appendChild(backButton);  // Add it to the page
+
+        backButton.addEventListener('click', () => {
+            categoriaDiv.style.display = 'block';  // Show categories again
+            opcaoDiv.style.display = 'none';  // Hide options
+            mensagemSecao.style.display = 'none';  // Hide messages
+            backButton.remove();  // Remove the Back button
+        });
+    }
 
     // Event for when an option is selected
     opcaoSelect.addEventListener('change', () => {
