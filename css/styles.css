@@ -354,6 +354,21 @@ li:hover {
     background-color: #28333f;
 }
 
+/* Style the breadcrumb navigation */
+div {
+    margin-bottom: 15px;
+}
+
+span {
+    font-weight: bold;
+    color: #007bff;
+}
+
+span:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 
 /* Footer Styles */
 footer {

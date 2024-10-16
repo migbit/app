@@ -21,22 +21,21 @@ function initializeMessageSelectors(mensagens) {
     const categoriaContainer = document.getElementById('categoria-container');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
-    const languageDisplay = document.createElement('h3'); // To display the selected language
-    languageButtonsDiv.insertAdjacentElement('beforebegin', languageDisplay);
+    const breadcrumbDiv = document.createElement('div'); // Create breadcrumb navigation
+    languageButtonsDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
 
-    let selectedIdioma = "";  // Store selected language
+    let selectedIdioma = "";
+    let selectedCategoria = "";
+    let selectedSubCategoria = "";
 
     // Event listener for each language button
     document.querySelectorAll('.language-btn').forEach(button => {
         button.addEventListener('click', (event) => {
-            selectedIdioma = button.value;  // Store the selected language
-            categoriaDiv.style.display = 'block';  // Show categories
+            selectedIdioma = button.value;
+            categoriaDiv.style.display = 'block';
             languageButtonsDiv.style.display = 'none'; // Hide language buttons
-            
-            // Display the selected language
-            languageDisplay.textContent = `Idioma: ${selectedIdioma}`;
 
-            // Create category menu dynamically
+            updateBreadcrumb(); // Update breadcrumb
             createCategoryMenu(Object.keys(mensagens));
         });
     });
@@ -44,7 +43,7 @@ function initializeMessageSelectors(mensagens) {
     // Function to create the category menu
     function createCategoryMenu(categories) {
         categoriaContainer.innerHTML = ''; // Clear previous categories
-        const ul = document.createElement('ul'); // Create a menu
+        const ul = document.createElement('ul');
         categories.forEach(categoria => {
             const li = document.createElement('li');
             li.textContent = categoria;
@@ -52,14 +51,16 @@ function initializeMessageSelectors(mensagens) {
 
             // Event listener to display sub-categories
             li.addEventListener('click', () => {
-                showSubCategoryMenu(mensagens[categoria], categoria);
+                selectedCategoria = categoria;
+                updateBreadcrumb();
+                showSubCategoryMenu(mensagens[categoria]);
             });
         });
         categoriaContainer.appendChild(ul);
     }
 
     // Function to show sub-categories as a menu
-    function showSubCategoryMenu(subCategories, categoria) {
+    function showSubCategoryMenu(subCategories) {
         categoriaContainer.innerHTML = ''; // Clear previous sub-categories
         const ul = document.createElement('ul');
         Object.keys(subCategories).forEach(subCategory => {
@@ -69,16 +70,79 @@ function initializeMessageSelectors(mensagens) {
 
             // Event listener to display the message
             li.addEventListener('click', () => {
-                displayMessage(subCategories[subCategory], categoria);
+                selectedSubCategoria = subCategory;
+                updateBreadcrumb();
+                displayMessage(subCategories[subCategory]);
             });
         });
         categoriaContainer.appendChild(ul);
     }
 
     // Function to display the selected message
-    function displayMessage(messageObj, categoria) {
-        const selectedMessage = messageObj[selectedIdioma]; // Get the message in the selected language
-        mensagemContainer.innerHTML = `<h3>${categoria}</h3><p>${selectedMessage}</p>`;
+    function displayMessage(messageObj) {
+        const selectedMessage = messageObj[selectedIdioma];
+        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+        categoriaContainer.style.display = 'none'; // Hide sub-categories
         mensagemSecao.style.display = 'block'; // Show the message section
+    }
+
+    // Function to update breadcrumb navigation
+    function updateBreadcrumb() {
+        breadcrumbDiv.innerHTML = ''; // Clear previous breadcrumb
+        const breadcrumb = [];
+
+        // Add language
+        if (selectedIdioma) {
+            const langCrumb = document.createElement('span');
+            langCrumb.textContent = selectedIdioma;
+            langCrumb.style.cursor = 'pointer';
+            langCrumb.addEventListener('click', () => {
+                resetToLanguageSelection();
+            });
+            breadcrumb.push(langCrumb);
+        }
+
+        // Add category
+        if (selectedCategoria) {
+            const categoryCrumb = document.createElement('span');
+            categoryCrumb.textContent = ` > ${selectedCategoria}`;
+            categoryCrumb.style.cursor = 'pointer';
+            categoryCrumb.addEventListener('click', () => {
+                resetToCategorySelection();
+            });
+            breadcrumb.push(categoryCrumb);
+        }
+
+        // Add sub-category
+        if (selectedSubCategoria) {
+            const subCategoryCrumb = document.createElement('span');
+            subCategoryCrumb.textContent = ` > ${selectedSubCategoria}`;
+            breadcrumb.push(subCategoryCrumb); // No need for clickable, this is the last step
+        }
+
+        // Append the breadcrumb elements
+        breadcrumb.forEach(item => {
+            breadcrumbDiv.appendChild(item);
+        });
+    }
+
+    // Function to reset to language selection
+    function resetToLanguageSelection() {
+        selectedIdioma = "";
+        selectedCategoria = "";
+        selectedSubCategoria = "";
+        categoriaDiv.style.display = 'none';
+        languageButtonsDiv.style.display = 'block'; // Show language buttons
+        mensagemSecao.style.display = 'none'; // Hide the message section
+        updateBreadcrumb();
+    }
+
+    // Function to reset to category selection
+    function resetToCategorySelection() {
+        selectedCategoria = "";
+        selectedSubCategoria = "";
+        mensagemSecao.style.display = 'none'; // Hide the message section
+        showSubCategoryMenu(mensagens[selectedCategoria]);
+        updateBreadcrumb();
     }
 }
