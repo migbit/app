@@ -19,31 +19,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to initialize selectors and events
 function initializeMessageSelectors(mensagens) {
-    // Selecionar elementos do DOM
-    const idiomaSelect = document.getElementById('idioma');
+    // Language buttons
+    const buttons = {
+        "btn-portugues": "Português",
+        "btn-ingles": "Inglês",
+        "btn-espanhol": "Espanhol",
+        "btn-frances": "Francês",
+        "btn-alemao": "Alemão",
+        "btn-italiano": "Italiano"
+    };
+
     const categoriaDiv = document.getElementById('categoria-div');
     const categoriaSelect = document.getElementById('categoria');
     const opcaoDiv = document.getElementById('opcao-div');
     const opcaoSelect = document.getElementById('opcao');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
+    
+    let selectedIdioma = "";  // Store selected language
 
-    // Evento para quando o idioma for selecionado
-    idiomaSelect.addEventListener('change', () => {
-        const idioma = idiomaSelect.value;
-        if (idioma) {
+    // Event listener for each language button
+    Object.keys(buttons).forEach(buttonId => {
+        document.getElementById(buttonId).addEventListener('click', (event) => {
+            selectedIdioma = buttons[buttonId];  // Store the selected language
             categoriaDiv.style.display = 'block';
             opcaoDiv.style.display = 'none';
             opcaoSelect.innerHTML = '<option value="">Selecionar Opção</option>';
             mensagemSecao.style.display = 'none';
-        } else {
-            categoriaDiv.style.display = 'none';
-            opcaoDiv.style.display = 'none';
-            mensagemSecao.style.display = 'none';
-        }
+
+            // Remove active class from other buttons and add to the clicked one
+            document.querySelectorAll('.language-buttons button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        });
     });
 
-    // Evento para quando a categoria for selecionada
+    // Event for when a category is selected
     categoriaSelect.addEventListener('change', () => {
         const categoria = categoriaSelect.value;
         if (categoria) {
@@ -64,13 +74,12 @@ function initializeMessageSelectors(mensagens) {
         }
     });
 
-    // Evento para quando a opção for selecionada
+    // Event for when an option is selected
     opcaoSelect.addEventListener('change', () => {
-        const idioma = idiomaSelect.value;
         const categoria = categoriaSelect.value;
         const opcao = opcaoSelect.value;
-        if (opcao && mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][idioma]) {
-            const mensagem = mensagens[categoria][opcao][idioma];
+        if (opcao && mensagens[categoria] && mensagens[categoria][opcao] && mensagens[categoria][opcao][selectedIdioma]) {
+            const mensagem = mensagens[categoria][opcao][selectedIdioma];
             mensagemContainer.innerHTML = mensagem;
             mensagemSecao.style.display = 'block';
         } else {
@@ -78,7 +87,7 @@ function initializeMessageSelectors(mensagens) {
         }
     });
 
-    // Evento para copiar a mensagem ao clicar no container
+    // Event to copy the message when the container is clicked
     mensagemContainer.addEventListener('click', async () => {
         const mensagemHTML = mensagemContainer.innerHTML;
         try {
