@@ -1,3 +1,4 @@
+@ -1,293 +1,293 @@
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -139,7 +140,7 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/*                                                                      Estilos Específicos para Lista de Compras */
+/* Estilos Específicos para Lista de Compras */
 .categoria {
     margin-bottom: 20px;
     border-bottom: 1px solid #ccc;
@@ -291,11 +292,7 @@ tr:hover {
     color: white;
     border: none;
     padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
+@ -299,135 +299,135 @@
 
 /* Estilo para o botão "Saída" */
 #btn-saida {
