@@ -37,18 +37,29 @@
 
         <!-- Category selection menu, hidden by default -->
         <section id="categoria-div" style="display: none;">
-            <h2 id="categoria-heading">Escolha a Categoria:</h2> <!-- Added the id -->
-            <div id="categoria-container" class="category-menu"></div> <!-- Menu for categories and sub-categories -->
+            <h2 id="categoria-heading">Escolha a Categoria:</h2>
+            <div id="categoria-container" class="category-menu"></div>
         </section>
 
-        <!-- Display the selected message, hidden by default -->
+        <!-- Display the selected message and day of the week dropdown -->
         <section id="mensagem-secao" style="display: none;">
             <h2>Mensagem Selecionada:</h2>
-            <div id="guest-name-container" style="display: none;">
-                <label for="guest-name">Nome do Hóspede:</label>
-                <input type="text" id="guest-name" placeholder="Digite o nome do hóspede">
+
+            <!-- Dropdown for selecting the day of the week -->
+            <div id="weekday-dropdown-container" style="display: block;">
+                <label for="weekday-select">Selecione o Dia da Semana:</label>
+                <select id="weekday-select">
+                    <option value="Segunda-feira">Segunda-feira</option>
+                    <option value="Terça-feira">Terça-feira</option>
+                    <option value="Quarta-feira">Quarta-feira</option>
+                    <option value="Quinta-feira">Quinta-feira</option>
+                    <option value="Sexta-feira">Sexta-feira</option>
+                    <option value="Sábado">Sábado</option>
+                    <option value="Domingo">Domingo</option>
+                </select>
             </div>
-            <!-- Weekday buttons will be added dynamically here -->
+
+            <!-- Display the selected message -->
             <div id="mensagem-container" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
         </section>
     </main>
