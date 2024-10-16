@@ -62,8 +62,22 @@ function initializeMessageSelectors(mensagens) {
 
     // Function to show options for a category
     function showOptionsForCategory(categoryOptions) {
-        // Logic to display options when a category is selected
-        // You can expand this function depending on how you want to handle the display of the options
-        console.log('Selected category options:', categoryOptions);
+        // Clear any previously displayed message
+        mensagemContainer.innerHTML = '';
+
+        // Display each option in the selected category
+        Object.keys(categoryOptions).forEach(option => {
+            const optionButton = document.createElement('button');
+            optionButton.textContent = option;
+            optionButton.classList.add('language-btn');
+            mensagemContainer.appendChild(optionButton);
+
+            // Display the message for the selected option
+            optionButton.addEventListener('click', () => {
+                const selectedMessage = categoryOptions[option][selectedIdioma];
+                mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+                mensagemSecao.style.display = 'block'; // Show the message section
+            });
+        });
     }
 }
