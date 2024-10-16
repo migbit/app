@@ -85,6 +85,10 @@ function initializeMessageSelectors(mensagens) {
         mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
         categoriaContainer.style.display = 'none'; // Hide sub-categories
         mensagemSecao.style.display = 'block'; // Show the message section
+        const escolhaCategoriaLabel = document.querySelector('#escolha-categoria-label');
+        const mensagemSelecionadaLabel = document.querySelector('#mensagem-selecionada-label');
+            if (escolhaCategoriaLabel) escolhaCategoriaLabel.style.display = 'none'; // Hide "Escolha a Categoria"
+            if (mensagemSelecionadaLabel) mensagemSelecionadaLabel.style.display = 'none'; // Hide "Mensagem Selecionada"
     }
 
     // Function to update breadcrumb navigation
