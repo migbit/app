@@ -23,12 +23,30 @@ function initializeMessageSelectors(mensagens) {
     const mensagemContainer = document.getElementById('mensagem-container');
     const guestNameContainer = document.getElementById('guest-name-container');
     const guestNameInput = document.getElementById('guest-name');
+    const weekdayButtonsContainer = document.createElement('div');  // Container for weekday buttons
     const breadcrumbDiv = document.createElement('div');
     languageButtonsDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
 
     let selectedIdioma = "";
     let selectedCategoria = "";
     let selectedSubCategoria = "";
+    let selectedDay = "";
+
+    // Create weekday buttons
+    const daysOfWeek = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
+    daysOfWeek.forEach(day => {
+        const dayButton = document.createElement('button');
+        dayButton.textContent = day;
+        dayButton.classList.add('menu-btn');
+        dayButton.addEventListener('click', () => {
+            selectedDay = day;  // Store the selected day
+            updateMessageWithDay();
+        });
+        weekdayButtonsContainer.appendChild(dayButton);
+    });
+
+    // Append weekday buttons container after the guest name input field
+    guestNameContainer.insertAdjacentElement('afterend', weekdayButtonsContainer);
 
     // Event listener for each language button
     document.querySelectorAll('.language-btn').forEach(button => {
@@ -79,29 +97,34 @@ function initializeMessageSelectors(mensagens) {
         categoriaContainer.appendChild(ul);
     }
 
-    // Function to display the selected message and replace [Hospede] placeholder
+    // Function to display the selected message and replace placeholders
     function displayMessage(messageObj) {
         const selectedMessage = messageObj[selectedIdioma];
 
         if (selectedSubCategoria === 'Quando Chegam?') {
-            // Show guest name input field
+            // Show guest name input field and weekday buttons
             guestNameContainer.style.display = 'block';
+            weekdayButtonsContainer.style.display = 'block';  // Show the day buttons
 
-            // Event listener to replace [Hospede] with input value
-            guestNameInput.addEventListener('input', () => {
-                const guestName = guestNameInput.value;
-                const personalizedMessage = selectedMessage.replace('[Hospede]', guestName || '[Hospede]');
-                mensagemContainer.innerHTML = `<p>${personalizedMessage}</p>`;
-            });
+            guestNameInput.addEventListener('input', updateMessageWithDay);
 
         } else {
-            // Hide guest name input field if it's not "Quando Chegam?"
+            // Hide guest name input field and weekday buttons for other messages
             guestNameContainer.style.display = 'none';
+            weekdayButtonsContainer.style.display = 'none';
             mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
         }
 
         categoriaContainer.style.display = 'none';
         mensagemSecao.style.display = 'block';
+    }
+
+    // Function to update the message with both the guest name and day
+    function updateMessageWithDay() {
+        const selectedMessage = mensagens[selectedCategoria][selectedSubCategoria][selectedIdioma];
+        const guestName = guestNameInput.value || '[Hospede]';
+        const personalizedMessage = selectedMessage.replace('[Hospede]', guestName).replace('[Dia]', selectedDay || '[Dia]');
+        mensagemContainer.innerHTML = `<p>${personalizedMessage}</p>`;
     }
 
     // Function to update breadcrumb navigation
