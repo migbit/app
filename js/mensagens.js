@@ -16,38 +16,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeMessageSelectors(mensagens) {
-    const languageButtonsDiv = document.querySelector('.language-buttons-vertical');
     const categoriaDiv = document.getElementById('categoria-div');
     const categoriaContainer = document.getElementById('categoria-container');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
     const guestNameInput = document.getElementById('guest-name');
     const guestNameContainer = document.getElementById('guest-name-container');
+    const weekdayDropdown = document.getElementById('weekday-select');
     const breadcrumbDiv = document.createElement('div'); // Create breadcrumb navigation
-    languageButtonsDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
+    categoriaDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
 
     let selectedIdioma = "";
     let selectedCategoria = "";
     let selectedSubCategoria = "";
 
-    // Event listener for each language button
-    document.querySelectorAll('.language-btn').forEach(button => {
-        button.addEventListener('click', (event) => {
-            selectedIdioma = button.value;
-            categoriaDiv.style.display = 'block';
-            languageButtonsDiv.style.display = 'none'; // Hide language buttons
-            mensagemSecao.style.display = 'none'; // Hide the message section
-
-            updateBreadcrumb(); // Update breadcrumb
-            createCategoryMenu(Object.keys(mensagens)); // Show categories for the selected language
-        });
-    });
-
     // Function to create the category menu
     function createCategoryMenu(categories) {
         categoriaContainer.innerHTML = ''; // Clear previous categories
-        
-        // Show the "Escolha a Categoria:" text again
+
         const categoriaHeading = document.getElementById('categoria-heading');
         if (categoriaHeading) {
             categoriaHeading.style.display = 'block';
@@ -84,16 +70,14 @@ function initializeMessageSelectors(mensagens) {
         // Special case for "Quando Chegam?"
         if (selectedCategoria === "Antes do Check-in" && subCategories["Quando Chegam?"]) {
             guestNameContainer.style.display = 'block'; // Show the guest name input field
-            const weekDays = Object.keys(subCategories["Quando Chegam?"]);
-            weekDays.forEach(day => {
-                const li = document.createElement('li');
-                li.textContent = day;
-                li.addEventListener('click', () => {
-                    selectedSubCategoria = day;
+            weekdayDropdown.style.display = 'block'; // Show the day of the week dropdown
+            weekdayDropdown.addEventListener('change', () => {
+                const selectedDay = weekdayDropdown.value;
+                if (subCategories["Quando Chegam?"][selectedDay]) {
+                    selectedSubCategoria = selectedDay;
                     updateBreadcrumb();
-                    displayMessage(subCategories["Quando Chegam?"][day]);
-                });
-                categoriaContainer.appendChild(li);
+                    displayMessage(subCategories["Quando Chegam?"][selectedDay]);
+                }
             });
             return;
         }
@@ -132,17 +116,6 @@ function initializeMessageSelectors(mensagens) {
         breadcrumbDiv.innerHTML = ''; // Clear previous breadcrumb
         const breadcrumb = [];
 
-        // Add language
-        if (selectedIdioma) {
-            const langCrumb = document.createElement('span');
-            langCrumb.textContent = selectedIdioma;
-            langCrumb.style.cursor = 'pointer';
-            langCrumb.addEventListener('click', () => {
-                resetToLanguageSelection();
-            });
-            breadcrumb.push(langCrumb);
-        }
-
         // Add category
         if (selectedCategoria) {
             const categoryCrumb = document.createElement('span');
@@ -165,24 +138,6 @@ function initializeMessageSelectors(mensagens) {
         breadcrumb.forEach(item => {
             breadcrumbDiv.appendChild(item);
         });
-    }
-
-    // Function to reset to language selection
-    function resetToLanguageSelection() {
-        selectedIdioma = "";
-        selectedCategoria = "";
-        selectedSubCategoria = "";
-        categoriaDiv.style.display = 'none';
-        languageButtonsDiv.style.display = 'block'; // Show language buttons
-        mensagemSecao.style.display = 'none'; // Hide the message section
-        
-        // Show the "Escolha a Categoria:" text again
-        const categoriaHeading = document.getElementById('categoria-heading');
-        if (categoriaHeading) {
-            categoriaHeading.style.display = 'block';
-        }
-
-        updateBreadcrumb();
     }
 
     // Function to reset to category selection
