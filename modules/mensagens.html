@@ -24,6 +24,7 @@
     </header>
 
     <main>
+        <!-- Language selection buttons -->
         <section>
             <div class="language-buttons-vertical">
                 <label>Selecione o Idioma:</label>
@@ -32,33 +33,30 @@
                 <button class="language-btn" id="btn-espanhol" value="Espanhol">Espanhol</button>
                 <button class="language-btn" id="btn-frances" value="Francês">Francês</button>
             </div>
-
-            <div class="dropdowns" id="categoria-div" style="display: none;">
-                <label for="categoria">Categoria:</label>
-                <select id="categoria">
-                    <option value="">Selecionar Categoria</option>
-                    <option value="Antes Reserva">Antes Reserva</option>
-                    <option value="Antes do Check-in">Antes do Check-in</option>
-                    <option value="Chegada ao Porto">Chegada ao Porto</option>
-                    <option value="Durante a Estadia">Durante a Estadia</option>
-                    <option value="Check-Out">Check-Out</option>
-                    <option value="Comentário">Comentário</option>
-                </select>
-            </div>
-
-            <div class="dropdowns" id="opcao-div" style="display: none;">
-                <label for="opcao">Opção:</label>
-                <select id="opcao">
-                    <option value="">Selecionar Opção</option>
-                    <!-- As opções serão carregadas dinamicamente -->
-                </select>
-            </div>
         </section>
 
+        <!-- Category selection buttons, hidden by default -->
+        <section id="categoria-div" style="display: none;">
+            <h2>Escolha a Categoria:</h2>
+            <div id="categoria-container" class="category-buttons"></div>
+        </section>
+
+        <!-- Options section to be dynamically updated based on category, hidden by default -->
+        <section id="opcao-div" style="display: none;">
+            <h2>Escolha uma Opção:</h2>
+            <select id="opcao">
+                <option value="">Selecionar Opção</option>
+            </select>
+        </section>
+
+        <!-- Display the selected message, hidden by default -->
         <section id="mensagem-secao" style="display: none;">
             <h2>Mensagem Selecionada:</h2>
             <div id="mensagem-container" style="cursor: pointer; background-color: #f0f0f0; padding: 10px;"></div>
         </section>
+
+        <!-- Back button, hidden by default -->
+        <button id="back-btn" style="display: none;">Voltar</button>
     </main>
 
     <footer>
