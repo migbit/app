@@ -81,20 +81,20 @@ main {
 /* Section Styles */
 .form-section, .report-section {
     background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 2rem;  /* Increased from 20px */
+    margin-bottom: 2rem;  /* Increased from 20px */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Styles */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 0.75rem;
     font-weight: bold;
     font-size: 1em;
     color: #34495e;
@@ -102,11 +102,12 @@ label {
 
 input[type="number"], select, input[type="checkbox"] {
     width: 100%;
-    padding: 10px;
+    padding: 0.75rem;
     border: 1px solid #bdc3c7;
     border-radius: 4px;
     max-width: 300px;
     font-size: 1em;
+    margin-bottom: 1rem;  /* Added spacing after inputs */
 }
 
 button {
@@ -125,9 +126,14 @@ button:hover {
 }
 
 /* Dropdown Styles */
+
+.dropdown-group {
+    margin-bottom: 1.5rem;  /* Added spacing between dropdown groups */
+}
+
 select {
-    margin-bottom: 2px; /* Space between dropdowns */
-    padding: 5px;
+    margin-bottom: 1rem; /* Space between dropdowns */
+    padding: 0.75rem;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -146,8 +152,9 @@ label {
 
 /* Additional spacing for message container */
 #mensagem-container {
-    margin-top: 5px; /* Space between dropdown and message container */
-    padding: 15px;
+    margin-top: 1.5rem; /* Space between dropdown and message container */
+    margin-bottom: 1.5rem;  /* Added bottom margin */
+    padding: 1.5rem;
     background-color: #f0f0f0;
     border-radius: 5px;
     font-size: 16px;
@@ -156,31 +163,33 @@ label {
 
 /* Spacing for guest name input and weekday dropdown */
 #name-input-container, #weekday-dropdown-container {
-    margin-top: 5px;
+    margin-top: 1.5rem;  /* Increased from 5px */
+    margin-bottom: 1.5rem;  /* Added bottom margin */
 }
 
 #guest-name, #weekday-select {
-    padding: 5px;
+    padding: 0.75rem;  /* Increased from 5px */
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
     width: 100%;
     max-width: 400px;
+    margin-bottom: 1rem;  /* Added bottom margin */
 }
 
 /* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: 2rem;  /* Increased from 20px */
+    margin-bottom: 2.5rem;  /* Increased from 30px */
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-size: 1em;
 }
 
 th, td {
-    padding: 12px 15px;
+    padding: 1rem 1.25rem;  /* Increased from 12px 15px */
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
@@ -202,9 +211,9 @@ tr:hover {
 
 /* Shopping List Styles */
 .categoria {
-    margin-bottom: 20px;
+    margin-bottom: 2rem;  /* Increased from 20px */
+    padding-bottom: 2rem;  /* Increased from 20px */
     border-bottom: 1px solid #ccc;
-    padding-bottom: 20px;
 }
 
 .categoria h3 {
@@ -216,8 +225,8 @@ tr:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    padding: 10px;
+    margin-bottom: 1rem;
+    padding: 1rem;
     background-color: #f9f9f9;
     border-radius: 5px;
 }
