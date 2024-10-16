@@ -44,6 +44,13 @@ function initializeMessageSelectors(mensagens) {
     // Function to create the category menu
     function createCategoryMenu(categories) {
         categoriaContainer.innerHTML = ''; // Clear previous categories
+        
+        // Show the "Escolha a Categoria:" text again
+        const categoriaHeading = document.getElementById('categoria-heading');
+        if (categoriaHeading) {
+            categoriaHeading.style.display = 'block';
+        }
+
         const ul = document.createElement('ul');
         categories.forEach(categoria => {
             const li = document.createElement('li');
@@ -60,9 +67,18 @@ function initializeMessageSelectors(mensagens) {
         categoriaContainer.appendChild(ul);
     }
 
+    // Function to hide the category heading
+    function hideCategoriaHeading() {
+        const categoriaHeading = document.getElementById('categoria-heading');
+        if (categoriaHeading) {
+            categoriaHeading.style.display = 'none';
+        }
+    }
+
     // Function to show sub-categories as a menu
     function showSubCategoryMenu(subCategories) {
         categoriaContainer.innerHTML = ''; // Clear previous sub-categories
+        hideCategoriaHeading(); // Hide the "Escolha a Categoria:" text
         const ul = document.createElement('ul');
         Object.keys(subCategories).forEach(subCategory => {
             const li = document.createElement('li');
@@ -79,22 +95,13 @@ function initializeMessageSelectors(mensagens) {
         categoriaContainer.appendChild(ul);
     }
 
-   // Function to display the selected message
+    // Function to display the selected message
     function displayMessage(messageObj) {
-     const selectedMessage = messageObj[selectedIdioma];
-     mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
-    
-    // Hide category selection section and its heading
-    categoriaDiv.style.display = 'none'; // Hide the entire category div
-    
-    // Hide the "Mensagem Selecionada" header, but show the message container
-    const mensagemSecaoHeader = document.querySelector('#mensagem-secao h2');
-      if (mensagemSecaoHeader) {
-          mensagemSecaoHeader.style.display = 'none'; // Hide the "Mensagem Selecionada" text
+        const selectedMessage = messageObj[selectedIdioma];
+        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+        categoriaContainer.style.display = 'none'; // Hide sub-categories
+        mensagemSecao.style.display = 'block'; // Show the message section
     }
-    
-    mensagemSecao.style.display = 'block'; // Show the message section
-}
 
     // Function to update breadcrumb navigation
     function updateBreadcrumb() {
@@ -144,18 +151,25 @@ function initializeMessageSelectors(mensagens) {
         categoriaDiv.style.display = 'none';
         languageButtonsDiv.style.display = 'block'; // Show language buttons
         mensagemSecao.style.display = 'none'; // Hide the message section
+        
+        // Show the "Escolha a Categoria:" text again
+        const categoriaHeading = document.getElementById('categoria-heading');
+        if (categoriaHeading) {
+            categoriaHeading.style.display = 'block';
+        }
+
         updateBreadcrumb();
     }
 
- // Function to reset to category selection
-function resetToCategorySelection() {
-    selectedSubCategoria = "";  // Reset the selected sub-category
-    mensagemSecao.style.display = 'none';  // Hide the message section
-    categoriaContainer.style.display = 'block';  // Show the category container again
-    categoriaDiv.style.display = 'block';  // Show the category div again
-    
-    // Show the sub-categories for the currently selected category
-    showSubCategoryMenu(mensagens[selectedCategoria]);  // Recreate the sub-categories
-    updateBreadcrumb();  // Update the breadcrumb to reflect the change
-}
+    // Function to reset to category selection
+    function resetToCategorySelection() {
+        selectedSubCategoria = "";  // Reset the selected sub-category
+        mensagemSecao.style.display = 'none';  // Hide the message section
+        categoriaContainer.style.display = 'block';  // Show the category container again
+        categoriaDiv.style.display = 'block';  // Show the category div again
+        
+        // Show the sub-categories for the currently selected category
+        showSubCategoryMenu(mensagens[selectedCategoria]);  // Recreate the sub-categories
+        updateBreadcrumb();  // Update the breadcrumb to reflect the change
+    }
 }
