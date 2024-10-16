@@ -54,7 +54,7 @@ function initializeMessageSelectors(mensagens) {
             li.addEventListener('click', () => {
                 selectedCategoria = categoria;
                 updateBreadcrumb();
-                showSubCategoryMenu(mensagens[categoria]);
+                showSubCategoryMenu(mensagens[categoria]); // Show sub-categories for the selected category
             });
         });
         categoriaContainer.appendChild(ul);
@@ -142,7 +142,7 @@ function initializeMessageSelectors(mensagens) {
     function resetToCategorySelection() {
         selectedSubCategoria = "";
         mensagemSecao.style.display = 'none'; // Hide the message section
-        createCategoryMenu(Object.keys(mensagens)); // Recreate the categories for the current language
+        showSubCategoryMenu(mensagens[selectedCategoria]); // Recreate the sub-categories for the current category
         updateBreadcrumb();
     }
 }
