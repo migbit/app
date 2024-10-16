@@ -101,6 +101,13 @@ function initializeMessageSelectors(mensagens) {
         mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
         categoriaContainer.style.display = 'none'; // Hide sub-categories
         mensagemSecao.style.display = 'block'; // Show the message section
+
+        // Copy message to clipboard and display alert
+        navigator.clipboard.writeText(selectedMessage).then(() => {
+            alert("Mensagem Copiada");
+        }).catch(err => {
+            console.error('Failed to copy message:', err);
+        });
     }
 
     // Function to update breadcrumb navigation
