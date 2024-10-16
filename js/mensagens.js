@@ -69,44 +69,50 @@ function initializeMessageSelectors(mensagens) {
         if (subCategory === 'Quando Chegam?') {
             nameInputContainer.style.display = 'block';
             weekdayDropdownContainer.style.display = 'block';
-        } else {
-            nameInputContainer.style.display = 'none';
-            weekdayDropdownContainer.style.display = 'none';
-        }
-
-        const subCategoryData = mensagens[selectedCategoria][subCategory];
-        if (subCategory === 'Quando Chegam?') {
+    
+            // Add event listener for when the weekday is selected
             weekdayDropdown.addEventListener('change', () => {
                 const selectedWeekday = weekdayDropdown.value;
-                if (selectedWeekday && subCategoryData[selectedWeekday]) {
-                    displayMessage(subCategoryData[selectedWeekday]);
+                if (selectedWeekday && mensagens[selectedCategoria][subCategory][selectedWeekday]) {
+                    displayMessage(mensagens[selectedCategoria][subCategory][selectedWeekday]);
                 } else {
                     mensagemSecao.style.display = 'none';
                 }
             });
         } else {
+            nameInputContainer.style.display = 'none';
+            weekdayDropdownContainer.style.display = 'none';
+            const subCategoryData = mensagens[selectedCategoria][subCategory];
             displayMessage(subCategoryData);
         }
     }
+  
 
     // Display the selected message
     function displayMessage(messageObj) {
-        const selectedMessage = messageObj[selectedIdioma];
-        const guestName = guestNameInput.value.trim();
-        let finalMessage = selectedMessage;
-
-        if (guestName && selectedMessage.includes('[Hospede]')) {
-            finalMessage = selectedMessage.replace('[Hospede]', guestName);
+        const selectedMessage = messageObj[selectedIdioma];  // Fetch message based on selected language
+        const guestName = guestNameInput.value.trim();  // Get guest name from input
+    
+        if (selectedMessage) {
+            let finalMessage = selectedMessage;
+    
+            // Replace [Hospede] with the guest's name if available
+            if (guestName && selectedMessage.includes('[Hospede]')) {
+                finalMessage = selectedMessage.replace('[Hospede]', guestName);
+            }
+    
+            mensagemContainer.innerHTML = `<p>${finalMessage}</p>`;
+            mensagemSecao.style.display = 'block';
+    
+            // Copy to clipboard functionality
+            mensagemContainer.addEventListener('click', () => {
+                copyMessageToClipboard(finalMessage);
+            });
+        } else {
+            mensagemContainer.innerHTML = 'Mensagem não disponível.';
         }
-
-        mensagemContainer.innerHTML = `<p>${finalMessage}</p>`;
-        mensagemSecao.style.display = 'block';
-
-        // Copy to clipboard when clicked
-        mensagemContainer.addEventListener('click', () => {
-            copyMessageToClipboard(finalMessage);
-        });
     }
+    
 
     // Copy the message to the clipboard
     function copyMessageToClipboard(text) {
