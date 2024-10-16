@@ -98,20 +98,42 @@ function initializeMessageSelectors(mensagens) {
     // Function to display the selected message
     function displayMessage(messageObj) {
         const selectedMessage = messageObj[selectedIdioma];
-        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+        const mensagemContainer = document.getElementById('mensagem-container');
+        const guestNameContainer = document.getElementById('guest-name-container');
+        const guestNameInput = document.getElementById('guest-name');
+    
+        if (selectedSubCategoria === 'Quando Chegam?') {
+            // Show the guest name input field if the sub-category is "Quando Chegam?"
+            guestNameContainer.style.display = 'block';
+    
+            // Listen for changes in the input field
+            guestNameInput.addEventListener('input', () => {
+                const guestName = guestNameInput.value;
+                let personalizedMessage = selectedMessage.replace('[Hospede]', guestName || '[Hospede]');
+                mensagemContainer.innerHTML = `<p>${personalizedMessage}</p>`;
+            });
+    
+            // Initial message with placeholder if no name is provided
+            mensagemContainer.innerHTML = `<p>${selectedMessage.replace('[Hospede]', '[Hospede]')}</p>`;
+        } else {
+            // Hide the guest name input field for other messages
+            guestNameContainer.style.display = 'none';
+            mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+        }
+    
         categoriaContainer.style.display = 'none'; // Hide sub-categories
         mensagemSecao.style.display = 'block'; // Show the message section
-
-        // Add event listener to copy message on click
+    
+        // Add event listener to copy the message on click
         mensagemContainer.addEventListener('click', () => {
-            navigator.clipboard.writeText(selectedMessage).then(() => {
+            navigator.clipboard.writeText(mensagemContainer.textContent).then(() => {
                 alert("Mensagem Copiada");
             }).catch(err => {
                 console.error('Failed to copy message:', err);
             });
         });
     }
-
+    
     // Function to update breadcrumb navigation
     function updateBreadcrumb() {
         breadcrumbDiv.innerHTML = ''; // Clear previous breadcrumb
