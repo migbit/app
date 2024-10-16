@@ -280,7 +280,7 @@ tr:hover {
     color: #e74c3c; /* Red for negative numbers */
 }
 
-.total-em-caixa {
+.total-caixa {
     text-align: right;
     font-weight: bold;
     color: #2ecc71; /* Green for positive total */
