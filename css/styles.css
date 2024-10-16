@@ -423,6 +423,17 @@ li:hover {
     border-radius: 5px;
 }
 
+/*                                                                    ------------- Reparações ----------------                         */
+.urgente {
+    background-color: #ffe4e1;
+    color: #d9534f;
+}
+
+.reparado {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
 
 /* Footer Styles */
 footer {
