@@ -1,4 +1,3 @@
-@ -1,293 +1,293 @@
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -38,8 +37,8 @@ nav ul li {
 }
 
 nav ul li a {
-    background-color: transparent; /* Transparent background */
-    color: white; /* White text */
+    background-color: transparent;
+    color: white;
     text-decoration: none;
     font-weight: 500;
     padding: 10px;
@@ -49,7 +48,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #1abc9c; /* Hover effect */
+    background-color: #1abc9c;
 }
 
 /* Main Content Styles */
@@ -183,7 +182,7 @@ tr:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Adjust spacing between buttons */
+    gap: 10px;
 }
 
 .item-quantidade {
@@ -213,7 +212,7 @@ tr:hover {
 
 .btn-zero:hover {
     background-color: #c0392b;
-    margin-right: 10px; /* Add space between the '0' button and others */
+    margin-right: 10px;
 }
 
 .item-acoes {
@@ -232,12 +231,12 @@ tr:hover {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease;
-    margin-left: 10px; /* This will add space between the buttons */
-    margin-top: 0; /* Ensure vertical alignment */
+    margin-left: 10px;
+    margin-top: 0;
 }
 
 .btn-local-a.active, .btn-local-c.active {
-    background-color: #2ecc71; /* Color for active state */
+    background-color: #2ecc71;
 }
 
 .btn-local-a:hover, .btn-local-c:hover {
@@ -272,85 +271,24 @@ tr:hover {
     }
 }
 
-/*                                                                                  Caixa */
-.valor-positivo {
-    color: #2ecc71; /* Green for positive numbers */
-}
-
-.valor-negativo {
-    color: #e74c3c; /* Red for negative numbers */
-}
-
-.total-caixa {
-    text-align: center;
-    font-size: 1.5em; /* Adjust this value as needed */
-}
-
-/* Estilo para o botão "Entrada" */
-#btn-entrada {
-    background-color: #34495e;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-@ -299,135 +299,135 @@
-
-/* Estilo para o botão "Saída" */
-#btn-saida {
-    background-color: #34495e;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
-
-/* Estilos para os botões quando estão ativos */
-#btn-entrada.btn-active {
-    background-color: #16a085;
-}
-
-#btn-saida.btn-active {
-    background-color: #c0392b;
-}
-
-/* Estilos para os botões quando estão inativos */
-#btn-entrada.btn-inativo,
-#btn-saida.btn-inativo {
-    background-color: #bdc3c7;
-    color: white;
-}
-
-/*                                                                                 Reparações */
-.urgente {
-    background-color: #ffe4e1;
-    color: #d9534f;
-}
-
-.reparado {
-    text-decoration: line-through;
-    color: #95a5a6;
-}
-
-/*                                                                                  Mensagens Page Styles      */
+/* Mensagens Page Styles */
 
 /* Ensure buttons are displayed vertically */
 .language-buttons-vertical {
     display: flex;
-    flex-direction: column; /* Stack buttons vertically */
-    align-items: flex-start; /* Align buttons to the left */
+    flex-direction: column;
+    align-items: flex-start;
     margin-top: 20px;
 }
 
 .language-btn,
 .menu-btn {
     display: block;
-    width: 100%; /* Make buttons full width */
-    margin: 10px 0; /* Add spacing between buttons */
+    width: 100%;
+    margin: 10px 0;
     padding: 10px;
     font-size: 16px;
-    background-color: #34495e; /* Primary button color */
+    background-color: #34495e;
     color: white;
     border: none;
     border-radius: 5px;
@@ -359,21 +297,21 @@ tr:hover {
 
 .language-btn:hover,
 .menu-btn:hover {
-    background-color: #28333f; /* Darker shade on hover */
+    background-color: #28333f;
 }
 
 .language-btn.active {
-    background-color: #28a745; /* Green color to indicate active button */
+    background-color: #28a745;
 }
 
 .language-btn:focus,
 .menu-btn:focus {
-    outline: none; /* Remove default focus outline */
+    outline: none;
 }
 
 .language-btn:disabled,
 .menu-btn:disabled {
-    background-color: #cccccc; /* Disabled state styling */
+    background-color: #cccccc;
     cursor: not-allowed;
 }
 
@@ -381,7 +319,7 @@ tr:hover {
 ul {
     list-style-type: none;
     padding: 0;
-    margin: 0; /* Remove default margins */
+    margin: 0;
 }
 
 li {
@@ -415,9 +353,8 @@ li:hover {
 
 /* Ensure breadcrumb and other divs are correctly spaced */
 .mensagens-container div {
-    margin-bottom: 15px; /* Add spacing between containers */
+    margin-bottom: 15px;
 }
-
 
 /* Footer Styles */
 footer {
