@@ -16,19 +16,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeMessageSelectors(mensagens) {
+    const languageDropdown = document.getElementById('language-select');
     const categoriaDiv = document.getElementById('categoria-div');
     const categoriaContainer = document.getElementById('categoria-container');
     const mensagemSecao = document.getElementById('mensagem-secao');
     const mensagemContainer = document.getElementById('mensagem-container');
     const guestNameInput = document.getElementById('guest-name');
-    const guestNameContainer = document.getElementById('guest-name-container');
     const weekdayDropdown = document.getElementById('weekday-select');
-    const breadcrumbDiv = document.createElement('div'); // Create breadcrumb navigation
+    const breadcrumbDiv = document.createElement('div');
     categoriaDiv.insertAdjacentElement('beforebegin', breadcrumbDiv);
 
     let selectedIdioma = "";
     let selectedCategoria = "";
     let selectedSubCategoria = "";
+
+    // Language selection logic
+    languageDropdown.addEventListener('change', () => {
+        selectedIdioma = languageDropdown.value;
+        categoriaDiv.style.display = 'block'; // Show categories after language is selected
+        createCategoryMenu(Object.keys(mensagens)); // Show categories for the selected language
+    });
 
     // Function to create the category menu
     function createCategoryMenu(categories) {
@@ -69,7 +76,6 @@ function initializeMessageSelectors(mensagens) {
 
         // Special case for "Quando Chegam?"
         if (selectedCategoria === "Antes do Check-in" && subCategories["Quando Chegam?"]) {
-            guestNameContainer.style.display = 'block'; // Show the guest name input field
             weekdayDropdown.style.display = 'block'; // Show the day of the week dropdown
             weekdayDropdown.addEventListener('change', () => {
                 const selectedDay = weekdayDropdown.value;
@@ -101,7 +107,7 @@ function initializeMessageSelectors(mensagens) {
 
     // Function to display the selected message
     function displayMessage(messageObj) {
-        const guestName = guestNameInput.value || "[Hospede]";
+        const guestName = guestNameInput ? guestNameInput.value : "[Hospede]";
         let selectedMessage = messageObj[selectedIdioma];
 
         // Replace placeholders with actual values
@@ -146,8 +152,7 @@ function initializeMessageSelectors(mensagens) {
         mensagemSecao.style.display = 'none';  // Hide the message section
         categoriaContainer.style.display = 'block';  // Show the category container again
         categoriaDiv.style.display = 'block';  // Show the category div again
-        
-        // Show the sub-categories for the currently selected category
+
         showSubCategoryMenu(mensagens[selectedCategoria]);  // Recreate the sub-categories
         updateBreadcrumb();  // Update the breadcrumb to reflect the change
     }
