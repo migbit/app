@@ -124,6 +124,50 @@ button:hover {
     background-color: #16a085;
 }
 
+/* Dropdown Styles */
+select {
+    margin-bottom: 20px; /* Space between dropdowns */
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 400px; /* Set a reasonable max-width */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1em;
+    color: #34495e;
+    margin-top: 20px; /* Add space above the label */
+}
+
+/* Additional spacing for message container */
+#mensagem-container {
+    margin-top: 20px; /* Space between dropdown and message container */
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Spacing for guest name input and weekday dropdown */
+#name-input-container, #weekday-dropdown-container {
+    margin-top: 20px;
+}
+
+#guest-name, #weekday-select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 400px;
+}
+
 /* Table Styles */
 table {
     width: 100%;
