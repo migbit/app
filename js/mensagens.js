@@ -40,7 +40,7 @@ function initializeMessageSelectors(mensagens) {
         dayButton.classList.add('menu-btn');
         dayButton.addEventListener('click', () => {
             selectedDay = day;  // Store the selected day
-            updateMessageWithDay();
+            displayMessage(mensagens[selectedCategoria][selectedSubCategoria][selectedDay]);
         });
         weekdayButtonsContainer.appendChild(dayButton);
     });
@@ -91,40 +91,26 @@ function initializeMessageSelectors(mensagens) {
             li.addEventListener('click', () => {
                 selectedSubCategoria = subCategory;
                 updateBreadcrumb();
-                displayMessage(subCategories[subCategory]);
+                // Show guest name input and day buttons only for "Quando Chegam?"
+                if (selectedSubCategoria === 'Quando Chegam?') {
+                    guestNameContainer.style.display = 'block';
+                    weekdayButtonsContainer.style.display = 'block';  // Show the weekday buttons
+                } else {
+                    guestNameContainer.style.display = 'none';
+                    weekdayButtonsContainer.style.display = 'none';
+                }
             });
         });
         categoriaContainer.appendChild(ul);
     }
 
-    // Function to display the selected message and replace placeholders
+    // Function to display the selected message
     function displayMessage(messageObj) {
-        const selectedMessage = messageObj[selectedIdioma];
-
-        if (selectedSubCategoria === 'Quando Chegam?') {
-            // Show guest name input field and weekday buttons
-            guestNameContainer.style.display = 'block';
-            weekdayButtonsContainer.style.display = 'block';  // Show the day buttons
-
-            guestNameInput.addEventListener('input', updateMessageWithDay);
-
-        } else {
-            // Hide guest name input field and weekday buttons for other messages
-            guestNameContainer.style.display = 'none';
-            weekdayButtonsContainer.style.display = 'none';
-            mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
-        }
-
-        categoriaContainer.style.display = 'none';
-        mensagemSecao.style.display = 'block';
-    }
-
-    // Function to update the message with both the guest name and day
-    function updateMessageWithDay() {
-        const selectedMessage = mensagens[selectedCategoria][selectedSubCategoria][selectedIdioma];
-        const guestName = guestNameInput.value || '[Hospede]';
-        const personalizedMessage = selectedMessage.replace('[Hospede]', guestName).replace('[Dia]', selectedDay || '[Dia]');
+        const guestName = guestNameInput.value || '[Hospede]';  // Replace placeholder if needed
+        const personalizedMessage = messageObj[selectedIdioma].replace('[Hospede]', guestName);
         mensagemContainer.innerHTML = `<p>${personalizedMessage}</p>`;
+        categoriaContainer.style.display = 'none';  // Hide sub-categories
+        mensagemSecao.style.display = 'block';  // Show the message section
     }
 
     // Function to update breadcrumb navigation
