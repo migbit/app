@@ -287,43 +287,10 @@ tr:hover {
 }
 
 /* Reparações */
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-ul li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f9f9f9;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Smaller text for details (like dates or additional info) */
-ul li small {
-    color: #7f8c8d;
-}
-
-/* Delete button style */
-.btn-apagar {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
-
-/* Delete button hover state */
-.btn-apagar:hover {
-    background-color: #c0392b;
+/* Urgência alta */
+.urgencia-alta {
+    color: #e74c3c; /* Red for high urgency */
+    font-weight: bold;
 }
 
 /* Footer Styles */
