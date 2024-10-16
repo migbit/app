@@ -296,7 +296,8 @@ tr:hover {
     color: #95a5a6;
 }
 
-/* Mensagens */
+/*                                                                                  Mensagens Page Styles      */
+
 /* Ensure buttons are displayed vertically */
 .language-buttons-vertical {
     display: flex;
@@ -305,7 +306,8 @@ tr:hover {
     margin-top: 20px;
 }
 
-.language-btn {
+.language-btn,
+.menu-btn {
     display: block;
     width: 100%; /* Make buttons full width */
     margin: 10px 0; /* Add spacing between buttons */
@@ -318,7 +320,8 @@ tr:hover {
     cursor: pointer;
 }
 
-.language-btn:hover {
+.language-btn:hover,
+.menu-btn:hover {
     background-color: #28333f; /* Darker shade on hover */
 }
 
@@ -326,19 +329,22 @@ tr:hover {
     background-color: #28a745; /* Green color to indicate active button */
 }
 
-.language-btn:focus {
+.language-btn:focus,
+.menu-btn:focus {
     outline: none; /* Remove default focus outline */
 }
 
-.language-btn:disabled {
+.language-btn:disabled,
+.menu-btn:disabled {
     background-color: #cccccc; /* Disabled state styling */
     cursor: not-allowed;
 }
 
-/* Style the menu */
+/* Style the menu (categories and sub-categories) */
 ul {
     list-style-type: none;
     padding: 0;
+    margin: 0; /* Remove default margins */
 }
 
 li {
@@ -354,19 +360,25 @@ li:hover {
     background-color: #28333f;
 }
 
-/* Style the breadcrumb navigation */
-div {
+/* Style the breadcrumb navigation specific to mensagens page */
+.breadcrumb {
     margin-bottom: 15px;
+    font-size: 16px;
 }
 
-span {
+.breadcrumb span {
     font-weight: bold;
     color: #007bff;
 }
 
-span:hover {
+.breadcrumb span:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+/* Ensure breadcrumb and other divs are correctly spaced */
+.mensagens-container div {
+    margin-bottom: 15px; /* Add spacing between containers */
 }
 
 
