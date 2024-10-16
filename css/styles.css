@@ -14,36 +14,15 @@ body {
     line-height: 1.6;
 }
 
-/* Header Styles */
-header {
-    background-color: #34495e;
-    padding: 20px;
-    color: white;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+/* Header Specific Styles */
+header nav ul li a {
+    background-color: transparent !important; /* Ensure no background for header links */
+    color: white; /* Keep the text white */
+    border: none; /* Remove any borders */
 }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-
-nav ul li {
-    margin: 0 15px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-nav ul li a:hover {
-    color: #1abc9c;
+header nav ul li a:hover {
+    background-color: #1abc9c; /* Add hover effect for clarity */
 }
 
 /* Main Content Styles */
@@ -337,8 +316,9 @@ ul li small {
 
 .item-acoes {
     display: flex;
-    flex-direction: column; /* Stacks buttons vertically */
-    gap: 5px; /* Adds space between the A and C buttons */
+    gap: 10px; /* Horizontal gap between the buttons */
+    align-items: center; /* Vertically center align the buttons */
+    justify-content: flex-start; /* Align buttons to the left */
 }
 
 /* Responsive Design */
