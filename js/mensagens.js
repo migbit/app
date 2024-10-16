@@ -79,17 +79,22 @@ function initializeMessageSelectors(mensagens) {
         categoriaContainer.appendChild(ul);
     }
 
-    // Function to display the selected message
+   // Function to display the selected message
     function displayMessage(messageObj) {
-        const selectedMessage = messageObj[selectedIdioma];
-        mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
-        categoriaContainer.style.display = 'none'; // Hide sub-categories
-        mensagemSecao.style.display = 'block'; // Show the message section
-        const escolhaCategoriaLabel = document.querySelector('#escolha-categoria-label');
-        const mensagemSelecionadaLabel = document.querySelector('#mensagem-selecionada-label');
-            if (escolhaCategoriaLabel) escolhaCategoriaLabel.style.display = 'none'; // Hide "Escolha a Categoria"
-            if (mensagemSelecionadaLabel) mensagemSelecionadaLabel.style.display = 'none'; // Hide "Mensagem Selecionada"
+     const selectedMessage = messageObj[selectedIdioma];
+     mensagemContainer.innerHTML = `<p>${selectedMessage}</p>`;
+    
+    // Hide category selection section and its heading
+    categoriaDiv.style.display = 'none'; // Hide the entire category div
+    
+    // Hide the "Mensagem Selecionada" header, but show the message container
+    const mensagemSecaoHeader = document.querySelector('#mensagem-secao h2');
+      if (mensagemSecaoHeader) {
+          mensagemSecaoHeader.style.display = 'none'; // Hide the "Mensagem Selecionada" text
     }
+    
+    mensagemSecao.style.display = 'block'; // Show the message section
+}
 
     // Function to update breadcrumb navigation
     function updateBreadcrumb() {
