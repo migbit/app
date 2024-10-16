@@ -51,6 +51,26 @@ nav ul li a:hover {
     background-color: #1abc9c;
 }
 
+/* Mobile View Fix for Header */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column; /* Stack items vertically on small screens */
+        padding: 0;
+    }
+
+    nav ul li {
+        margin: 5px 0; /* Add some spacing between items */
+        flex: 1; /* Allow the items to expand to fit the screen */
+        text-align: center; /* Center align the text */
+    }
+
+    nav ul li a {
+        padding: 10px;
+        display: block; /* Ensure each link is block-level so it takes up full width */
+        width: 100%; /* Make each link take the full width of the screen */
+    }
+}
+
 /* Main Content Styles */
 main {
     flex: 1;
