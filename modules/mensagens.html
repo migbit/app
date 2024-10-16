@@ -54,6 +54,27 @@
             </select>
         </section>
 
+        <!-- Guest name input, hidden by default -->
+        <div id="name-input-container" style="display: none;">
+            <label for="guest-name">Nome do Hóspede:</label>
+            <input type="text" id="guest-name" placeholder="Digite o nome do hóspede">
+        </div>
+
+        <!-- Weekday selection dropdown, hidden by default -->
+        <div id="weekday-dropdown-container" style="display: none;">
+            <label for="weekday-select">Selecione o Dia da Semana:</label>
+            <select id="weekday-select">
+                <option value="">Selecionar Dia</option>
+                <option value="Segunda-feira">Segunda-feira</option>
+                <option value="Terça-feira">Terça-feira</option>
+                <option value="Quarta-feira">Quarta-feira</option>
+                <option value="Quinta-feira">Quinta-feira</option>
+                <option value="Sexta-feira">Sexta-feira</option>
+                <option value="Sábado">Sábado</option>
+                <option value="Domingo">Domingo</option>
+            </select>
+        </div>
+
         <!-- Display the selected message -->
         <section id="mensagem-secao" style="display: none;">
             <h2>Mensagem Selecionada:</h2>
