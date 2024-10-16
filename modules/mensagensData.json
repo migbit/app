@@ -62,16 +62,46 @@
   "Antes do Check-in": {
     "Quando Chegam?": {
       "Segunda-feira": {
-        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo nesta Segunda-feira! Gostaria de confirmar a sua hora de chegada...",
-        "Inglês": "Hello [Hospede],\n\nI hope you're doing well on this Monday! I just wanted to confirm your arrival time...",
-        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien en este lunes! Quería confirmar tu hora de llegada...",
-        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ce lundi ! Je voulais confirmer votre heure d'arrivée..."
+        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo! Gostaria de confirmar a sua hora prevista de chegada para a próxima Segunda-feira. Se precisar de alguma informação adicional, estou à disposição.\n\nMelhores cumprimentos",
+        "Inglês": "Hello [Hospede],\n\nI hope you're doing well! I just wanted to confirm your expected arrival time for next Monday. If you need any additional information, feel free to reach out.\n\nKind regards",
+        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien! Quería confirmar tu hora estimada de llegada para el próximo lunes. Si necesitas alguna información adicional, no dudes en contactarme.\n\nUn saludo",
+        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ! Je voulais confirmer votre heure d'arrivée prévue pour lundi prochain. Si vous avez besoin de plus d'informations, n'hésitez pas à me contacter.\n\nCordialement"
       },
       "Terça-feira": {
-        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo nesta Terça-feira! Gostaria de confirmar a sua hora de chegada...",
-        "Inglês": "Hello [Hospede],\n\nI hope you're doing well on this Tuesday! I just wanted to confirm your arrival time...",
-        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien en este martes! Quería confirmar tu hora de llegada...",
-        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ce mardi ! Je voulais confirmer votre heure d'arrivée..."
+        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo! Gostaria de confirmar a sua hora prevista de chegada para a próxima Terça-feira. Se precisar de alguma informação adicional, estou à disposição.\n\nMelhores cumprimentos",
+        "Inglês": "Hello [Hospede],\n\nI hope you're doing well! I just wanted to confirm your expected arrival time for next Tuesday. If you need any additional information, feel free to reach out.\n\nKind regards",
+        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien! Quería confirmar tu hora estimada de llegada para el próximo martes. Si necesitas alguna información adicional, no dudes en contactarme.\n\nUn saludo",
+        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ! Je voulais confirmer votre heure d'arrivée prévue pour mardi prochain. Si vous avez besoin de plus d'informations, n'hésitez pas à me contacter.\n\nCordialement"
+      },
+      "Quarta-feira": {
+        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo! Gostaria de confirmar a sua hora prevista de chegada para a próxima Quarta-feira. Se precisar de alguma informação adicional, estou à disposição.\n\nMelhores cumprimentos",
+        "Inglês": "Hello [Hospede],\n\nI hope you're doing well! I just wanted to confirm your expected arrival time for next Wednesday. If you need any additional information, feel free to reach out.\n\nKind regards",
+        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien! Quería confirmar tu hora estimada de llegada para el próximo miércoles. Si necesitas alguna información adicional, no dudes en contactarme.\n\nUn saludo",
+        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ! Je voulais confirmer votre heure d'arrivée prévue pour mercredi prochain. Si vous avez besoin de plus d'informations, n'hésitez pas à me contacter.\n\nCordialement"
+      },
+      "Quinta-feira": {
+        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo! Gostaria de confirmar a sua hora prevista de chegada para a próxima Quinta-feira. Se precisar de alguma informação adicional, estou à disposição.\n\nMelhores cumprimentos",
+        "Inglês": "Hello [Hospede],\n\nI hope you're doing well! I just wanted to confirm your expected arrival time for next Thursday. If you need any additional information, feel free to reach out.\n\nKind regards",
+        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien! Quería confirmar tu hora estimada de llegada para el próximo jueves. Si necesitas alguna información adicional, no dudes en contactarme.\n\nUn saludo",
+        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ! Je voulais confirmer votre heure d'arrivée prévue pour jeudi prochain. Si vous avez besoin de plus d'informations, n'hésitez pas à me contacter.\n\nCordialement"
+      },
+      "Sexta-feira": {
+        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo! Gostaria de confirmar a sua hora prevista de chegada para a próxima Sexta-feira. Se precisar de alguma informação adicional, estou à disposição.\n\nMelhores cumprimentos",
+        "Inglês": "Hello [Hospede],\n\nI hope you're doing well! I just wanted to confirm your expected arrival time for next Friday. If you need any additional information, feel free to reach out.\n\nKind regards",
+        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien! Quería confirmar tu hora estimada de llegada para el próximo viernes. Si necesitas alguna información adicional, no dudes en contactarme.\n\nUn saludo",
+        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ! Je voulais confirmer votre heure d'arrivée prévue pour vendredi prochain. Si vous avez besoin de plus d'informations, n'hésitez pas à me contacter.\n\nCordialement"
+      },
+      "Sábado": {
+        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo! Gostaria de confirmar a sua hora prevista de chegada para o próximo Sábado. Se precisar de alguma informação adicional, estou à disposição.\n\nMelhores cumprimentos",
+        "Inglês": "Hello [Hospede],\n\nI hope you're doing well! I just wanted to confirm your expected arrival time for next Saturday. If you need any additional information, feel free to reach out.\n\nKind regards",
+        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien! Quería confirmar tu hora estimada de llegada para el próximo sábado. Si necesitas alguna información adicional, no dudes en contactarme.\n\nUn saludo",
+        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ! Je voulais confirmer votre heure d'arrivée prévue pour samedi prochain. Si vous avez besoin de plus d'informations, n'hésitez pas à me contacter.\n\nCordialement"
+      },
+      "Domingo": {
+        "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo! Gostaria de confirmar a sua hora prevista de chegada para o próximo Domingo. Se precisar de alguma informação adicional, estou à disposição.\n\nMelhores cumprimentos",
+        "Inglês": "Hello [Hospede],\n\nI hope you're doing well! I just wanted to confirm your expected arrival time for next Sunday. If you need any additional information, feel free to reach out.\n\nKind regards",
+        "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien! Quería confirmar tu hora estimada de llegada para el próximo domingo. Si necesitas alguna información adicional, no dudes en contactarme.\n\nUn saludo",
+        "Francês": "Bonjour [Hospede],\n\nJ'espère que vous allez bien ! Je voulais confirmer votre heure d'arrivée prévue pour dimanche prochain. Si vous avez besoin de plus d'informations, n'hésitez pas à me contacter.\n\nCordialement"
       }
     }
   },
