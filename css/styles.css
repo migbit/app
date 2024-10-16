@@ -127,7 +127,7 @@ button:hover {
 /* Dropdown Styles */
 select {
     margin-bottom: 2px; /* Space between dropdowns */
-    padding: 10px;
+    padding: 5px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
