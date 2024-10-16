@@ -31,12 +31,16 @@ function initializeMessageSelectors(mensagens) {
     let selectedIdioma = "";
     let selectedCategoria = "";
     let selectedSubCategoria = "";
+    let selectedWeekday = "";
 
     function resetDropdowns() {
         [elements.categoriaDiv, elements.subcategoriaDiv, elements.nameInputContainer, 
          elements.weekdayDropdownContainer, elements.mensagemSecao].forEach(el => el.style.display = 'none');
         elements.categoriaDropdown.innerHTML = '<option value="">Selecionar Categoria</option>';
         elements.subcategoriaDropdown.innerHTML = '<option value="">Selecionar Subcategoria</option>';
+        selectedCategoria = "";
+        selectedSubCategoria = "";
+        selectedWeekday = "";
     }
 
     function populateDropdown(dropdown, options, defaultText) {
@@ -49,26 +53,33 @@ function initializeMessageSelectors(mensagens) {
         });
     }
 
-    function handleSubcategoryChange(subCategory) {
-        const isWhenArrive = subCategory === 'Quando Chegam?';
+    function handleSubcategoryChange() {
+        const isWhenArrive = selectedSubCategoria === 'Quando Chegam?';
         elements.nameInputContainer.style.display = isWhenArrive ? 'block' : 'none';
         elements.weekdayDropdownContainer.style.display = isWhenArrive ? 'block' : 'none';
 
         if (isWhenArrive) {
-            elements.weekdayDropdown.onchange = () => {
-                const selectedWeekday = elements.weekdayDropdown.value;
-                if (selectedWeekday && mensagens[selectedCategoria][subCategory][selectedWeekday]) {
-                    displayMessage(mensagens[selectedCategoria][subCategory][selectedWeekday]);
-                } else {
-                    elements.mensagemSecao.style.display = 'none';
-                }
-            };
+            if (selectedWeekday) {
+                updateMessage();
+            } else {
+                elements.mensagemSecao.style.display = 'none';
+            }
         } else {
-            displayMessage(mensagens[selectedCategoria][subCategory]);
+            updateMessage();
         }
     }
 
-    function displayMessage(messageObj) {
+    function updateMessage() {
+        if (!selectedIdioma || !selectedCategoria || !selectedSubCategoria) {
+            elements.mensagemSecao.style.display = 'none';
+            return;
+        }
+
+        let messageObj = mensagens[selectedCategoria][selectedSubCategoria];
+        if (selectedSubCategoria === 'Quando Chegam?' && selectedWeekday) {
+            messageObj = messageObj[selectedWeekday];
+        }
+
         const selectedMessage = messageObj[selectedIdioma];
         const guestName = elements.guestNameInput.value.trim();
 
@@ -79,6 +90,7 @@ function initializeMessageSelectors(mensagens) {
             elements.mensagemContainer.onclick = () => copyMessageToClipboard(finalMessage);
         } else {
             elements.mensagemContainer.innerHTML = 'Mensagem não disponível.';
+            elements.mensagemSecao.style.display = 'block';
         }
     }
 
@@ -91,8 +103,12 @@ function initializeMessageSelectors(mensagens) {
     elements.languageDropdown.onchange = () => {
         selectedIdioma = elements.languageDropdown.value;
         if (selectedIdioma) {
-            populateDropdown(elements.categoriaDropdown, Object.keys(mensagens), 'Selecionar Categoria');
-            elements.categoriaDiv.style.display = 'block';
+            if (!selectedCategoria) {
+                populateDropdown(elements.categoriaDropdown, Object.keys(mensagens), 'Selecionar Categoria');
+                elements.categoriaDiv.style.display = 'block';
+            } else {
+                updateMessage();
+            }
         } else {
             resetDropdowns();
         }
@@ -103,18 +119,24 @@ function initializeMessageSelectors(mensagens) {
         if (selectedCategoria) {
             populateDropdown(elements.subcategoriaDropdown, Object.keys(mensagens[selectedCategoria]), 'Selecionar Subcategoria');
             elements.subcategoriaDiv.style.display = 'block';
+            selectedSubCategoria = "";
+            selectedWeekday = "";
         } else {
             elements.subcategoriaDiv.style.display = 'none';
             elements.mensagemSecao.style.display = 'none';
         }
+        updateMessage();
     };
 
     elements.subcategoriaDropdown.onchange = () => {
         selectedSubCategoria = elements.subcategoriaDropdown.value;
-        if (selectedSubCategoria) {
-            handleSubcategoryChange(selectedSubCategoria);
-        } else {
-            elements.mensagemSecao.style.display = 'none';
-        }
+        handleSubcategoryChange();
     };
+
+    elements.weekdayDropdown.onchange = () => {
+        selectedWeekday = elements.weekdayDropdown.value;
+        updateMessage();
+    };
+
+    elements.guestNameInput.oninput = updateMessage;
 }
