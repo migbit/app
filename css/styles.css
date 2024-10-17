@@ -429,12 +429,6 @@ footer {
         margin-right: 0.25rem; /* Add spacing between buttons */
     }
 
-    /* Adjust C button's alignment */
-    .btn-local-c {
-        background-color: #3498db;
-        margin-left: 0; /* Remove margin to avoid wrapping */
-    }
-
     .btn-zero {
         background-color: #e74c3c;
     }
