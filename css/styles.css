@@ -408,6 +408,7 @@ footer {
     /* Ensure buttons are aligned in a row */
     .btn-aumentar,
     .btn-diminuir,
+    .btn-local-c
     .btn-zero {
         width: 1.75rem;
         height: 1.75rem;
@@ -459,5 +460,3 @@ footer {
         width: 100%;
         margin-top: 0.5rem; /* Add margin between item name and controls group */
     }
-
-    
