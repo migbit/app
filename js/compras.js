@@ -69,7 +69,6 @@ function criarItemCompra(item) {
             </div>
         </div>
         <div class="item-acoes">
-            <button type="button" class="btn-local-a">A</button>
             <button type="button" class="btn-local-c">C</button>
         </div>
     `;
@@ -90,7 +89,6 @@ function criarItemCompraEmBranco() {
             </div>
         </div>
         <div class="item-acoes">
-            <button type="button" class="btn-local-a">A</button>
             <button type="button" class="btn-local-c">C</button>
         </div>
     `;
@@ -139,9 +137,6 @@ async function carregarListaCompras() {
                     item.querySelector('.item-quantidade').value = itens[nome].quantidade;
                     item.setAttribute('data-local', itens[nome].local);
                     
-                    if (itens[nome].local.includes('A')) {
-                        item.querySelector('.btn-local-a').classList.add('active');
-                    }
                     if (itens[nome].local.includes('C')) {
                         item.querySelector('.btn-local-c').classList.add('active');
                     }
@@ -154,11 +149,10 @@ async function carregarListaCompras() {
 }
 
 function updateLocalData(item) {
-    const localA = item.querySelector('.btn-local-a').classList.contains('active') ? 'A' : '';
     const localC = item.querySelector('.btn-local-c').classList.contains('active') ? 'C' : '';
-    const locaisSelecionados = [localA, localC].filter(Boolean).join(', ');
+    const locaisSelecionados = localC || 'Não definido';
 
-    item.setAttribute('data-local', locaisSelecionados || 'Não definido');
+    item.setAttribute('data-local', locaisSelecionados);
 }
 
 function gerarResumo() {
@@ -204,10 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (e.target.classList.contains('btn-zero')) {
             const input = e.target.previousElementSibling.previousElementSibling.previousElementSibling;
             input.value = 0;
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-local-a')) {
-            e.target.classList.toggle('active');
-            updateLocalData(e.target.closest('.item-compra'));
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-local-c')) {
             e.target.classList.toggle('active');
