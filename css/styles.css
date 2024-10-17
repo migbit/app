@@ -197,7 +197,13 @@ tr:hover {
     padding: 0.25rem;
 }
 
-btn-aumentar,
+.item-controles {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Adiciona espaço entre os botões */
+}
+
+.btn-aumentar,
 .btn-diminuir,
 .btn-zero,
 .btn-local-c {
