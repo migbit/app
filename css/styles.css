@@ -375,8 +375,6 @@ footer {
         width: 100%;
         margin-bottom: 0.5rem;
         font-weight: bold;
-        display: flex;
-        flex-direction: column;  /* Stack item name and controls on separate rows */
     }
 
     /* Ensure that controls stay in one row and don't break */
@@ -385,7 +383,7 @@ footer {
         align-items: center;
         justify-content: flex-start;
         gap: 0.25rem;
-        flex-wrap: nowrap;  /* Prevent wrapping */
+        flex-wrap: nowrap;  /* Prevents wrapping of buttons */
         width: 100%;  /* Ensure controls take full width */
     }
 
@@ -438,15 +436,21 @@ footer {
     .item-controles {
         white-space: nowrap;  /* Prevents wrapping */
         overflow: hidden;  /* Ensures overflow doesn’t affect the layout */
-        width: 100%;
     }
 
-    /* Add a flex container to ensure quantity and buttons are aligned on one line */
+    /* This is the change to ensure the quantity and buttons are in a new line */
+    .item-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Add a new div to group the quantity input and buttons */
     .item-controls-group {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         gap: 0.25rem;
-        width: 100%;  /* Ensure full width */
+        width: 100%;
+        margin-top: 0.5rem; /* Add margin between item name and controls group */
     }
 }
