@@ -190,21 +190,26 @@ tr:hover {
     border-radius: 3px;
 }
 
+/* Adjust input size and alignment for quantity */
 .item-quantidade {
-    width: 3rem;
+    width: 2rem;
     text-align: center;
-    padding: 0.25rem;
+    padding: 0.2rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    margin-right: 0.3rem; /* Adds space between input and buttons */
 }
 
-/* Alinhe os itens do controls em um linha e centralize os itens verticalmente */
+/* Align control buttons horizontally and center vertically */
 .item-controles {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 0.5rem; /* Espaçamento entre os botões */
+    justify-content: flex-start; /* Align buttons to the start */
+    gap: 0.5rem; /* Space between buttons */
 }
 
-/* Configurações gerais para os botões de controle */
+/* Common styles for all control buttons */
 .btn-aumentar,
 .btn-diminuir,
 .btn-zero,
@@ -221,10 +226,10 @@ tr:hover {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
-    padding: 0; /* Remove any padding */
+    padding: 0; /* No extra padding */
 }
 
-/* Configurações específicas para o botão de zero */
+/* Specific styles for the zero button */
 .btn-zero {
     background-color: #e74c3c;
 }
@@ -233,7 +238,7 @@ tr:hover {
     background-color: #c0392b;
 }
 
-/* Configurações específicas para o botão de local-c */
+/* Specific styles for the 'C' button */
 .btn-local-c {
     background-color: #3498db;
 }
@@ -242,16 +247,6 @@ tr:hover {
     background-color: #2ecc71;
 }
 
-/* Ajuste no input de quantidade para garantir que ele tenha o tamanho correto */
-.item-quantidade {
-    width: 2rem;
-    text-align: center;
-    padding: 0.2rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    margin-right: 0.3rem; /* Espaço entre o input e os botões */
-}
 
 /* Caixa Page Styles */
 #relatorio-caixa h3 {
