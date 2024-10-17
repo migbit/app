@@ -169,7 +169,8 @@ function gerarResumo() {
             if (local === 'C') {
                 localDisplay = ' (Casa)';
             }
-            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
+            resumo += `${nome}: ${quantidade}${localDisplay}
+`;
         }
     });
 
@@ -183,6 +184,28 @@ async function exibirResumoESalvar() {
     document.getElementById('resumo').style.display = 'block';
 
     await salvarListaCompras();
+}
+
+function enviarEmailListaCompras(resumo) {
+    if (typeof emailjs === 'undefined') {
+        console.error('EmailJS não está definido. Verifique se o script foi carregado corretamente.');
+        alert('Ocorreu um erro ao tentar enviar o e-mail. Por favor, tente novamente mais tarde.');
+        return;
+    }
+
+    emailjs.send('service_tuglp9h', 'template_4micnki', {
+        to_name: "apartments.oporto@gmail.com",
+        from_name: "Apartments Oporto",
+        subject: "Lista de Compras",
+        message: resumo
+    })
+    .then(function(response) {
+        console.log('E-mail enviado com sucesso!', response.status, response.text);
+        alert('E-mail enviado com sucesso!');
+    }, function(error) {
+        console.error('Erro ao enviar e-mail:', error);
+        alert('Ocorreu um erro ao enviar o e-mail.');
+    });
 }
 
 // Event listeners
