@@ -240,9 +240,9 @@ tr:hover {
 
 /* Ajuste no input de quantidade para garantir que ele tenha o tamanho correto */
 .item-quantidade {
-    width: 2.5rem;
+    width: 2rem;
     text-align: center;
-    padding: 0.25rem;
+    padding: 0.2rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 0.875rem;
