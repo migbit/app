@@ -408,8 +408,8 @@ footer {
     /* Ensure buttons are aligned in a row */
     .btn-aumentar,
     .btn-diminuir,
-    .btn-local-c
-    .btn-zero {
+    .btn-zero,
+    .btn-local-c {
         width: 1.75rem;
         height: 1.75rem;
         background-color: #2c3e50;
