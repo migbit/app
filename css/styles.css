@@ -447,7 +447,7 @@ footer {
     }
     }
 
-    /* Mobile Responsive Styles */
+/* Mobile Responsive Styles */
 @media screen and (max-width: 768px) {
     /* Adjust the item layout */
     .item-compra {
@@ -461,32 +461,35 @@ footer {
         border: 2px solid red; /* You can remove this border after testing */
     }
 
+    /* Ensure item name is on one line and aligned left */
     .item-info {
-        width: 100%; /* Make sure it takes the full width */
+        width: 100%;
         margin-bottom: 0.5rem;
         text-align: left; /* Align the item name to the left */
+        display: block; /* Ensure it takes one line */
     }
 
     .item-nome,
     .item-nome-custom {
         font-size: 1rem;
         font-weight: bold;
-        color: blue; /* Use your color, and you can remove this later */
+        color: blue; /* You can remove this color after testing */
+        display: block; /* Force the item name to take the full width */
     }
 
-    /* Controls (quantity and buttons) aligned underneath the item name */
+    /* Align controls (quantity box and buttons) under the item name */
     .item-controles {
         display: flex;
-        flex-direction: row; /* Keep buttons and quantity in a row */
+        flex-direction: row; /* Buttons and input on the same row */
         align-items: center;
         justify-content: flex-start; /* Align all elements to the left */
+        width: 100%;
         gap: 0.25rem; /* Space between the buttons */
-        width: 100%; /* Ensure it takes up full width */
     }
 
     /* Adjust the size of the quantity input */
     .item-quantidade {
-        width: 3rem;
+        width: 2.5rem; /* Make it smaller to fit */
         text-align: center;
         padding: 0.25rem;
         border: 1px solid #ccc;
@@ -520,14 +523,18 @@ footer {
 
     .btn-local-c {
         background-color: #3498db;
+        margin-left: 0.25rem; /* Add spacing between the buttons */
     }
 
-    /* Add margin between buttons and input */
-    .item-quantidade,
-    .btn-aumentar,
-    .btn-diminuir,
+    .btn-local-c.active {
+        background-color: #2ecc71;
+    }
+
+    /* Ensure all buttons are properly spaced */
     .btn-zero,
-    .btn-local-c {
-        margin: 0 5px;
+    .btn-local-c,
+    .btn-aumentar,
+    .btn-diminuir {
+        margin-right: 0.25rem; /* Add spacing between buttons */
     }
 }
