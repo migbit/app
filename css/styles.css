@@ -233,9 +233,11 @@ tr:hover {
     color: white;
     border: none;
     padding: 0.5rem;
-    border-radius: 4px;
+    border-radius: 50%; /* Make the button round */
     cursor: pointer;
     margin-left: 0.5rem;
+    width: 35px;  /* Ensure width and height are equal */
+    height: 35px;
 }
 
 .btn-local-c.active {
