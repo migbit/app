@@ -174,7 +174,7 @@ tr:hover {
 
 .item-info {
     display: flex;
-    align-items: center;
+    align-items: center; /* Isso garante o alinhamento vertical */
     flex: 1;
     gap: 0.5rem;
 }
@@ -193,18 +193,21 @@ tr:hover {
 
 .item-controles {
     display: flex;
-    align-items: center;
-    justify-content: flex-start; /* Ajusta os botões à esquerda */
+    align-items: center; /* Isso centraliza verticalmente os botões */
+    justify-content: flex-start; /* Alinhamento à esquerda */
     gap: 0.5rem; /* Espaçamento entre os botões */
 }
 
 .item-quantidade {
-    width: 2.5rem;  /* Reduzindo a largura para caber melhor */
+    display: inline-block; /* Certifica que ele se comporte como um botão */
+    width: 2.5rem;
+    height: 1.75rem; /* Definindo a mesma altura dos botões */
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-right: 0.5rem; /* Pequena margem para espaçar dos botões */
+    margin-right: 0.5rem;
+    line-height: 1.75rem; /* Centralizando o texto verticalmente */
 }
 
 .btn-aumentar,
