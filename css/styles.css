@@ -354,15 +354,30 @@ footer {
     .item-acoes {
         width: 100%;
         margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Ensure all buttons are in a row */
     }
 
     .item-controles {
+        display: flex;
         justify-content: space-between;
+        width: 100%; /* Full width for mobile view */
     }
 
     .btn-local-a,
     .btn-local-c {
-        width: auto;
-        margin: 0.25rem;
+        width: 35px; /* Ensure buttons maintain the same size */
+        height: 35px;
+        margin: 0 5px; /* Add space between buttons */
+    }
+
+    .btn-zero {
+        margin-right: 5px; /* Adjust margin to fit the layout */
+    }
+
+    .item-quantidade {
+        width: 50px; /* Adjust input field size for mobile view */
+        text-align: center;
     }
 }
