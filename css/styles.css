@@ -357,6 +357,7 @@ footer {
 /*                                        ---------------------------------> Compras Mobile
 /* Mobile Responsive Styles for Compras Section */
 @media screen and (max-width: 768px) {
+
     /* Stack the item information and controls vertically */
     .item-compra {
         display: flex;
@@ -391,12 +392,13 @@ footer {
     /* Adjust width for the quantity input */
     .item-quantidade {
         min-width: 2rem;  /* Minimum width to avoid overflow */
-        max-width: 2.5rem;  /* Ensure it doesn't expand too much */
+        max-width: 2.5rem;  /* Ensure it doesn’t expand too much */
         text-align: center;
         padding: 0.25rem;
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 0.875rem;
+        flex-shrink: 0;  /* Ensure this doesn't shrink too much */
     }
 
     /* Ensure buttons are aligned in a row */
@@ -417,11 +419,14 @@ footer {
         justify-content: center;
         transition: background-color 0.3s ease;
         margin-right: 0.25rem;  /* Add spacing between buttons */
+        flex-shrink: 0;  /* Prevent buttons from shrinking and wrapping */
     }
 
     /* Adjust C button with proper margin and alignment */
     .btn-local-c {
         background-color: #3498db;
+        margin-left: 0;  /* Remove margin to avoid wrapping */
+        flex-shrink: 0;  /* Prevent this button from shrinking and wrapping */
     }
 
     .btn-zero {
@@ -435,8 +440,9 @@ footer {
     /* Ensures the entire control set (quantity and buttons) does not wrap */
     .item-controles {
         white-space: nowrap;  /* Prevents wrapping */
-        overflow: hidden;  /* Ensures overflow doesn't affect the layout */
+        overflow: hidden;  /* Ensures overflow doesn’t affect the layout */
         width: 100%;
+        flex-wrap: nowrap;  /* Ensure no wrapping of controls */
     }
 
     /* Add a flex container to ensure quantity and buttons are aligned on one line */
@@ -446,5 +452,16 @@ footer {
         justify-content: flex-start;
         gap: 0.25rem;
         width: 100%;  /* Ensure full width */
+        flex-wrap: nowrap;  /* Ensure no wrapping within this group */
+    }
+
+    /* Ensure the buttons container doesn't shrink and wraps */
+    .buttons-container {
+        display: flex;
+        flex-wrap: nowrap;  /* Ensures buttons don't wrap */
+        align-items: center;
+        gap: 0.25rem;  /* Spacing between buttons */
+        width: auto;  /* Let the buttons determine the width */
+        flex-shrink: 0;  /* Prevent shrinking */
     }
 }
