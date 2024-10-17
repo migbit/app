@@ -327,3 +327,96 @@ footer {
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    /* Header Styles */
+    header {
+        padding: 0.5rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 0.25rem 0;
+    }
+
+    nav ul li a {
+        display: block;
+        padding: 0.5rem;
+    }
+
+    /* Main Content Styles */
+    main {
+        padding: 0.75rem;
+    }
+
+    /* Form Styles */
+    input[type="number"],
+    select,
+    input[type="checkbox"] {
+        max-width: 100%;
+    }
+
+    /* Table Styles */
+    table {
+        font-size: 0.875rem;
+    }
+
+    th, td {
+        padding: 0.5rem;
+    }
+
+    /* Shopping List Styles */
+    .item-compra {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .item-info {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .item-controles {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .item-quantidade {
+        width: 3rem;
+    }
+
+    /* Caixa Page Styles */
+    .btn-entrada,
+    .btn-saida {
+        width: 100%;
+        margin: 0.25rem 0;
+    }
+
+    /* Reparações Page Styles */
+    .urgente,
+    .reparado {
+        font-size: 0.875rem;
+    }
+}
+
+/* Further optimizations for very small screens */
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .form-section, .report-section {
+        padding: 0.75rem;
+    }
+
+    table {
+        font-size: 0.75rem;
+    }
+
+    th, td {
+        padding: 0.375rem;
+    }
+}
