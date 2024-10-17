@@ -27,7 +27,8 @@ function initializeMessageSelectors(mensagens) {
         mensagemSecao: document.getElementById('mensagem-secao'),
         mensagemContainer: document.getElementById('mensagem-container'),
         babyMessageContainer: document.getElementById('baby-message-container'),  // Baby message section
-        copyBabyMessageBtn: document.getElementById('copy-baby-message-btn')  // Baby message button
+        copyBabyMessageBtn: document.getElementById('copy-baby-message-btn'),  // Baby message button
+        copySMSMessageBtn: document.getElementById('copy-sms-message-btn')  // SMS button
     };
 
     let selectedIdioma = "";
@@ -41,6 +42,14 @@ function initializeMessageSelectors(mensagens) {
         "Inglês": "Additionally, I’d like to know if you need a baby bed and/or a feeding chair.",
         "Espanhol": "Además, me gustaría saber si necesitas una cuna y/o una silla para bebé.",
         "Francês": "De plus, je voudrais savoir si vous avez besoin d'un lit bébé et/ou d'une chaise pour bébé."
+    };
+
+    // Fixed SMS message for all languages
+    const smsMessages = {
+        "Português": "Sou Miguel, o seu anfitrião Airbnb em Porto.",
+        "Inglês": "I’m Miguel, your Porto Airbnb host.",
+        "Espanhol": "Soy Miguel, tu anfitrión de Airbnb en Porto.",
+        "Francês": "Je suis Miguel, votre hôte Airbnb à Porto."
     };
 
     // Reset function to hide elements
@@ -121,6 +130,12 @@ function initializeMessageSelectors(mensagens) {
     elements.copyBabyMessageBtn.onclick = () => {
         const babyMessage = babyMessages[selectedIdioma] || babyMessages["Inglês"];  // Fallback to English if no match
         copyMessageToClipboard(babyMessage);
+    };
+
+    // Handle SMS message copy button click
+    elements.copySMSMessageBtn.onclick = () => {
+        const smsMessage = smsMessages[selectedIdioma] || smsMessages["Inglês"];  // Fallback to English if no match
+        copyMessageToClipboard(smsMessage);
     };
 
     // Language dropdown changes
