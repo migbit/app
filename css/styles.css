@@ -447,48 +447,32 @@ footer {
     }
     }
 
-   /* Mobile Responsive Styles */
-@media screen and (max-width: 768px) {
-    .item-compra {
-        flex-direction: column;
-        align-items: flex-start;
+    @media screen and (max-width: 768px) {
+        .item-compra {
+            background-color: #ffff00 !important; /* Bright yellow background */
+            border: 2px solid red !important;
+            padding: 10px !important;
+        }
+    
+        .item-nome,
+        .item-nome-custom {
+            color: blue !important;
+            font-weight: bold !important;
+        }
+    
+        .item-controles {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            margin-top: 10px !important;
+        }
+    
+        .item-quantidade,
+        .btn-aumentar,
+        .btn-diminuir,
+        .btn-zero,
+        .btn-local-c {
+            margin: 0 5px !important;
+        }
     }
-
-    .item-info {
-        margin-bottom: 0.5rem;
-    }
-
-    .item-controles {
-        width: 100%;
-        justify-content: flex-start;
-    }
-
-    .item-quantidade {
-        width: 2.5rem;
-        margin-right: 0.5rem;
-    }
-
-    .btn-aumentar,
-    .btn-diminuir,
-    .btn-zero,
-    .btn-local-c {
-        width: 1.75rem;
-        height: 1.75rem;
-    }
-}
-
-/* Further optimizations for very small screens */
-@media screen and (max-width: 480px) {
-    .item-quantidade {
-        width: 2.5rem;
-    }
-
-    .btn-aumentar,
-    .btn-diminuir,
-    .btn-zero,
-    .btn-local-c {
-        width: 1.5rem;
-        height: 1.5rem;
-        font-size: 0.6875rem;
-    }
-}
