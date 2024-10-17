@@ -1,4 +1,4 @@
-/* Reset and Base Styles */
+/* Base Styles for all screens */
 * {
     margin: 0;
     padding: 0;
@@ -58,97 +58,6 @@ main {
     margin: 0 auto;
 }
 
-/* Section Styles */
-.form-section, .report-section {
-    background-color: white;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Form Styles */
-.form-group {
-    margin-bottom: 0.75rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-weight: bold;
-    font-size: 0.875rem;
-    color: #34495e;
-}
-
-input[type="number"],
-select,
-input[type="checkbox"] {
-    width: 100%;
-    padding: 0.375rem;
-    border: 1px solid #bdc3c7;
-    border-radius: 4px;
-    max-width: 300px;
-    font-size: 0.875rem;
-    margin-bottom: 0.375rem;
-}
-
-button {
-    padding: 0.375rem 0.75rem;
-    background-color: #1abc9c;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    transition: background-color 0.3s ease;
-    margin-top: 0.5rem;
-}
-
-button:hover {
-    background-color: #16a085;
-}
-
-/* Message Container */
-#mensagem-container {
-    margin-top: 0.75rem;
-    padding: 0.75rem;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    line-height: 1.5;
-}
-
-/* Table Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1rem 0;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-th, td {
-    padding: 0.75rem;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #34495e;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-}
-
-tr:nth-child(even) {
-    background-color: #f8f9fa;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
 /* Shopping List Styles */
 .categoria {
     margin-bottom: 0.75rem;
@@ -194,11 +103,12 @@ tr:hover {
 .item-controles {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
 }
 
 .item-quantidade {
-    width: 2.5rem;  /* Reducing the width to fit single or double digits */
+    width: 2.5rem;  /* Adjusted for double digits */
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
@@ -221,6 +131,7 @@ tr:hover {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
+    margin-right: 0.25rem; /* Spacing between buttons */
 }
 
 .btn-zero {
@@ -232,155 +143,35 @@ tr:hover {
 }
 
 .btn-local-c {
-    background-color: #3498db;  /* Keeping the unique color for the 'C' button */
-    margin-left: 0.5rem;  /* Adding spacing before the 'C' button */
+    background-color: #3498db;  /* Unique color for the 'C' button */
 }
 
 .btn-local-c.active {
     background-color: #2ecc71;  /* Green when active */
-    margin-left: 0.5rem;  /* Adding spacing before the 'C' button */
 }
 
-
-/* Caixa Page Styles */
-#relatorio-caixa h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-    font-size: 1.25rem;
-    color: #333;
-    border-bottom: 2px solid #333;
-    padding-bottom: 0.5rem;
-}
-
-#relatorio-caixa > div {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.btn-entrada,
-.btn-saida {
-    padding: 0.5rem 1rem;
-    margin: 0.25rem;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-entrada {
-    background-color: #ecf0f1;
-    color: #333;
-}
-
-.btn-saida {
-    background-color: #ecf0f1;
-    color: #333;
-}
-
-.btn-entrada.btn-active {
-    background-color: #2ecc71;
-    color: white;
-}
-
-.btn-saida.btn-active {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.valor-positivo {
-    color: #2ecc71;
-}
-
-.valor-negativo {
-    color: #e74c3c;
-}
-
-.total-caixa {
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background-color: #fafafa;
-    border-radius: 4px;
-    text-align: center;
-}
-
-/* Reparações Page Styles */
-.urgente {
-    background-color: #ffe4e1;
-    color: #d9534f;
-}
-
-.reparado {
-    text-decoration: line-through;
-    color: #95a5a6;
-}
-
-/* Footer Styles */
-footer {
-    background-color: #34495e;
-    color: white;
-    text-align: center;
-    padding: 1rem 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/*                                          ----------------------------------> MOBILE!
-
-/*                                          ----------------------------------> Cabeçalho Mobile
+/* Mobile Responsive Styles */
 @media screen and (max-width: 768px) {
-    header {
-        padding: 0.5rem; /* Reduce padding for smaller screens */
-    
-    /* Stack navigation items vertically on smaller screens */
-    nav ul {
-        flex-direction: column;
-        padding: 0;
-    }
-
-    nav ul li {
-        margin: 0.25rem 0; /* Reduce margin between list items */
-    }
-
-    nav ul li a {
-        padding: 0.5rem; /* Adjust padding for better touch area */
-        font-size: 1rem; /* Slightly larger font size for readability */
-    }
-
-    /* Reduce the overall header text size */
-    header h1 {
-        font-size: 1.5rem; /* Adjust for better fitting on mobile */
-    }
-
-/*                                        ---------------------------------> Compras Mobile
-/* Mobile Responsive Styles for Compras Section */
-@media screen and (max-width: 768px) {
-    /* Stack the item information and controls vertically */
+    /* Stack item info and controls vertically */
     .item-compra {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         padding: 0.5rem;
-        background-color: #f9f9f9;
-        border-radius: 4px;
-        margin-bottom: 1rem;
         width: 100%;
     }
 
-    /* Ensure item name takes the full width */
+    /* Ensure full width for item name and flex alignment */
     .item-info {
         width: 100%;
         margin-bottom: 0.5rem;
         font-weight: bold;
         display: flex;
-        flex-direction: row;
         justify-content: space-between;
         align-items: center;
     }
 
-    /* Ensure that controls stay in one row and don't break */
+    /* Align controls and prevent them from breaking */
     .item-controles {
         display: flex;
         align-items: center;
@@ -389,64 +180,14 @@ footer {
         flex-wrap: nowrap;  /* Prevent wrapping */
     }
 
-    /* Adjust width for the quantity input */
-    .item-quantidade {
-        min-width: 2rem;  /* Minimum width to avoid overflow */
-        max-width: 2.5rem;  /* Ensure it doesn't expand too much */
-        text-align: center;
-        padding: 0.25rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 0.875rem;
-    }
-
-    /* Ensure buttons are aligned in a row */
-    .btn-aumentar,
-    .btn-diminuir,
-    .btn-zero {
-        width: 1.75rem;
-        height: 1.75rem;
-        background-color: #2c3e50;
-        color: white;
-        border: none;
-        border-radius: 50%;  /* Ensure round buttons */
-        cursor: pointer;
-        font-size: 0.75rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.3s ease;
-        margin-right: 0.25rem;  /* Add spacing between buttons */
-    }
-
-    /* Adjust C button with proper margin and alignment */
+    /* Adjust C button alignment and prevent overflow */
     .btn-local-c {
-        width: 1.75rem;
-        height: 1.75rem;
-        background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 50%;  /* Ensure round buttons */
-        cursor: pointer;
-        font-size: 0.75rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.3s ease;
+        margin-left: 0;  /* Remove margin for consistent alignment */
     }
 
-    .btn-zero {
-        background-color: #e74c3c;
-    }
-
-    .btn-local-c.active {
-        background-color: #2ecc71;
-    }
-
-    /* Ensures the entire control set (quantity and buttons) does not wrap */
+    /* Ensures that controls remain aligned without overflow */
     .item-controles {
-        white-space: nowrap;  /* Prevents wrapping */
-        overflow: hidden;  /* Ensures overflow doesn't affect the layout */
-        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
     }
 }
