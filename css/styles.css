@@ -357,7 +357,6 @@ footer {
 /*                                        ---------------------------------> Compras Mobile
 /* Mobile Responsive Styles for Compras Section */
 @media screen and (max-width: 768px) {
-
     /* Stack the item information and controls vertically */
     .item-compra {
         display: flex;
@@ -376,7 +375,9 @@ footer {
         margin-bottom: 0.5rem;
         font-weight: bold;
         display: flex;
-        flex-direction: column;  /* Stack item name and controls on separate rows */
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 
     /* Ensure that controls stay in one row and don't break */
@@ -385,27 +386,24 @@ footer {
         align-items: center;
         justify-content: flex-start;
         gap: 0.25rem;
-        flex-wrap: nowrap;  /* Absolutely no wrapping */
-        width: 100%;  /* Ensure controls take full width */
+        flex-wrap: nowrap;  /* Prevent wrapping */
     }
 
     /* Adjust width for the quantity input */
     .item-quantidade {
         min-width: 2rem;  /* Minimum width to avoid overflow */
-        max-width: 2.5rem;  /* Ensure it doesn’t expand too much */
+        max-width: 2.5rem;  /* Ensure it doesn't expand too much */
         text-align: center;
         padding: 0.25rem;
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 0.875rem;
-        flex-shrink: 0;  /* Ensure this doesn't shrink too much */
     }
 
-    /* Ensure buttons are aligned in a row and don't wrap */
+    /* Ensure buttons are aligned in a row */
     .btn-aumentar,
     .btn-diminuir,
-    .btn-zero,
-    .btn-local-c {
+    .btn-zero {
         width: 1.75rem;
         height: 1.75rem;
         background-color: #2c3e50;
@@ -419,49 +417,36 @@ footer {
         justify-content: center;
         transition: background-color 0.3s ease;
         margin-right: 0.25rem;  /* Add spacing between buttons */
-        flex-shrink: 0;  /* Prevent buttons from shrinking and wrapping */
     }
 
-    /* Special styling for the local c button */
+    /* Adjust C button with proper margin and alignment */
     .btn-local-c {
+        width: 1.75rem;
+        height: 1.75rem;
         background-color: #3498db;
-        /* Place btn-local-c before btn-zero using the order property */
-        order: 1;  /* Ensure btn-local-c appears before btn-zero */
-        flex-shrink: 0;  /* Prevent this button from shrinking and wrapping */
+        color: white;
+        border: none;
+        border-radius: 50%;  /* Ensure round buttons */
+        cursor: pointer;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
     }
 
     .btn-zero {
         background-color: #e74c3c;
-        order: 2;  /* btn-zero will come after btn-local-c */
     }
 
     .btn-local-c.active {
         background-color: #2ecc71;
     }
 
-    /* Ensure the entire control set (quantity and buttons) does not wrap */
-    .item-controls-group {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.25rem;
-        width: 100%;  /* Ensure full width */
-        flex-wrap: nowrap;  /* Ensure no wrapping within this group */
-    }
-
-    /* Prevent the button container from wrapping and ensure overflow is managed */
-    .button-container {
-        display: flex;
-        flex-wrap: nowrap;  /* Ensure buttons don't wrap */
-        overflow: hidden;  /* Hide any overflow if the container can't fit all content */
-        width: auto;  /* Let the buttons determine the width */
-        flex-shrink: 0;  /* Prevent the container from shrinking */
-    }
-
-    /* Ensure that the parent container (item-controles) doesn't allow wrapping */
+    /* Ensures the entire control set (quantity and buttons) does not wrap */
     .item-controles {
-        white-space: nowrap;  /* Prevents text wrapping */
-        overflow: hidden;  /* Ensures overflow is managed */
-        flex-wrap: nowrap;  /* Ensures flex items don't wrap */
+        white-space: nowrap;  /* Prevents wrapping */
+        overflow: hidden;  /* Ensures overflow doesn't affect the layout */
+        width: 100%;
     }
 }
