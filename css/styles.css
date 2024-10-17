@@ -396,7 +396,7 @@ footer {
 
     /* Ensure C button is properly styled */
     .btn-local-c {
-        background-color: #3498db;
+        background-color: #94408d; /*#3498db 
     }
 
     .btn-local-c.active {
