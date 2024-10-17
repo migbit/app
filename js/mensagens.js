@@ -99,19 +99,23 @@ function initializeMessageSelectors(mensagens) {
             elements.mensagemSecao.style.display = 'none';
             return;
         }
-
+    
         let messageObj = mensagens[selectedCategoria][selectedSubCategoria];
         if (selectedSubCategoria === 'Quando Chegam?' && selectedWeekday) {
             messageObj = messageObj[selectedWeekday];
         }
-
+    
         const selectedMessage = messageObj[selectedIdioma];
         const guestName = elements.guestNameInput.value.trim();
-
+    
         if (selectedMessage) {
             const finalMessage = guestName ? selectedMessage.replace(/\[Hospede\]/g, guestName) : selectedMessage;
-            elements.mensagemContainer.innerHTML = `<p>${finalMessage}</p>`;
+    
+            // Display the formatted message
+            elements.mensagemContainer.innerHTML = `<p>${finalMessage.replace(/\n/g, '</p><p>')}</p>`;
             elements.mensagemSecao.style.display = 'block';
+    
+            // Copy only plain text
             elements.mensagemContainer.onclick = () => copyMessageToClipboard(finalMessage);
         } else {
             elements.mensagemContainer.innerHTML = 'Mensagem não disponível.';
@@ -119,11 +123,19 @@ function initializeMessageSelectors(mensagens) {
         }
     }
 
-    // Copy message to clipboard
+   // Copy message to clipboard
     function copyMessageToClipboard(text) {
-        navigator.clipboard.writeText(text)
-            .then(() => alert('Mensagem copiada para a área de transferência'))
-            .catch(err => console.error('Failed to copy: ', err));
+    const tempElement = document.createElement('textarea');
+    tempElement.style.position = 'absolute';
+    tempElement.style.left = '-9999px';
+    tempElement.value = text;  // Use the plain text instead of HTML
+
+    document.body.appendChild(tempElement);
+    tempElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempElement);
+
+    alert('Mensagem copiada para a área de transferência');
     }
 
     // Handle baby message copy button click
