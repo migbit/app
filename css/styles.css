@@ -254,6 +254,7 @@ tr:hover {
 
 .btn-local-c.active {
     background-color: #2ecc71;  /* Green when active */
+    margin-left: 0.5rem;  /* Adding spacing before the 'C' button */
 }
 
 
