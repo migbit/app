@@ -111,24 +111,26 @@ function initializeMessageSelectors(mensagens) {
         if (selectedMessage) {
             const finalMessage = guestName ? selectedMessage.replace(/\[Hospede\]/g, guestName) : selectedMessage;
     
-            // Display the formatted message
+            // Display the message with formatting
             elements.mensagemContainer.innerHTML = `<p>${finalMessage.replace(/\n/g, '</p><p>')}</p>`;
             elements.mensagemSecao.style.display = 'block';
     
-            // Copy only plain text
-            elements.mensagemContainer.onclick = () => copyMessageToClipboard(finalMessage);
+            // Copy only plain text (without HTML)
+            elements.mensagemContainer.onclick = () => copyMessageToClipboard();
         } else {
             elements.mensagemContainer.innerHTML = 'Mensagem não disponível.';
             elements.mensagemSecao.style.display = 'block';
         }
     }
 
-   // Copy message to clipboard
-    function copyMessageToClipboard(text) {
+   // Copy plain text message to clipboard
+function copyMessageToClipboard() {
+    const messageText = elements.mensagemContainer.textContent.trim();  // Get only plain text content
+
     const tempElement = document.createElement('textarea');
     tempElement.style.position = 'absolute';
     tempElement.style.left = '-9999px';
-    tempElement.value = text;  // Use the plain text instead of HTML
+    tempElement.value = messageText;  // Use the plain text without HTML
 
     document.body.appendChild(tempElement);
     tempElement.select();
@@ -136,7 +138,7 @@ function initializeMessageSelectors(mensagens) {
     document.body.removeChild(tempElement);
 
     alert('Mensagem copiada para a área de transferência');
-    }
+}
 
     // Handle baby message copy button click
     elements.copyBabyMessageBtn.onclick = () => {
