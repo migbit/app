@@ -408,8 +408,7 @@ footer {
     /* Ensure buttons are aligned in a row */
     .btn-aumentar,
     .btn-diminuir,
-    .btn-zero,
-    .btn-local-c {
+    .btn-zero {
         width: 1.75rem;
         height: 1.75rem;
         background-color: #2c3e50;
@@ -439,17 +438,32 @@ footer {
         background-color: #2ecc71;
     }
 
+    /* Ensures the entire control set (quantity and buttons) does not wrap */
+    .item-controles {
+        white-space: nowrap;  /* Prevents wrapping */
+        overflow: hidden;  /* Ensures overflow doesn’t affect the layout */
+    }
+
     /* This is the change to ensure the quantity and buttons are in a new line */
     .item-info {
         display: flex;
         flex-direction: column;
     }
 
-    /* Ensures the entire control set (quantity and buttons) does not wrap */
-    .item-controles {
-        white-space: nowrap;  /* Prevents wrapping */
-        overflow: hidden;  /* Ensures overflow doesn’t affect the layout */
-        flex-wrap: wrap;  /* Allows the quantity and buttons to wrap to a new line */
+    /* Add a new div to group the quantity input and buttons */
+    .item-controls-group {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.25rem;
+        width: 100%;
+        margin-top: 0.5rem; /* Add margin between item name and controls group */
+    }
+
+     /* Move the btn-local-c (C button) to a new line */
+     .btn-local-c {
+        display: block;
+        margin-top: 0.5rem; /* Add margin between controls group and C button */
     }
 
 }
