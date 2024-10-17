@@ -233,11 +233,12 @@ tr:hover {
 
 .btn-local-c {
     background-color: #3498db;  /* Keeping the unique color for the 'C' button */
+    margin-left: 0.5rem;  /* Adding spacing before the 'C' button */
 }
 
 .btn-local-c.active {
     background-color: #2ecc71;  /* Green when active */
-    margin-left: 2rem;  /* Adding spacing before the 'C' button */
+    margin-left: 0.5rem;  /* Adding spacing before the 'C' button */
 }
 
 
