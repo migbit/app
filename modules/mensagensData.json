@@ -1,9 +1,10 @@
 {
   "Antes Reserva": {
     "Baixar Preço": {
-      "Português": "<p><strong>Olá! Para baixar o preço, siga este link:</p>",
-      "Inglês": "<p><strong>Hello! To lower the price, follow this link:</p>",
-      "Espanhol": "<p><strong>¡Hola! Para bajar el precio, sigue este enlace:</p>"
+      "Português": "<p>Agradecemos o seu contacto.</p><p>Lamentamos, mas os nossos preços são definidos por um algoritmo e não é possível fazer alterações.</p><p>Agradecemos a sua compreensão.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>Thank you for your message.</p><p>Unfortunately, our pricing is set by an algorithm and we are unable to modify it.</p><p>We appreciate your understanding.</p><p>Best regards.</p>",
+      "Espanhol": "<p>Gracias por su mensaje.</p><p>Lamentablemente, nuestros precios están establecidos por un algoritmo y no es posible modificarlos.</p><p>Agradecemos su comprensión.</p><p>Un saludo.</p>",
+      "Francês": "<p>Nous vous remercions de votre message.</p><p>Malheureusement, nos prix sont fixés par un algorithme et nous ne pouvons pas les modifier.</p><p>Nous vous remercions de votre compréhension.</p><p>Cordialement.</p>"
     },
     "Estacionamento 123": {
       "Português": "<p><strong>Estacionamento 123 está disponível para sua reserva.</p>",
