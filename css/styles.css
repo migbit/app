@@ -167,7 +167,7 @@ tr:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
-    padding: 0.375rem 0.375rem;
+    padding: 0.375rem 0.75rem;
     background-color: #f9f9f9;
     border-radius: 4px;
 }
@@ -176,13 +176,12 @@ tr:hover {
     display: flex;
     align-items: center;
     flex: 1;
-    gap: 0.5rem;
 }
 
 .item-nome,
 .item-nome-custom {
     flex: 1;
-    margin-right: 0.5rem;
+    margin-right: 1rem;
 }
 
 .item-nome-custom {
@@ -201,25 +200,26 @@ tr:hover {
     display: flex;
     align-items: center;
     justify-content: center; /* Centraliza horizontalmente */
-    gap: 0.5rem; /* Espaçamento entre os botões */
+    gap: 0.25rem; /* Espaçamento entre os botões */
 }
 
 .btn-aumentar,
 .btn-diminuir,
 .btn-zero,
 .btn-local-c {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
     background-color: #2c3e50;
     color: white;
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
+    padding: 0; /* Remove any padding */
 }
 
 .btn-zero {
@@ -232,6 +232,7 @@ tr:hover {
 
 .btn-local-c {
     background-color: #3498db;
+    margin-left: 0.25rem; /* Add a small margin to separate from other buttons */
 }
 
 .btn-local-c.active {
@@ -240,10 +241,12 @@ tr:hover {
 
 /* Ajuste no input de quantidade para garantir que ele tenha o tamanho correto */
 .item-quantidade {
-    width: 3rem;
+    width: 2.5rem;
     text-align: center;
     padding: 0.25rem;
-    margin-right: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.875rem;
 }
 
 
