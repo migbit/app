@@ -431,7 +431,9 @@ footer {
     }
 
     .btn-local-c {
-    background-color: #3498db;
+        position: relative;
+        top: -1px;  /* Ajuste este valor conforme necessário */
+        vertical-align: middle;
     }
 
     .btn-local-c.active {
