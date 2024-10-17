@@ -165,7 +165,7 @@ tr:hover {
 .item-compra {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 0.5rem;
     padding: 0.375rem 0.375rem;
     background-color: #f9f9f9;
@@ -174,9 +174,10 @@ tr:hover {
 
 .item-info {
     display: flex;
-    align-items: center; /* Isso garante o alinhamento vertical */
+    align-items: flex-start; /* Isso garante o alinhamento vertical */
     flex: 1;
     gap: 0.5rem;
+    padding-top: 0.25rem
 }
 
 .item-nome,
@@ -193,8 +194,7 @@ tr:hover {
 
 .item-controles {
     display: flex;
-    align-items: center; /* Isso centraliza verticalmente os botões */
-    justify-content: flex-start; /* Alinhamento à esquerda */
+    align-items: flex-start; /* Isso centraliza verticalmente os botões */
     gap: 0.5rem; /* Espaçamento entre os botões */
 }
 
@@ -207,7 +207,7 @@ tr:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-right: 0.5rem;
-    line-height: 1.75rem; /* Centralizando o texto verticalmente */
+    line-height: 1.25rem; /* Centralizando o texto verticalmente */
 }
 
 .btn-aumentar,
@@ -226,6 +226,7 @@ tr:hover {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
+    padding: 0;
 }
 
 .btn-zero {
