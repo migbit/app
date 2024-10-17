@@ -111,26 +111,29 @@ function initializeMessageSelectors(mensagens) {
         if (selectedMessage) {
             const finalMessage = guestName ? selectedMessage.replace(/\[Hospede\]/g, guestName) : selectedMessage;
     
-            // Display the message with formatting
+            // Display the message with <p> tags for formatting
             elements.mensagemContainer.innerHTML = `<p>${finalMessage.replace(/\n/g, '</p><p>')}</p>`;
             elements.mensagemSecao.style.display = 'block';
     
-            // Copy only plain text (without HTML)
+            // Copy only plain text (with newline formatting)
             elements.mensagemContainer.onclick = () => copyMessageToClipboard();
         } else {
             elements.mensagemContainer.innerHTML = 'Mensagem não disponível.';
             elements.mensagemSecao.style.display = 'block';
         }
     }
+    
 
-   // Copy plain text message to clipboard
-function copyMessageToClipboard() {
-    const messageText = elements.mensagemContainer.textContent.trim();  // Get only plain text content
+  // Copy plain text message to clipboard
+    function copyMessageToClipboard() {
+    const messageText = elements.mensagemContainer.innerHTML
+        .replace(/<\/p><p>/g, '\n')  // Replace paragraph breaks with newlines
+        .replace(/<\/?p>/g, '');      // Remove the remaining <p> tags
 
     const tempElement = document.createElement('textarea');
     tempElement.style.position = 'absolute';
     tempElement.style.left = '-9999px';
-    tempElement.value = messageText;  // Use the plain text without HTML
+    tempElement.value = messageText.trim();  // Copy formatted plain text
 
     document.body.appendChild(tempElement);
     tempElement.select();
