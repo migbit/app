@@ -375,22 +375,33 @@ footer {
         width: 100%;
         margin-bottom: 0.5rem;
         font-weight: bold;
+        display: block; /* Force item name to be on its own line */
     }
 
-    /* Ensure that controls stay in one row and don't break */
-    .item-controles {
+    /* Group controls (quantity and buttons) together */
+    .item-controls-group {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         gap: 0.25rem;
-        flex-wrap: nowrap;  /* Prevents wrapping of buttons */
-        width: 100%;  /* Ensure controls take full width */
+        flex-wrap: nowrap; /* Prevent wrapping */
+        width: 100%;
+    }
+
+    /* Ensure buttons stay in one row and don't break */
+    .item-controles {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        flex-wrap: nowrap; /* Prevents wrapping */
+        width: 100%; /* Ensure controls take full width */
+        justify-content: flex-start;
     }
 
     /* Adjust width for the quantity input */
     .item-quantidade {
-        min-width: 2rem;  /* Minimum width to avoid overflow */
-        max-width: 2.5rem;  /* Ensure it doesn’t expand too much */
+        min-width: 2rem; /* Minimum width to avoid overflow */
+        max-width: 2.5rem; /* Ensure it doesn’t expand too much */
         text-align: center;
         padding: 0.25rem;
         border: 1px solid #ccc;
@@ -398,7 +409,7 @@ footer {
         font-size: 0.875rem;
     }
 
-    /* Ensure buttons are aligned in a row */
+    /* Make sure the buttons are aligned in a row */
     .btn-aumentar,
     .btn-diminuir,
     .btn-zero,
@@ -408,20 +419,20 @@ footer {
         background-color: #2c3e50;
         color: white;
         border: none;
-        border-radius: 50%;  /* Ensure round buttons */
+        border-radius: 50%; /* Ensure round buttons */
         cursor: pointer;
         font-size: 0.75rem;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: background-color 0.3s ease;
-        margin-right: 0.25rem;  /* Add spacing between buttons */
+        margin-right: 0.25rem; /* Add spacing between buttons */
     }
 
-    /* Adjust C button with proper margin and alignment */
+    /* Adjust C button's alignment */
     .btn-local-c {
         background-color: #3498db;
-        margin-left: 0;  /* Remove margin to avoid wrapping */
+        margin-left: 0; /* Remove margin to avoid wrapping */
     }
 
     .btn-zero {
@@ -430,27 +441,5 @@ footer {
 
     .btn-local-c.active {
         background-color: #2ecc71;
-    }
-
-    /* Ensures the entire control set (quantity and buttons) does not wrap */
-    .item-controles {
-        white-space: nowrap;  /* Prevents wrapping */
-        overflow: hidden;  /* Ensures overflow doesn’t affect the layout */
-    }
-
-    /* This is the change to ensure the quantity and buttons are in a new line */
-    .item-info {
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Add a new div to group the quantity input and buttons */
-    .item-controls-group {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.25rem;
-        width: 100%;
-        margin-top: 0.5rem; /* Add margin between item name and controls group */
     }
 }
