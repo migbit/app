@@ -124,7 +124,7 @@ function initializeMessageSelectors(mensagens) {
     }
     
 
- // Copy plain text message to clipboard with paragraph spacing
+ // Copy plain text message to clipboard with paragraph spacing, no success alert
 function copyMessageToClipboard() {
     const messageText = elements.mensagemContainer.innerHTML
         .replace(/<\/p><p>/g, '\n\n')  // Replace paragraph breaks with two newlines for spacing
@@ -139,8 +139,6 @@ function copyMessageToClipboard() {
     tempElement.select();
     document.execCommand('copy');
     document.body.removeChild(tempElement);
-
-    alert('Mensagem copiada para a área de transferência');
 }
 
 
