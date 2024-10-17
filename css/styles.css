@@ -329,6 +329,7 @@ footer {
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+    /* Adjust the navigation menu to stack items vertically on small screens */
     nav ul {
         flex-direction: column;
         padding: 0;
@@ -344,6 +345,7 @@ footer {
         padding: 0.5rem;
     }
 
+    /* Stack shopping list items vertically on small screens */
     .item-compra {
         flex-direction: column;
         align-items: stretch;
@@ -359,25 +361,28 @@ footer {
         justify-content: space-between; /* Ensure all buttons are in a row */
     }
 
+    /* Adjust controls for better spacing and width in mobile view */
     .item-controles {
         display: flex;
         justify-content: space-between;
         width: 100%; /* Full width for mobile view */
     }
 
-    .btn-local-a,
+    /* Remove "A" button reference and ensure "C" button is properly styled */
     .btn-local-c {
-        width: 35px; /* Ensure buttons maintain the same size */
+        width: 35px; /* Ensure the button maintains the same size */
         height: 35px;
         margin: 0 5px; /* Add space between buttons */
     }
 
+    /* Adjust zero button margin for spacing */
     .btn-zero {
-        margin-right: 5px; /* Adjust margin to fit the layout */
+        margin-right: 5px;
     }
 
+    /* Adjust input field size for mobile view */
     .item-quantidade {
-        width: 50px; /* Adjust input field size for mobile view */
+        width: 50px;
         text-align: center;
     }
 }
