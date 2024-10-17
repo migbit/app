@@ -196,13 +196,15 @@ tr:hover {
     padding: 0.25rem;
 }
 
+/* Alinhe os itens do controls em um linha e centralize os itens verticalmente */
 .item-controles {
     display: flex;
     align-items: center;
-    justify-content: flex-start; 
+    justify-content: flex-start;
     gap: 0.3rem; /* Espaçamento entre os botões */
 }
 
+/* Configurações gerais para os botões de controle */
 .btn-aumentar,
 .btn-diminuir,
 .btn-zero,
@@ -222,6 +224,7 @@ tr:hover {
     padding: 0; /* Remove any padding */
 }
 
+/* Configurações específicas para o botão de zero */
 .btn-zero {
     background-color: #e74c3c;
 }
@@ -230,6 +233,7 @@ tr:hover {
     background-color: #c0392b;
 }
 
+/* Configurações específicas para o botão de local-c */
 .btn-local-c {
     background-color: #3498db;
 }
@@ -248,7 +252,6 @@ tr:hover {
     font-size: 0.875rem;
     margin-right: 0.3rem; /* Espaço entre o input e os botões */
 }
-
 
 /* Caixa Page Styles */
 #relatorio-caixa h3 {
