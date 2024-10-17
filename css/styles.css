@@ -199,8 +199,8 @@ tr:hover {
 .item-controles {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza horizontalmente */
-    gap: 0.25rem; /* Espaçamento entre os botões */
+    justify-content: flex-start; 
+    gap: 0.3rem; /* Espaçamento entre os botões */
 }
 
 .btn-aumentar,
@@ -232,7 +232,6 @@ tr:hover {
 
 .btn-local-c {
     background-color: #3498db;
-    margin-left: 0.25rem; /* Add a small margin to separate from other buttons */
 }
 
 .btn-local-c.active {
@@ -247,6 +246,7 @@ tr:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 0.875rem;
+    margin-right: 0.3rem; /* Espaço entre o input e os botões */
 }
 
 
