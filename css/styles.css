@@ -357,7 +357,6 @@ footer {
 /*                                        ---------------------------------> Compras Mobile
 /* Mobile Responsive Styles for Compras Section */
 @media screen and (max-width: 768px) {
-
     /* Stack the item information and controls vertically */
     .item-compra {
         display: flex;
@@ -392,7 +391,7 @@ footer {
     /* Adjust width for the quantity input */
     .item-quantidade {
         min-width: 2rem;  /* Minimum width to avoid overflow */
-        max-width: 2.5rem;  /* Ensure it doesn’t expand too much */
+        max-width: 2.5rem;  /* Ensure it doesn't expand too much */
         text-align: center;
         padding: 0.25rem;
         border: 1px solid #ccc;
@@ -423,7 +422,6 @@ footer {
     /* Adjust C button with proper margin and alignment */
     .btn-local-c {
         background-color: #3498db;
-        margin-left: 0;  /* Remove margin to avoid wrapping */
     }
 
     .btn-zero {
@@ -437,7 +435,7 @@ footer {
     /* Ensures the entire control set (quantity and buttons) does not wrap */
     .item-controles {
         white-space: nowrap;  /* Prevents wrapping */
-        overflow: hidden;  /* Ensures overflow doesn’t affect the layout */
+        overflow: hidden;  /* Ensures overflow doesn't affect the layout */
         width: 100%;
     }
 
