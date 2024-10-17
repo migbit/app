@@ -7,15 +7,16 @@
       "Francês": "<p>Nous vous remercions de votre message.</p><p>Malheureusement, nos prix sont fixés automatiquement par un algorithme, nous ne pouvons donc pas les modifier.</p><p>Nous vous remercions de votre compréhension.</p><p>Cordialement.</p>"
     },
     "Estacionamento 123": {
-      "Português": "<p><strong>Estacionamento 123 está disponível para sua reserva.</p>",
-      "Inglês": "<p><strong>Parking 123 is available for your reservation.</p>",
-      "Espanhol": "<p><strong>El estacionamiento 123 está disponible para su reserva.</p>"
+      "Português": "<p>O apartamento não dispõe de estacionamento próprio, mas pode estacionar gratuitamente na rua.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>The apartment does not have private parking, but there is free street parking available.</p><p>Best regards.</p>",
+      "Espanhol": "<p>El apartamento no dispone de aparcamiento privado, pero hay estacionamiento gratuito en la calle.</p><p>Un saludo.</p>",
+      "Francês": "<p>L'appartement ne dispose pas de parking privé, mais il y a un stationnement gratuit dans la rue.</p><p>Cordialement.</p>"
     },
     "Estacionamento 1248": {
-      "Português": "Mensagem para Estacionamento 1248 em Português.",
-      "Inglês": "Message for Estacionamento 1248 in English.",
-      "Espanhol": "Mensaje para Estacionamento 1248 en Español.",
-      "Francês": "Message pour Estacionamento 1248 en Français."
+      "Português": "<p>Pode estacionar gratuitamente na rua ou, se preferir, também pode estacionar na entrada do apartamento.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>You can park on the street for free, or if you prefer, you can also park in the driveway.</p><p>Best regards.</p>",
+      "Espanhol": "<p>Puede aparcar gratuitamente en la calle o, si lo prefiere, también puede aparcar en la entrada.</p><p>Un saludo.</p>",
+      "Francês": "<p>Vous pouvez vous garer dans la rue gratuitement ou, si vous préférez, également dans l'allée.</p><p>Cordialement.</p>"
     },
     "Escadas 123": {
       "Português": "Mensagem para Escadas 123 em Português.",
@@ -29,35 +30,35 @@
       "Espanhol": "Mensaje para Escadas 1248 en Español.",
       "Francês": "Message pour Escadas 1248 en Français."
     },
-    "Localização": {
-      "Português": "Mensagem para Localização em Português.",
-      "Inglês": "Message for Localização in English.",
-      "Espanhol": "Mensaje para Localização en Español.",
-      "Francês": "Message pour Localização en Français."
+    "Localização 123": {
+      "Português": "<p>O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.), próximo à estação de metro Casa da Música. Se desejar pesquisar no mapa, está na Rua Francisco Sanches, Porto.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.), close to Casa da Música metro station. If you want to find it on a map, it is on Rua Francisco Sanches, Porto.</p><p>Best regards.</p>",
+      "Espanhol": "<p>El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.), próximo a la estación de metro Casa da Música. Si desea buscarlo en el mapa, está en la Rua Francisco Sanches, Porto.</p><p>Un saludo.</p>",
+      "Francês": "<p>L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.), près de la station de métro Casa da Música. Pour le trouver sur une carte, il est situé rue Francisco Sanches, à Porto.</p><p>Cordialement.</p>"
+    },
+    "Localização 1248": {
+      "Português": "<p>O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.), próximo à estação de metro Casa da Música. Se desejar pesquisar no mapa, está na Rua de Pedro Hispano 1248, Porto.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.), close to Casa da Música metro station. If you want to find it on a map, it is on Rua de Pedro Hispano 1248, Porto.</p><p>Best regards.</p>",
+      "Espanhol": "<p>El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.), próximo a la estación de metro Casa da Música. Si desea buscarlo en el mapa, está en la Rua de Pedro Hispano 1248, Porto.</p><p>Un saludo.</p>",
+      "Francês": "<p>L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.), près de la station de métro Casa da Música. Pour le trouver sur une carte, il est situé rue de Pedro Hispano 1248, à Porto.</p><p>Cordialement.</p>"
     },
     "Check-In cedo sem hóspedes": {
-      "Português": "Mensagem para Check-In cedo sem hóspedes em Português.",
-      "Inglês": "Message for Check-In cedo sem hóspedes in English.",
-      "Espanhol": "Mensaje para Check-In cedo sem huéspedes en Español.",
-      "Francês": "Message pour Check-In cedo sem hóspedes en Français."
+      "Português": "<p>O check-in antecipado não é um problema. Por favor, envie-me uma mensagem 30 minutos antes da sua chegada, e estarei lá para recebê-lo. </p><p>Cumprimentos.</p>",
+      "Inglês": "<p>Early check-in isn't a problem. Please send me a message 30 minutes before your arrival, and I will be there to welcome you. </p><p>Best regards.</p>",
+      "Espanhol": "<p>El check-in temprano no es un problema. Por favor, envíeme un mensaje 30 minutos antes de su llegada, y estaré allí para recibirle. </p><p>Un saludo.</p>",
+      "Francês": "<p>Le check-in anticipé n'est pas un problème. Merci de m'envoyer un message 30 minutes avant votre arrivée, et je serai là pour vous accueillir. </p><p>Cordialement.</p>"
     },
-    "Check-In cedo com hóspedes 123": {
-      "Português": "Mensagem para Check-In cedo com hóspedes 123 em Português.",
-      "Inglês": "Message for Check-In cedo com hóspedes 123 in English.",
-      "Espanhol": "Mensaje para Check-In cedo com hóspedes 123 en Español.",
-      "Francês": "Message pour Check-In cedo com hóspedes 123 en Français."
+    "Check-In cedo sem hóspedes? 1248": {
+      "Português": "<p>Por agora, não sabemos se teremos hóspedes a sair até às 12h, mas se houver:</p><ul><li><strong>Antes das 12:00:</strong> Podem guardar as bagagens no anexo da lavandaria.</li><li><strong>12:00 às 16:00:</strong> Podem guardar as bagagens dentro do apartamento, levar as chaves, e receberá uma mensagem assim que o apartamento estiver limpo.</li></ul><p>Cumprimentos.</p>",
+      "Inglês": "<p>For now, we don't know if I'll have guests leaving until 12h, but if we do:</p><ul><li><strong>Before 12:00:</strong> You can store your luggage in the laundry annex.</li><li><strong>12:00 to 16:00:</strong> You can store your luggage inside the apartment and take the keys, and you'll receive a message as soon as the apartment is cleaned.</li></ul><p>Best regards.</p>",
+      "Espanhol": "<p>Por ahora, no sabemos si tendré huéspedes saliendo hasta las 12h, pero si los hay:</p><ul><li><strong>Antes de las 12:00:</strong> Puede guardar su equipaje en el anexo de lavandería.</li><li><strong>12:00 a 16:00:</strong> Puede guardar su equipaje dentro del apartamento y tomar las llaves, y recibirá un mensaje tan pronto como el apartamento esté limpio.</li></ul><p>Un saludo.</p>",
+      "Francês": "<p>Pour l'instant, nous ne savons pas si des invités partiront avant 12h, mais si c'est le cas :</p><ul><li><strong>Avant 12:00 :</strong> Vous pouvez déposer vos bagages dans l'annexe de la buanderie.</li><li><strong>De 12:00 à 16:00 :</strong> Vous pouvez déposer vos bagages dans l'appartement et prendre les clés, et vous recevrez un message dès que l'appartement sera propre.</li></ul><p>Cordialement.</p>"
     },
-    "Check-In cedo com hóspedes 1248": {
-      "Português": "Mensagem para Check-In cedo com hóspedes 1248 em Português.",
-      "Inglês": "Message for Check-In cedo com hóspedes 1248 in English.",
-      "Espanhol": "Mensaje para Check-In cedo com hóspedes 1248 en Español.",
-      "Francês": "Message pour Check-In cedo com hóspedes 1248 en Français."
-    },
-    "Check-in tardio": {
-      "Português": "Mensagem para Check-in tardio em Português.",
-      "Inglês": "Message for Check-in tardio in English.",
-      "Espanhol": "Mensaje para Check-in tardio en Español.",
-      "Francês": "Message pour Check-in tardio en Français."
+    "Check-In tardio": {
+      "Português": "<p>O check-in tardio não é um problema de todo, peço apenas que me envie uma mensagem antes da sua chegada e estarei à espera, independentemente da hora.</p>",
+      "Inglês": "<p>The late check-in isn't a problem at all, I just ask you to send me a message before your arrival, and I'll be waiting regardless of the hour.</p>",
+      "Espanhol": "<p>El check-in tardío no es un problema en absoluto, solo le pido que me envíe un mensaje antes de su llegada, y estaré esperando independientemente de la hora.</p>",
+      "Francês": "<p>Le check-in tardif n'est pas un problème du tout, je vous demande simplement de m'envoyer un message avant votre arrivée, et je serai là, quelle que soit l'heure.</p>"
     }
   },
   "Antes do Check-in": {
