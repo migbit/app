@@ -1,4 +1,4 @@
-/* Base Styles for all screens */
+/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -47,7 +47,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #505f6d;
+    background-color: #1abc9c;
 }
 
 /* Main Content Styles */
@@ -56,6 +56,97 @@ main {
     padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+/* Section Styles */
+.form-section, .report-section {
+    background-color: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 0.75rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+    font-size: 0.875rem;
+    color: #34495e;
+}
+
+input[type="number"],
+select,
+input[type="checkbox"] {
+    width: 100%;
+    padding: 0.375rem;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    max-width: 300px;
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+}
+
+button {
+    padding: 0.375rem 0.75rem;
+    background-color: #1abc9c;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: background-color 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+button:hover {
+    background-color: #16a085;
+}
+
+/* Message Container */
+#mensagem-container {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
 }
 
 /* Shopping List Styles */
@@ -103,12 +194,11 @@ main {
 .item-controles {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
 }
 
 .item-quantidade {
-    width: 2.5rem;  /* Adjusted for double digits */
+    width: 2.5rem;  /* Reducing the width to fit single or double digits */
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
@@ -131,7 +221,6 @@ main {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
-    margin-right: 0.25rem; /* Spacing between buttons */
 }
 
 .btn-zero {
@@ -143,51 +232,157 @@ main {
 }
 
 .btn-local-c {
-    background-color: #3498db;  /* Unique color for the 'C' button */
+    background-color: #3498db;  /* Keeping the unique color for the 'C' button */
+    margin-left: 0.5rem;  /* Adding spacing before the 'C' button */
 }
 
 .btn-local-c.active {
     background-color: #2ecc71;  /* Green when active */
+    margin-left: 0.5rem;  /* Adding spacing before the 'C' button */
 }
 
-/* Mobile Responsive Styles */
-@media screen and (max-width: 768px) {
-    /* Stack item info and controls vertically */
-    .item-compra {
-        display: flex;
+
+/* Caixa Page Styles */
+#relatorio-caixa h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 0.5rem;
+}
+
+#relatorio-caixa > div {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-entrada,
+.btn-saida {
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-entrada {
+    background-color: #ecf0f1;
+    color: #333;
+}
+
+.btn-saida {
+    background-color: #ecf0f1;
+    color: #333;
+}
+
+.btn-entrada.btn-active {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-saida.btn-active {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.valor-positivo {
+    color: #2ecc71;
+}
+
+.valor-negativo {
+    color: #e74c3c;
+}
+
+.total-caixa {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: #fafafa;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Reparações Page Styles */
+.urgente {
+    background-color: #ffe4e1;
+    color: #d9534f;
+}
+
+.reparado {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #34495e;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    /* Adjust the navigation menu to stack items vertically on small screens */
+    nav ul {
         flex-direction: column;
-        align-items: flex-start;
-        padding: 0.5rem;
-        width: 100%;
+        padding: 0;
     }
 
-    /* Ensure full width for item name and flex alignment */
-    .item-info {
+    nav ul li {
+        margin: 0.25rem 0;
+        text-align: center;
+    }
+
+    nav ul li a {
+        display: block;
+        padding: 0.5rem;
+    }
+
+    /* Stack shopping list items vertically on small screens */
+    .item-compra {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.5rem;
+    }
+
+    .item-info,
+    .item-acoes {
         width: 100%;
         margin-bottom: 0.5rem;
-        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Ensure all buttons are in a row */
+    }
+
+    /* Adjust controls for better spacing and width in mobile view */
+    .item-controles {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        width: 100%; /* Full width for mobile view */
     }
 
-    /* Align controls and prevent them from breaking */
-    .item-controles {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.25rem;
-        flex-wrap: nowrap;  /* Prevent wrapping */
-    }
-
-    /* Adjust C button alignment and prevent overflow */
+    /* Remove "A" button reference and ensure "C" button is properly styled */
     .btn-local-c {
-        margin-left: 0;  /* Remove margin for consistent alignment */
+        width: 35px; /* Ensure the button maintains the same size */
+        height: 35px;
+        margin: 0 5px; /* Add space between buttons */
     }
 
-    /* Ensures that controls remain aligned without overflow */
-    .item-controles {
-        white-space: nowrap;
-        overflow: hidden;
+    /* Adjust zero button margin for spacing */
+    .btn-zero {
+        margin-right: 5px;
+    }
+
+    /* Adjust input field size for mobile view */
+    .item-quantidade {
+        width: 50px;
+        text-align: center;
     }
 }
