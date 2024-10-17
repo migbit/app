@@ -67,57 +67,6 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Form Styles */
-.form-group {
-    margin-bottom: 0.75rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-weight: bold;
-    font-size: 0.875rem;
-    color: #34495e;
-}
-
-input[type="number"],
-select,
-input[type="checkbox"] {
-    width: 100%;
-    padding: 0.375rem;
-    border: 1px solid #bdc3c7;
-    border-radius: 4px;
-    max-width: 300px;
-    font-size: 0.875rem;
-    margin-bottom: 0.375rem;
-}
-
-button {
-    padding: 0.375rem 0.75rem;
-    background-color: #1abc9c;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    transition: background-color 0.3s ease;
-    margin-top: 0.5rem;
-}
-
-button:hover {
-    background-color: #16a085;
-}
-
-/* Message Container */
-#mensagem-container {
-    margin-top: 0.75rem;
-    padding: 0.75rem;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    line-height: 1.5;
-}
-
 /* Table Styles */
 table {
     width: 100%;
@@ -149,7 +98,7 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/*                                                        -------------------->    Shopping List Styles */
+/* Shopping List Styles */
 .categoria {
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
@@ -165,7 +114,7 @@ tr:hover {
 .item-compra {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 0.5rem;
     padding: 0.375rem 0.375rem;
     background-color: #f9f9f9;
@@ -174,16 +123,16 @@ tr:hover {
 
 .item-info {
     display: flex;
-    align-items: flex-start; /* Isso garante o alinhamento vertical */
+    align-items: center;
     flex: 1;
     gap: 0.5rem;
-    padding-top: 0.25rem
 }
 
 .item-nome,
 .item-nome-custom {
     flex: 1;
     margin-right: 0.5rem;
+    font-weight: bold;
 }
 
 .item-nome-custom {
@@ -194,39 +143,36 @@ tr:hover {
 
 .item-controles {
     display: flex;
-    align-items: flex-start; /* Isso centraliza verticalmente os botões */
-    gap: 0.5rem; /* Espaçamento entre os botões */
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .item-quantidade {
-    display: inline-block; /* Certifica que ele se comporte como um botão */
-    width: 2.5rem;
-    height: 1.75rem; /* Definindo a mesma altura dos botões */
+    width: 2.5rem;  /* Reduzindo o tamanho para números pequenos */
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-right: 0.5rem;
-    line-height: 1.25rem; /* Centralizando o texto verticalmente */
+    height: 2rem; /* Garantindo altura consistente */
+    line-height: 2rem; /* Centralizando o texto */
 }
 
 .btn-aumentar,
 .btn-diminuir,
 .btn-zero,
 .btn-local-c {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 2rem;
+    height: 2rem;
     background-color: #2c3e50;
     color: white;
     border: none;
-    border-radius: 50%;  /* Garantir que os botões sejam redondos */
+    border-radius: 50%;  /* Garantindo que todos os botões sejam redondos */
     cursor: pointer;
     font-size: 0.875rem;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
-    padding: 0;
 }
 
 .btn-zero {
@@ -238,14 +184,26 @@ tr:hover {
 }
 
 .btn-local-c {
-    background-color: #3498db;  /* Keeping the unique color for the 'C' button */
+    background-color: #3498db;
+    margin-left: 0.5rem;  /* Espaçamento antes do botão C */
 }
 
 .btn-local-c.active {
-    background-color: #2ecc71;  /* Green when active */
-    margin-left: 0.5rem;  /* Adding spacing before the 'C' button */
+    background-color: #2ecc71;  /* Verde quando ativo */
+    margin-left: 0.5rem;
 }
 
+/* Alinhamento e espaçamento */
+.item-controles {
+    display: flex;
+    align-items: center;  /* Garantindo alinhamento vertical centralizado */
+    justify-content: flex-start;
+    gap: 0.5rem;  /* Espaçamento entre os botões */
+}
+
+.item-quantidade {
+    margin-right: 0.5rem;  /* Espaçamento entre o input de quantidade e os botões */
+}
 
 /* Caixa Page Styles */
 #relatorio-caixa h3 {
@@ -330,52 +288,4 @@ footer {
     text-align: center;
     padding: 1rem 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    /* Adjust the navigation menu to stack items vertically on small screens */
-    nav ul {
-        flex-direction: column;
-        padding: 0;
-    }
-
-    nav ul li {
-        margin: 0.25rem 0;
-        text-align: center;
-    }
-
-    nav ul li a {
-        display: block;
-        padding: 0.5rem;
-    }
-
-    /* Stack shopping list items vertically on small screens */
-    .item-compra {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 0.5rem;
-    }
-
-    .item-info,
-    .item-acoes {
-        width: 100%;
-        margin-bottom: 0.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between; /* Ensure all buttons are in a row */
-    }
-
-    /* Adjust controls for better spacing and width in mobile view */
-    .item-controles {
-        display: flex;
-        justify-content: space-between;
-        width: 100%; /* Full width for mobile view */
-    }
-
-    /* Adjust input field size for mobile view */
-    .item-quantidade {
-        width: 50px;
-        text-align: center;
-    }
 }
