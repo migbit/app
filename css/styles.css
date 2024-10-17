@@ -357,6 +357,7 @@ footer {
 /*                                        ---------------------------------> Compras Mobile
 /* Mobile Responsive Styles for Compras Section */
 @media screen and (max-width: 768px) {
+
     /* Stack the item information and controls vertically */
     .item-compra {
         display: flex;
@@ -373,6 +374,7 @@ footer {
     .item-info {
         width: 100%;
         margin-bottom: 0.5rem;
+        font-weight: bold;
     }
 
     /* Item name styles */
@@ -381,9 +383,6 @@ footer {
         width: 100%;
         font-weight: bold;
         font-size: 1rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
     /* Ensure that controls stay in one row and don't break */
@@ -392,14 +391,13 @@ footer {
         align-items: center;
         justify-content: flex-start;
         gap: 0.25rem;
-        width: 100%;
-        margin-top: 0.5rem; /* Add some space between name and controls */
+        width: 100%;  /* Ensure controls take full width */
     }
 
     /* Adjust width for the quantity input */
     .item-quantidade {
-        min-width: 2rem;
-        max-width: 2.5rem;
+        min-width: 2rem;  /* Minimum width to avoid overflow */
+        max-width: 2.5rem;  /* Ensure it doesn’t expand too much */
         text-align: center;
         padding: 0.25rem;
         border: 1px solid #ccc;
@@ -417,19 +415,20 @@ footer {
         background-color: #2c3e50;
         color: white;
         border: none;
-        border-radius: 50%;
+        border-radius: 50%;  /* Ensure round buttons */
         cursor: pointer;
         font-size: 0.75rem;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: background-color 0.3s ease;
-        margin-right: 0.25rem;
+        margin-right: 0.25rem;  /* Add spacing between buttons */
     }
 
     /* Adjust C button with proper margin and alignment */
     .btn-local-c {
         background-color: #3498db;
+        margin-left: 0;  /* Remove margin to avoid wrapping */
     }
 
     .btn-zero {
@@ -439,4 +438,18 @@ footer {
     .btn-local-c.active {
         background-color: #2ecc71;
     }
+
+    /* This is the change to ensure the quantity and buttons are in a new line */
+    .item-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Ensures the entire control set (quantity and buttons) does not wrap */
+    .item-controles {
+        white-space: nowrap;  /* Prevents wrapping */
+        overflow: hidden;  /* Ensures overflow doesn’t affect the layout */
+        flex-wrap: wrap;  /* Allows the quantity and buttons to wrap to a new line */
+    }
+
 }
