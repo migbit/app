@@ -191,16 +191,16 @@ tr:hover {
     border-radius: 3px;
 }
 
-.item-controles {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 .item-quantidade {
     width: 3rem;
     text-align: center;
     padding: 0.25rem;
+}
+
+.item-controles {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Adiciona espaço entre os botões */
 }
 
 .btn-aumentar,
@@ -212,13 +212,14 @@ tr:hover {
     background-color: #2c3e50;
     color: white;
     border: none;
-    border-radius: 50%; /* Makes all buttons round */
+    border-radius: 50%;
     cursor: pointer;
     font-size: 0.875rem;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
+    margin-right: 0.5rem; /* Adiciona margem à direita para espaçar os botões */
 }
 
 .btn-zero {
@@ -235,14 +236,6 @@ tr:hover {
 
 .btn-local-c.active {
     background-color: #2ecc71;
-}
-
-.btn-zero {
-    background-color: #e74c3c;
-}
-
-.btn-zero:hover {
-    background-color: #c0392b;
 }
 
 
