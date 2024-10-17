@@ -357,6 +357,7 @@ footer {
 /*                                        ---------------------------------> Compras Mobile
 /* Mobile Responsive Styles for Compras Section */
 @media screen and (max-width: 768px) {
+
     /* Stack the item information and controls vertically */
     .item-compra {
         display: flex;
@@ -384,22 +385,23 @@ footer {
         align-items: center;
         justify-content: flex-start;
         gap: 0.25rem;
-        flex-wrap: nowrap;  /* Prevent wrapping */
+        flex-wrap: nowrap;  /* Absolutely no wrapping */
         width: 100%;  /* Ensure controls take full width */
     }
 
     /* Adjust width for the quantity input */
     .item-quantidade {
         min-width: 2rem;  /* Minimum width to avoid overflow */
-        max-width: 2.5rem;  /* Ensure it doesn't expand too much */
+        max-width: 2.5rem;  /* Ensure it doesn’t expand too much */
         text-align: center;
         padding: 0.25rem;
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 0.875rem;
+        flex-shrink: 0;  /* Ensure this doesn't shrink too much */
     }
 
-    /* Ensure buttons are aligned in a row */
+    /* Ensure buttons are aligned in a row and don't wrap */
     .btn-aumentar,
     .btn-diminuir,
     .btn-zero,
@@ -417,11 +419,14 @@ footer {
         justify-content: center;
         transition: background-color 0.3s ease;
         margin-right: 0.25rem;  /* Add spacing between buttons */
+        flex-shrink: 0;  /* Prevent buttons from shrinking and wrapping */
     }
 
-    /* Adjust C button with proper margin and alignment */
+    /* Special styling for the local c button */
     .btn-local-c {
         background-color: #3498db;
+        margin-left: 0;  /* Ensure no extra margin that could cause wrapping */
+        flex-shrink: 0;  /* Prevent this button from shrinking and wrapping */
     }
 
     .btn-zero {
@@ -432,10 +437,29 @@ footer {
         background-color: #2ecc71;
     }
 
-    /* Ensures the entire control set (quantity and buttons) does not wrap */
+    /* Ensure the entire control set (quantity and buttons) does not wrap */
+    .item-controls-group {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.25rem;
+        width: 100%;  /* Ensure full width */
+        flex-wrap: nowrap;  /* Ensure no wrapping within this group */
+    }
+
+    /* Prevent the button container from wrapping and ensure overflow is managed */
+    .button-container {
+        display: flex;
+        flex-wrap: nowrap;  /* Ensure buttons don't wrap */
+        overflow: hidden;  /* Hide any overflow if the container can't fit all content */
+        width: auto;  /* Let the buttons determine the width */
+        flex-shrink: 0;  /* Prevent the container from shrinking */
+    }
+
+    /* Ensure that the parent container (item-controles) doesn't allow wrapping */
     .item-controles {
-        white-space: nowrap;  /* Prevents wrapping */
-        overflow: hidden;  /* Ensures overflow doesn't affect the layout */
-        width: 100%;
+        white-space: nowrap;  /* Prevents text wrapping */
+        overflow: hidden;  /* Ensures overflow is managed */
+        flex-wrap: nowrap;  /* Ensures flex items don't wrap */
     }
 }
