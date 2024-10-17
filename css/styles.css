@@ -205,13 +205,14 @@ tr:hover {
 
 .btn-aumentar,
 .btn-diminuir,
-.btn-zero {
+.btn-zero,
+.btn-local-c {
     width: 1.75rem;
     height: 1.75rem;
     background-color: #2c3e50;
     color: white;
     border: none;
-    border-radius: 50%;
+    border-radius: 50%; /* Makes all buttons round */
     cursor: pointer;
     font-size: 0.875rem;
     display: flex;
@@ -230,19 +231,20 @@ tr:hover {
 
 .btn-local-c {
     background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 0.375rem;
-    border-radius: 50%; /* Make the button round */
-    cursor: pointer;
-    margin-left: 0.5rem;
-    width: 35px;  /* Ensure width and height are equal */
-    height: 35px;
 }
 
 .btn-local-c.active {
     background-color: #2ecc71;
 }
+
+.btn-zero {
+    background-color: #e74c3c;
+}
+
+.btn-zero:hover {
+    background-color: #c0392b;
+}
+
 
 /* Caixa Page Styles */
 #relatorio-caixa h3 {
