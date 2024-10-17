@@ -25,7 +25,8 @@ function initializeMessageSelectors(mensagens) {
         weekdayDropdownContainer: document.getElementById('weekday-dropdown-container'),
         weekdayDropdown: document.getElementById('weekday-select'),
         mensagemSecao: document.getElementById('mensagem-secao'),
-        mensagemContainer: document.getElementById('mensagem-container')
+        mensagemContainer: document.getElementById('mensagem-container'),
+        babyMessageContainer: document.getElementById('baby-message-container') // Adicionando o container do texto sobre o bebé
     };
 
     let selectedIdioma = "";
@@ -33,9 +34,16 @@ function initializeMessageSelectors(mensagens) {
     let selectedSubCategoria = "";
     let selectedWeekday = "";
 
+    const babyMessage = {
+        "Português": "Além disso, gostaria de saber se precisa de um berço para bebé e/ou uma cadeira de alimentação.",
+        "Inglês": "Additionally, I’d like to know if you need a baby bed and/or a feeding chair.",
+        "Espanhol": "Además, me gustaría saber si necesita una cuna para bebé y/o una silla de alimentación.",
+        "Francês": "De plus, j'aimerais savoir si vous avez besoin d'un lit bébé et/ou d'une chaise haute."
+    };
+
     function resetDropdowns() {
-        [elements.categoriaDiv, elements.subcategoriaDiv, elements.nameInputContainer, 
-         elements.weekdayDropdownContainer, elements.mensagemSecao].forEach(el => el.style.display = 'none');
+        [elements.categoriaDiv, elements.subcategoriaDiv, elements.nameInputContainer,
+         elements.weekdayDropdownContainer, elements.mensagemSecao, elements.babyMessageContainer].forEach(el => el.style.display = 'none');
         elements.categoriaDropdown.innerHTML = '<option value="">Selecionar Categoria</option>';
         elements.subcategoriaDropdown.innerHTML = '<option value="">Selecionar Subcategoria</option>';
         selectedCategoria = "";
@@ -57,6 +65,7 @@ function initializeMessageSelectors(mensagens) {
         const isWhenArrive = selectedSubCategoria === 'Quando Chegam?';
         elements.nameInputContainer.style.display = isWhenArrive ? 'block' : 'none';
         elements.weekdayDropdownContainer.style.display = isWhenArrive ? 'block' : 'none';
+        elements.babyMessageContainer.style.display = isWhenArrive ? 'block' : 'none'; // Exibe o texto sobre o bebé
 
         if (isWhenArrive) {
             if (selectedWeekday) {
@@ -82,16 +91,21 @@ function initializeMessageSelectors(mensagens) {
 
         const selectedMessage = messageObj[selectedIdioma];
         const guestName = elements.guestNameInput.value.trim();
+        const babyText = babyMessage[selectedIdioma]; // Pega a mensagem sobre o bebé para o idioma selecionado
 
         if (selectedMessage) {
             const finalMessage = guestName ? selectedMessage.replace(/\[Hospede\]/g, guestName) : selectedMessage;
             elements.mensagemContainer.innerHTML = `<p>${finalMessage}</p>`;
             elements.mensagemSecao.style.display = 'block';
-            elements.mensagemContainer.onclick = () => copyMessageToClipboard(finalMessage);
+            elements.mensagemContainer.onclick = () => copyMessageToClipboard(finalMessage + "\n\n" + babyText); // Copia ambos os textos
         } else {
             elements.mensagemContainer.innerHTML = 'Mensagem não disponível.';
             elements.mensagemSecao.style.display = 'block';
         }
+
+        // Adiciona a mensagem de bebê ao container correspondente
+        elements.babyMessageContainer.innerHTML = `<p>${babyText}</p>`;
+        elements.babyMessageContainer.onclick = () => copyMessageToClipboard(babyText); // Permite copiar só a mensagem de bebê
     }
 
     function copyMessageToClipboard(text) {
