@@ -376,11 +376,6 @@ footer {
         width: 100%; /* Full width for mobile view */
     }
 
-   /* Adjust zero button margin for spacing */
-    .btn-zero {
-        margin-right: 5px;
-    }
-
     /* Adjust input field size for mobile view */
     .item-quantidade {
         width: 50px;
