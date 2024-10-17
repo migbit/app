@@ -326,3 +326,32 @@ footer {
     padding: 1rem 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
+
+/*                                          ----------------------------------> MOBILE!
+
+/* Mobile Responsive Header Styles */
+@media screen and (max-width: 768px) {
+    header {
+        padding: 0.5rem; /* Reduce padding for smaller screens */
+    }
+
+    /* Stack navigation items vertically on smaller screens */
+    nav ul {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    nav ul li {
+        margin: 0.25rem 0; /* Reduce margin between list items */
+    }
+
+    nav ul li a {
+        padding: 0.5rem; /* Adjust padding for better touch area */
+        font-size: 1rem; /* Slightly larger font size for readability */
+    }
+
+    /* Reduce the overall header text size */
+    header h1 {
+        font-size: 1.5rem; /* Adjust for better fitting on mobile */
+    }
+}
