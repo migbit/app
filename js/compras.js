@@ -162,10 +162,14 @@ function gerarResumo() {
     itens.forEach(item => {
         const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
         const quantidade = item.querySelector('.item-quantidade').value;
-        const local = item.getAttribute('data-local') || 'Não definido';
+        const local = item.getAttribute('data-local');
 
         if (nome && parseInt(quantidade) > 0) {
-            resumo += `${nome}: ${quantidade} (${local})\n`;
+            let localDisplay = '';
+            if (local === 'C') {
+                localDisplay = ' (Casa)';
+            }
+            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
         }
     });
 
