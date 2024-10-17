@@ -367,12 +367,14 @@ footer {
         background-color: #f9f9f9;
         border-radius: 4px;
         margin-bottom: 1rem;
+        width: 100%;
     }
 
     /* Ensure item name takes the full width */
     .item-info {
         width: 100%;
         margin-bottom: 0.5rem;
+        font-weight: bold;
     }
 
     /* Item name styles */
@@ -383,19 +385,20 @@ footer {
         font-size: 1rem;
     }
 
-    /* Ensure that controls stay in one row */
+    /* Ensure that controls stay in one row and don't break */
     .item-controles {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         gap: 0.25rem;
-        flex-wrap: nowrap;  /* Prevent the buttons from wrapping */
-        width: 100%;  /* Make sure the controls take the full width */
+        flex-wrap: nowrap;  /* Prevent buttons from wrapping */
+        width: 100%;  /* Ensure controls take full width */
     }
 
     /* Adjust width for the quantity input */
     .item-quantidade {
-        width: 2.5rem;  /* Smaller width to accommodate single or double digits */
+        min-width: 2rem;  /* Minimum width to avoid overflow */
+        max-width: 2.5rem;  /* Ensure it doesn’t expand too much */
         text-align: center;
         padding: 0.25rem;
         border: 1px solid #ccc;
@@ -413,7 +416,7 @@ footer {
         background-color: #2c3e50;
         color: white;
         border: none;
-        border-radius: 50%;  /* Round buttons */
+        border-radius: 50%;  /* Ensure round buttons */
         cursor: pointer;
         font-size: 0.75rem;
         display: flex;
@@ -436,4 +439,11 @@ footer {
     .btn-local-c.active {
         background-color: #2ecc71;
     }
+
+    /* Ensures the entire control set (quantity and buttons) does not wrap */
+    .item-controles {
+        white-space: nowrap;  /* Prevents wrapping */
+        overflow: hidden;  /* Ensures overflow doesn’t affect the layout */
+    }
+
 }
