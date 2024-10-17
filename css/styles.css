@@ -460,10 +460,4 @@ footer {
         margin-top: 0.5rem; /* Add margin between item name and controls group */
     }
 
-     /* Move the btn-local-c (C button) to a new line */
-     .btn-local-c {
-        display: block;
-        margin-top: 0.5rem; /* Add margin between controls group and C button */
-    }
-
-}
+    
