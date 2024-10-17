@@ -228,7 +228,7 @@ tr:hover {
     background-color: #c0392b;
 }
 
-.btn-local-a {
+.btn-local-c {
     background-color: #3498db;
     color: white;
     border: none;
@@ -238,7 +238,7 @@ tr:hover {
     margin-left: 0.5rem;
 }
 
-.btn-local-a.active {
+.btn-local-c.active {
     background-color: #2ecc71;
 }
 
