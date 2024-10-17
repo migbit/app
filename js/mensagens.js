@@ -124,16 +124,16 @@ function initializeMessageSelectors(mensagens) {
     }
     
 
-  // Copy plain text message to clipboard
-    function copyMessageToClipboard() {
+ // Copy plain text message to clipboard with paragraph spacing
+function copyMessageToClipboard() {
     const messageText = elements.mensagemContainer.innerHTML
-        .replace(/<\/p><p>/g, '\n')  // Replace paragraph breaks with newlines
-        .replace(/<\/?p>/g, '');      // Remove the remaining <p> tags
+        .replace(/<\/p><p>/g, '\n\n')  // Replace paragraph breaks with two newlines for spacing
+        .replace(/<\/?p>/g, '');       // Remove the remaining <p> tags
 
     const tempElement = document.createElement('textarea');
     tempElement.style.position = 'absolute';
     tempElement.style.left = '-9999px';
-    tempElement.value = messageText.trim();  // Copy formatted plain text
+    tempElement.value = messageText.trim();  // Copy formatted plain text with paragraph spacing
 
     document.body.appendChild(tempElement);
     tempElement.select();
@@ -142,6 +142,7 @@ function initializeMessageSelectors(mensagens) {
 
     alert('Mensagem copiada para a área de transferência');
 }
+
 
     // Handle baby message copy button click
     elements.copyBabyMessageBtn.onclick = () => {
