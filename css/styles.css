@@ -177,6 +177,7 @@ tr:hover {
     align-items: center;
     flex: 1;
     gap: 0.5rem;
+    height: 100%; /* Adicionado para garantir que tudo seja centralizado verticalmente */
 }
 
 .item-nome,
@@ -195,14 +196,17 @@ tr:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    height: 100%; /* Certifica-se de que os controles sejam centralizados */
 }
 
 .item-quantidade {
-    width: 2.5rem;  /* Reducing the width to fit single or double digits */
+    width: 2.5rem;
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
     border-radius: 4px;
+    height: 2rem; /* Garantindo altura consistente */
+    line-height: 2rem; /* Centralizando o texto verticalmente */
 }
 
 .btn-aumentar,
@@ -237,6 +241,13 @@ tr:hover {
 
 .btn-local-c.active {
     background-color: #2ecc71;  /* Green when active */
+}
+
+/* Certificando que todos os elementos estejam alinhados centralmente */
+.item-info, .item-controles, .item-nome, .item-quantidade, .btn-aumentar, .btn-diminuir, .btn-zero, .btn-local-c {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Caixa Page Styles */
