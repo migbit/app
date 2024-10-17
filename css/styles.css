@@ -432,7 +432,7 @@ footer {
 
     .btn-local-c {
         position: relative;
-        top: -1px;  /* Ajuste este valor conforme necessário */
+        top: -2px;  /* Ajuste este valor conforme necessário */
         vertical-align: middle;
     }
 
