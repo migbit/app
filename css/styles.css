@@ -220,6 +220,9 @@ tr:hover {
     justify-content: center;
     transition: background-color 0.3s ease;
     margin-right: 0.5rem; /* Adiciona margem à direita para espaçar os botões */
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
 }
 
 .btn-zero {
