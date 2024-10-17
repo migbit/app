@@ -378,16 +378,6 @@ footer {
         flex-direction: column;  /* Stack item name and controls on separate rows */
     }
 
-    /* Create a new flex container for the buttons */
-    .item-controls-group {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 0.25rem;
-        width: 100%;
-    }
-
     /* Ensure that controls stay in one row and don't break */
     .item-controles {
         display: flex;
@@ -412,6 +402,7 @@ footer {
     /* Ensure buttons are aligned in a row */
     .btn-aumentar,
     .btn-diminuir,
+    .btn-local-c,
     .btn-zero {
         width: 1.75rem;
         height: 1.75rem;
@@ -430,19 +421,7 @@ footer {
 
     /* Adjust C button with proper margin and alignment */
     .btn-local-c {
-        width: 1.75rem;
-        height: 1.75rem;
         background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 50%;  /* Ensure round buttons */
-        cursor: pointer;
-        font-size: 0.75rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.3s ease;
-        margin-top: 0.25rem;  /* Add spacing between buttons */
     }
 
     .btn-zero {
