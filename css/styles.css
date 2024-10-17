@@ -366,18 +366,41 @@ footer {
         display: flex;
         justify-content: space-between;
         width: 100%; /* Full width for mobile view */
+        gap: 0.25rem; /* Add slight spacing between buttons */
     }
 
-    /* Remove "A" button reference and ensure "C" button is properly styled */
+    /* Adjust the size of the buttons to be the same */
+    .btn-aumentar,
+    .btn-diminuir,
+    .btn-zero,
     .btn-local-c {
-        width: 35px; /* Ensure the button maintains the same size */
-        height: 35px;
-        margin: 0 5px; /* Add space between buttons */
+        width: 1.75rem;  /* Set all buttons to the same size */
+        height: 1.75rem;
+        background-color: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+        margin: 0;  /* Ensure there’s no margin that causes wrapping */
     }
 
     /* Adjust zero button margin for spacing */
     .btn-zero {
-        margin-right: 5px;
+        background-color: #e74c3c;
+    }
+
+    /* Ensure C button is properly styled */
+    .btn-local-c {
+        background-color: #3498db;
+    }
+
+    .btn-local-c.active {
+        background-color: #2ecc71;
     }
 
     /* Adjust input field size for mobile view */
