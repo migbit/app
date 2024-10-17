@@ -2,7 +2,7 @@
 import { db } from './script.js';
 import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Estrutura de dados para a lista de compras
+// Structure of the shopping list
 const listaCompras = {
     "Produtos Limpeza": [
         "Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF",
@@ -28,10 +28,11 @@ const listaCompras = {
     ]
 };
 
+// Create the shopping list UI dynamically
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
     
-    for (const [categoria, itens] of Object.entries(listaCompras)) {
+    Object.entries(listaCompras).forEach(([categoria, itens]) => {
         const categoriaDiv = document.createElement('div');
         categoriaDiv.className = 'categoria';
         categoriaDiv.innerHTML = `<h3>${categoria}</h3>`;
@@ -42,9 +43,9 @@ function criarListaCompras() {
         });
         
         form.appendChild(categoriaDiv);
-    }
+    });
     
-    // Adicionar campos em branco para itens adicionais
+    // Add blank fields for additional items
     const diversosDiv = document.createElement('div');
     diversosDiv.className = 'categoria';
     diversosDiv.innerHTML = '<h3>Itens Adicionais</h3>';
@@ -55,46 +56,45 @@ function criarListaCompras() {
     form.appendChild(diversosDiv);
 }
 
+// Create an item element in the shopping list
 function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
     itemDiv.innerHTML = `
         <div class="item-info">
             <span class="item-nome">${item}</span>
-            <div class="item-controles">
-                <input type="number" value="0" min="0" class="item-quantidade">
-                <button type="button" class="btn-aumentar">+</button>
-                <button type="button" class="btn-diminuir">-</button>
-                <button type="button" class="btn-zero">0</button>
-            </div>
         </div>
-        <div class="item-acoes">
+        <div class="item-controles">
+            <input type="number" value="0" min="0" class="item-quantidade">
+            <button type="button" class="btn-aumentar">+</button>
+            <button type="button" class="btn-diminuir">-</button>
+            <button type="button" class="btn-zero">0</button>
             <button type="button" class="btn-local-c">C</button>
         </div>
     `;
     return itemDiv;
 }
 
+// Create a blank item input for adding new items
 function criarItemCompraEmBranco() {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
     itemDiv.innerHTML = `
         <div class="item-info">
             <input type="text" class="item-nome-custom" placeholder="Novo item">
-            <div class="item-controles">
-                <input type="number" value="0" min="0" class="item-quantidade">
-                <button type="button" class="btn-aumentar">+</button>
-                <button type="button" class="btn-diminuir">-</button>
-                <button type="button" class="btn-zero">0</button>
-            </div>
         </div>
-        <div class="item-acoes">
+        <div class="item-controles">
+            <input type="number" value="0" min="0" class="item-quantidade">
+            <button type="button" class="btn-aumentar">+</button>
+            <button type="button" class="btn-diminuir">-</button>
+            <button type="button" class="btn-zero">0</button>
             <button type="button" class="btn-local-c">C</button>
         </div>
     `;
     return itemDiv;
 }
 
+// Save the current shopping list to Firestore
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
@@ -121,6 +121,7 @@ async function salvarListaCompras() {
     }
 }
 
+// Load the shopping list from Firestore
 async function carregarListaCompras() {
     try {
         const docRef = doc(db, "listas_compras", "lista_atual");
@@ -148,6 +149,7 @@ async function carregarListaCompras() {
     }
 }
 
+// Helper function to update local data based on button state
 function updateLocalData(item) {
     const localC = item.querySelector('.btn-local-c').classList.contains('active') ? 'C' : '';
     const locaisSelecionados = localC || 'Não definido';
@@ -155,6 +157,7 @@ function updateLocalData(item) {
     item.setAttribute('data-local', locaisSelecionados);
 }
 
+// Generate the summary of the shopping list
 function gerarResumo() {
     const itens = document.querySelectorAll('.item-compra');
     let resumo = '';
@@ -169,14 +172,14 @@ function gerarResumo() {
             if (local === 'C') {
                 localDisplay = ' (Casa)';
             }
-            resumo += `${nome}: ${quantidade}${localDisplay}
-`;
+            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
         }
     });
 
     return resumo;
 }
 
+// Display the summary and save the list
 async function exibirResumoESalvar() {
     const resumo = gerarResumo();
     const resumoConteudo = document.getElementById('resumo-conteudo');
@@ -186,10 +189,11 @@ async function exibirResumoESalvar() {
     await salvarListaCompras();
 }
 
+// Send the shopping list by email using EmailJS
 function enviarEmailListaCompras(resumo) {
     if (typeof emailjs === 'undefined') {
-        console.error('EmailJS não está definido. Verifique se o script foi carregado corretamente.');
-        alert('Ocorreu um erro ao tentar enviar o e-mail. Por favor, tente novamente mais tarde.');
+        console.error('EmailJS não está definido.');
+        alert('Erro ao enviar o e-mail.');
         return;
     }
 
@@ -204,7 +208,7 @@ function enviarEmailListaCompras(resumo) {
         alert('E-mail enviado com sucesso!');
     }, function(error) {
         console.error('Erro ao enviar e-mail:', error);
-        alert('Ocorreu um erro ao enviar o e-mail.');
+        alert('Erro ao enviar o e-mail.');
     });
 }
 
