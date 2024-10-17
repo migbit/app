@@ -1,10 +1,10 @@
 {
   "Antes Reserva": {
     "Baixar Preço": {
-      "Português": "<p>Agradecemos o seu contacto.</p><p>Lamentamos, mas os nossos preços são definidos por um algoritmo e não é possível fazer alterações.</p><p>Agradecemos a sua compreensão.</p><p>Cumprimentos.</p>",
-      "Inglês": "<p>Thank you for your message.</p><p>Unfortunately, our pricing is set by an algorithm and we are unable to modify it.</p><p>We appreciate your understanding.</p><p>Best regards.</p>",
-      "Espanhol": "<p>Gracias por su mensaje.</p><p>Lamentablemente, nuestros precios están establecidos por un algoritmo y no es posible modificarlos.</p><p>Agradecemos su comprensión.</p><p>Un saludo.</p>",
-      "Francês": "<p>Nous vous remercions de votre message.</p><p>Malheureusement, nos prix sont fixés par un algorithme et nous ne pouvons pas les modifier.</p><p>Nous vous remercions de votre compréhension.</p><p>Cordialement.</p>"
+      "Português": "<p>Agradecemos o seu contacto.</p><p>Lamentamos, mas os nossos preços são definidos automaticamente por um algoritmo, pelo que não é possível fazer alterações.</p><p>Agradecemos a sua compreensão.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>Thank you for your message.</p><p>Unfortunately, our pricing is automatically set by an algorithm, so we are unable to make modifications.</p><p>We appreciate your understanding.</p><p>Best regards.</p>",
+      "Espanhol": "<p>Gracias por su mensaje.</p><p>Lamentablemente, nuestros precios se establecen automáticamente por un algoritmo, por lo que no podemos modificarlos.</p><p>Agradecemos su comprensión.</p><p>Un saludo.</p>",
+      "Francês": "<p>Nous vous remercions de votre message.</p><p>Malheureusement, nos prix sont fixés automatiquement par un algorithme, nous ne pouvons donc pas les modifier.</p><p>Nous vous remercions de votre compréhension.</p><p>Cordialement.</p>"
     },
     "Estacionamento 123": {
       "Português": "<p><strong>Estacionamento 123 está disponível para sua reserva.</p>",
