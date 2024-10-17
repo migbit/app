@@ -200,7 +200,8 @@ tr:hover {
 .item-controles {
     display: flex;
     align-items: center;
-    gap: 0.5rem; /* Adiciona espaço entre os botões */
+    justify-content: center; /* Centraliza horizontalmente */
+    gap: 0.5rem; /* Espaçamento entre os botões */
 }
 
 .btn-aumentar,
@@ -219,10 +220,6 @@ tr:hover {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
-    margin-right: 0.5rem; /* Adiciona margem à direita para espaçar os botões */
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #ccc;
 }
 
 .btn-zero {
@@ -239,6 +236,14 @@ tr:hover {
 
 .btn-local-c.active {
     background-color: #2ecc71;
+}
+
+/* Ajuste no input de quantidade para garantir que ele tenha o tamanho correto */
+.item-quantidade {
+    width: 3rem;
+    text-align: center;
+    padding: 0.25rem;
+    margin-right: 0.5rem;
 }
 
 
