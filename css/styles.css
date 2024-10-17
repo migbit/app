@@ -368,18 +368,6 @@ footer {
         width: 100%; /* Full width for mobile view */
     }
 
-    /* Remove "A" button reference and ensure "C" button is properly styled */
-    .btn-local-c {
-        width: 35px; /* Ensure the button maintains the same size */
-        height: 35px;
-        margin: 0 5px; /* Add space between buttons */
-    }
-
-    /* Adjust zero button margin for spacing */
-    .btn-zero {
-        margin-right: 5px;
-    }
-
     /* Adjust input field size for mobile view */
     .item-quantidade {
         width: 50px;
