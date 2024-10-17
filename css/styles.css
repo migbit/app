@@ -250,7 +250,7 @@ tr:hover {
     justify-content: center;
 }
 
-/* Caixa Page Styles */
+/*                                           --------------->  Caixa Page Styles */
 #relatorio-caixa h3 {
     margin-top: 1.5rem;
     margin-bottom: 1rem;
@@ -380,5 +380,51 @@ footer {
     .item-quantidade {
         width: 50px;
         text-align: center;
+    }
+}
+
+/*                                           ----------------- > Caixa Page Styles - Mobile Adjustments */
+@media screen and (max-width: 768px) {
+
+    /* Ajuste no título */
+    #relatorio-caixa h3 {
+        font-size: 1.1rem;  /* Reduzindo ligeiramente o tamanho da fonte */
+        margin-top: 1rem;   /* Ajustando as margens para caber melhor */
+        margin-bottom: 0.75rem;
+        text-align: center; /* Centralizando o título no mobile */
+    }
+
+    /* Seções de relatórios */
+    #relatorio-caixa > div {
+        padding-bottom: 1rem; /* Reduzindo o espaçamento entre as seções */
+        margin-bottom: 1rem;   /* Espaço inferior menor */
+    }
+
+    /* Botões de Entrada e Saída */
+    .btn-entrada,
+    .btn-saida {
+        width: 100%;  /* Botões ocupam 100% da largura no mobile */
+        padding: 0.75rem;  /* Mantendo o padding consistente */
+        font-size: 1rem;   /* Ajuste no tamanho da fonte para boa legibilidade */
+    }
+
+    /* Botões ativos */
+    .btn-entrada.btn-active,
+    .btn-saida.btn-active {
+        color: white;  /* Cor de texto para botões ativos */
+    }
+
+    /* Estilo para valores */
+    .valor-positivo,
+    .valor-negativo {
+        font-size: 1rem;  /* Ajuste no tamanho da fonte */
+    }
+
+    /* Total do caixa */
+    .total-caixa {
+        font-size: 1.05rem;  /* Ajuste no tamanho da fonte */
+        margin-top: 0.75rem; /* Margem superior menor para economizar espaço */
+        padding: 0.5rem;     /* Menos padding para caber melhor no mobile */
+        text-align: center;  /* Centralizando o total no mobile */
     }
 }
