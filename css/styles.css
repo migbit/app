@@ -329,26 +329,34 @@ tr:hover {
 /*                                           ------------------------> mensagens
 /* Adjust the message box alignment */
 #mensagem-selecionada {
-    margin-left: 0;  /* Ensure the message starts aligned with the rest of the content */
-    padding-left: 1rem;  /* Adjust this value for alignment with the dropdowns */
-    max-width: 80%;  /* Limit the width of the message for better readability */
-    text-align: left;  /* Ensure text is left-aligned */
+    margin-left: 0;  /* Ensure alignment with other elements */
+    padding-left: 1rem;  /* Adjust this for consistent left padding */
+    max-width: 100%;  /* Allow full width use */
+    text-align: left;  /* Ensure text remains left-aligned */
+    margin-top: 1rem;  /* Add some space between the title and the message */
 }
 
 /* Adjust the spacing of "Mensagem Selecionada" */
 #mensagem-titulo {
-    margin-top: 2rem;  /* Increase the margin to push it slightly lower */
-    margin-left: 0;  /* Ensure it's aligned to the left like the rest of the page */
-    padding-left: 1rem;  /* Match the padding with the message box */
-    font-size: 1.25rem;  /* Adjust font size for better readability */
+    margin-top: 2rem;  /* Add more space above the title */
+    margin-left: 0;  /* Align the title to the left */
+    padding-left: 1rem;  /* Add consistent padding with the message box */
+    font-size: 1.5rem;  /* Slightly larger for emphasis */
+    font-weight: bold;
 }
 
-/* Overall container alignment */
+/* Ensure the dropdowns and message are aligned */
 .container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;  /* Align all elements to the left */
-    padding: 1rem 2rem;  /* Add padding for a more centered look on the page */
+    align-items: flex-start;  /* Aligns all elements to the left */
+    padding: 1rem 2rem;  /* Add padding to better center the content */
+    max-width: 90%;  /* Limit width for better alignment */
+}
+
+/* Add some space between the dropdowns and the message title */
+#dropdown-section {
+    margin-bottom: 2rem;  /* Add margin between dropdowns and message */
 }
 
 /* Footer Styles */
