@@ -368,68 +368,69 @@ footer {
         padding: 0.5rem;
     }
 
-    /* Shopping List Styles */
-.item-compra {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
-    background-color: #f9f9f9;
-    border-radius: 4px;
-}
+   /* Shopping List Styles for Mobile */
+    @media screen and (max-width: 768px) {
+    .item-compra {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+    }
 
-.item-info {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 0.5rem;
-}
+    .item-info {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
 
-.item-nome,
-.item-nome-custom {
-    flex: 1;
-}
+    .item-nome,
+    .item-nome-custom {
+        width: 100%;
+    }
 
-.item-controles {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
+    .item-controles {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
 
-.item-quantidade {
-    width: 2.5rem;
-    text-align: center;
-    padding: 0.25rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.875rem;
-}
+    .item-quantidade {
+        width: 3rem;
+        text-align: center;
+        padding: 0.25rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        margin-right: 0.25rem;
+    }
 
-.btn-aumentar,
-.btn-diminuir,
-.btn-zero,
-.btn-local-c {
-    width: 1.75rem;
-    height: 1.75rem;
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
-}
+    .btn-aumentar,
+    .btn-diminuir,
+    .btn-zero,
+    .btn-local-c {
+        width: 1.75rem;
+        height: 1.75rem;
+        background-color: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+    }
 
-.btn-zero {
-    background-color: #e74c3c;
-}
+    .btn-zero {
+        background-color: #e74c3c;
+    }
 
-.btn-local-c {
-    background-color: #3498db;
-}
+    .btn-local-c {
+        background-color: #3498db;
+    }
+    }
 
 
     /* Caixa Page Styles */
@@ -479,8 +480,7 @@ footer {
 /* Further optimizations for very small screens */
 @media screen and (max-width: 480px) {
     .item-quantidade {
-        width: 2rem;
-        font-size: 0.75rem;
+        width: 2.5rem;
     }
 
     .btn-aumentar,
