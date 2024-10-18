@@ -123,23 +123,26 @@ function initializeMessageSelectors(mensagens) {
         }
     }
 
-    // Copy plain text message to clipboard with paragraph spacing, no success alert
-   // Function to copy formatted plain text message to clipboard
+// Function to copy formatted plain text message to clipboard
 function copyMessageToClipboard() {
     let messageText = elements.mensagemContainer.innerHTML;
 
-    // Handle <ul> and <li> to add bullet points
+    // Replace list items and paragraph tags with formatted text
     messageText = messageText
         .replace(/<\/li>/g, '\n')  // End of list item adds newline
         .replace(/<li>/g, '• ')    // Start of list item adds bullet point
         .replace(/<\/?ul>/g, '')   // Remove <ul> tags
-        .replace(/<\/?strong>/g, '') // Remove <strong> tags but keep text
-        .replace(/<\/?p>/g, '\n\n') // Replace paragraph tags with newlines for spacing
+        .replace(/<\/p>/g, '\n')   // End of paragraph adds newline
+        .replace(/<p>/g, '')       // Remove start of paragraph
+        .replace(/<\/?strong>/g, '') // Remove <strong> tags
 
     // Remove any remaining HTML tags
     messageText = messageText.replace(/<\/?[^>]+(>|$)/g, '').trim();
 
-    // Create a temporary textarea to hold the plain text
+    // Remove multiple consecutive newlines (this prevents extra space)
+    messageText = messageText.replace(/\n\s*\n/g, '\n\n');  // Two newlines for proper paragraph spacing
+
+    // Copy formatted plain text to clipboard
     const tempElement = document.createElement('textarea');
     tempElement.style.position = 'absolute';
     tempElement.style.left = '-9999px';
@@ -151,17 +154,31 @@ function copyMessageToClipboard() {
     document.body.removeChild(tempElement);
 }
 
-    // Handle baby message copy button click
-    elements.copyBabyMessageBtn.onclick = () => {
-        const babyMessage = babyMessages[selectedIdioma] || babyMessages["Inglês"];  // Fallback to English if no match
-        copyPlainTextToClipboard(babyMessage);
-    };
+// Handle baby message copy button click
+elements.copyBabyMessageBtn.onclick = () => {
+    const babyMessage = babyMessages[selectedIdioma] || babyMessages["Inglês"];  // Fallback to English if no match
+    copyPlainTextToClipboard(babyMessage);
+};
 
-    // Handle SMS message copy button click
-    elements.copySMSMessageBtn.onclick = () => {
-        const smsMessage = smsMessages[selectedIdioma] || smsMessages["Inglês"];  // Fallback to English if no match
-        copyPlainTextToClipboard(smsMessage);
-    };
+// Handle SMS message copy button click
+elements.copySMSMessageBtn.onclick = () => {
+    const smsMessage = smsMessages[selectedIdioma] || smsMessages["Inglês"];  // Fallback to English if no match
+    copyPlainTextToClipboard(smsMessage);
+};
+
+// Function to copy plain text to clipboard (without extra formatting)
+function copyPlainTextToClipboard(text) {
+    const tempElement = document.createElement('textarea');
+    tempElement.style.position = 'absolute';
+    tempElement.style.left = '-9999px';
+    tempElement.value = text.trim();  // Copy plain text
+
+    document.body.appendChild(tempElement);
+    tempElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempElement);
+}
+
 
     // Language dropdown changes
     elements.languageDropdown.onchange = () => {
