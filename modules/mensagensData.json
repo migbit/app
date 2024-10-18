@@ -1,16 +1,16 @@
 {
   "Antes Reserva": {
     "Baixar Preço": {
-      "Português": "<p>Agradecemos o seu contacto.</p><p>Lamentamos, mas os nossos preços são definidos automaticamente por um algoritmo, pelo que não é possível fazer alterações.</p><p>Agradecemos a sua compreensão.</p><p>Cumprimentos.</p>",
-      "Inglês": "<p>Thank you for your message.</p><p>Unfortunately, our pricing is automatically set by an algorithm, so we are unable to make modifications.</p><p>We appreciate your understanding.</p><p>Best regards.</p>",
-      "Espanhol": "<p>Gracias por su mensaje.</p><p>Lamentablemente, nuestros precios se establecen automáticamente por un algoritmo, por lo que no podemos modificarlos.</p><p>Agradecemos su comprensión.</p><p>Un saludo.</p>",
-      "Francês": "<p>Nous vous remercions de votre message.</p><p>Malheureusement, nos prix sont fixés automatiquement par un algorithme, nous ne pouvons donc pas les modifier.</p><p>Nous vous remercions de votre compréhension.</p><p>Cordialement.</p>"
+      "Português": "<p>Agradecemos o seu contacto e o seu interesse no nosso apartamento.</p><p>Os nossos preços são definidos automaticamente por um algoritmo para garantir tarifas justas e consistentes para todos os nossos hóspedes, por isso não é possível fazer alterações manuais.</p><p>Agradecemos a sua compreensão.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>Thank you for your message and for your interest in our apartment.</p><p>Our pricing is automatically set by an algorithm to ensure fair and consistent rates for all our guests, so we are unable to make manual changes.</p><p>We appreciate your understanding.</p><p>Best regards.</p>",
+      "Espanhol": "<p>Gracias por su mensaje y su interés en nuestro apartamento.</p><p>Nuestros precios se establecen automáticamente mediante un algoritmo para garantizar tarifas justas y consistentes para todos nuestros huéspedes, por lo que no podemos hacer cambios manuales.</p><p>Agradecemos su comprensión.</p><p>Un saludo.</p>",
+      "Francês": "<p>Nous vous remercions de votre message et de l'intérêt porté à notre appartement.</p><p>Nos prix sont fixés automatiquement par un algorithme afin de garantir des tarifs justes et cohérents pour tous nos invités, c'est pourquoi nous ne pouvons pas les modifier manuellement.</p><p>Nous vous remercions de votre compréhension.</p><p>Cordialement.</p>"
     },
     "Estacionamento 123": {
-      "Português": "<p>O apartamento não dispõe de estacionamento próprio, mas pode estacionar gratuitamente na rua.</p><p>Cumprimentos.</p>",
-      "Inglês": "<p>The apartment does not have private parking, but there is free street parking available.</p><p>Best regards.</p>",
-      "Espanhol": "<p>El apartamento no dispone de aparcamiento privado, pero hay estacionamiento gratuito en la calle.</p><p>Un saludo.</p>",
-      "Francês": "<p>L'appartement ne dispose pas de parking privé, mais il y a un stationnement gratuit dans la rue.</p><p>Cordialement.</p>"
+      "Português": "<p>O apartamento não dispõe de estacionamento privativo, mas há estacionamento gratuito disponível na rua, geralmente com facilidade de encontrar vagas.</p><p>Se tiver mais alguma questão, encontro-me disponível.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>The apartment does not have private parking, but there is free street parking available, usually easy to find.</p><p>If you have any further questions, I am available to assist.</p><p>Best regards.</p>",
+      "Espanhol": "<p>El apartamento no dispone de aparcamiento privativo, pero hay estacionamiento gratuito en la calle, por lo general fácil de encontrar.</p><p>Si tiene alguna otra pregunta, estoy disponible para ayudarle.</p><p>Un saludo.</p>",
+      "Francês": "<p>L'appartement ne dispose pas de parking privatif, mais il y a un stationnement gratuit dans la rue, généralement facile à trouver.</p><p>Si vous avez d'autres questions, je suis disponible pour vous aider.</p><p>Cordialement.</p>"
     },
     "Estacionamento 1248": {
       "Português": "<p>Pode estacionar gratuitamente na rua ou, se preferir, também pode estacionar na entrada do apartamento.</p><p>Cumprimentos.</p>",
