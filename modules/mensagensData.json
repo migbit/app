@@ -179,13 +179,13 @@
       "Francês": "<p>Le check-in tardif n'est pas un problème du tout, je vous demande simplement de m'envoyer un message avant votre arrivée, et je serai là, quelle que soit l'heure.</p>"
     }
   },
-  "Chegada ao Porto": {
-    "Instruções metro aeroporto": {
-      "Português": "Siga as instruções do metrô para chegar ao aeroporto.",
-      "Inglês": "Follow the metro instructions to reach the airport.",
-      "Espanhol": "Siga las instrucciones del metro para llegar al aeropuerto.",
-      "Francês": "Suivez les instructions du métro pour arriver à l'aéroport."
-    }
+    "Chegada ao Porto": {
+      "Instruções metro aeroporto": {
+        "Português": "Para chegar do aeroporto ao apartamento de metro:\n\n1. Vai encontrar uma estação de metro dentro do aeroporto.\n2. Compre um cartão Andante recarregável (€0,60) e carregue-o com um bilhete Z4 (€2,25). Nota: Este bilhete Z4 cobre a viagem do aeroporto, mas dentro do centro da cidade, só precisará de bilhetes Z2 para viagens futuras.\n3. Apanhe a Linha E (linha roxa) em direção ao centro da cidade.\n4. Saia na estação **Casa da Música**.\n5. Vou enviar-lhe um mapa mostrando como chegar da estação ao apartamento.\n\nSe precisar de mais informações, estou à disposição!\n\nCumprimentos.",
+        "Inglês": "To get from the airport to the apartment by metro:\n\n1. You'll find a metro station inside the airport.\n2. Purchase a rechargeable Andante card (€0.60) and load it with one Z4 ticket (€2.25). Note: This Z4 ticket covers your airport trip, but within the city center, you'll only need Z2 tickets for future trips.\n3. Take Line E (purple line) towards the city center.\n4. Exit at **Casa da Música** station.\n5. I'll send you a map showing how to get from the station to the apartment.\n\nLet me know if you need any more information!\n\nKind regards.",
+        "Espanhol": "Para llegar del aeropuerto al apartamento en metro:\n\n1. Encontrará una estación de metro dentro del aeropuerto.\n2. Compre una tarjeta Andante recargable (€0,60) y cárguela con un billete Z4 (€2,25). Nota: Este billete Z4 cubre el viaje desde el aeropuerto, pero dentro del centro de la ciudad, solo necesitará billetes Z2 para futuros viajes.\n3. Tome la Línea E (línea morada) hacia el centro de la ciudad.\n4. Bájese en la estación **Casa da Música**.\n5. Le enviaré un mapa que muestra cómo llegar desde la estación al apartamento.\n\n¡Déjeme saber si necesita más información!\n\nUn saludo.",
+        "Francês": "Pour aller de l'aéroport à l'appartement en métro :\n\n1. Vous trouverez une station de métro à l'intérieur de l'aéroport.\n2. Achetez une carte Andante rechargeable (€0,60) et chargez-la avec un billet Z4 (€2,25). Remarque : Ce billet Z4 couvre votre trajet depuis l'aéroport, mais dans le centre-ville, vous n'aurez besoin que de billets Z2 pour les futurs trajets.\n3. Prenez la ligne E (ligne violette) en direction du centre-ville.\n4. Descendez à la station **Casa da Música**.\n5. Je vous enverrai un plan indiquant comment aller de la station à l'appartement.\n\nFaites-moi savoir si vous avez besoin de plus d'informations !\n\nCordialement."
+      }
   },
   "Durante a Estadia": {
     "Papel Higiénico 123": {
@@ -197,11 +197,28 @@
   },
   "Check-Out": {
     "Agradecimento": {
-      "Português": "Obrigado por se hospedar conosco!",
-      "Inglês": "Thank you for staying with us!",
-      "Espanhol": "¡Gracias por hospedarse con nosotros!",
-      "Francês": "Merci d'avoir séjourné avec nous!"
+      "Português": "Olá [Nome do Hóspede],\n\nMuito obrigado por deixar o apartamento em perfeito estado. Foi um prazer conhecê-los a si e ao seu grupo. Espero que as minhas sugestões tenham sido úteis, que tenha apreciado o Porto, e que o apartamento tenha sido confortável durante a sua estadia.\n\nVou deixar-lhe uma avaliação de 5 estrelas, pois foi realmente uma excelente experiência recebê-los.\n\nMais uma vez, obrigado, e se algum dia regressar ao Porto, será sempre bem-vindo.\n\nDesejo-lhe uma boa viagem.\n\nCumprimentos.",
+      "Inglês": "Hello [Guest's Name],\n\nThank you so much for leaving the apartment in perfect condition. It was a pleasure meeting you and your group. I hope my suggestions were helpful, that you enjoyed Porto, and that the apartment was comfortable for your stay.\n\nI’ll be leaving you a 5-star rating because it was truly an excellent experience hosting you.\n\nThank you again, and if you ever return to Porto, you’re always welcome.\n\nWishing you a safe trip.\n\nBest regards.",
+      "Espanhol": "Hola [Nombre del Huésped],\n\nMuchas gracias por dejar el apartamento en perfectas condiciones. Fue un placer conocerle a usted y a su grupo. Espero que mis sugerencias hayan sido útiles, que haya disfrutado de Oporto, y que el apartamento haya sido cómodo durante su estadía.\n\nVoy a dejarle una valoración de 5 estrellas, ya que fue realmente una excelente experiencia recibirles.\n\nGracias de nuevo, y si alguna vez regresa a Oporto, siempre será bienvenido.\n\nLe deseo un buen viaje.\n\nUn saludo.",
+      "Francês": "Bonjour [Nom du Client],\n\nMerci beaucoup d'avoir laissé l'appartement en parfait état. Ce fut un plaisir de vous rencontrer, vous et votre groupe. J'espère que mes suggestions vous ont été utiles, que vous avez apprécié Porto, et que l'appartement a été confortable pour votre séjour.\n\nJe vais vous laisser une évaluation de 5 étoiles car ce fut vraiment une excellente expérience de vous accueillir.\n\nMerci encore, et si vous revenez à Porto, vous serez toujours les bienvenus.\n\nJe vous souhaite un bon voyage.\n\nCordialement."
+    },
+    "Chaves 123": {
+      "Português": "Olá [Nome do Hóspede],\n\nPor favor, deixe as chaves na caixa de correio do 1º Andar. Foi um prazer conhecê-los a si e ao seu grupo. Espero que as minhas sugestões tenham sido úteis, que tenha apreciado o Porto, e que o apartamento tenha sido confortável durante a sua estadia.\n\nVou deixar-lhe uma avaliação de 5 estrelas, pois foi realmente uma excelente experiência recebê-los.\n\nMais uma vez, obrigado, e se algum dia regressar ao Porto, será sempre bem-vindo.\n\nCumprimentos.",
+      "Inglês": "Hello [Guest's Name],\n\nPlease leave the keys inside the mailbox 1º Andar. It was a pleasure meeting you and your group. I hope my suggestions were helpful, that you enjoyed Porto, and that the apartment was comfortable for your stay.\n\nI’ll be leaving you a 5-star rating because it was truly an excellent experience hosting you.\n\nThank you again, and if you ever return to Porto, you’re always welcome.\n\nBest regards.",
+      "Espanhol": "Hola [Nombre del Huésped],\n\nPor favor, deje las llaves en el buzón del 1º Andar. Fue un placer conocerle a usted y a su grupo. Espero que mis sugerencias hayan sido útiles, que haya disfrutado de Oporto, y que el apartamento haya sido cómodo durante su estadía.\n\nVoy a dejarle una valoración de 5 estrellas, ya que fue realmente una excelente experiencia recibirles.\n\nGracias de nuevo, y si alguna vez regresa a Oporto, siempre será bienvenido.\n\nUn saludo.",
+      "Francês": "Bonjour [Nom du Client],\n\nVeuillez laisser les clés dans la boîte aux lettres du 1º Andar. Ce fut un plaisir de vous rencontrer, vous et votre groupe. J'espère que mes suggestions vous ont été utiles, que vous avez apprécié Porto, et que l'appartement a été confortable pour votre séjour.\n\nJe vais vous laisser une évaluation de 5 étoiles car ce fut vraiment une excellente expérience de vous accueillir.\n\nMerci encore, et si vous revenez à Porto, vous serez toujours les bienvenus.\n\nCordialement."
+    },
+    "Chaves 1248": {
+      "Português": "Olá [Nome do Hóspede],\n\nPor favor, deixe as chaves no apartamento. Foi um prazer conhecê-los a si e ao seu grupo. Espero que as minhas sugestões tenham sido úteis, que tenha apreciado o Porto, e que o apartamento tenha sido confortável durante a sua estadia.\n\nVou deixar-lhe uma avaliação de 5 estrelas, pois foi realmente uma excelente experiência recebê-los.\n\nMais uma vez, obrigado, e se algum dia regressar ao Porto, será sempre bem-vindo.\n\nCumprimentos.",
+      "Inglês": "Hello [Guest's Name],\n\nPlease leave the keys inside the apartment. It was a pleasure meeting you and your group. I hope my suggestions were helpful, that you enjoyed Porto, and that the apartment was comfortable for your stay.\n\nI’ll be leaving you a 5-star rating because it was truly an excellent experience hosting you.\n\nThank you again, and if you ever return to Porto, you’re always welcome.\n\nBest regards.",
+      "Espanhol": "Hola [Nombre del Huésped],\n\nPor favor, deje las llaves dentro del apartamento. Fue un placer conocerle a usted y a su grupo. Espero que mis sugerencias hayan sido útiles, que haya disfrutado de Oporto, y que el apartamento haya sido cómodo durante su estadía.\n\nVoy a dejarle una valoración de 5 estrellas, ya que fue realmente una excelente experiencia recibirles.\n\nGracias de nuevo, y si alguna vez regresa a Oporto, siempre será bienvenido.\n\nUn saludo.",
+      "Francês": "Bonjour [Nom du Client],\n\nVeuillez laisser les clés dans l'appartement. Ce fut un plaisir de vous rencontrer, vous et votre groupe. J'espère que mes suggestions vous ont été utiles, que vous avez apprécié Porto, et que l'appartement a été confortable pour votre séjour.\n\nJe vais vous laisser une évaluation de 5 étoiles car ce fut vraiment une excellente expérience de vous accueillir.\n\nMerci encore, et si vous revenez à Porto, vous serez toujours les bienvenus.\n\nCordialement."
     }
   },
-  "Comentário": {}
+  "Comentário": {
+    "Português": "Receber [GUEST] e o seu grupo foi um verdadeiro prazer. Se tiver a oportunidade de os acolher, não hesite! Deixaram o apartamento em perfeito estado, demonstrando um cuidado e respeito excepcionais pelo espaço. Espero sinceramente ter a oportunidade de recebê-los novamente no Porto um dia.",
+    "Inglês": "Hosting [GUEST] and their group was an absolute delight. If you ever have the chance to welcome them, don’t hesitate! They left the apartment in immaculate condition, showing exceptional care and respect for the space. I sincerely hope to have the opportunity to welcome them back to Porto someday.",
+    "Espanhol": "Alojar a [GUEST] y su grupo fue un verdadero placer. Si alguna vez tienes la oportunidad de recibirlos, ¡no lo dudes! Dejaron el apartamento en perfecto estado, mostrando un cuidado y respeto excepcionales por el espacio. Espero sinceramente tener la oportunidad de darles la bienvenida de nuevo en Oporto algún día.",
+    "Francês": "Accueillir [GUEST] et son groupe a été un véritable plaisir. Si vous avez l'occasion de les accueillir, n'hésitez pas ! Ils ont laissé l'appartement dans un état impeccable, faisant preuve d'un soin et d'un respect exceptionnels pour l'espace. J'espère sincèrement avoir l'occasion de les accueillir à nouveau à Porto un jour."
+  }
 }
