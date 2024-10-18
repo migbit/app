@@ -122,64 +122,35 @@ function initializeMessageSelectors(mensagens) {
             elements.mensagemSecao.style.display = 'block';
         }
     }
-    
 
- // Copy plain text message to clipboard with paragraph spacing, no success alert
-function copyMessageToClipboard() {
-    const messageText = elements.mensagemContainer.innerHTML
-        .replace(/<\/p><p>/g, '\n\n')  // Replace paragraph breaks with two newlines for spacing
-        .replace(/<\/?p>/g, '');       // Remove the remaining <p> tags
+    // Copy plain text message to clipboard with paragraph spacing, no success alert
+    function copyMessageToClipboard() {
+        const messageText = elements.mensagemContainer.innerHTML
+            .replace(/<\/p><p>/g, '\n\n')  // Replace paragraph breaks with two newlines for spacing
+            .replace(/<\/?p>/g, '');       // Remove the remaining <p> tags
 
-    const tempElement = document.createElement('textarea');
-    tempElement.style.position = 'absolute';
-    tempElement.style.left = '-9999px';
-    tempElement.value = messageText.trim();  // Copy formatted plain text with paragraph spacing
+        const tempElement = document.createElement('textarea');
+        tempElement.style.position = 'absolute';
+        tempElement.style.left = '-9999px';
+        tempElement.value = messageText.trim();  // Copy formatted plain text with paragraph spacing
 
-    document.body.appendChild(tempElement);
-    tempElement.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempElement);
-}
+        document.body.appendChild(tempElement);
+        tempElement.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempElement);
+    }
 
-function copyFormattedMessageToClipboard() {
-    // Cria um elemento temporário de textarea
-    const tempElement = document.createElement('textarea');
-    tempElement.style.position = 'absolute';
-    tempElement.style.left = '-9999px';
+    // Handle baby message copy button click
+    elements.copyBabyMessageBtn.onclick = () => {
+        const babyMessage = babyMessages[selectedIdioma] || babyMessages["Inglês"];  // Fallback to English if no match
+        copyPlainTextToClipboard(babyMessage);
+    };
 
-    // Extrai apenas o texto puro, substituindo os elementos HTML por nova linha
-    tempElement.value = elements.mensagemContainer.innerText.trim();
-
-    document.body.appendChild(tempElement);
-    tempElement.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempElement);
-}
-
-// Função para copiar texto simples (sem formatação HTML)
-function copyPlainTextToClipboard(text) {
-    const tempElement = document.createElement('textarea');
-    tempElement.style.position = 'absolute';
-    tempElement.style.left = '-9999px';
-    tempElement.value = text.trim();  // Copiar o texto simples
-
-    document.body.appendChild(tempElement);
-    tempElement.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempElement);
-}
-
-// Manipulador do botão de cópia da mensagem para Berço/Cadeira
-elements.copyBabyMessageBtn.onclick = () => {
-    const babyMessage = babyMessages[selectedIdioma] || babyMessages["Inglês"];  // Fallback para inglês se o idioma não for encontrado
-    copyPlainTextToClipboard(babyMessage);  // Copiar o texto simples
-};
-
-// Manipulador do botão de cópia da mensagem para SMS
-elements.copySMSMessageBtn.onclick = () => {
-    const smsMessage = smsMessages[selectedIdioma] || smsMessages["Inglês"];  // Fallback para inglês se o idioma não for encontrado
-    copyPlainTextToClipboard(smsMessage);  // Copiar o texto simples
-};
+    // Handle SMS message copy button click
+    elements.copySMSMessageBtn.onclick = () => {
+        const smsMessage = smsMessages[selectedIdioma] || smsMessages["Inglês"];  // Fallback to English if no match
+        copyPlainTextToClipboard(smsMessage);
+    };
 
     // Language dropdown changes
     elements.languageDropdown.onchange = () => {
