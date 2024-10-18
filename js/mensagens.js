@@ -141,18 +141,30 @@ function copyMessageToClipboard() {
     document.body.removeChild(tempElement);
 }
 
+// Função para copiar texto simples (sem formatação HTML)
+function copyPlainTextToClipboard(text) {
+    const tempElement = document.createElement('textarea');
+    tempElement.style.position = 'absolute';
+    tempElement.style.left = '-9999px';
+    tempElement.value = text.trim();  // Copiar o texto simples
 
-    // Handle baby message copy button click
-    elements.copyBabyMessageBtn.onclick = () => {
-        const babyMessage = babyMessages[selectedIdioma] || babyMessages["Inglês"];  // Fallback to English if no match
-        copyMessageToClipboard(babyMessage);
-    };
+    document.body.appendChild(tempElement);
+    tempElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempElement);
+}
 
-    // Handle SMS message copy button click
-    elements.copySMSMessageBtn.onclick = () => {
-        const smsMessage = smsMessages[selectedIdioma] || smsMessages["Inglês"];  // Fallback to English if no match
-        copyMessageToClipboard(smsMessage);
-    };
+// Manipulador do botão de cópia da mensagem para Berço/Cadeira
+elements.copyBabyMessageBtn.onclick = () => {
+    const babyMessage = babyMessages[selectedIdioma] || babyMessages["Inglês"];  // Fallback para inglês se o idioma não for encontrado
+    copyPlainTextToClipboard(babyMessage);  // Copiar o texto simples
+};
+
+// Manipulador do botão de cópia da mensagem para SMS
+elements.copySMSMessageBtn.onclick = () => {
+    const smsMessage = smsMessages[selectedIdioma] || smsMessages["Inglês"];  // Fallback para inglês se o idioma não for encontrado
+    copyPlainTextToClipboard(smsMessage);  // Copiar o texto simples
+};
 
     // Language dropdown changes
     elements.languageDropdown.onchange = () => {
