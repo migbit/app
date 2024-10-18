@@ -188,11 +188,11 @@
       }
   },
   "Durante a Estadia": {
-    "Papel Higiénico 123": {
-      "Português": "O papel higiênico 123 está disponível.",
-      "Inglês": "Toilet paper 123 is available.",
-      "Espanhol": "El papel higiénico 123 está disponible.",
-      "Francês": "Le papier toilette 123 est disponible."
+    "Papel Higiénico": {
+      "Português": "Olá [GUEST], espero que esteja a desfrutar do Porto e do apartamento. Vou deixar mais papel higiénico à porta dentro de alguns minutos.",
+      "Inglês": "Hello [GUEST], hope you're enjoying Porto and the apartment. I'll leave you more toilet paper at the door in a few minutes.",
+      "Espanhol": "Hola [GUEST], espero que estés disfrutando de Oporto y del apartamento. Dejaré más papel higiénico en la puerta en unos minutos.",
+      "Francês": "Bonjour [GUEST], j'espère que vous profitez de Porto et de l'appartement. Je vais laisser plus de papier toilette à la porte dans quelques minutes."
     }
   },
   "Check-Out": {
