@@ -141,6 +141,21 @@ function copyMessageToClipboard() {
     document.body.removeChild(tempElement);
 }
 
+function copyFormattedMessageToClipboard() {
+    // Cria um elemento temporário de textarea
+    const tempElement = document.createElement('textarea');
+    tempElement.style.position = 'absolute';
+    tempElement.style.left = '-9999px';
+
+    // Extrai apenas o texto puro, substituindo os elementos HTML por nova linha
+    tempElement.value = elements.mensagemContainer.innerText.trim();
+
+    document.body.appendChild(tempElement);
+    tempElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempElement);
+}
+
 // Função para copiar texto simples (sem formatação HTML)
 function copyPlainTextToClipboard(text) {
     const tempElement = document.createElement('textarea');
