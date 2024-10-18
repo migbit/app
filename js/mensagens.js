@@ -124,21 +124,32 @@ function initializeMessageSelectors(mensagens) {
     }
 
     // Copy plain text message to clipboard with paragraph spacing, no success alert
-    function copyMessageToClipboard() {
-        const messageText = elements.mensagemContainer.innerHTML
-            .replace(/<\/p><p>/g, '\n\n')  // Replace paragraph breaks with two newlines for spacing
-            .replace(/<\/?p>/g, '');       // Remove the remaining <p> tags
+   // Function to copy formatted plain text message to clipboard
+function copyMessageToClipboard() {
+    let messageText = elements.mensagemContainer.innerHTML;
 
-        const tempElement = document.createElement('textarea');
-        tempElement.style.position = 'absolute';
-        tempElement.style.left = '-9999px';
-        tempElement.value = messageText.trim();  // Copy formatted plain text with paragraph spacing
+    // Handle <ul> and <li> to add bullet points
+    messageText = messageText
+        .replace(/<\/li>/g, '\n')  // End of list item adds newline
+        .replace(/<li>/g, '• ')    // Start of list item adds bullet point
+        .replace(/<\/?ul>/g, '')   // Remove <ul> tags
+        .replace(/<\/?strong>/g, '') // Remove <strong> tags but keep text
+        .replace(/<\/?p>/g, '\n\n') // Replace paragraph tags with newlines for spacing
 
-        document.body.appendChild(tempElement);
-        tempElement.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempElement);
-    }
+    // Remove any remaining HTML tags
+    messageText = messageText.replace(/<\/?[^>]+(>|$)/g, '').trim();
+
+    // Create a temporary textarea to hold the plain text
+    const tempElement = document.createElement('textarea');
+    tempElement.style.position = 'absolute';
+    tempElement.style.left = '-9999px';
+    tempElement.value = messageText; // Copy formatted plain text
+
+    document.body.appendChild(tempElement);
+    tempElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempElement);
+}
 
     // Handle baby message copy button click
     elements.copyBabyMessageBtn.onclick = () => {
