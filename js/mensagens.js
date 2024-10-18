@@ -46,7 +46,7 @@ function initializeMessageSelectors(mensagens) {
 
     // Fixed SMS message for all languages
     const smsMessages = {
-        "Português": "Sou Miguel, o seu anfitrião Airbnb em Porto.",
+        "Português": "Sou Miguel, o seu anfitrião Airbnb no Porto.",
         "Inglês": "I’m Miguel, your Porto Airbnb host.",
         "Espanhol": "Soy Miguel, tu anfitrión de Airbnb en Porto.",
         "Francês": "Je suis Miguel, votre hôte Airbnb à Porto."
