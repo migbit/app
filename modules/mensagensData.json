@@ -1,23 +1,23 @@
 {
   "Antes Reserva": {
     "Baixar Preço": {
-      "Português": "<p>Agradecemos o seu contacto e o seu interesse no nosso apartamento.</p><p>Os nossos preços são definidos automaticamente por um algoritmo para garantir tarifas justas e consistentes para todos os nossos hóspedes, por isso não é possível fazer alterações manuais.</p><p>Agradecemos a sua compreensão.</p><p>Cumprimentos.</p>",
-      "Inglês": "<p>Thank you for your message and for your interest in our apartment.</p><p>Our pricing is automatically set by an algorithm to ensure fair and consistent rates for all our guests, so we are unable to make manual changes.</p><p>We appreciate your understanding.</p><p>Best regards.</p>",
-      "Espanhol": "<p>Gracias por su mensaje y su interés en nuestro apartamento.</p><p>Nuestros precios se establecen automáticamente mediante un algoritmo para garantizar tarifas justas y consistentes para todos nuestros huéspedes, por lo que no podemos hacer cambios manuales.</p><p>Agradecemos su comprensión.</p><p>Un saludo.</p>",
-      "Francês": "<p>Nous vous remercions de votre message et de l'intérêt porté à notre appartement.</p><p>Nos prix sont fixés automatiquement par un algorithme afin de garantir des tarifs justes et cohérents pour tous nos invités, c'est pourquoi nous ne pouvons pas les modifier manuellement.</p><p>Nous vous remercions de votre compréhension.</p><p>Cordialement.</p>"
+      "Português": "<p>Agradecemos muito o seu contacto e o interesse demonstrado no nosso apartamento.</p><p>Os nossos preços são calculados automaticamente por um algoritmo, de forma a garantir tarifas justas e consistentes para todos os nossos hóspedes. Sendo assim, não temos a possibilidade de fazer ajustes manuais.</p><p>Agradecemos a sua compreensão e estamos à disposição para qualquer outra questão.</p><p>Cumprimentos.</p>",
+      "Inglês": "<p>Thank you very much for your message and for showing interest in our apartment.</p><p>Our prices are automatically calculated by an algorithm to ensure fair and consistent rates for all our guests. As such, we are unable to make manual adjustments.</p><p>We appreciate your understanding and are available for any further questions.</p><p>Best regards.</p>",
+      "Espanhol": "<p>Muchas gracias por su mensaje y por el interés mostrado en nuestro apartamento.</p><p>Nuestros precios se calculan automáticamente mediante un algoritmo para garantizar tarifas justas y consistentes para todos nuestros huéspedes. Por ello, no podemos realizar ajustes manuales.</p><p>Agradecemos su comprensión y estamos a su disposición para cualquier otra consulta.</p><p>Un saludo.</p>",
+      "Francês": "<p>Nous vous remercions beaucoup pour votre message et l'intérêt que vous portez à notre appartement.</p><p>Nos prix sont calculés automatiquement par un algorithme afin de garantir des tarifs justes et cohérents pour tous nos invités. Par conséquent, nous ne pouvons pas effectuer de modifications manuelles.</p><p>Nous vous remercions pour votre compréhension et restons à votre disposition pour toute autre question.</p><p>Cordialement.</p>"
     },
     "Estacionamento 123": {
-      "Português": "<p>O apartamento não dispõe de estacionamento privativo, mas há estacionamento gratuito disponível na rua, geralmente com facilidade de encontrar vagas.</p><p>Se tiver mais alguma questão, encontro-me disponível.</p><p>Cumprimentos.</p>",
-      "Inglês": "<p>The apartment does not have private parking, but there is free street parking available, usually easy to find.</p><p>If you have any further questions, I am available to assist.</p><p>Best regards.</p>",
-      "Espanhol": "<p>El apartamento no dispone de aparcamiento privativo, pero hay estacionamiento gratuito en la calle, por lo general fácil de encontrar.</p><p>Si tiene alguna otra pregunta, estoy disponible para ayudarle.</p><p>Un saludo.</p>",
-      "Francês": "<p>L'appartement ne dispose pas de parking privatif, mais il y a un stationnement gratuit dans la rue, généralement facile à trouver.</p><p>Si vous avez d'autres questions, je suis disponible pour vous aider.</p><p>Cordialement.</p>"
-    },
+    "Português": "<p>O apartamento não dispõe de estacionamento privativo, mas há estacionamento gratuito disponível na rua, geralmente com facilidade para encontrar vagas.</p><p>Se tiver mais alguma questão, encontro-me à disposição.</p><p>Cumprimentos.</p>",
+    "Inglês": "<p>The apartment does not have private parking, but there is free street parking available, and it is usually easy to find a spot.</p><p>If you have any further questions, I am available to assist you.</p><p>Best regards.</p>",
+    "Espanhol": "<p>El apartamento no dispone de aparcamiento privado, pero hay estacionamiento gratuito en la calle, por lo general fácil de encontrar plazas.</p><p>Si tiene alguna otra pregunta, estoy disponible para ayudarle.</p><p>Un saludo.</p>",
+    "Francês": "<p>L'appartement ne dispose pas de parking privatif, mais il y a un stationnement gratuit dans la rue, et il est généralement facile de trouver une place.</p><p>Si vous avez d'autres questions, je suis disponible pour vous aider.</p><p>Cordialement.</p>"
+  },
     "Estacionamento 1248": {
-      "Português": "<p>Pode estacionar gratuitamente na rua ou, se preferir, também pode estacionar na entrada do apartamento.</p><p>Cumprimentos.</p>",
-      "Inglês": "<p>You can park on the street for free, or if you prefer, you can also park in the driveway.</p><p>Best regards.</p>",
-      "Espanhol": "<p>Puede aparcar gratuitamente en la calle o, si lo prefiere, también puede aparcar en la entrada.</p><p>Un saludo.</p>",
-      "Francês": "<p>Vous pouvez vous garer dans la rue gratuitement ou, si vous préférez, également dans l'allée.</p><p>Cordialement.</p>"
-    },
+    "Português": "<p>Pode estacionar na entrada do apartamento ou na rua de forma gratuita.</p><p>Se tiverem mais perguntas, encontro-me à disposição.</p><p>Cumprimentos.</p>",
+    "Inglês": "<p>You can park in the driveway or on the street for free.</p><p>If you have any further questions, I am available to assist.</p><p>Best regards.</p>",
+    "Espanhol": "<p>Pueden aparcar en la entrada del apartamento o en la calle de forma gratuita.</p><p>Si tiene más preguntas, estoy disponible para ayudarles.</p><p>Un saludo.</p>",
+    "Francês": "<p>Vous pouvez vous garer dans l'allée de l'appartement ou dans la rue gratuitement.</p><p>Si vous avez d'autres questions, je me tiens à votre disposition.</p><p>Cordialement.</p>"
+  },
     "Escadas 123": {
       "Português": "Mensagem para Escadas 123 em Português.",
       "Inglês": "Message for Escadas 123 in English.",
@@ -31,23 +31,23 @@
       "Francês": "Message pour Escadas 1248 en Français."
     },
     "Localização 123": {
-      "Português": "<p>O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.), próximo à estação de metro Casa da Música. Se desejar pesquisar no mapa, está na Rua Francisco Sanches, Porto.</p><p>Cumprimentos.</p>",
-      "Inglês": "<p>The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.), close to Casa da Música metro station. If you want to find it on a map, it is on Rua Francisco Sanches, Porto.</p><p>Best regards.</p>",
-      "Espanhol": "<p>El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.), próximo a la estación de metro Casa da Música. Si desea buscarlo en el mapa, está en la Rua Francisco Sanches, Porto.</p><p>Un saludo.</p>",
-      "Francês": "<p>L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.), près de la station de métro Casa da Música. Pour le trouver sur une carte, il est situé rue Francisco Sanches, à Porto.</p><p>Cordialement.</p>"
-    },
+    "Português": "<p>O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.), próximo à estação de metro Casa da Música. Se desejar pesquisar no mapa, está na Rua Francisco Sanches, Porto.</p><p>Cumprimentos.</p>",
+    "Inglês": "<p>The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.), close to Casa da Música metro station. If you want to find it on a map, it is on Rua Francisco Sanches, Porto.</p><p>Best regards.</p>",
+    "Espanhol": "<p>El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.), próximo a la estación de metro Casa da Música. Si desea buscarlo en el mapa, está en la Rua Francisco Sanches, Porto.</p><p>Un saludo.</p>",
+    "Francês": "<p>L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.), près de la station de métro Casa da Música. Pour le trouver sur une carte, il est situé rue Francisco Sanches, à Porto.</p><p>Cordialement.</p>"
+  },
     "Localização 1248": {
-      "Português": "<p>O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.), próximo à estação de metro Casa da Música. Se desejar pesquisar no mapa, está na Rua de Pedro Hispano 1248, Porto.</p><p>Cumprimentos.</p>",
-      "Inglês": "<p>The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.), close to Casa da Música metro station. If you want to find it on a map, it is on Rua de Pedro Hispano 1248, Porto.</p><p>Best regards.</p>",
-      "Espanhol": "<p>El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.), próximo a la estación de metro Casa da Música. Si desea buscarlo en el mapa, está en la Rua de Pedro Hispano 1248, Porto.</p><p>Un saludo.</p>",
-      "Francês": "<p>L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.), près de la station de métro Casa da Música. Pour le trouver sur une carte, il est situé rue de Pedro Hispano 1248, à Porto.</p><p>Cordialement.</p>"
-    },
+    "Português": "<p>O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.), próximo à estação de metro Casa da Música. Se desejar pesquisar no mapa, está na Rua de Pedro Hispano 1248, Porto.</p><p>Cumprimentos.</p>",
+    "Inglês": "<p>The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.), close to Casa da Música metro station. If you want to find it on a map, it is on Rua de Pedro Hispano 1248, Porto.</p><p>Best regards.</p>",
+    "Espanhol": "<p>El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.), próximo a la estación de metro Casa da Música. Si desea buscarlo en el mapa, está en la Rua de Pedro Hispano 1248, Porto.</p><p>Un saludo.</p>",
+    "Francês": "<p>L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.), près de la station de métro Casa da Música. Pour le trouver sur une carte, il est situé rue de Pedro Hispano 1248, à Porto.</p><p>Cordialement.</p>"
+  },
     "Check-in cedo sem hóspedes": {
-      "Português": "<p>O check-in antecipado não é um problema. Por favor, envie-me uma mensagem 30 minutos antes da sua chegada, e estarei lá para recebê-lo. </p><p>Cumprimentos.</p>",
-      "Inglês": "<p>Early check-in isn't a problem. Please send me a message 30 minutes before your arrival, and I will be there to welcome you. </p><p>Best regards.</p>",
-      "Espanhol": "<p>El check-in temprano no es un problema. Por favor, envíeme un mensaje 30 minutos antes de su llegada, y estaré allí para recibirle. </p><p>Un saludo.</p>",
-      "Francês": "<p>Le check-in anticipé n'est pas un problème. Merci de m'envoyer un message 30 minutes avant votre arrivée, et je serai là pour vous accueillir. </p><p>Cordialement.</p>"
-    },
+    "Português": "<p>O check-in antecipado não é um problema. Por favor, envie-me uma mensagem 30 minutos antes da vossa chegada, e estarei lá para vos receber.</p><p>Cumprimentos.</p>",
+    "Inglês": "<p>Early check-in isn't a problem. Please send me a message 30 minutes before your arrival, and I will be there to welcome you.</p><p>Best regards.</p>",
+    "Espanhol": "<p>El check-in temprano no es un problema. Por favor, envíeme un mensaje 30 minutos antes de su llegada, y estaré allí para recibirles.</p><p>Un saludo.</p>",
+    "Francês": "<p>Le check-in anticipé n'est pas un problème. Merci de m'envoyer un message 30 minutes avant votre arrivée, et je serai là pour vous accueillir.</p><p>Cordialement.</p>"
+  },
     "Check-in cedo sem hóspedes? 1248": {
       "Português": "<p>Por agora, não sabemos se teremos hóspedes a sair até às 12h, mas se houver:</p><ul><li><strong>Antes das 12:00:</strong> Podem guardar as bagagens no anexo da lavandaria.</li><li><strong>12:00 às 16:00:</strong> Podem guardar as bagagens dentro do apartamento, levar as chaves, e receberá uma mensagem assim que o apartamento estiver limpo.</li></ul><p>Cumprimentos.</p>",
       "Inglês": "<p>For now, we don't know if I'll have guests leaving until 12h, but if we do:</p><ul><li><strong>Before 12:00:</strong> You can store your luggage in the laundry annex.</li><li><strong>12:00 to 16:00:</strong> You can store your luggage inside the apartment and take the keys, and you'll receive a message as soon as the apartment is cleaned.</li></ul><p>Best regards.</p>",
