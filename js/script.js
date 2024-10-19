@@ -32,6 +32,7 @@ const provider = new GoogleAuthProvider();
 
 // Função de login com Google
 function loginComGoogle() {
+    console.log("Botão de login clicado. Tentando login com Google...");
     signInWithPopup(auth, provider)
     .then((result) => {
         // O utilizador autenticou-se com sucesso
@@ -47,6 +48,7 @@ function loginComGoogle() {
 
 // Função de logout
 function logout() {
+    console.log("Tentando fazer logout...");
     signOut(auth)
     .then(() => {
         console.log("Utilizador saiu com sucesso.");
@@ -80,6 +82,7 @@ function atualizarInterface(user) {
 
     if (user) {
         // Utilizador autenticado
+        console.log("Atualizando interface para mostrar informações do utilizador...");
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'block';
         userInfo.style.display = 'block';
@@ -87,6 +90,7 @@ function atualizarInterface(user) {
         userEmail.textContent = user.email;
     } else {
         // Nenhum utilizador autenticado
+        console.log("Nenhum utilizador autenticado. Atualizando interface para mostrar botão de login...");
         loginBtn.style.display = 'block';
         logoutBtn.style.display = 'none';
         userInfo.style.display = 'none';
