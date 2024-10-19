@@ -11,7 +11,12 @@
 <body>
     <header>
         <h1>Reparações</h1>
-        <nav>
+         <!-- Ícone de menu "hambúrguer" para mobile -->
+         <div class="menu-icon" id="menu-icon">
+            &#9776; <!-- Ícone de três linhas -->
+        </div>
+    
+        <nav id="nav-menu">
             <ul>
                 <li><a href="mensagens.html">Mensagens</a></li>
                 <li><a href="compras.html">Compras</a></li>
@@ -29,6 +34,7 @@
             </ul>
         </nav>
     </header>
+
 
     <main>
         <section class="form-section">
@@ -81,6 +87,15 @@
        })();
     </script>
     
+        <!-- Script para alternar o menu no mobile -->
+<script>
+    const menuIcon = document.getElementById('menu-icon');
+    const navMenu = document.getElementById('nav-menu');
+
+    menuIcon.addEventListener('click', function() {
+        navMenu.classList.toggle('active');
+    });
+</script>
     
 </body>
 </html>
