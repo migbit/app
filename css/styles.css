@@ -77,6 +77,70 @@ nav ul li a:hover {
     padding: 0.5rem 0.75rem;
 }
 
+/* Estilos base do menu de navegação */
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+nav ul li {
+    margin: 0 0.75rem;
+}
+
+/* Ocultar o menu de navegação no mobile por padrão */
+nav {
+    display: none;
+}
+
+/* Exibir o menu quando a classe "active" é adicionada */
+nav.active {
+    display: block;
+}
+
+/* Ícone de menu "hambúrguer" para mobile */
+.menu-icon {
+    display: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    text-align: right;
+    padding: 0.5rem;
+    background-color: #34495e;
+}
+
+/* Estilos para o mobile */
+@media (max-width: 768px) {
+    /* Exibir o ícone "hambúrguer" apenas no mobile */
+    .menu-icon {
+        display: block;
+    }
+
+    /* Menu recolhível no mobile */
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 0.75rem 0;
+    }
+
+    /* Ocultar o menu de navegação por padrão em dispositivos móveis */
+    nav {
+        display: none;
+        background-color: #34495e;
+        padding: 1rem;
+    }
+
+    /* Mostrar o menu quando estiver ativo no mobile */
+    nav.active {
+        display: block;
+    }
+}
+
 /* Main Content Styles */
 main {
     flex: 1;
