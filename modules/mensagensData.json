@@ -1,74 +1,74 @@
 {
     "Antes Reserva": {
-      "Baixar Preço": {
-        "Português": "Agradecemos muito o seu contacto e o interesse demonstrado no nosso apartamento.\n\nOs nossos preços são calculados automaticamente por um algoritmo, de forma a garantir tarifas justas e consistentes para todos os nossos hóspedes. Sendo assim, não temos a possibilidade de fazer ajustes manuais.\n\nAgradecemos a sua compreensão e estamos à disposição para qualquer outra questão.\n\nCumprimentos.",
-        "Inglês": "Thank you very much for your message and for showing interest in our apartment.\n\nOur prices are automatically calculated by an algorithm to ensure fair and consistent rates for all our guests. As such, we are unable to make manual adjustments.\n\nWe appreciate your understanding and are available for any further questions.\n\nBest regards.",
-        "Espanhol": "Muchas gracias por su mensaje y por el interés mostrado en nuestro apartamento.\n\nNuestros precios se calculan automáticamente mediante un algoritmo para garantizar tarifas justas y consistentes para todos nuestros huéspedes. Por ello, no podemos realizar ajustes manuales.\n\nAgradecemos su comprensión y estamos a su disposición para cualquier otra consulta.\n\nUn saludo.",
-        "Francês": "Nous vous remercions beaucoup pour votre message et l'intérêt que vous portez à notre appartement.\n\nNos prix sont calculés automatiquement par un algorithme afin de garantir des tarifs justes et cohérents pour tous nos invités. Par conséquent, nous ne pouvons pas effectuer de modifications manuelles.\n\nNous vous remercions pour votre compréhension et restons à votre disposition pour toute autre question.\n\nCordialement."
-      },
-      "Estacionamento 123": {
-        "Português": "O apartamento não dispõe de estacionamento privativo, mas há estacionamento gratuito disponível na rua, geralmente com facilidade para encontrar vagas. Se precisar de alguma outra informação, estarei à disposição para ajudar.\n\nCumprimentos.",
-        "Inglês": "The apartment does not have private parking, but there is free street parking available, and it is usually easy to find a spot. If you need any further information, I am available to assist.\n\nBest regards.",
-        "Espanhol": "El apartamento no dispone de aparcamiento privado, pero hay estacionamiento gratuito en la calle, por lo general fácil de encontrar plazas. Si necesita más información, estaré disponible para ayudarle.\n\nUn saludo.",
-        "Francês": "L'appartement ne dispose pas de parking privatif, mais il y a un stationnement gratuit dans la rue, et il est généralement facile de trouver une place. Si vous avez besoin de plus d'informations, je suis disponible pour vous aider.\n\nCordialement."
-      },
-      "Estacionamento 1248": {
-        "Português": "Pode estacionar na entrada do apartamento ou na rua de forma gratuita.\n\nSe tiverem mais perguntas, encontro-me à disposição.\n\nCumprimentos.",
-        "Inglês": "You can park in the driveway or on the street for free.\n\nIf you have any further questions, I am available to assist.\n\nBest regards.",
-        "Espanhol": "Pueden aparcar en la entrada del apartamento o en la calle de forma gratuita.\n\nSi tiene más preguntas, estoy disponible para ayudarles.\n\nUn saludo.",
-        "Francês": "Vous pouvez vous garer dans l'allée de l'appartement ou dans la rue gratuitement.\n\nSi vous avez d'autres questions, je me tiens à votre disposition.\n\nCordialement."
-      },
-      "Escadas 123": {
-        "Português": "Há 20 degraus até à porta de entrada do prédio. Da porta de entrada do prédio até ao andar do apartamento tem uma escadaria com 30 degraus. Se tiver mais alguma dúvida, estou à disposição.\n\nCumprimentos.",
-        "Inglês": "There are 20 steps to the building's entrance door. From the entrance door to the apartment's floor, there is a staircase with 30 steps. If you have any further questions, feel free to ask.\n\nBest regards.",
-        "Espanhol": "Hay 20 escalones hasta la puerta de entrada del edificio. Desde la puerta de entrada hasta el piso del apartamento hay una escalinata con 30 escalones. Si tiene alguna pregunta más, no dude en preguntar.\n\nUn saludo.",
-        "Francês": "Il y a 20 marches jusqu'à la porte d'entrée de l'immeuble. De la porte d'entrée à l'étage de l'appartement, il y a un escalier avec 30 marches. Si vous avez d'autres questions, n'hésitez pas à demander.\n\nCordialement."
-      },
-      "Escadas 1248": {
-        "Português": "Há 11 degraus até à porta de entrada do apartamento, que dá acesso ao 1º andar, onde se encontram a cozinha, a sala de estar e de jantar, um terraço, uma casa de banho e um quarto com duas camas individuais. Depois, do 1º andar para o 2º andar, há uma escadaria de madeira com 16 degraus. Pode visualizar todos estes degraus nas fotos do apartamento. Se tiver mais alguma dúvida, estou à disposição.\n\nCumprimentos.",
-        "Inglês": "There are 11 steps to the apartment entry door, which gives access to the 1st floor with the kitchen, living and dining room, a terrace, one bathroom, and a bedroom with two single beds. Then, from the 1st floor to the 2nd floor, there is a wooden staircase with 16 steps. You can see all these steps in the apartment pictures. If you have any more questions, feel free to ask.\n\nBest regards.",
-        "Espanhol": "Hay 11 escalones hasta la puerta de entrada del apartamento, que da acceso al 1º piso, donde se encuentran la cocina, la sala de estar y de comedor, un terraza, un baño y un dormitorio con dos camas individuales. Luego, del 1º al 2º piso, hay una escalinata de madera con 16 escalones. Puede ver todos estos escalones en las fotos del apartamento. Si tiene alguna pregunta más, no dude en preguntar.\n\nUn saludo.",
-        "Francês": "Il y a 11 marches jusqu'à la porte d'entrée de l'appartement, qui donne accès au 1er étage avec la cuisine, le salon et salle à manger, une terrasse, une salle de bain et une chambre avec deux lits simples. Ensuite, du 1er au 2ème étage, il y a un escalier en bois avec 16 marches. Vous pouvez visualiser toutes ces marches sur les photos de l'appartement. Si vous avez d'autres questions, n'hésitez pas à demander.\n\nCordialement."
-      },
-      "Localização 123": {
-        "Português": "O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.) e a 5 minutos a pé da estação de metro Casa da Música. Se precisar de localizar no mapa, o apartamento está na Rua Francisco Sanches, Porto.\n\nCumprimentos.",
-        "Inglês": "The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.) and is a 5-minute walk from Casa da Música metro station. If you need to find it on a map, it is located on Rua Francisco Sanches, Porto.\n\nBest regards.",
-        "Espanhol": "El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.) y a 5 minutos a pie de la estación de metro Casa da Música. Si necesita buscarlo en el mapa, el apartamento está en la Rua Francisco Sanches, Porto.\n\nUn saludo.",
-        "Francês": "L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.) et à 5 minutes à pied de la station de métro Casa da Música. Si vous avez besoin de le localiser sur une carte, l'appartement est situé rue Francisco Sanches, à Porto.\n\nCordialement."
-      },
-      "Localização 1248": {
-        "Português": "O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.) e a 10 minutos a pé da estação de metro Casa da Música. Se precisar de localizar no mapa, o apartamento está na Rua de Pedro Hispano 1248, Porto.\n\nCumprimentos.",
-        "Inglês": "The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.) and is a 10-minute walk from Casa da Música metro station. If you need to find it on a map, it is located on Rua de Pedro Hispano 1248, Porto.\n\nBest regards.",
-        "Espanhol": "El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.) y a 10 minutos a pie de la estación de metro Casa da Música. Si necesita buscarlo en el mapa, el apartamento está en la Rua de Pedro Hispano 1248, Porto.\n\nUn saludo.",
-        "Francês": "L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.) et à 10 minutes à pied de la station de métro Casa da Música. Si vous avez besoin de le localiser sur une carte, l'appartement est situé rue de Pedro Hispano 1248, à Porto.\n\nCordialement."
-      },
-      "Check-in cedo sem hóspedes": {
-        "Português": "O check-in antecipado não é um problema. Por favor, envie-me uma mensagem 30 minutos antes da vossa chegada, e estarei lá para vos receber.\n\nCumprimentos.",
-        "Inglês": "Early check-in isn't a problem. Please send me a message 30 minutes before your arrival, and I will be there to welcome you.\n\nBest regards.",
-        "Espanhol": "El check-in temprano no es un problema. Por favor, envíeme un mensaje 30 minutos antes de su llegada, y estaré allí para recibirles.\n\nUn saludo.",
-        "Francês": "Le check-in anticipé n'est pas un problème. Merci de m'envoyer un message 30 minutes avant votre arrivée, et je serai là pour vous accueillir.\n\nCordialement."
-      },
-      "Check-in cedo sem hóspedes? 1248": {
-        "Português": "Por agora, não sabemos se teremos hóspedes a sair até às 12h, mas caso haja:\n\n• Antes das 12:00: Podem guardar as bagagens no anexo da lavandaria.\n\n• 12:00 às 16:00: Podem guardar as bagagens dentro do apartamento, levar as chaves e receberá uma mensagem assim que o apartamento estiver limpo.\n\nCumprimentos.",
-        "Inglês": "For now, we don't know if we will have guests leaving until 12h, but if we do:\n\n• Before 12:00: You can store your luggage in the laundry annex.\n\n• 12:00 to 16:00: You can store your luggage inside the apartment, take the keys, and you will receive a message as soon as the apartment is cleaned.\n\nBest regards.",
-        "Espanhol": "Por ahora, no sabemos si tendremos huéspedes saliendo hasta las 12h, pero si los hay:\n\n• Antes de las 12:00: Pueden guardar sus equipajes en el anexo de lavandería.\n\n• 12:00 a 16:00: Pueden guardar sus equipajes dentro del apartamento, tomar las llaves y recibirá un mensaje tan pronto como el apartamento esté limpio.\n\nUn saludo.",
-        "Francês": "Pour l'instant, nous ne savons pas si nous aurons des invités partant avant 12h, mais si c'est le cas :\n\n• Avant 12:00 : Vous pouvez déposer vos bagages dans l'annexe de la buanderie.\n\n• De 12:00 à 16:00 : Vous pouvez déposer vos bagages dans l'appartement, prendre les clés et vous recevrez un message dès que l'appartement sera propre.\n\nCordialement."
-      },
-      "Check-in cedo sem hóspedes? 123": {
-        "Português": "Por agora, não sabemos se teremos hóspedes a sair até às 12h, mas se houver:\n\n• Antes das 12:00: Podem guardar as bagagens no nosso escritório (3 minutos a pé do apartamento).\n\n• 12:00 às 15:00: Podem guardar as bagagens dentro do apartamento, levar as chaves, e receberá uma mensagem assim que o apartamento estiver limpo.\n\nCumprimentos.",
-        "Inglês": "For now, we don't know if we will have guests leaving until 12h, but if we do:\n\n• Before 12:00: You can store your luggage in our office (3 minutes walking distance from the apartment).\n\n• 12:00 to 15:00: You can store your luggage inside the apartment and take the keys, and you will receive a message as soon as the apartment is cleaned.\n\nBest regards.",
-        "Espanhol": "Por ahora, no sabemos si tendremos huéspedes saliendo hasta las 12h, pero si los hay:\n\n• Antes de las 12:00: Puede guardar su equipaje en nuestra oficina (a 3 minutos a pie del apartamento).\n\n• 12:00 a 15:00: Puede guardar su equipaje dentro del apartamento y tomar las llaves, y recibirá un mensaje tan pronto como el apartamento esté limpio.\n\nUn saludo.",
-        "Francês": "Pour l'instant, nous ne savons pas si nous aurons des invités partant avant 12h, mais si c'est le cas :\n\n• Avant 12:00 : Vous pouvez déposer vos bagages dans notre bureau (à 3 minutes à pied de l'appartement).\n\n• De 12:00 à 15:00 : Vous pouvez déposer vos bagages dans l'appartement et prendre les clés, et vous recevrez un message dès que l'appartement sera propre.\n\nCordialement."
-      },
-      "Check-In tardio": {
-        "Português": "O check-in tardio não é um problema de todo. Peço apenas que me envie uma mensagem com antecedência, antes da sua chegada, e estarei disponível para recebê-lo, independentemente da hora.\n\nCumprimentos.",
-        "Inglês": "Late check-in isn't a problem at all. I kindly ask that you send me a message in advance, before your arrival, and I will be ready to welcome you, regardless of the hour.\n\nBest regards.",
-        "Espanhol": "El check-in tardío no es un problema en absoluto. Solo le pido que me envíe un mensaje con antelación, antes de su llegada, y estaré disponible para recibirle, independientemente de la hora.\n\nUn saludo.",
-        "Francês": "Le check-in tardif n'est pas un problème du tout. Je vous demande simplement de m'envoyer un message à l'avance, avant votre arrivée, et je serai disponible pour vous accueillir, quelle que soit l'heure.\n\nCordialement."
-      }
+    "Baixar Preço": {
+      "Português": "Agradecemos muito o seu contacto e o interesse demonstrado no nosso apartamento.\n\nOs nossos preços são calculados automaticamente por um algoritmo, de forma a garantir tarifas justas e consistentes para todos os nossos hóspedes. Sendo assim, não temos a possibilidade de fazer ajustes manuais.\n\nAgradecemos a sua compreensão e estamos à disposição para qualquer outra questão.\n\nCumprimentos.",
+      "Inglês": "Thank you very much for your message and for showing interest in our apartment.\n\nOur prices are automatically calculated by an algorithm to ensure fair and consistent rates for all our guests. As such, we are unable to make manual adjustments.\n\nWe appreciate your understanding and are available for any further questions.\n\nBest regards.",
+      "Espanhol": "Muchas gracias por su mensaje y por el interés mostrado en nuestro apartamento.\n\nNuestros precios se calculan automáticamente mediante un algoritmo para garantizar tarifas justas y consistentes para todos nuestros huéspedes. Por ello, no podemos realizar ajustes manuales.\n\nAgradecemos su comprensión y estamos a su disposición para cualquier otra consulta.\n\nUn saludo.",
+      "Francês": "Nous vous remercions beaucoup pour votre message et l'intérêt que vous portez à notre appartement.\n\nNos prix sont calculés automatiquement par un algorithme afin de garantir des tarifs justes et cohérents pour tous nos invités. Par conséquent, nous ne pouvons pas effectuer de modifications manuelles.\n\nNous vous remercions pour votre compréhension et restons à votre disposition pour toute autre question.\n\nCordialement."
+    },
+    "Estacionamento 123": {
+      "Português": "O apartamento não dispõe de estacionamento privativo, mas há estacionamento gratuito disponível na rua, geralmente com facilidade para encontrar vagas. Se precisar de alguma outra informação, estarei à disposição para ajudar.\n\nCumprimentos.",
+      "Inglês": "The apartment does not have private parking, but there is free street parking available, and it is usually easy to find a spot. If you need any further information, I am available to assist.\n\nBest regards.",
+      "Espanhol": "El apartamento no dispone de aparcamiento privado, pero hay estacionamiento gratuito en la calle, por lo general fácil de encontrar plazas. Si necesita más información, estaré disponible para ayudarle.\n\nUn saludo.",
+      "Francês": "L'appartement ne dispose pas de parking privatif, mais il y a un stationnement gratuit dans la rue, et il est généralement facile de trouver une place. Si vous avez besoin de plus d'informations, je suis disponible pour vous aider.\n\nCordialement."
+    },
+    "Estacionamento 1248": {
+      "Português": "Pode estacionar na entrada do apartamento ou na rua de forma gratuita.\n\nSe tiverem mais perguntas, encontro-me à disposição.\n\nCumprimentos.",
+      "Inglês": "You can park in the driveway or on the street for free.\n\nIf you have any further questions, I am available to assist.\n\nBest regards.",
+      "Espanhol": "Pueden aparcar en la entrada del apartamento o en la calle de forma gratuita.\n\nSi tiene más preguntas, estoy disponible para ayudarles.\n\nUn saludo.",
+      "Francês": "Vous pouvez vous garer dans l'allée de l'appartement ou dans la rue gratuitement.\n\nSi vous avez d'autres questions, je me tiens à votre disposition.\n\nCordialement."
+    },
+    "Escadas 123": {
+      "Português": "Há 20 degraus até à porta de entrada do prédio. Da porta de entrada do prédio até ao andar do apartamento tem uma escadaria com 30 degraus. Se tiver mais alguma dúvida, estou à disposição.\n\nCumprimentos.",
+      "Inglês": "There are 20 steps to the building's entrance door. From the entrance door to the apartment's floor, there is a staircase with 30 steps. If you have any further questions, feel free to ask.\n\nBest regards.",
+      "Espanhol": "Hay 20 escalones hasta la puerta de entrada del edificio. Desde la puerta de entrada hasta el piso del apartamento hay una escalinata con 30 escalones. Si tiene alguna pregunta más, no dude en preguntar.\n\nUn saludo.",
+      "Francês": "Il y a 20 marches jusqu'à la porte d'entrée de l'immeuble. De la porte d'entrée à l'étage de l'appartement, il y a un escalier avec 30 marches. Si vous avez d'autres questions, n'hésitez pas à demander.\n\nCordialement."
+    },
+    "Escadas 1248": {
+      "Português": "Há 11 degraus até à porta de entrada do apartamento, que dá acesso ao 1º andar, onde se encontram a cozinha, a sala de estar e de jantar, um terraço, uma casa de banho e um quarto com duas camas individuais. Depois, do 1º andar para o 2º andar, há uma escadaria de madeira com 16 degraus. Pode visualizar todos estes degraus nas fotos do apartamento. Se tiver mais alguma dúvida, estou à disposição.\n\nCumprimentos.",
+      "Inglês": "There are 11 steps to the apartment entry door, which gives access to the 1st floor with the kitchen, living and dining room, a terrace, one bathroom, and a bedroom with two single beds. Then, from the 1st floor to the 2nd floor, there is a wooden staircase with 16 steps. You can see all these steps in the apartment pictures. If you have any more questions, feel free to ask.\n\nBest regards.",
+      "Espanhol": "Hay 11 escalones hasta la puerta de entrada del apartamento, que da acceso al 1º piso, donde se encuentran la cocina, la sala de estar y de comedor, un terraza, un baño y un dormitorio con dos camas individuales. Luego, del 1º al 2º piso, hay una escalinata de madera con 16 escalones. Puede ver todos estos escalones en las fotos del apartamento. Si tiene alguna pregunta más, no dude en preguntar.\n\nUn saludo.",
+      "Francês": "Il y a 11 marches jusqu'à la porte d'entrée de l'appartement, qui donne accès au 1er étage avec la cuisine, le salon et salle à manger, une terrasse, une salle de bain et une chambre avec deux lits simples. Ensuite, du 1er au 2ème étage, il y a un escalier en bois avec 16 marches. Vous pouvez visualiser toutes ces marches sur les photos de l'appartement. Si vous avez d'autres questions, n'hésitez pas à demander.\n\nCordialement."
+    },
+    "Localização 123": {
+      "Português": "O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.) e a 5 minutos a pé da estação de metro Casa da Música. Se precisar de localizar no mapa, o apartamento está na Rua Francisco Sanches, Porto.\n\nCumprimentos.",
+      "Inglês": "The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.) and is a 5-minute walk from Casa da Música metro station. If you need to find it on a map, it is located on Rua Francisco Sanches, Porto.\n\nBest regards.",
+      "Espanhol": "El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.) y a 5 minutos a pie de la estación de metro Casa da Música. Si necesita buscarlo en el mapa, el apartamento está en la Rua Francisco Sanches, Porto.\n\nUn saludo.",
+      "Francês": "L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.) et à 5 minutes à pied de la station de métro Casa da Música. Si vous avez besoin de le localiser sur une carte, l'appartement est situé rue Francisco Sanches, à Porto.\n\nCordialement."
+    },
+    "Localização 1248": {
+      "Português": "O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.) e a 10 minutos a pé da estação de metro Casa da Música. Se precisar de localizar no mapa, o apartamento está na Rua de Pedro Hispano 1248, Porto.\n\nCumprimentos.",
+      "Inglês": "The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.) and is a 10-minute walk from Casa da Música metro station. If you need to find it on a map, it is located on Rua de Pedro Hispano 1248, Porto.\n\nBest regards.",
+      "Espanhol": "El apartamento está ubicado cerca de todos los servicios esenciales (restaurantes, supermercados, panaderías, etc.) y a 10 minutos a pie de la estación de metro Casa da Música. Si necesita buscarlo en el mapa, el apartamento está en la Rua de Pedro Hispano 1248, Porto.\n\nUn saludo.",
+      "Francês": "L'appartement est situé à proximité de tous les services essentiels (restaurants, supermarchés, boulangeries, etc.) et à 10 minutes à pied de la station de métro Casa da Música. Si vous avez besoin de le localiser sur une carte, l'appartement est situé rue de Pedro Hispano 1248, à Porto.\n\nCordialement."
+    },
+    "Check-in cedo sem hóspedes": {
+      "Português": "O check-in antecipado não é um problema. Por favor, envie-me uma mensagem 30 minutos antes da vossa chegada, e estarei lá para vos receber.\n\nCumprimentos.",
+      "Inglês": "Early check-in isn't a problem. Please send me a message 30 minutes before your arrival, and I will be there to welcome you.\n\nBest regards.",
+      "Espanhol": "El check-in temprano no es un problema. Por favor, envíeme un mensaje 30 minutos antes de su llegada, y estaré allí para recibirles.\n\nUn saludo.",
+      "Francês": "Le check-in anticipé n'est pas un problème. Merci de m'envoyer un message 30 minutes avant votre arrivée, et je serai là pour vous accueillir.\n\nCordialement."
+    },
+    "Check-in cedo sem hóspedes? 1248": {
+      "Português": "Por agora, não sabemos se teremos hóspedes a sair até às 12h, mas caso haja:\n\n• Antes das 12:00: Podem guardar as bagagens no anexo da lavandaria.\n\n• 12:00 às 16:00: Podem guardar as bagagens dentro do apartamento, levar as chaves e receberá uma mensagem assim que o apartamento estiver limpo.\n\nCumprimentos.",
+      "Inglês": "For now, we don't know if we will have guests leaving until 12h, but if we do:\n\n• Before 12:00: You can store your luggage in the laundry annex.\n\n• 12:00 to 16:00: You can store your luggage inside the apartment, take the keys, and you will receive a message as soon as the apartment is cleaned.\n\nBest regards.",
+      "Espanhol": "Por ahora, no sabemos si tendremos huéspedes saliendo hasta las 12h, pero si los hay:\n\n• Antes de las 12:00: Pueden guardar sus equipajes en el anexo de lavandería.\n\n• 12:00 a 16:00: Pueden guardar sus equipajes dentro del apartamento, tomar las llaves y recibirá un mensaje tan pronto como el apartamento esté limpio.\n\nUn saludo.",
+      "Francês": "Pour l'instant, nous ne savons pas si nous aurons des invités partant avant 12h, mais si c'est le cas :\n\n• Avant 12:00 : Vous pouvez déposer vos bagages dans l'annexe de la buanderie.\n\n• De 12:00 à 16:00 : Vous pouvez déposer vos bagages dans l'appartement, prendre les clés et vous recevrez un message dès que l'appartement sera propre.\n\nCordialement."
+    },
+    "Check-in cedo sem hóspedes? 123": {
+      "Português": "Por agora, não sabemos se teremos hóspedes a sair até às 12h, mas se houver:\n\n• Antes das 12:00: Podem guardar as bagagens no nosso escritório (3 minutos a pé do apartamento).\n\n• 12:00 às 15:00: Podem guardar as bagagens dentro do apartamento, levar as chaves, e receberá uma mensagem assim que o apartamento estiver limpo.\n\nCumprimentos.",
+      "Inglês": "For now, we don't know if we will have guests leaving until 12h, but if we do:\n\n• Before 12:00: You can store your luggage in our office (3 minutes walking distance from the apartment).\n\n• 12:00 to 15:00: You can store your luggage inside the apartment and take the keys, and you will receive a message as soon as the apartment is cleaned.\n\nBest regards.",
+      "Espanhol": "Por ahora, no sabemos si tendremos huéspedes saliendo hasta las 12h, pero si los hay:\n\n• Antes de las 12:00: Puede guardar su equipaje en nuestra oficina (a 3 minutos a pie del apartamento).\n\n• 12:00 a 15:00: Puede guardar su equipaje dentro del apartamento y tomar las llaves, y recibirá un mensaje tan pronto como el apartamento esté limpio.\n\nUn saludo.",
+      "Francês": "Pour l'instant, nous ne savons pas si nous aurons des invités partant avant 12h, mais si c'est le cas :\n\n• Avant 12:00 : Vous pouvez déposer vos bagages dans notre bureau (à 3 minutes à pied de l'appartement).\n\n• De 12:00 à 15:00 : Vous pouvez déposer vos bagages dans l'appartement et prendre les clés, et vous recevrez un message dès que l'appartement sera propre.\n\nCordialement."
+    },
+    "Check-In tardio": {
+      "Português": "O check-in tardio não é um problema de todo. Peço apenas que me envie uma mensagem com antecedência, antes da sua chegada, e estarei disponível para recebê-lo, independentemente da hora.\n\nCumprimentos.",
+      "Inglês": "Late check-in isn't a problem at all. I kindly ask that you send me a message in advance, before your arrival, and I will be ready to welcome you, regardless of the hour.\n\nBest regards.",
+      "Espanhol": "El check-in tardío no es un problema en absoluto. Solo le pido que me envíe un mensaje con antelación, antes de su llegada, y estaré disponible para recibirle, independientemente de la hora.\n\nUn saludo.",
+      "Francês": "Le check-in tardif n'est pas un problème du tout. Je vous demande simplement de m'envoyer un message à l'avance, avant votre arrivée, et je serai disponible pour vous accueillir, quelle que soit l'heure.\n\nCordialement."
+    }
   },
   "Antes do Check-in": {
-    "Segunda-feira": {
+   "Segunda-feira": {
       "Português": "Olá [Hospede],\n\nEspero que esteja tudo bem consigo! Gostaria de confirmar se já tem uma hora estimada de chegada para a próxima Segunda-feira. Se precisar de alguma coisa ou tiver alguma questão antes da sua estadia, estou à disposição. Desejo-lhe uma excelente viagem.\n\nMelhores cumprimentos",
       "Inglês": "Hello [Hospede],\n\nI hope you're doing well! I just wanted to confirm if you have an estimated time of arrival for next Monday. If there's anything you need or any questions before your stay, please don't hesitate to reach out. Wishing you a wonderful trip.\n\nBest regards",
       "Espanhol": "Hola [Hospede],\n\n¡Espero que estés bien! Quería confirmar si ya tienes una hora estimada de llegada para el próximo lunes. Si necesitas algo o tienes alguna pregunta antes de tu estadía, no dudes en contactarme. Te deseo un excelente viaje.\n\nUn saludo",
