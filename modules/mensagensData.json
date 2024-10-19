@@ -18,18 +18,18 @@
     "Espanhol": "<p>Pueden aparcar en la entrada del apartamento o en la calle de forma gratuita.</p><p>Si tiene más preguntas, estoy disponible para ayudarles.</p><p>Un saludo.</p>",
     "Francês": "<p>Vous pouvez vous garer dans l'allée de l'appartement ou dans la rue gratuitement.</p><p>Si vous avez d'autres questions, je me tiens à votre disposition.</p><p>Cordialement.</p>"
   },
-    "Escadas 123": {
-      "Português": "Mensagem para Escadas 123 em Português.",
-      "Inglês": "Message for Escadas 123 in English.",
-      "Espanhol": "Mensaje para Escadas 123 en Español.",
-      "Francês": "Message pour Escadas 123 en Français."
-    },
+   "Escadas 123": {
+    "Português": "Há 20 degraus até à porta de entrada do prédio. Da porta de entrada do prédio até ao andar do apartamento tem uma escadaria com 30 degraus. Se tiver mais alguma dúvida, estou à disposição.\n\nCumprimentos.",
+    "Inglês": "There are 20 steps to the building's entrance door. From the entrance door to the apartment's floor, there is a staircase with 30 steps. If you have any further questions, feel free to ask.\n\nBest regards.",
+    "Espanhol": "Hay 20 escalones hasta la puerta de entrada del edificio. Desde la puerta de entrada hasta el piso del apartamento hay una escalinata con 30 escalones. Si tiene alguna pregunta más, no dude en preguntar.\n\nUn saludo.",
+    "Francês": "Il y a 20 marches jusqu'à la porte d'entrée de l'immeuble. De la porte d'entrée à l'étage de l'appartement, il y a un escalier avec 30 marches. Si vous avez d'autres questions, n'hésitez pas à demander.\n\nCordialement."
+  },
     "Escadas 1248": {
-      "Português": "Mensagem para Escadas 1248 em Português.",
-      "Inglês": "Message for Escadas 1248 in English.",
-      "Espanhol": "Mensaje para Escadas 1248 en Español.",
-      "Francês": "Message pour Escadas 1248 en Français."
-    },
+    "Português": "Há 11 degraus até à porta de entrada do apartamento, que dá acesso ao 1º andar, onde se encontram a cozinha, a sala de estar e de jantar, um terraço, uma casa de banho e um quarto com duas camas individuais. Depois, do 1º andar para o 2º andar, há uma escadaria de madeira com 16 degraus. Pode visualizar todos estes degraus nas fotos do apartamento. Se tiver mais alguma dúvida, estou à disposição.\n\nCumprimentos.",
+    "Inglês": "There are 11 steps to the apartment entry door, which gives access to the 1st floor with the kitchen, living and dining room, a terrace, one bathroom, and a bedroom with two single beds. Then, from the 1st floor to the 2nd floor, there is a wooden staircase with 16 steps. You can see all these steps in the apartment pictures. If you have any more questions, feel free to ask.\n\nBest regards.",
+    "Espanhol": "Hay 11 escalones hasta la puerta de entrada del apartamento, que da acceso al 1º piso, donde se encuentran la cocina, la sala de estar y de comedor, un terraza, un baño y un dormitorio con dos camas individuales. Luego, del 1º al 2º piso, hay una escalinata de madera con 16 escalones. Puede ver todos estos escalones en las fotos del apartamento. Si tiene alguna pregunta más, no dude en preguntar.\n\nUn saludo.",
+    "Francês": "Il y a 11 marches jusqu'à la porte d'entrée de l'appartement, qui donne accès au 1er étage avec la cuisine, le salon et salle à manger, une terrasse, une salle de bain et une chambre avec deux lits simples. Ensuite, du 1er au 2ème étage, il y a un escalier en bois avec 16 marches. Vous pouvez visualiser toutes ces marches sur les photos de l'appartement. Si vous avez d'autres questions, n'hésitez pas à demander.\n\nCordialement."
+  },
     "Localização 123": {
     "Português": "<p>O apartamento está localizado perto de todos os serviços essenciais (restaurantes, supermercados, padarias, etc.) e a 5 minutos a pé da estação de metro Casa da Música. Se precisar de localizar no mapa, o apartamento está na Rua Francisco Sanches, Porto.</p><p>Cumprimentos.</p>",
     "Inglês": "<p>The apartment is located near all essential services (restaurants, supermarkets, bakeries, etc.) and is a 5-minute walk from Casa da Música metro station. If you need to find it on a map, it is located on Rua Francisco Sanches, Porto.</p><p>Best regards.</p>",
