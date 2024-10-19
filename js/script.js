@@ -59,17 +59,38 @@ function logout() {
     });
 }
 
-// Verificar o estado de autenticação
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // O utilizador está autenticado
-        console.log("Utilizador autenticado:", user.displayName);
-        atualizarInterface(user);
+// Garantir que o código só seja executado quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar a existência dos elementos antes de acessá-los
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Verificar se o botão de login existe antes de tentar adicionar o event listener
+    if (loginBtn) {
+        console.log("Login button found, adding event listener");
+        loginBtn.addEventListener('click', loginComGoogle);
     } else {
-        // O utilizador não está autenticado
-        console.log("Nenhum utilizador autenticado.");
-        atualizarInterface(null);
+        console.log("Login button not found on this page.");
     }
+
+    // Verificar se o botão de logout existe antes de tentar adicionar o event listener
+    if (logoutBtn) {
+        console.log("Logout button found, adding event listener");
+        logoutBtn.addEventListener('click', logout);
+    } else {
+        console.log("Logout button not found on this page.");
+    }
+
+    // Estado de autenticação - Verificar se o utilizador está autenticado
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("User is authenticated:", user.displayName);
+            atualizarInterface(user);  // Atualizar a interface com as informações do utilizador
+        } else {
+            console.log("No user is authenticated.");
+            atualizarInterface(null);  // Limpar a interface
+        }
+    });
 });
 
 // Atualizar a interface de acordo com o estado de autenticação
@@ -82,18 +103,20 @@ function atualizarInterface(user) {
 
     if (user) {
         // Utilizador autenticado
-        console.log("Atualizando interface para mostrar informações do utilizador...");
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'block';
-        userInfo.style.display = 'block';
-        userName.textContent = user.displayName;
-        userEmail.textContent = user.email;
+        console.log("Updating interface to show user information");
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'block';
+        if (userInfo) {
+            userInfo.style.display = 'block';
+            userName.textContent = user.displayName;
+            userEmail.textContent = user.email;
+        }
     } else {
         // Nenhum utilizador autenticado
-        console.log("Nenhum utilizador autenticado. Atualizando interface para mostrar botão de login...");
-        loginBtn.style.display = 'block';
-        logoutBtn.style.display = 'none';
-        userInfo.style.display = 'none';
+        console.log("Updating interface to show login button");
+        if (loginBtn) loginBtn.style.display = 'block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (userInfo) userInfo.style.display = 'none';
     }
 }
 
@@ -126,7 +149,3 @@ export function enviarEmailUrgencia(apartamento, descricao) {
 
 // Attach the function to the window object if needed (for testing)
 window.enviarEmailUrgencia = enviarEmailUrgencia;
-
-// Event listeners para os botões de login e logout
-document.getElementById('login-btn').addEventListener('click', loginComGoogle);
-document.getElementById('logout-btn').addEventListener('click', logout);
