@@ -1,9 +1,8 @@
 // js/cal.js
 
 // Import necessary Firebase functions from script.js and Firebase SDK
-import { db, auth } from './script.js';
+import { db } from './script.js';
 import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 
 // URLs and Configuration for Calendar
 const workerUrl = 'https://noisy-butterfly-af58.migbit84.workers.dev/';
