@@ -5,7 +5,7 @@ const icalUrls = {
     '1248': 'https://www.airbnb.pt/calendar/ical/9776121.ics?s=20937949370c92092084c8f0e5a50bbb'
 };
 
-// Variables to store reservation dates
+// Variables to store reservation start dates
 let reservedDates = new Set();
 
 // Function to Fetch iCal Data through Proxy
@@ -45,7 +45,7 @@ function parseIcalData(icalData) {
     }
 }
 
-// Function to Display Reservations in Lists
+// Function to Display Reservations in Lists and Collect Start Dates
 function displayReservations(apartmentId, reservations) {
     const ul = document.getElementById(`reservas${apartmentId}`);
     if (!ul) {
@@ -58,13 +58,9 @@ function displayReservations(apartmentId, reservations) {
         li.textContent = `${reservation.summary}: ${reservation.startDate.toLocaleDateString()} - ${reservation.endDate.toLocaleDateString()}`;
         ul.appendChild(li);
 
-        // Add each date in the reservation period to reservedDates set
-        let currentDate = new Date(reservation.startDate);
-        while (currentDate < reservation.endDate) {
-            const dateStr = currentDate.toISOString().split('T')[0];
-            reservedDates.add(dateStr);
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
+        // **Add only the start date of the reservation to reservedDates set**
+        const dateStr = reservation.startDate.toISOString().split('T')[0];
+        reservedDates.add(dateStr);
     });
 }
 
@@ -144,7 +140,7 @@ function renderCalendar(month, year) {
                 const dateObj = new Date(year, month, date);
                 const dateStr = dateObj.toISOString().split('T')[0];
 
-                // Highlight Reserved Dates
+                // **Highlight Reserved Dates (Only Start Dates)**
                 if (reservedDates.has(dateStr)) {
                     span.classList.add('reserved');
                 }
