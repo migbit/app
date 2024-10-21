@@ -507,10 +507,14 @@ footer {
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    padding: 20px;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
 }
 
 /* Calendar Container */
@@ -520,6 +524,8 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 0 auto 40px auto;
 }
 
 /* Calendar Header */
@@ -535,18 +541,18 @@ body {
     color: #333;
 }
 
-.calendar-header button {
+.nav-button {
     padding: 8px 12px;
     background-color: #007bff;
     border: none;
     color: #fff;
-    font-size: 1em;
+    font-size: 1.2em;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
 }
 
-.calendar-header button:hover {
+.nav-button:hover {
     background-color: #0056b3;
 }
 
@@ -577,6 +583,17 @@ body {
     transition: background-color 0.2s ease;
 }
 
+/* Highlight for Days with Reservations */
+.reserved {
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    line-height: 30px;
+}
+
 /* Highlight for Today */
 .today {
     background-color: #ffeb3b;
@@ -585,6 +602,39 @@ body {
     height: 30px;
     display: inline-block;
     line-height: 30px;
+}
+
+/* Reservations Section */
+#calendario {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#calendario > div {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#calendario h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#calendario ul {
+    list-style-type: none;
+}
+
+#calendario li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#calendario li.error {
+    color: red;
 }
 
 /* Responsive Design */
@@ -597,8 +647,12 @@ body {
         height: 60px;
     }
 
-    .calendar-header button {
+    .nav-button {
         padding: 6px 10px;
-        font-size: 0.9em;
+        font-size: 1em;
+    }
+
+    #calendario > div {
+        padding: 10px;
     }
 }

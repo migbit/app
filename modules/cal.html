@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Calendar</title>
-    <!-- Link to the external CSS file -->
+    <title>Calendário de Reservas</title>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
+    <h1>Calendário de Reservas</h1>
+    
+    <!-- Calendar Section -->
     <div class="calendar-container">
         <div class="calendar-header">
-            <button id="prev-month">Prev</button>
+            <button id="prev-month" class="nav-button">&lt;</button>
             <h2 id="month-year"></h2>
-            <button id="next-month">Next</button>
+            <button id="next-month" class="nav-button">&gt;</button>
         </div>
         <table class="calendar">
             <thead>
                 <tr>
-                    <th>Sun</th>
-                    <th>Mon</th>
-                    <th>Tue</th>
-                    <th>Wed</th>
-                    <th>Thu</th>
-                    <th>Fri</th>
-                    <th>Sat</th>
+                    <th>Dom</th>
+                    <th>Seg</th>
+                    <th>Ter</th>
+                    <th>Qua</th>
+                    <th>Qui</th>
+                    <th>Sex</th>
+                    <th>Sáb</th>
                 </tr>
             </thead>
             <tbody id="calendar-body">
@@ -31,7 +33,21 @@
             </tbody>
         </table>
     </div>
-    <!-- Link to the external JavaScript file -->
+
+    <!-- Reservations Section -->
+    <div id="calendario">
+        <div id="apartamento123">
+            <h2>Apartamento 123</h2>
+            <ul id="reservas123"></ul>
+        </div>
+        <div id="apartamento1248">
+            <h2>Apartamento 1248</h2>
+            <ul id="reservas1248"></ul>
+        </div>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script src="../js/cal.js"></script>
 </body>
 </html>
