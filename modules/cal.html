@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendário de Reservas</title>
-    <link href='https://unpkg.com/@fullcalendar/core@6.1.8/main.min.css' rel='stylesheet' />
-    <script src='https://unpkg.com/@fullcalendar/core@6.1.8/main.min.js'></script>
-    <link rel="stylesheet" href="../css/styles.css">
+    <meta charset="utf-8">
+    <title>Calendar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 </head>
 <body>
-    <h1>Calendário de Reservas</h1>
+    <div class="calendar-container">
+        <header class="calendar-header">
+            <p class="calendar-current-date"></p>
+            <div class="calendar-navigation">
+                <span id="calendar-prev" class="material-symbols-rounded">chevron_left</span>
+                <span id="calendar-next" class="material-symbols-rounded">chevron_right</span>
+            </div>
+        </header>
 
-    <!-- Calendar element -->
-    <div id="calendar"></div>
+        <div class="calendar-body">
+            <ul class="calendar-weekdays">
+                <li>Sun</li>
+                <li>Mon</li>
+                <li>Tue</li>
+                <li>Wed</li>
+                <li>Thu</li>
+                <li>Fri</li>
+                <li>Sat</li>
+            </ul>
+            <ul class="calendar-dates"></ul>
+        </div>
+    </div>
 
     <!-- Reservation lists under the calendar -->
     <div id="calendario">
@@ -25,7 +43,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
-    <script src="../js/cal.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
