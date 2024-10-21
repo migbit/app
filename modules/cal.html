@@ -3,29 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listagem de Check-ins</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .calendar-list {
-            margin-bottom: 20px;
-        }
-    </style>
+    <title>Calendário de Reservas</title>
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-    <h1>Listagem de Check-ins dos Apartamentos</h1>
-    <div id="apartment123" class="calendar-list">
-        <h2>Apartamento 123</h2>
-        <ul id="apartment123-events"></ul>
+    <h1>Calendário de Reservas</h1>
+    <div id="calendario">
+        <div id="apartamento123">
+            <h2>Apartamento 123</h2>
+            <ul id="reservas123"></ul>
+        </div>
+        <div id="apartamento1248">
+            <h2>Apartamento 1248</h2>
+            <ul id="reservas1248"></ul>
+        </div>
     </div>
-    <div id="apartment1248" class="calendar-list">
-        <h2>Apartamento 1248</h2>
-        <ul id="apartment1248-events"></ul>
-    </div>
-
-    <!-- Inclui o ficheiro JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script src="../js/cal.js"></script>
 </body>
 </html>
