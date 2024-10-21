@@ -583,7 +583,7 @@ h1 {
     transition: background-color 0.2s ease;
 }
 
-/* Highlight for Days with Reservations */
+/* Highlight for Reserved Days */
 .reserved {
     background-color: #000;
     color: #fff;
