@@ -1,11 +1,14 @@
 const workerUrl = 'https://noisy-butterfly-af58.migbit84.workers.dev/';
 const icalUrls = {
-    apartamento123: 'https://www.airbnb.pt/calendar/ical/9776121.ics?s=713a99e9483f6ed204d12be2acc1f940',
-    apartamento1248: 'https://www.airbnb.pt/calendar/ical/1192674.ics?s=20937949370c92092084c8f0e5a50bbb'
+    '123': 'https://www.airbnb.pt/calendar/ical/9776121.ics?s=713a99e9483f6ed204d12be2acc1f940',
+    '1248': 'https://www.airbnb.pt/calendar/ical/1192674.ics?s=20937949370c92092084c8f0e5a50bbb'
 };
 
 async function fetchIcalData(icalUrl) {
     const response = await fetch(`${workerUrl}?url=${encodeURIComponent(icalUrl)}`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
     return await response.text();
 }
 
@@ -24,6 +27,10 @@ function parseIcalData(icalData) {
 
 function displayReservations(apartmentId, reservations) {
     const ul = document.getElementById(`reservas${apartmentId}`);
+    if (!ul) {
+        console.error(`Element with id 'reservas${apartmentId}' not found`);
+        return;
+    }
     ul.innerHTML = '';
     reservations.forEach(reservation => {
         const li = document.createElement('li');
@@ -32,16 +39,26 @@ function displayReservations(apartmentId, reservations) {
     });
 }
 
-async function init() {
-    for (const [apartmentId, icalUrl] of Object.entries(icalUrls)) {
-        try {
-            const icalData = await fetchIcalData(icalUrl);
-            const reservations = parseIcalData(icalData);
-            displayReservations(apartmentId, reservations);
-        } catch (error) {
-            console.error(`Erro ao buscar dados para ${apartmentId}:`, error);
+async function loadICalData(apartmentId) {
+    try {
+        const icalData = await fetchIcalData(icalUrls[apartmentId]);
+        const reservations = parseIcalData(icalData);
+        displayReservations(apartmentId, reservations);
+    } catch (error) {
+        console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
+        const errorElement = document.getElementById(`reservas${apartmentId}`);
+        if (errorElement) {
+            errorElement.innerHTML = `<li class="error">Erro ao carregar dados para Apartamento ${apartmentId}</li>`;
         }
     }
+}
+
+function init() {
+    document.addEventListener('DOMContentLoaded', () => {
+        for (const apartmentId of Object.keys(icalUrls)) {
+            loadICalData(apartmentId);
+        }
+    });
 }
 
 init();
