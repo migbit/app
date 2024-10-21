@@ -1,11 +1,41 @@
-<div class="calendar">
-    <div class="calendar__header">
-        <button class="prev" id="btnPrev">&#9664;</button>
-        <span class="calendar__month-year" id="currentMonth"></span>
-        <button class="next" id="btnNext">&#9654;</button>
-    </div>
-    <div class="calendar__day-names">
-        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-    </div>
-    <div class="calendar__days" id="calendarDays"></div>
-</div>
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caixa</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <h1>Calendário</h1>
+    
+        
+   
+        <div class="calendar">
+            <div class="calendar__header">
+                <button class="prev" id="btnPrev">&#9664;</button>
+                <span class="calendar__month-year" id="currentMonth"></span>
+                <button class="next" id="btnNext">&#9654;</button>
+            </div>
+            <div class="calendar__day-names">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="calendar__days" id="calendarDays"></div>
+        </div>
+
+       
+
+    <footer>
+        <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Importar o script.js e caixa.js como módulos -->
+    <script type="module" src="../js/script.js"></script>
+    <script type="module" src="../js/caixa.js"></script>
+
+
+</body>
+</html>
