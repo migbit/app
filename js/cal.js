@@ -16,31 +16,46 @@ async function fetchIcalData(icalUrl) {
     return text;
 }
 
-function parseIcalData(icalData) {
+function parseIcalData(icalData, color) {
+    const events = [];
+    const reservations = [];
     try {
         const jcalData = ICAL.parse(icalData);
         const comp = new ICAL.Component(jcalData);
-        const events = comp.getAllSubcomponents('vevent');
+        const vevents = comp.getAllSubcomponents('vevent');
         
-        return events.map(event => {
+        vevents.forEach(event => {
             const summary = event.getFirstPropertyValue('summary');
             const startDate = event.getFirstPropertyValue('dtstart').toJSDate();
             const endDate = event.getFirstPropertyValue('dtend').toJSDate();
-            return { summary, startDate, endDate };
+            events.push({
+                title: summary,
+                start: startDate,
+                end: endDate,
+                color: color
+            });
+            reservations.push({ summary, startDate, endDate });
         });
     } catch (error) {
         console.error('Error parsing iCal data:', error);
-        console.log('Raw iCal data:', icalData);
         throw error;
     }
+    return { events, reservations };
+}
+
+function renderCalendar(events) {
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: events,
+        locale: 'pt',
+        eventDisplay: 'block',
+    });
+    calendar.render();
 }
 
 function displayReservations(apartmentId, reservations) {
     const ul = document.getElementById(`reservas${apartmentId}`);
-    if (!ul) {
-        console.error(`Element with id 'reservas${apartmentId}' not found`);
-        return;
-    }
     ul.innerHTML = '';
     reservations.forEach(reservation => {
         const li = document.createElement('li');
@@ -49,27 +64,23 @@ function displayReservations(apartmentId, reservations) {
     });
 }
 
-async function loadICalData(apartmentId) {
+async function loadICalData() {
+    const allEvents = [];
     try {
-        const icalData = await fetchIcalData(icalUrls[apartmentId]);
-        console.log(`Raw iCal data for Apartment ${apartmentId}:`, icalData);
-        const reservations = parseIcalData(icalData);
-        displayReservations(apartmentId, reservations);
+        const icalData123 = await fetchIcalData(icalUrls['123']);
+        const { events: events123, reservations: reservations123 } = parseIcalData(icalData123, 'blue');
+        allEvents.push(...events123);
+        displayReservations('123', reservations123);
+
+        const icalData1248 = await fetchIcalData(icalUrls['1248']);
+        const { events: events1248, reservations: reservations1248 } = parseIcalData(icalData1248, 'orange');
+        allEvents.push(...events1248);
+        displayReservations('1248', reservations1248);
+
+        renderCalendar(allEvents);
     } catch (error) {
-        console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
-        const errorElement = document.getElementById(`reservas${apartmentId}`);
-        if (errorElement) {
-            errorElement.innerHTML = `<li class="error">Erro ao carregar dados para Apartamento ${apartmentId}: ${error.message}</li>`;
-        }
+        console.error("Error loading calendar data", error);
     }
 }
 
-function init() {
-    document.addEventListener('DOMContentLoaded', () => {
-        for (const apartmentId of Object.keys(icalUrls)) {
-            loadICalData(apartmentId);
-        }
-    });
-}
-
-init();
+document.addEventListener('DOMContentLoaded', loadICalData);
