@@ -1,53 +1,96 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendário de Reservas</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <h1>Calendário de Reservas</h1>
+    <header>
+        <h1>Calendário de Reservas</h1>
     
-    <!-- Calendar Section -->
-    <div class="calendar-container">
-        <div class="calendar-header">
-            <button id="prev-month" class="nav-button">&lt;</button>
-            <h2 id="month-year"></h2>
-            <button id="next-month" class="nav-button">&gt;</button>
+        <!-- Ícone de menu "hambúrguer" para mobile -->
+        <div class="menu-icon" id="menu-icon">
+            &#9776; <!-- Ícone de três linhas -->
         </div>
-        <table class="calendar">
-            <thead>
-                <tr>
-                    <th>Dom</th>
-                    <th>Seg</th>
-                    <th>Ter</th>
-                    <th>Qua</th>
-                    <th>Qui</th>
-                    <th>Sex</th>
-                    <th>Sáb</th>
-                </tr>
-            </thead>
-            <tbody id="calendar-body">
-                <!-- Calendar dates will be dynamically generated here -->
-            </tbody>
-        </table>
-    </div>
+    
+        <nav id="nav-menu">
+            <ul>
+                <li><a href="mensagens.html">Mensagens</a></li>
+                <li><a href="compras.html">Compras</a></li>
+                <li><a href="faturas.html">Faturas / Relatórios</a></li>
+                <li><a href="caixa.html">Caixa</a></li>
+                <li><a href="reparações.html">Reparações</a></li>
+                <li><a href="tarefas.html">Tarefas</a></li>
+                <li><a href="ficheiros.html">Ficheiros</a></li>
+                <!-- Botões de login/logout -->
+                <li><a href="#" id="login-btn">Login com Google</a></li>
+                <li><a href="#" id="logout-btn" style="display:none;">Logout</a></li>
+                <li id="user-info" style="display:none;">
+                    <span id="user-name"></span> | <span id="user-email"></span>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
-    <!-- Reservations Section -->
-    <div id="calendario">
-        <div id="apartamento123">
-            <h2>Apartamento 123</h2>
-            <ul id="reservas123"></ul>
+    <main>
+        <!-- Calendar Section -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button id="prev-month" class="nav-button">&lt;</button>
+                <h2 id="month-year"></h2>
+                <button id="next-month" class="nav-button">&gt;</button>
+            </div>
+            <table class="calendar">
+                <thead>
+                    <tr>
+                        <th>Dom</th>
+                        <th>Seg</th>
+                        <th>Ter</th>
+                        <th>Qua</th>
+                        <th>Qui</th>
+                        <th>Sex</th>
+                        <th>Sáb</th>
+                    </tr>
+                </thead>
+                <tbody id="calendar-body">
+                    <!-- Calendar dates will be dynamically generated here -->
+                </tbody>
+            </table>
         </div>
-        <div id="apartamento1248">
-            <h2>Apartamento 1248</h2>
-            <ul id="reservas1248"></ul>
-        </div>
-    </div>
 
-    <!-- External Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
-    <script src="../js/cal.js"></script>
+        <!-- To-Do List Section -->
+        <section class="todo-section">
+            <h2>Lista de Tarefas</h2>
+            <form id="todo-form">
+                <input type="text" id="todo-input" placeholder="Adicionar nova tarefa..." required>
+                <button type="submit">Adicionar</button>
+            </form>
+            <ul id="todo-list">
+                <!-- To-Do items will be dynamically added here -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Importar o script.js e cal.js como módulos -->
+    <script type="module" src="../js/script.js"></script>
+    <script type="module" src="../js/cal.js"></script>
+
+    <!-- Script para alternar o menu no mobile -->
+    <script>
+        const menuIcon = document.getElementById('menu-icon');
+        const navMenu = document.getElementById('nav-menu');
+
+        menuIcon.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
