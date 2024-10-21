@@ -505,7 +505,7 @@ footer {
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: #f4f4f4;
     padding: 20px;
 }
@@ -543,17 +543,16 @@ h1 {
 
 .nav-button {
     padding: 8px 12px;
-    background-color: #007bff;
+    background-color: transparent;
     border: none;
     color: #fff;
     font-size: 1.2em;
     cursor: pointer;
     border-radius: 4px;
-    transition: background-color 0.3s ease;
 }
 
 .nav-button:hover {
-    background-color: #0056b3;
+    background-color: transparent;
 }
 
 /* Calendar Table */
