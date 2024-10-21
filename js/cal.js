@@ -51,38 +51,20 @@ function parseIcalData(icalData) {
     }
 }
 
-// Function to Display Reservations in Lists and Collect Start Dates
-function displayReservations(apartmentId, reservations) {
-    const ul = document.getElementById(`reservas${apartmentId}`);
-    if (!ul) {
-        console.error(`Element with id 'reservas${apartmentId}' not found`);
-        return;
-    }
-    ul.innerHTML = '';
-    reservations.forEach(reservation => {
-        const li = document.createElement('li');
-        li.textContent = `${reservation.summary}: ${reservation.startDate.toLocaleDateString()} - ${reservation.endDate.toLocaleDateString()}`;
-        ul.appendChild(li);
-
-        // Add only the start date of the reservation to reservedDates set
-        const dateStr = reservation.startDate.toISOString().split('T')[0];
-        reservedDates.add(dateStr);
-    });
-}
-
-// Function to Load iCal Data for an Apartment
-async function loadICalData(apartmentId) {
+// Function to Load iCal Data for an Apartment and Add Dates to reservedDates
+async function loadIcalData(apartmentId) {
     try {
         const icalData = await fetchIcalData(icalUrls[apartmentId]);
         console.log(`Raw iCal data for Apartment ${apartmentId}:`, icalData);
         const reservations = parseIcalData(icalData);
-        displayReservations(apartmentId, reservations);
+        // Add only the start dates to reservedDates
+        reservations.forEach(reservation => {
+            const dateStr = reservation.startDate.toISOString().split('T')[0];
+            reservedDates.add(dateStr);
+        });
     } catch (error) {
         console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
-        const errorElement = document.getElementById(`reservas${apartmentId}`);
-        if (errorElement) {
-            errorElement.innerHTML = `<li class="error">Erro ao carregar dados para Apartamento ${apartmentId}: ${error.message}</li>`;
-        }
+        // No need to handle displayReservations since elements are removed
     }
 }
 
@@ -90,7 +72,7 @@ async function loadICalData(apartmentId) {
 async function initReservations() {
     const promises = [];
     for (const apartmentId of Object.keys(icalUrls)) {
-        promises.push(loadICalData(apartmentId));
+        promises.push(loadIcalData(apartmentId));
     }
     await Promise.all(promises);
 }
@@ -216,8 +198,8 @@ async function addTask(taskText) {
     try {
         const docRef = await addDoc(collection(db, "todos"), {
             text: taskText,
-            timestamp: new Date(),
-            userId: auth.currentUser ? auth.currentUser.uid : null
+            timestamp: new Date()
+            // Removed userId since auth is not used
         });
         console.log("Task added with ID: ", docRef.id);
     } catch (e) {
@@ -282,9 +264,14 @@ todoForm.addEventListener('submit', async (e) => {
 // Initialize All Functionality
 // ======================
 
-function init() {
-    initReservations();
-    initCalendar();
+async function init() {
+    try {
+        await initReservations(); // Remove or comment out this line if reservations are no longer needed
+        initCalendar();
+        loadTasks(); // Load To-Do tasks on initialization
+    } catch (error) {
+        console.error('Initialization error:', error);
+    }
 }
 
 init();
