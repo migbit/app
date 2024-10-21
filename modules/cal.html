@@ -1,23 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendário de Reservas</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-</head>
+    <title>Calendário de Reservas</title>
+    </head>
 <body>
-    <header>
-        <h1>Calendário de Reservas</h1>
-    
-        <!-- Ícone de menu "hambúrguer" para mobile -->
-        <div class="menu-icon" id="menu-icon">
-            &#9776; <!-- Ícone de três linhas -->
-        </div>
-    
-        <nav id="nav-menu">
+    <div id="menu">
+        <div id="menu-icon" class="menu-icon">☰</div>
+        <nav>
             <ul>
                 <li><a href="mensagens.html">Mensagens</a></li>
                 <li><a href="compras.html">Compras</a></li>
@@ -26,25 +19,25 @@
                 <li><a href="reparações.html">Reparações</a></li>
                 <li><a href="tarefas.html">Tarefas</a></li>
                 <li><a href="ficheiros.html">Ficheiros</a></li>
-                <!-- Botões de login/logout -->
-                <li><a href="#" id="login-btn">Login com Google</a></li>
-                <li><a href="#" id="logout-btn" style="display:none;">Logout</a></li>
-                <li id="user-info" style="display:none;">
-                    <span id="user-name"></span> | <span id="user-email"></span>
-                </li>
             </ul>
         </nav>
-    </header>
+        <div class="auth-buttons">
+            <a href="#" id="login-btn">Login com Google</a>
+            <a href="#" id="logout-btn" style="display:none;">Logout</a>
+            <span id="user-info">
+                <span id="user-name"></span> | <span id="user-email"></span>
+            </span>
+        </div>
+    </div>
 
     <main>
-        <!-- Calendar Section -->
         <div class="calendar-container">
             <div class="calendar-header">
-                <button id="prev-month" class="nav-button">&lt;</button>
+                <button id="prev-month">&lt;</button>
                 <h2 id="month-year"></h2>
-                <button id="next-month" class="nav-button">&gt;</button>
+                <button id="next-month">&gt;</button>
             </div>
-            <table class="calendar">
+            <table id="calendar">
                 <thead>
                     <tr>
                         <th>Dom</th>
@@ -57,43 +50,26 @@
                     </tr>
                 </thead>
                 <tbody id="calendar-body">
-                    <!-- Calendar dates will be dynamically generated here -->
                 </tbody>
             </table>
         </div>
 
-        <!-- To-Do List Section -->
-        <section class="todo-section">
+        <div class="todo-section">
             <h2>Lista de Tarefas</h2>
             <form id="todo-form">
-                <input type="text" id="todo-input" placeholder="Adicionar nova tarefa..." required>
+                <input type="text" id="todo-input" placeholder="Nova tarefa">
                 <button type="submit">Adicionar</button>
             </form>
-            <ul id="todo-list">
-                <!-- To-Do items will be dynamically added here -->
-            </ul>
-        </section>
+            <ul id="todo-list"></ul>
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- Include iCal.js Library -->
+    <!-- Required Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
-
-    <!-- Importar o script.js e cal.js como módulos -->
-    <script type="module" src="../js/script.js"></script>
-    <script type="module" src="../js/cal.js"></script>
-
-    <!-- Script para alternar o menu no mobile -->
-    <script>
-        const menuIcon = document.getElementById('menu-icon');
-        const navMenu = document.getElementById('nav-menu');
-
-        menuIcon.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-        });
-    </script>
+    <script type="module" src="js/cal.js"></script>
 </body>
 </html>
