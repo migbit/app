@@ -1,23 +1,41 @@
 // js/cal.js
 
-// Import necessary Firebase functions from script.js and Firebase SDK
 import { db } from './script.js';
-import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { 
+    collection, 
+    addDoc, 
+    getDocs, 
+    deleteDoc, 
+    doc, 
+    query, 
+    orderBy 
+} from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// URLs and Configuration for Calendar
-const workerUrl = 'https://noisy-butterfly-af58.migbit84.workers.dev/';
-const icalUrls = {
-    '123': 'https://www.airbnb.pt/calendar/ical/1192674.ics?s=713a99e9483f6ed204d12be2acc1f940',
-    '1248': 'https://www.airbnb.pt/calendar/ical/9776121.ics?s=20937949370c92092084c8f0e5a50bbb'
+// Configuration
+const CONFIG = {
+    workerUrl: 'https://noisy-butterfly-af58.migbit84.workers.dev/',
+    icalUrls: {
+        '123': 'https://www.airbnb.pt/calendar/ical/1192674.ics?s=713a99e9483f6ed204d12be2acc1f940',
+        '1248': 'https://www.airbnb.pt/calendar/ical/9776121.ics?s=20937949370c92092084c8f0e5a50bbb'
+    },
+    months: [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ]
 };
 
-// Variables to store reservation start dates
-let reservedDates = new Set();
+// State
+const state = {
+    reservedDates: new Set(),
+    today: new Date(),
+    currentMonth: new Date().getMonth(),
+    currentYear: new Date().getFullYear()
+};
 
-// Function to Fetch iCal Data through Proxy
+// Calendar Functions
 async function fetchIcalData(icalUrl) {
     try {
-        const response = await fetch(`${workerUrl}?url=${encodeURIComponent(icalUrl)}`);
+        const response = await fetch(`${CONFIG.workerUrl}?url=${encodeURIComponent(icalUrl)}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -27,114 +45,83 @@ async function fetchIcalData(icalUrl) {
         }
         return text;
     } catch (error) {
+        console.error('Error fetching iCal data:', error);
         throw error;
     }
 }
 
-// Function to Parse iCal Data
 function parseIcalData(icalData) {
     try {
         const jcalData = ICAL.parse(icalData);
         const comp = new ICAL.Component(jcalData);
         const events = comp.getAllSubcomponents('vevent');
 
-        return events.map(event => {
-            const summary = event.getFirstPropertyValue('summary');
-            const startDate = event.getFirstPropertyValue('dtstart').toJSDate();
-            const endDate = event.getFirstPropertyValue('dtend').toJSDate();
-            return { summary, startDate, endDate };
-        });
+        return events.map(event => ({
+            summary: event.getFirstPropertyValue('summary'),
+            startDate: event.getFirstPropertyValue('dtstart').toJSDate(),
+            endDate: event.getFirstPropertyValue('dtend').toJSDate()
+        }));
     } catch (error) {
         console.error('Error parsing iCal data:', error);
-        console.log('Raw iCal data:', icalData);
         throw error;
     }
 }
 
-// Function to Load iCal Data for an Apartment and Add Dates to reservedDates
 async function loadIcalData(apartmentId) {
     try {
-        const icalData = await fetchIcalData(icalUrls[apartmentId]);
-        console.log(`Raw iCal data for Apartment ${apartmentId}:`, icalData);
+        const icalData = await fetchIcalData(CONFIG.icalUrls[apartmentId]);
         const reservations = parseIcalData(icalData);
-        // Add only the start dates to reservedDates
+        
         reservations.forEach(reservation => {
             const dateStr = reservation.startDate.toISOString().split('T')[0];
-            reservedDates.add(dateStr);
+            state.reservedDates.add(dateStr);
         });
     } catch (error) {
         console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
-        // No need to handle displayReservations since elements are removed
     }
 }
 
-// Function to Initialize Reservation Loading
-async function initReservations() {
-    const promises = [];
-    for (const apartmentId of Object.keys(icalUrls)) {
-        promises.push(loadIcalData(apartmentId));
-    }
-    await Promise.all(promises);
-}
-
-// Calendar Variables
-let today = new Date();
-let currentMonth = today.getMonth();
-let currentYear = today.getFullYear();
-
-// Array of Month Names
-const months = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
-];
-
-// Function to Render the Calendar
 function renderCalendar(month, year) {
     const monthYear = document.getElementById('month-year');
     const calendarBody = document.getElementById('calendar-body');
+    
+    if (!monthYear || !calendarBody) {
+        console.error('Required calendar elements not found');
+        return;
+    }
+
+    // Clear previous content
     calendarBody.innerHTML = '';
+    monthYear.textContent = `${CONFIG.months[month]} ${year}`;
 
-    // Set Month and Year in Header
-    monthYear.textContent = `${months[month]} ${year}`;
-
-    // First Day of the Month (0 = Sunday, 6 = Saturday)
-    let firstDay = new Date(year, month, 1).getDay();
-
-    // Number of Days in the Month
-    let daysInMonth = new Date(year, month + 1, 0).getDate();
-
+    // Calculate calendar data
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
     let date = 1;
 
-    // Create 6 Rows for the Calendar (to cover all possible weeks)
+    // Create calendar grid
     for (let i = 0; i < 6; i++) {
-        let row = document.createElement('tr');
+        const row = document.createElement('tr');
 
-        // Create 7 Columns for Each Day of the Week
         for (let j = 0; j < 7; j++) {
-            let cell = document.createElement('td');
+            const cell = document.createElement('td');
 
-            if (i === 0 && j < firstDay) {
-                // Empty Cell Before First Day of the Month
+            if (i === 0 && j < firstDay || date > daysInMonth) {
                 cell.innerHTML = '';
-            }
-            else if (date > daysInMonth) {
-                // Empty Cell After Last Day of the Month
-                cell.innerHTML = '';
-            }
-            else {
-                let span = document.createElement('span');
+            } else {
+                const span = document.createElement('span');
                 span.textContent = date;
 
                 const dateObj = new Date(year, month, date);
                 const dateStr = dateObj.toISOString().split('T')[0];
 
-                // Highlight Reserved Dates (Only Start Dates)
-                if (reservedDates.has(dateStr)) {
+                if (state.reservedDates.has(dateStr)) {
                     span.classList.add('reserved');
                 }
 
-                // Highlight Today's Date
-                if (date === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                if (date === state.today.getDate() && 
+                    month === state.today.getMonth() && 
+                    year === state.today.getFullYear()) {
                     span.classList.add('today');
                 }
 
@@ -146,132 +133,133 @@ function renderCalendar(month, year) {
         }
 
         calendarBody.appendChild(row);
-
-        // Stop Creating Rows if All Dates are Rendered
-        if (date > daysInMonth) {
-            break;
-        }
+        if (date > daysInMonth) break;
     }
 }
 
-// Function to Handle Navigation
-function setupNavigation() {
-    const prevBtn = document.getElementById('prev-month');
-    const nextBtn = document.getElementById('next-month');
-
-    prevBtn.addEventListener('click', () => {
-        currentMonth--;
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        }
-        renderCalendar(currentMonth, currentYear);
-    });
-
-    nextBtn.addEventListener('click', () => {
-        currentMonth++;
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
-        renderCalendar(currentMonth, currentYear);
-    });
-}
-
-// Function to Initialize Calendar
-function initCalendar() {
-    renderCalendar(currentMonth, currentYear);
-    setupNavigation();
-}
-
-// ======================
-// To-Do List Functionality
-// ======================
-
-// Select DOM elements for To-Do list
-const todoForm = document.getElementById('todo-form');
-const todoInput = document.getElementById('todo-input');
-const todoList = document.getElementById('todo-list');
-
-// Function to add a new task to Firestore
+// Todo List Functions
 async function addTask(taskText) {
     try {
         const docRef = await addDoc(collection(db, "todos"), {
             text: taskText,
             timestamp: new Date()
-            // Removed userId since auth is not used
         });
-        console.log("Task added with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding task: ", e);
+        console.log("Task added with ID:", docRef.id);
+        return docRef.id;
+    } catch (error) {
+        console.error("Error adding task:", error);
+        throw error;
     }
 }
 
-// Function to load tasks from Firestore
 async function loadTasks() {
+    const todoList = document.getElementById('todo-list');
+    if (!todoList) return;
+
     todoList.innerHTML = '<li>Carregando tarefas...</li>';
+    
     try {
         const q = query(collection(db, "todos"), orderBy("timestamp", "asc"));
         const querySnapshot = await getDocs(q);
+        
         todoList.innerHTML = '';
-
+        
         querySnapshot.forEach((doc) => {
             const task = doc.data();
             const li = document.createElement('li');
-            li.textContent = task.text;
-            li.setAttribute('data-id', doc.id);
-
-            // Create a delete button
+            
+            const taskText = document.createElement('span');
+            taskText.textContent = task.text;
+            li.appendChild(taskText);
+            
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'Apagar';
             deleteBtn.classList.add('delete-btn');
-            deleteBtn.addEventListener('click', () => deleteTask(doc.id));
-
+            deleteBtn.onclick = () => deleteTask(doc.id);
             li.appendChild(deleteBtn);
+            
             todoList.appendChild(li);
         });
-    } catch (e) {
-        console.error("Error loading tasks: ", e);
-        todoList.innerHTML = '<li>Ocorreu um erro ao carregar as tarefas.</li>';
+    } catch (error) {
+        console.error("Error loading tasks:", error);
+        todoList.innerHTML = '<li>Erro ao carregar tarefas</li>';
     }
 }
 
-// Function to delete a task from Firestore
 async function deleteTask(taskId) {
     try {
         await deleteDoc(doc(db, "todos", taskId));
-        console.log("Task deleted with ID: ", taskId);
-        loadTasks(); // Reload tasks after deletion
-    } catch (e) {
-        console.error("Error deleting task: ", e);
+        await loadTasks();
+    } catch (error) {
+        console.error("Error deleting task:", error);
+        alert('Erro ao apagar tarefa');
     }
 }
 
-// Event listener for adding a new task
-todoForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const taskText = todoInput.value.trim();
-    if (taskText === '') {
-        alert('Por favor, insira uma tarefa válida.');
-        return;
-    }
-    await addTask(taskText);
-    todoInput.value = '';
-    loadTasks();
-});
+// Event Listeners
+function setupEventListeners() {
+    // Calendar navigation
+    document.getElementById('prev-month')?.addEventListener('click', () => {
+        state.currentMonth--;
+        if (state.currentMonth < 0) {
+            state.currentMonth = 11;
+            state.currentYear--;
+        }
+        renderCalendar(state.currentMonth, state.currentYear);
+    });
 
-// ======================
-// Initialize All Functionality
-// ======================
+    document.getElementById('next-month')?.addEventListener('click', () => {
+        state.currentMonth++;
+        if (state.currentMonth > 11) {
+            state.currentMonth = 0;
+            state.currentYear++;
+        }
+        renderCalendar(state.currentMonth, state.currentYear);
+    });
 
+    // Todo form
+    document.getElementById('todo-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('todo-input');
+        if (!input) return;
+
+        const taskText = input.value.trim();
+        if (!taskText) {
+            alert('Por favor, insira uma tarefa válida');
+            return;
+        }
+
+        try {
+            await addTask(taskText);
+            input.value = '';
+            await loadTasks();
+        } catch (error) {
+            alert('Erro ao adicionar tarefa');
+        }
+    });
+}
+
+// Initialization
 async function init() {
     try {
-        await initReservations(); // Remove or comment out this line if reservations are no longer needed
-        initCalendar();
-        loadTasks(); // Load To-Do tasks on initialization
+        // Load reservations
+        const loadPromises = Object.keys(CONFIG.icalUrls).map(loadIcalData);
+        await Promise.allSettled(loadPromises);
+
+        // Initialize calendar
+        renderCalendar(state.currentMonth, state.currentYear);
+        
+        // Load tasks
+        await loadTasks();
+        
+        // Setup event listeners
+        setupEventListeners();
+        
     } catch (error) {
         console.error('Initialization error:', error);
+        alert('Erro ao inicializar a aplicação');
     }
 }
 
-init();
+// Start the application when DOM is ready
+document.addEventListener('DOMContentLoaded', init);
