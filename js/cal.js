@@ -297,27 +297,6 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Function to handle login
-document.getElementById('login-btn').addEventListener('click', () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-        .then((result) => {
-            // Successful login
-            console.log('User logged in:', result.user);
-        })
-        .catch((error) => {
-            console.error('Error during login:', error);
-        });
-});
-
-// Function to handle logout
-document.getElementById('logout-btn').addEventListener('click', () => {
-    signOut(auth).then(() => {
-        console.log('User signed out');
-    }).catch((error) => {
-        console.error('Error during sign out:', error);
-    });
-});
 
 // ======================
 // Initialize All Functionality
