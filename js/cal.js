@@ -1,4 +1,11 @@
-// URLs and Configuration
+// js/cal.js
+
+// Import necessary Firebase functions from script.js and Firebase SDK
+import { db, auth } from './script.js';
+import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+// URLs and Configuration for Calendar
 const workerUrl = 'https://noisy-butterfly-af58.migbit84.workers.dev/';
 const icalUrls = {
     '123': 'https://www.airbnb.pt/calendar/ical/1192674.ics?s=713a99e9483f6ed204d12be2acc1f940',
@@ -196,14 +203,130 @@ function initCalendar() {
     setupNavigation();
 }
 
-// Initialize Both Reservations and Calendar
-async function init() {
+// ======================
+// To-Do List Functionality
+// ======================
+
+// Select DOM elements for To-Do list
+const todoForm = document.getElementById('todo-form');
+const todoInput = document.getElementById('todo-input');
+const todoList = document.getElementById('todo-list');
+
+// Function to add a new task to Firestore
+async function addTask(taskText) {
     try {
-        await initReservations();
-        initCalendar();
-    } catch (error) {
-        console.error('Initialization error:', error);
+        const docRef = await addDoc(collection(db, "todos"), {
+            text: taskText,
+            timestamp: new Date(),
+            userId: auth.currentUser ? auth.currentUser.uid : null
+        });
+        console.log("Task added with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding task: ", e);
     }
+}
+
+// Function to load tasks from Firestore
+async function loadTasks() {
+    todoList.innerHTML = '<li>Carregando tarefas...</li>';
+    try {
+        const q = query(collection(db, "todos"), orderBy("timestamp", "asc"));
+        const querySnapshot = await getDocs(q);
+        todoList.innerHTML = '';
+
+        querySnapshot.forEach((doc) => {
+            const task = doc.data();
+            const li = document.createElement('li');
+            li.textContent = task.text;
+            li.setAttribute('data-id', doc.id);
+
+            // Create a delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Apagar';
+            deleteBtn.classList.add('delete-btn');
+            deleteBtn.addEventListener('click', () => deleteTask(doc.id));
+
+            li.appendChild(deleteBtn);
+            todoList.appendChild(li);
+        });
+    } catch (e) {
+        console.error("Error loading tasks: ", e);
+        todoList.innerHTML = '<li>Ocorreu um erro ao carregar as tarefas.</li>';
+    }
+}
+
+// Function to delete a task from Firestore
+async function deleteTask(taskId) {
+    try {
+        await deleteDoc(doc(db, "todos", taskId));
+        console.log("Task deleted with ID: ", taskId);
+        loadTasks(); // Reload tasks after deletion
+    } catch (e) {
+        console.error("Error deleting task: ", e);
+    }
+}
+
+// Event listener for adding a new task
+todoForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const taskText = todoInput.value.trim();
+    if (taskText === '') {
+        alert('Por favor, insira uma tarefa válida.');
+        return;
+    }
+    await addTask(taskText);
+    todoInput.value = '';
+    loadTasks();
+});
+
+// Real-time Authentication State Listener
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in
+        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('logout-btn').style.display = 'block';
+        document.getElementById('user-info').style.display = 'block';
+        document.getElementById('user-name').textContent = user.displayName;
+        document.getElementById('user-email').textContent = user.email;
+        loadTasks(); // Load tasks when user is authenticated
+    } else {
+        // User is signed out
+        document.getElementById('login-btn').style.display = 'block';
+        document.getElementById('logout-btn').style.display = 'none';
+        document.getElementById('user-info').style.display = 'none';
+        todoList.innerHTML = ''; // Clear tasks when user is not authenticated
+    }
+});
+
+// Function to handle login
+document.getElementById('login-btn').addEventListener('click', () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            // Successful login
+            console.log('User logged in:', result.user);
+        })
+        .catch((error) => {
+            console.error('Error during login:', error);
+        });
+});
+
+// Function to handle logout
+document.getElementById('logout-btn').addEventListener('click', () => {
+    signOut(auth).then(() => {
+        console.log('User signed out');
+    }).catch((error) => {
+        console.error('Error during sign out:', error);
+    });
+}
+
+// ======================
+// Initialize All Functionality
+// ======================
+
+function init() {
+    initReservations();
+    initCalendar();
 }
 
 init();
