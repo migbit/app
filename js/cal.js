@@ -1,7 +1,7 @@
 const workerUrl = 'https://noisy-butterfly-af58.migbit84.workers.dev/';
 const icalUrls = {
     '123': 'https://www.airbnb.pt/calendar/ical/9776121.ics?s=713a99e9483f6ed204d12be2acc1f940',
-    '1248': 'https://www.airbnb.pt/calendar/ical/1192674.ics?s=20937949370c92092084c8f0e5a50bbb'
+    '1248': 'https://www.airbnb.pt/calendar/ical/9776121.ics?s=20937949370c92092084c8f0e5a50bbb'
 };
 
 async function fetchIcalData(icalUrl) {
