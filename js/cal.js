@@ -3,7 +3,7 @@
 // Import necessary Firebase functions from script.js and Firebase SDK
 import { db, auth } from './script.js';
 import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 
 // URLs and Configuration for Calendar
 const workerUrl = 'https://noisy-butterfly-af58.migbit84.workers.dev/';
@@ -65,7 +65,7 @@ function displayReservations(apartmentId, reservations) {
         li.textContent = `${reservation.summary}: ${reservation.startDate.toLocaleDateString()} - ${reservation.endDate.toLocaleDateString()}`;
         ul.appendChild(li);
 
-        // **Add only the start date of the reservation to reservedDates set**
+        // Add only the start date of the reservation to reservedDates set
         const dateStr = reservation.startDate.toISOString().split('T')[0];
         reservedDates.add(dateStr);
     });
@@ -147,7 +147,7 @@ function renderCalendar(month, year) {
                 const dateObj = new Date(year, month, date);
                 const dateStr = dateObj.toISOString().split('T')[0];
 
-                // **Highlight Reserved Dates (Only Start Dates)**
+                // Highlight Reserved Dates (Only Start Dates)
                 if (reservedDates.has(dateStr)) {
                     span.classList.add('reserved');
                 }
@@ -318,7 +318,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
     }).catch((error) => {
         console.error('Error during sign out:', error);
     });
-}
+});
 
 // ======================
 // Initialize All Functionality
