@@ -9,20 +9,30 @@ async function fetchIcalData(icalUrl) {
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return await response.text();
+    const text = await response.text();
+    if (text.trim().startsWith('<')) {
+        throw new Error('Received HTML instead of iCal data');
+    }
+    return text;
 }
 
 function parseIcalData(icalData) {
-    const jcalData = ICAL.parse(icalData);
-    const comp = new ICAL.Component(jcalData);
-    const events = comp.getAllSubcomponents('vevent');
-    
-    return events.map(event => {
-        const summary = event.getFirstPropertyValue('summary');
-        const startDate = event.getFirstPropertyValue('dtstart').toJSDate();
-        const endDate = event.getFirstPropertyValue('dtend').toJSDate();
-        return { summary, startDate, endDate };
-    });
+    try {
+        const jcalData = ICAL.parse(icalData);
+        const comp = new ICAL.Component(jcalData);
+        const events = comp.getAllSubcomponents('vevent');
+        
+        return events.map(event => {
+            const summary = event.getFirstPropertyValue('summary');
+            const startDate = event.getFirstPropertyValue('dtstart').toJSDate();
+            const endDate = event.getFirstPropertyValue('dtend').toJSDate();
+            return { summary, startDate, endDate };
+        });
+    } catch (error) {
+        console.error('Error parsing iCal data:', error);
+        console.log('Raw iCal data:', icalData);
+        throw error;
+    }
 }
 
 function displayReservations(apartmentId, reservations) {
@@ -42,13 +52,14 @@ function displayReservations(apartmentId, reservations) {
 async function loadICalData(apartmentId) {
     try {
         const icalData = await fetchIcalData(icalUrls[apartmentId]);
+        console.log(`Raw iCal data for Apartment ${apartmentId}:`, icalData);
         const reservations = parseIcalData(icalData);
         displayReservations(apartmentId, reservations);
     } catch (error) {
         console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
         const errorElement = document.getElementById(`reservas${apartmentId}`);
         if (errorElement) {
-            errorElement.innerHTML = `<li class="error">Erro ao carregar dados para Apartamento ${apartmentId}</li>`;
+            errorElement.innerHTML = `<li class="error">Erro ao carregar dados para Apartamento ${apartmentId}: ${error.message}</li>`;
         }
     }
 }
