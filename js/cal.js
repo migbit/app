@@ -278,26 +278,6 @@ todoForm.addEventListener('submit', async (e) => {
     loadTasks();
 });
 
-// Real-time Authentication State Listener
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // User is signed in
-        document.getElementById('login-btn').style.display = 'none';
-        document.getElementById('logout-btn').style.display = 'block';
-        document.getElementById('user-info').style.display = 'block';
-        document.getElementById('user-name').textContent = user.displayName;
-        document.getElementById('user-email').textContent = user.email;
-        loadTasks(); // Load tasks when user is authenticated
-    } else {
-        // User is signed out
-        document.getElementById('login-btn').style.display = 'block';
-        document.getElementById('logout-btn').style.display = 'none';
-        document.getElementById('user-info').style.display = 'none';
-        todoList.innerHTML = ''; // Clear tasks when user is not authenticated
-    }
-});
-
-
 // ======================
 // Initialize All Functionality
 // ======================
