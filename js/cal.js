@@ -85,12 +85,12 @@ async function loadICalData(apartmentId) {
 }
 
 // Function to Initialize Reservation Loading
-function initReservations() {
-    document.addEventListener('DOMContentLoaded', () => {
-        for (const apartmentId of Object.keys(icalUrls)) {
-            loadICalData(apartmentId);
-        }
-    });
+async function initReservations() {
+    const promises = [];
+    for (const apartmentId of Object.keys(icalUrls)) {
+        promises.push(loadICalData(apartmentId));
+    }
+    await Promise.all(promises);
 }
 
 // Calendar Variables
@@ -134,14 +134,15 @@ function renderCalendar(month, year) {
                 cell.innerHTML = '';
             }
             else if (date > daysInMonth) {
-                // Exit the Loop if All Dates are Filled
+                // Empty Cell After Last Day of the Month
                 cell.innerHTML = '';
             }
             else {
                 let span = document.createElement('span');
                 span.textContent = date;
 
-                const dateStr = new Date(year, month, date).toISOString().split('T')[0];
+                const dateObj = new Date(year, month, date);
+                const dateStr = dateObj.toISOString().split('T')[0];
 
                 // Highlight Reserved Dates
                 if (reservedDates.has(dateStr)) {
@@ -195,16 +196,18 @@ function setupNavigation() {
 
 // Function to Initialize Calendar
 function initCalendar() {
-    document.addEventListener('DOMContentLoaded', () => {
-        renderCalendar(currentMonth, currentYear);
-        setupNavigation();
-    });
+    renderCalendar(currentMonth, currentYear);
+    setupNavigation();
 }
 
 // Initialize Both Reservations and Calendar
-function init() {
-    initReservations();
-    initCalendar();
+async function init() {
+    try {
+        await initReservations();
+        initCalendar();
+    } catch (error) {
+        console.error('Initialization error:', error);
+    }
 }
 
 init();
