@@ -87,7 +87,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #1abc9c;
+    background-color: #202f3e;
 }
 
 /* Login/Logout Button Styles */
@@ -105,7 +105,7 @@ nav ul li a:hover {
 }
 
 #login-btn:hover, #logout-btn:hover {
-    background-color: #1abc9c;
+    background-color: #202f3e;
 }
 
 #user-info {
