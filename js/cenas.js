@@ -27,7 +27,6 @@ const CONFIG = {
 
 // State
 const state = {
-    reservedDates: new Set(),
     reservedDates123: new Set(),
     reservedDates1248: new Set(),
     selectedDates: new Set(), // Track selected dates
@@ -51,12 +50,12 @@ async function fetchIcalData(icalUrl, apartmentId) {
         
         reservations.forEach(reservation => {
             const dateStr = reservation.startDate.toISOString().split('T')[0];
-            state.reservedDates.add(dateStr);
             if (apartmentId === '123') {
                 state.reservedDates123.add(dateStr);
             } else if (apartmentId === '1248') {
                 state.reservedDates1248.add(dateStr);
             }
+            state.reservedDates.add(dateStr);  // Keeping global set for any date
         });
     } catch (error) {
         console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
@@ -195,143 +194,27 @@ async function loadSelectedDates() {
     }
 }
 
-// Todo List Functions
-async function addTask(taskText) {
+// Guest List Functions
+async function addGuestToFirebase(guestData) {
     try {
-        const docRef = await addDoc(collection(db, "todos"), {
-            text: taskText,
-            timestamp: new Date()
-        });
-        console.log("Task added with ID:", docRef.id);
+        const docRef = await addDoc(collection(db, "guestList"), guestData);
         return docRef.id;
     } catch (error) {
-        console.error("Error adding task:", error);
+        console.error("Error adding guest:", error);
         throw error;
     }
 }
 
-async function loadTasks() {
-    const todoList = document.getElementById('todo-list');
-    if (!todoList) return;
-
-    todoList.innerHTML = '<li>Carregando tarefas...</li>';
-    
+async function deleteGuestFromFirebase(guestId) {
     try {
-        const q = query(collection(db, "todos"), orderBy("timestamp", "asc"));
-        const querySnapshot = await getDocs(q);
-        
-        todoList.innerHTML = '';
-        
-        querySnapshot.forEach((doc) => {
-            const task = doc.data();
-            const li = document.createElement('li');
-            
-            const taskText = document.createElement('span');
-            taskText.textContent = task.text;
-            li.appendChild(taskText);
-            
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'Apagar';
-            deleteBtn.classList.add('delete-btn');
-            deleteBtn.onclick = () => deleteTask(doc.id);
-            li.appendChild(deleteBtn);
-            
-            todoList.appendChild(li);
-        });
+        await deleteDoc(doc(db, "guestList", guestId));
     } catch (error) {
-        console.error("Error loading tasks:", error);
-        todoList.innerHTML = '<li>Erro ao carregar tarefas</li>';
+        console.error("Error deleting guest:", error);
+        throw error;
     }
 }
 
-async function deleteTask(taskId) {
-    try {
-        await deleteDoc(doc(db, "todos", taskId));
-        await loadTasks();
-    } catch (error) {
-        console.error("Error deleting task:", error);
-        alert('Erro ao apagar tarefa');
-    }
-}
-
-// Event Listeners
-function setupEventListeners() {
-    document.getElementById('prev-month')?.addEventListener('click', () => {
-        state.currentMonth--;
-        if (state.currentMonth < 0) {
-            state.currentMonth = 11;
-            state.currentYear--;
-        }
-        renderCalendar(state.currentMonth, state.currentYear);
-    });
-
-    document.getElementById('next-month')?.addEventListener('click', () => {
-        state.currentMonth++;
-        if (state.currentMonth > 11) {
-            state.currentMonth = 0;
-            state.currentYear++;
-        }
-        renderCalendar(state.currentMonth, state.currentYear);
-    });
-
-    // Todo form
-    document.getElementById('todo-form')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const input = document.getElementById('todo-input');
-        if (!input) return;
-
-        const taskText = input.value.trim();
-        if (!taskText) {
-            alert('Por favor, insira uma tarefa válida');
-            return;
-        }
-
-        try {
-            await addTask(taskText);
-            input.value = '';
-            await loadTasks();
-        } catch (error) {
-            alert('Erro ao adicionar tarefa');
-        }
-    });
-
-    // Guest form
-    document.getElementById('guest-form')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const entrada = document.getElementById('entrada').value;
-        const nome = document.getElementById('nome').value;
-        const estrelas = document.getElementById('estrelas').value;
-        const comentario = document.getElementById('comentario').value;
-
-        // Automatically determine apartment based on the entry date from iCal
-        const apartamento = determineApartmentByDate(entrada);
-
-        if (!apartamento) {
-            alert('Data não pertence a nenhum apartamento');
-            return;
-        }
-
-        try {
-            const docRef = await addDoc(collection(db, "guestList"), {
-                apartamento: apartamento,
-                entryDate: entrada,
-                nome: nome,
-                estrelas: estrelas,
-                comentario: comentario,
-                timestamp: new Date()
-            });
-            addGuestToDOM(docRef.id, { apartamento, entryDate: entrada, nome, estrelas, comentario });
-            console.log("Hóspede adicionado com ID:", docRef.id);
-        } catch (error) {
-            console.error("Erro ao adicionar hóspede:", error);
-        }
-
-        document.getElementById('guest-form').reset();
-    });
-}
-
-// Function to determine apartment (based on iCal data)
+// Function to determine apartment based on iCal data
 function determineApartmentByDate(entradaDate) {
     if (state.reservedDates123.has(entradaDate)) {
         return "123";
@@ -341,14 +224,14 @@ function determineApartmentByDate(entradaDate) {
     return null;
 }
 
-// Add guest to DOM
+// Add guest entry to the DOM
 function addGuestToDOM(id, guest) {
     const guestList = document.getElementById('guest-list');
     const li = document.createElement('li');
     li.id = id;
 
     li.innerHTML = `
-        Apartamento: ${guest.apartamento} | Entrada: ${guest.entryDate} | Nome: ${guest.nome} |
+        Apartamento: ${guest.apartamento} | Nome: ${guest.nome} |
         Vão deixar 5 estrelas? ${guest.estrelas} | Escrever comentário? ${guest.comentario}
         <button class="delete-guest-btn" onclick="deleteGuest('${id}')">Apagar</button>
     `;
@@ -356,52 +239,13 @@ function addGuestToDOM(id, guest) {
     guestList.appendChild(li);
 }
 
-// Delete guest
-async function deleteGuest(id) {
-    try {
-        await deleteDoc(doc(db, "guestList", id));
-        document.getElementById(id).remove();
-        console.log("Hóspede removido com sucesso.");
-    } catch (error) {
-        console.error("Erro ao apagar hóspede:", error);
-    }
-}
-
-// Initialization
-async function init() {
-    try {
-        // Load reservations
-        const loadPromises = Object.keys(CONFIG.icalUrls).map(apartmentId => fetchIcalData(CONFIG.icalUrls[apartmentId], apartmentId));
-        await Promise.allSettled(loadPromises);
-
-        // Load selected dates
-        await loadSelectedDates();
-
-        // Initialize calendar
-        renderCalendar(state.currentMonth, state.currentYear);
-        
-        // Load tasks
-        await loadTasks();
-
-        // Load guest list
-        loadGuestList();
-
-        // Setup event listeners
-        setupEventListeners();
-        
-    } catch (error) {
-        console.error('Initialization error:', error);
-        alert('Erro ao inicializar a aplicação');
-    }
-}
-
-// Load guest list
+// Load guest list from Firebase
 async function loadGuestList() {
     const guestList = document.getElementById('guest-list');
     guestList.innerHTML = 'Carregando...';
 
     try {
-        const q = query(collection(db, "guestList"), orderBy("entryDate", "asc"));
+        const q = query(collection(db, "guestList"));
         const querySnapshot = await getDocs(q);
 
         guestList.innerHTML = '';
@@ -412,6 +256,71 @@ async function loadGuestList() {
     } catch (error) {
         console.error("Erro ao carregar lista de hóspedes:", error);
         guestList.innerHTML = 'Erro ao carregar lista de hóspedes';
+    }
+}
+
+// Form submission event
+document.getElementById('guest-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById('nome').value;
+    const estrelas = document.getElementById('estrelas').value;
+    const comentario = document.getElementById('comentario').value;
+
+    // Determine apartment from iCal data
+    const apartamento = determineApartmentByDate(state.today.toISOString().split('T')[0]); // Use today's date to determine apartment
+
+    if (!apartamento) {
+        alert('Data não pertence a nenhum apartamento');
+        return;
+    }
+
+    const guestData = {
+        apartamento: apartamento,
+        nome: nome,
+        estrelas: estrelas,
+        comentario: comentario
+    };
+
+    try {
+        const guestId = await addGuestToFirebase(guestData);
+        addGuestToDOM(guestId, guestData);
+    } catch (error) {
+        alert('Erro ao adicionar hóspede');
+    }
+
+    // Reset form
+    document.getElementById('guest-form').reset();
+});
+
+// Delete guest entry
+async function deleteGuest(id) {
+    try {
+        await deleteGuestFromFirebase(id);
+        document.getElementById(id).remove();
+    } catch (error) {
+        console.error("Erro ao apagar hóspede:", error);
+    }
+}
+
+// Initialization
+async function init() {
+    try {
+        // Load reservations for both apartments
+        await fetchIcalData(CONFIG.icalUrls['123'], '123');
+        await fetchIcalData(CONFIG.icalUrls['1248'], '1248');
+
+        // Load selected dates for calendar
+        await loadSelectedDates();
+
+        // Render calendar
+        renderCalendar(state.currentMonth, state.currentYear);
+
+        // Load guest list
+        await loadGuestList();
+
+    } catch (error) {
+        console.error('Erro ao inicializar a aplicação:', error);
     }
 }
 
