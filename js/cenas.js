@@ -259,47 +259,74 @@ async function loadGuestList() {
     }
 }
 
-// Form submission event
-document.getElementById('guest-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
+// Setup event listeners
+function setupEventListeners() {
+    const prevMonthBtn = document.getElementById('prev-month');
+    const nextMonthBtn = document.getElementById('next-month');
+    const guestForm = document.getElementById('guest-form');
 
-    const nome = document.getElementById('nome').value;
-    const estrelas = document.getElementById('estrelas').value;
-    const comentario = document.getElementById('comentario').value;
-
-    // Determine apartment from iCal data
-    const apartamento = determineApartmentByDate(state.today.toISOString().split('T')[0]); // Use today's date to determine apartment
-
-    if (!apartamento) {
-        alert('Data não pertence a nenhum apartamento');
-        return;
+    // Add event listener for previous month button, if it exists
+    if (prevMonthBtn) {
+        prevMonthBtn.addEventListener('click', () => {
+            state.currentMonth--;
+            if (state.currentMonth < 0) {
+                state.currentMonth = 11;
+                state.currentYear--;
+            }
+            renderCalendar(state.currentMonth, state.currentYear);
+        });
+    } else {
+        console.error('prev-month button not found');
     }
 
-    const guestData = {
-        apartamento: apartamento,
-        nome: nome,
-        estrelas: estrelas,
-        comentario: comentario
-    };
-
-    try {
-        const guestId = await addGuestToFirebase(guestData);
-        addGuestToDOM(guestId, guestData);
-    } catch (error) {
-        alert('Erro ao adicionar hóspede');
+    // Add event listener for next month button, if it exists
+    if (nextMonthBtn) {
+        nextMonthBtn.addEventListener('click', () => {
+            state.currentMonth++;
+            if (state.currentMonth > 11) {
+                state.currentMonth = 0;
+                state.currentYear++;
+            }
+            renderCalendar(state.currentMonth, state.currentYear);
+        });
+    } else {
+        console.error('next-month button not found');
     }
 
-    // Reset form
-    document.getElementById('guest-form').reset();
-});
+    // Add event listener for guest form, if it exists
+    if (guestForm) {
+        guestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-// Delete guest entry
-async function deleteGuest(id) {
-    try {
-        await deleteGuestFromFirebase(id);
-        document.getElementById(id).remove();
-    } catch (error) {
-        console.error("Erro ao apagar hóspede:", error);
+            const nome = document.getElementById('nome').value;
+            const estrelas = document.getElementById('estrelas').value;
+            const comentario = document.getElementById('comentario').value;
+
+            const apartamento = determineApartmentByDate(state.today.toISOString().split('T')[0]); // Use today's date
+
+            if (!apartamento) {
+                alert('Data não pertence a nenhum apartamento');
+                return;
+            }
+
+            const guestData = {
+                apartamento: apartamento,
+                nome: nome,
+                estrelas: estrelas,
+                comentario: comentario
+            };
+
+            try {
+                const guestId = await addGuestToFirebase(guestData);
+                addGuestToDOM(guestId, guestData);
+            } catch (error) {
+                alert('Erro ao adicionar hóspede');
+            }
+
+            guestForm.reset();
+        });
+    } else {
+        console.error('guest-form not found');
     }
 }
 
@@ -318,6 +345,9 @@ async function init() {
 
         // Load guest list
         await loadGuestList();
+
+        // Set up event listeners
+        setupEventListeners();
 
     } catch (error) {
         console.error('Erro ao inicializar a aplicação:', error);
