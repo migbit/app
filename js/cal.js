@@ -117,6 +117,13 @@ function renderCalendar(month, year) {
                 const dateObj = new Date(year, month, date);
                 const dateStr = dateObj.toISOString().split('T')[0];
 
+                // Check if the day is today
+                if (date === state.today.getDate() && 
+                    month === state.today.getMonth() && 
+                    year === state.today.getFullYear()) {
+                    span.classList.add('today');
+                }
+
                 // Apply reserved style if date is reserved
                 if (state.reservedDates.has(dateStr)) {
                     span.classList.add('reserved');
