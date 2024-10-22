@@ -8,6 +8,7 @@ import {
     deleteDoc, 
     doc, 
     query, 
+    where, 
     orderBy 
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
@@ -27,6 +28,7 @@ const CONFIG = {
 // State
 const state = {
     reservedDates: new Set(),
+    selectedDates: new Set(), // Track selected dates
     today: new Date(),
     currentMonth: new Date().getMonth(),
     currentYear: new Date().getFullYear()
@@ -115,15 +117,30 @@ function renderCalendar(month, year) {
                 const dateObj = new Date(year, month, date);
                 const dateStr = dateObj.toISOString().split('T')[0];
 
+                // Apply reserved style if date is reserved
                 if (state.reservedDates.has(dateStr)) {
                     span.classList.add('reserved');
                 }
 
-                if (date === state.today.getDate() && 
-                    month === state.today.getMonth() && 
-                    year === state.today.getFullYear()) {
-                    span.classList.add('today');
+                // Apply selected style if date is selected
+                if (state.selectedDates.has(dateStr)) {
+                    span.classList.add('selected');
                 }
+
+                // Event listener for selecting/unselecting a date
+                span.addEventListener('click', async () => {
+                    if (span.classList.contains('selected')) {
+                        // Unselect the date
+                        span.classList.remove('selected');
+                        state.selectedDates.delete(dateStr);
+                        await removeSelectedDateFromFirebase(dateStr);
+                    } else {
+                        // Select the date
+                        span.classList.add('selected');
+                        state.selectedDates.add(dateStr);
+                        await saveSelectedDateToFirebase(dateStr);
+                    }
+                });
 
                 cell.appendChild(span);
                 date++;
@@ -134,6 +151,43 @@ function renderCalendar(month, year) {
 
         calendarBody.appendChild(row);
         if (date > daysInMonth) break;
+    }
+}
+
+// Firebase functions for saving and removing selected dates
+async function saveSelectedDateToFirebase(dateStr) {
+    try {
+        await addDoc(collection(db, "selectedDates"), { date: dateStr });
+        console.log(`Selected date ${dateStr} saved to Firebase`);
+    } catch (error) {
+        console.error("Error saving selected date:", error);
+    }
+}
+
+async function removeSelectedDateFromFirebase(dateStr) {
+    try {
+        const q = query(collection(db, "selectedDates"), where("date", "==", dateStr));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (doc) => {
+            await deleteDoc(doc.ref);
+            console.log(`Unselected date ${dateStr} removed from Firebase`);
+        });
+    } catch (error) {
+        console.error("Error removing selected date:", error);
+    }
+}
+
+// Load selected dates from Firebase on page load
+async function loadSelectedDates() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "selectedDates"));
+        querySnapshot.forEach((doc) => {
+            const dateStr = doc.data().date;
+            state.selectedDates.add(dateStr);
+        });
+        console.log("Selected dates loaded from Firebase");
+    } catch (error) {
+        console.error("Error loading selected dates:", error);
     }
 }
 
@@ -198,7 +252,6 @@ async function deleteTask(taskId) {
 
 // Event Listeners
 function setupEventListeners() {
-    // Calendar navigation
     document.getElementById('prev-month')?.addEventListener('click', () => {
         state.currentMonth--;
         if (state.currentMonth < 0) {
@@ -245,6 +298,9 @@ async function init() {
         // Load reservations
         const loadPromises = Object.keys(CONFIG.icalUrls).map(loadIcalData);
         await Promise.allSettled(loadPromises);
+
+        // Load selected dates
+        await loadSelectedDates();
 
         // Initialize calendar
         renderCalendar(state.currentMonth, state.currentYear);
