@@ -1,4 +1,4 @@
-// js/cal.js
+// js/cenas.js
 
 import { db } from '../js/script.js';
 import { 
