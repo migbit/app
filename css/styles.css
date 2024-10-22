@@ -16,12 +16,40 @@ body {
 }
 
 /* Header Styles */
+/* Header Styles */
 header {
     background-color: #34495e;
     padding: 0.75rem;
     color: white;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensures the title text in the header remains white */
+header h1 {
+    color: white;
+}
+
+/* Menu and Navigation */
+nav ul li a {
+    background-color: transparent;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+/* Active link styling */
+nav ul li a.active {
+    color: white; /* Keeps the active link's text color white */
+    font-weight: bold; /* Optional: makes the active link bold */
+}
+
+/* Hover effect */
+nav ul li a:hover {
+    background-color: #1abc9c;
 }
 
 /* Menu and Navigation */
