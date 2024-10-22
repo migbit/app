@@ -1,6 +1,6 @@
 // js/cal.js
 
-import { db } from './script.js';
+import { db } from '../js/script.js';
 import { 
     collection, 
     addDoc, 
