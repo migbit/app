@@ -1,6 +1,6 @@
 // js/cenas.js
 
-import { db } from '../js/script.js';
+import { db } from './script.js';
 import { 
     collection, 
     addDoc, 
@@ -28,6 +28,8 @@ const CONFIG = {
 // State
 const state = {
     reservedDates: new Set(),
+    reservedDates123: new Set(),
+    reservedDates1248: new Set(),
     selectedDates: new Set(), // Track selected dates
     today: new Date(),
     currentMonth: new Date().getMonth(),
@@ -35,7 +37,7 @@ const state = {
 };
 
 // Calendar Functions
-async function fetchIcalData(icalUrl) {
+async function fetchIcalData(icalUrl, apartmentId) {
     try {
         const response = await fetch(`${CONFIG.workerUrl}?url=${encodeURIComponent(icalUrl)}`);
         if (!response.ok) {
@@ -45,10 +47,19 @@ async function fetchIcalData(icalUrl) {
         if (text.trim().startsWith('<')) {
             throw new Error('Received HTML instead of iCal data');
         }
-        return text;
+        const reservations = parseIcalData(text);
+        
+        reservations.forEach(reservation => {
+            const dateStr = reservation.startDate.toISOString().split('T')[0];
+            state.reservedDates.add(dateStr);
+            if (apartmentId === '123') {
+                state.reservedDates123.add(dateStr);
+            } else if (apartmentId === '1248') {
+                state.reservedDates1248.add(dateStr);
+            }
+        });
     } catch (error) {
-        console.error('Error fetching iCal data:', error);
-        throw error;
+        console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
     }
 }
 
@@ -66,20 +77,6 @@ function parseIcalData(icalData) {
     } catch (error) {
         console.error('Error parsing iCal data:', error);
         throw error;
-    }
-}
-
-async function loadIcalData(apartmentId) {
-    try {
-        const icalData = await fetchIcalData(CONFIG.icalUrls[apartmentId]);
-        const reservations = parseIcalData(icalData);
-        
-        reservations.forEach(reservation => {
-            const dateStr = reservation.startDate.toISOString().split('T')[0];
-            state.reservedDates.add(dateStr);
-        });
-    } catch (error) {
-        console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
     }
 }
 
@@ -297,13 +294,84 @@ function setupEventListeners() {
             alert('Erro ao adicionar tarefa');
         }
     });
+
+    // Guest form
+    document.getElementById('guest-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const entrada = document.getElementById('entrada').value;
+        const nome = document.getElementById('nome').value;
+        const estrelas = document.getElementById('estrelas').value;
+        const comentario = document.getElementById('comentario').value;
+
+        // Automatically determine apartment based on the entry date from iCal
+        const apartamento = determineApartmentByDate(entrada);
+
+        if (!apartamento) {
+            alert('Data não pertence a nenhum apartamento');
+            return;
+        }
+
+        try {
+            const docRef = await addDoc(collection(db, "guestList"), {
+                apartamento: apartamento,
+                entryDate: entrada,
+                nome: nome,
+                estrelas: estrelas,
+                comentario: comentario,
+                timestamp: new Date()
+            });
+            addGuestToDOM(docRef.id, { apartamento, entryDate: entrada, nome, estrelas, comentario });
+            console.log("Hóspede adicionado com ID:", docRef.id);
+        } catch (error) {
+            console.error("Erro ao adicionar hóspede:", error);
+        }
+
+        document.getElementById('guest-form').reset();
+    });
+}
+
+// Function to determine apartment (based on iCal data)
+function determineApartmentByDate(entradaDate) {
+    if (state.reservedDates123.has(entradaDate)) {
+        return "123";
+    } else if (state.reservedDates1248.has(entradaDate)) {
+        return "1248";
+    }
+    return null;
+}
+
+// Add guest to DOM
+function addGuestToDOM(id, guest) {
+    const guestList = document.getElementById('guest-list');
+    const li = document.createElement('li');
+    li.id = id;
+
+    li.innerHTML = `
+        Apartamento: ${guest.apartamento} | Entrada: ${guest.entryDate} | Nome: ${guest.nome} |
+        Vão deixar 5 estrelas? ${guest.estrelas} | Escrever comentário? ${guest.comentario}
+        <button class="delete-guest-btn" onclick="deleteGuest('${id}')">Apagar</button>
+    `;
+
+    guestList.appendChild(li);
+}
+
+// Delete guest
+async function deleteGuest(id) {
+    try {
+        await deleteDoc(doc(db, "guestList", id));
+        document.getElementById(id).remove();
+        console.log("Hóspede removido com sucesso.");
+    } catch (error) {
+        console.error("Erro ao apagar hóspede:", error);
+    }
 }
 
 // Initialization
 async function init() {
     try {
         // Load reservations
-        const loadPromises = Object.keys(CONFIG.icalUrls).map(loadIcalData);
+        const loadPromises = Object.keys(CONFIG.icalUrls).map(apartmentId => fetchIcalData(CONFIG.icalUrls[apartmentId], apartmentId));
         await Promise.allSettled(loadPromises);
 
         // Load selected dates
@@ -314,13 +382,36 @@ async function init() {
         
         // Load tasks
         await loadTasks();
-        
+
+        // Load guest list
+        loadGuestList();
+
         // Setup event listeners
         setupEventListeners();
         
     } catch (error) {
         console.error('Initialization error:', error);
         alert('Erro ao inicializar a aplicação');
+    }
+}
+
+// Load guest list
+async function loadGuestList() {
+    const guestList = document.getElementById('guest-list');
+    guestList.innerHTML = 'Carregando...';
+
+    try {
+        const q = query(collection(db, "guestList"), orderBy("entryDate", "asc"));
+        const querySnapshot = await getDocs(q);
+
+        guestList.innerHTML = '';
+        querySnapshot.forEach((doc) => {
+            const guest = doc.data();
+            addGuestToDOM(doc.id, guest);
+        });
+    } catch (error) {
+        console.error("Erro ao carregar lista de hóspedes:", error);
+        guestList.innerHTML = 'Erro ao carregar lista de hóspedes';
     }
 }
 
