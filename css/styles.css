@@ -602,7 +602,16 @@ h1 {
     display: inline-block;
     line-height: 30px;
 }
-
+/* Highlight for Selected */
+.selected {
+    background-color: #3498db; /* Blue */
+    color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    line-height: 30px;
+}
 /* Reservations Section */
 #calendario {
     max-width: 800px;
