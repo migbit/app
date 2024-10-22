@@ -42,6 +42,11 @@ nav ul li {
     margin: 0 0.75rem;
 }
 
+nav ul li a.active {
+    color: white;  /* Ensure the selected link's text remains white */
+    font-weight: bold;  /* Optional: to differentiate the selected link */
+}
+
 nav ul li a {
     display: block;
     background-color: transparent;
