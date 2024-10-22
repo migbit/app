@@ -25,7 +25,7 @@ const CONFIG = {
 
 // State
 const state = {
-    reservedDates: new Set(),  // Added this
+    reservedDates: new Set(),
     reservedDates123: new Set(),
     reservedDates1248: new Set(),
     selectedDates: new Set(), // Track selected dates
@@ -193,8 +193,53 @@ async function loadSelectedDates() {
     }
 }
 
-// Guest List Functions (unchanged)
+// Load guest list from Firebase
+async function loadGuestList() {
+    const guestList = document.getElementById('guest-list');
+    guestList.innerHTML = 'Carregando...';  // Loading indicator
 
+    try {
+        const q = query(collection(db, "guestList"), orderBy("timestamp", "asc"));  // Ensure it's ordered by timestamp or any other field
+        const querySnapshot = await getDocs(q);
+
+        guestList.innerHTML = '';  // Clear loading text
+
+        querySnapshot.forEach((doc) => {
+            const guest = doc.data();
+            addGuestToDOM(doc.id, guest);  // Add each guest to the DOM
+        });
+    } catch (error) {
+        console.error("Erro ao carregar lista de hóspedes:", error);
+        guestList.innerHTML = 'Erro ao carregar lista de hóspedes';  // Show error message
+    }
+}
+
+// Add guest entry to the DOM
+function addGuestToDOM(id, guest) {
+    const guestList = document.getElementById('guest-list');
+    const li = document.createElement('li');
+    li.id = id;
+
+    li.innerHTML = `
+        Apartamento: ${guest.apartamento} | Nome: ${guest.nome} |
+        Vão deixar 5 estrelas? ${guest.estrelas} | Escrever comentário? ${guest.comentario}
+        <button class="delete-guest-btn" onclick="deleteGuest('${id}')">Apagar</button>
+    `;
+
+    guestList.appendChild(li);
+}
+
+// Delete guest entry
+async function deleteGuest(id) {
+    try {
+        await deleteGuestFromFirebase(id);
+        document.getElementById(id).remove();
+    } catch (error) {
+        console.error("Erro ao apagar hóspede:", error);
+    }
+}
+
+// Setup event listeners
 function setupEventListeners() {
     const prevMonthBtn = document.getElementById('prev-month');
     const nextMonthBtn = document.getElementById('next-month');
