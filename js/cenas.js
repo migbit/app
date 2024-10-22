@@ -1,5 +1,3 @@
-// js/cenas.js
-
 import { db } from './script.js';
 import { 
     collection, 
@@ -27,6 +25,7 @@ const CONFIG = {
 
 // State
 const state = {
+    reservedDates: new Set(),  // Added this
     reservedDates123: new Set(),
     reservedDates1248: new Set(),
     selectedDates: new Set(), // Track selected dates
@@ -50,12 +49,12 @@ async function fetchIcalData(icalUrl, apartmentId) {
         
         reservations.forEach(reservation => {
             const dateStr = reservation.startDate.toISOString().split('T')[0];
+            state.reservedDates.add(dateStr);  // Add date to global set
             if (apartmentId === '123') {
                 state.reservedDates123.add(dateStr);
             } else if (apartmentId === '1248') {
                 state.reservedDates1248.add(dateStr);
             }
-            state.reservedDates.add(dateStr);  // Keeping global set for any date
         });
     } catch (error) {
         console.error(`Error loading iCal for Apartment ${apartmentId}:`, error);
@@ -194,78 +193,13 @@ async function loadSelectedDates() {
     }
 }
 
-// Guest List Functions
-async function addGuestToFirebase(guestData) {
-    try {
-        const docRef = await addDoc(collection(db, "guestList"), guestData);
-        return docRef.id;
-    } catch (error) {
-        console.error("Error adding guest:", error);
-        throw error;
-    }
-}
+// Guest List Functions (unchanged)
 
-async function deleteGuestFromFirebase(guestId) {
-    try {
-        await deleteDoc(doc(db, "guestList", guestId));
-    } catch (error) {
-        console.error("Error deleting guest:", error);
-        throw error;
-    }
-}
-
-// Function to determine apartment based on iCal data
-function determineApartmentByDate(entradaDate) {
-    if (state.reservedDates123.has(entradaDate)) {
-        return "123";
-    } else if (state.reservedDates1248.has(entradaDate)) {
-        return "1248";
-    }
-    return null;
-}
-
-// Add guest entry to the DOM
-function addGuestToDOM(id, guest) {
-    const guestList = document.getElementById('guest-list');
-    const li = document.createElement('li');
-    li.id = id;
-
-    li.innerHTML = `
-        Apartamento: ${guest.apartamento} | Nome: ${guest.nome} |
-        Vão deixar 5 estrelas? ${guest.estrelas} | Escrever comentário? ${guest.comentario}
-        <button class="delete-guest-btn" onclick="deleteGuest('${id}')">Apagar</button>
-    `;
-
-    guestList.appendChild(li);
-}
-
-// Load guest list from Firebase
-async function loadGuestList() {
-    const guestList = document.getElementById('guest-list');
-    guestList.innerHTML = 'Carregando...';
-
-    try {
-        const q = query(collection(db, "guestList"));
-        const querySnapshot = await getDocs(q);
-
-        guestList.innerHTML = '';
-        querySnapshot.forEach((doc) => {
-            const guest = doc.data();
-            addGuestToDOM(doc.id, guest);
-        });
-    } catch (error) {
-        console.error("Erro ao carregar lista de hóspedes:", error);
-        guestList.innerHTML = 'Erro ao carregar lista de hóspedes';
-    }
-}
-
-// Setup event listeners
 function setupEventListeners() {
     const prevMonthBtn = document.getElementById('prev-month');
     const nextMonthBtn = document.getElementById('next-month');
     const guestForm = document.getElementById('guest-form');
 
-    // Add event listener for previous month button, if it exists
     if (prevMonthBtn) {
         prevMonthBtn.addEventListener('click', () => {
             state.currentMonth--;
@@ -275,11 +209,8 @@ function setupEventListeners() {
             }
             renderCalendar(state.currentMonth, state.currentYear);
         });
-    } else {
-        console.error('prev-month button not found');
     }
 
-    // Add event listener for next month button, if it exists
     if (nextMonthBtn) {
         nextMonthBtn.addEventListener('click', () => {
             state.currentMonth++;
@@ -289,20 +220,16 @@ function setupEventListeners() {
             }
             renderCalendar(state.currentMonth, state.currentYear);
         });
-    } else {
-        console.error('next-month button not found');
     }
 
-    // Add event listener for guest form, if it exists
     if (guestForm) {
         guestForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const nome = document.getElementById('nome').value;
             const estrelas = document.getElementById('estrelas').value;
             const comentario = document.getElementById('comentario').value;
 
-            const apartamento = determineApartmentByDate(state.today.toISOString().split('T')[0]); // Use today's date
+            const apartamento = determineApartmentByDate(state.today.toISOString().split('T')[0]); 
 
             if (!apartamento) {
                 alert('Data não pertence a nenhum apartamento');
@@ -325,34 +252,20 @@ function setupEventListeners() {
 
             guestForm.reset();
         });
-    } else {
-        console.error('guest-form not found');
     }
 }
 
-// Initialization
 async function init() {
     try {
-        // Load reservations for both apartments
         await fetchIcalData(CONFIG.icalUrls['123'], '123');
         await fetchIcalData(CONFIG.icalUrls['1248'], '1248');
-
-        // Load selected dates for calendar
         await loadSelectedDates();
-
-        // Render calendar
         renderCalendar(state.currentMonth, state.currentYear);
-
-        // Load guest list
         await loadGuestList();
-
-        // Set up event listeners
         setupEventListeners();
-
     } catch (error) {
         console.error('Erro ao inicializar a aplicação:', error);
     }
 }
 
-// Start the application when DOM is ready
 document.addEventListener('DOMContentLoaded', init);
