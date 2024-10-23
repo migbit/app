@@ -63,31 +63,36 @@
         </section>
 
         <!-- To-Do List Section -->
-        <section class="todo-section">
-            <h2>Cenas a Fazer</h2>
-            <form id="todo-form">
-                <input type="text" id="todo-input" placeholder="Nova tarefa" required>
-                <button type="submit">Adicionar</button>
-            </form>
-            <ul id="todo-list">
-                <!-- To-do list will be dynamically populated here -->
-            </ul>
+        <section class="todo-section card">
+            <h2 class="card-header">Cenas a Fazer</h2>
+            <div class="card-body">
+                <form id="todo-form" class="form-inline">
+                    <input type="text" id="todo-input" class="form-control" placeholder="Nova tarefa" required>
+                    <button type="submit" class="btn btn-success">Adicionar</button>
+                </form>
+                <ul id="todo-list" class="list-group mt-3">
+                    <!-- To-do list will be dynamically populated here -->
+                </ul>
+            </div>
         </section>
 
         <!-- Cenas dos Comentários Section -->
-        <section class="comments-section">
-    <       h2>Cenas dos Comentários</h2>
-            <form id="comment-form">
-                <input type="text" id="comment-input" placeholder="Novo comentário" required>
-                <button type="submit">Adicionar</button>
-            </form>
-            <ul id="comment-list">
-        <!-- Comments will be dynamically populated here -->
-            </ul>
+        <section class="comments-section card mt-4">
+            <h2 class="card-header">Cenas dos Comentários</h2>
+            <div class="card-body">
+                <form id="comment-form" class="form-inline">
+                    <input type="text" id="comment-input" class="form-control" placeholder="Novo comentário" required>
+                    <button type="submit" class="btn btn-success">Adicionar</button>
+                </form>
+                <ul id="comment-list" class="list-group mt-3">
+                    <!-- Comments will be dynamically populated here -->
+                </ul>
+            </div>
         </section>
 
+    </main>
 
-    <footer>
+    <footer class="text-center mt-5">
         <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
     </footer>
 
