@@ -34,7 +34,7 @@ const state = {
     currentYear: new Date().getFullYear()
 };
 
-// Calendar Functions
+// Calendar Functions (unchanged)
 async function fetchIcalData(icalUrl) {
     try {
         const response = await fetch(`${CONFIG.workerUrl}?url=${encodeURIComponent(icalUrl)}`);
@@ -161,7 +161,7 @@ function renderCalendar(month, year) {
     }
 }
 
-// Firebase functions for saving and removing selected dates
+// Firebase functions for saving and removing selected dates (unchanged)
 async function saveSelectedDateToFirebase(dateStr) {
     try {
         await addDoc(collection(db, "selectedDates"), { date: dateStr });
@@ -184,7 +184,7 @@ async function removeSelectedDateFromFirebase(dateStr) {
     }
 }
 
-// Load selected dates from Firebase on page load
+// Load selected dates from Firebase on page load (unchanged)
 async function loadSelectedDates() {
     try {
         const querySnapshot = await getDocs(collection(db, "selectedDates"));
@@ -198,7 +198,7 @@ async function loadSelectedDates() {
     }
 }
 
-// Todo List Functions
+// Todo List Functions (unchanged)
 async function addTask(taskText) {
     try {
         const docRef = await addDoc(collection(db, "todos"), {
@@ -257,7 +257,66 @@ async function deleteTask(taskId) {
     }
 }
 
-// Event Listeners
+// Cenas dos Comentários Functions (New)
+async function addComment(commentText) {
+    try {
+        const docRef = await addDoc(collection(db, "comments"), {
+            text: commentText,
+            timestamp: new Date()
+        });
+        console.log("Comment added with ID:", docRef.id);
+        return docRef.id;
+    } catch (error) {
+        console.error("Error adding comment:", error);
+        throw error;
+    }
+}
+
+async function loadComments() {
+    const commentList = document.getElementById('comment-list');
+    if (!commentList) return;
+
+    commentList.innerHTML = '<li>Carregando comentários...</li>';
+    
+    try {
+        const q = query(collection(db, "comments"), orderBy("timestamp", "asc"));
+        const querySnapshot = await getDocs(q);
+        
+        commentList.innerHTML = '';
+        
+        querySnapshot.forEach((doc) => {
+            const comment = doc.data();
+            const li = document.createElement('li');
+            
+            const commentText = document.createElement('span');
+            commentText.textContent = comment.text;
+            li.appendChild(commentText);
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Apagar';
+            deleteBtn.classList.add('delete-btn');
+            deleteBtn.onclick = () => deleteComment(doc.id);
+            li.appendChild(deleteBtn);
+            
+            commentList.appendChild(li);
+        });
+    } catch (error) {
+        console.error("Error loading comments:", error);
+        commentList.innerHTML = '<li>Erro ao carregar comentários</li>';
+    }
+}
+
+async function deleteComment(commentId) {
+    try {
+        await deleteDoc(doc(db, "comments", commentId));
+        await loadComments();
+    } catch (error) {
+        console.error("Error deleting comment:", error);
+        alert('Erro ao apagar comentário');
+    }
+}
+
+// Event Listeners (extended to support comments)
 function setupEventListeners() {
     document.getElementById('prev-month')?.addEventListener('click', () => {
         state.currentMonth--;
@@ -297,9 +356,30 @@ function setupEventListeners() {
             alert('Erro ao adicionar tarefa');
         }
     });
+
+    // Comment form (New)
+    document.getElementById('comment-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('comment-input');
+        if (!input) return;
+
+        const commentText = input.value.trim();
+        if (!commentText) {
+            alert('Por favor, insira um comentário válido');
+            return;
+        }
+
+        try {
+            await addComment(commentText);
+            input.value = '';
+            await loadComments();
+        } catch (error) {
+            alert('Erro ao adicionar comentário');
+        }
+    });
 }
 
-// Initialization
+// Initialization (unchanged)
 async function init() {
     try {
         // Load reservations
@@ -314,6 +394,9 @@ async function init() {
         
         // Load tasks
         await loadTasks();
+        
+        // Load comments (New)
+        await loadComments();
         
         // Setup event listeners
         setupEventListeners();
