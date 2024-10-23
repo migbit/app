@@ -7,13 +7,13 @@
     <title>Apartments.Oporto</title>
     
     <!-- Link to CSS -->
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/app/css/styles.css">
     
     <!-- Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/app/favicon.ico" type="image/x-icon">
     
     <!-- Link to PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/app/manifest.json">
     
     <!-- Theme color for mobile browsers -->
     <meta name="theme-color" content="#000000">
@@ -28,14 +28,14 @@
     
         <nav id="nav-menu">
             <ul>
-                <li><a href="./modules/mensagens.html">Mensagens</a></li>
-                <li><a href="./modules/compras.html">Compras</a></li>
-                <li><a href="./modules/faturas.html">Faturas / Relatórios</a></li>
-                <li><a href="./modules/caixa.html">Caixa</a></li>
-                <li><a href="./modules/reparações.html">Reparações</a></li>
-                <li><a href="./modules/tarefas.html">Tarefas</a></li>
-                <li><a href="./modules/ficheiros.html">Ficheiros</a></li>
-                <li><a href="./modules/cenas.html">Cenas</a></li>
+                <li><a href="/app/modules/mensagens.html">Mensagens</a></li>
+                <li><a href="/app/modules/compras.html">Compras</a></li>
+                <li><a href="/app/modules/faturas.html">Faturas / Relatórios</a></li>
+                <li><a href="/app/modules/caixa.html">Caixa</a></li>
+                <li><a href="/app/modules/reparações.html">Reparações</a></li>
+                <li><a href="/app/modules/tarefas.html">Tarefas</a></li>
+                <li><a href="/app/modules/ficheiros.html">Ficheiros</a></li>
+                <li><a href="/app/modules/cenas.html">Cenas</a></li>
                 <!-- Botões de login/logout -->
                 <li><a href="#" id="login-btn">Login com Google</a></li>
                 <li><a href="#" id="logout-btn" style="display:none;">Logout</a></li>
@@ -58,7 +58,7 @@
     </footer>
 
     <!-- Scripts com type="module" -->
-    <script type="module" src="js/script.js"></script>
+    <script type="module" src="/app/js/script.js"></script>
 
     <!-- Script para alternar o menu no mobile -->
     <script>
@@ -74,7 +74,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                navigator.serviceWorker.register('./sw.js').then(function(registration) {
+                navigator.serviceWorker.register('/app/sw.js').then(function(registration) {
                     console.log('Service Worker registered with scope:', registration.scope);
                 }, function(err) {
                     console.log('Service Worker registration failed:', err);
