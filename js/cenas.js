@@ -34,7 +34,7 @@ const state = {
     currentYear: new Date().getFullYear()
 };
 
-// Calendar Functions (unchanged)
+// Calendar Functions
 async function fetchIcalData(icalUrl) {
     try {
         const response = await fetch(`${CONFIG.workerUrl}?url=${encodeURIComponent(icalUrl)}`);
@@ -161,7 +161,7 @@ function renderCalendar(month, year) {
     }
 }
 
-// Firebase functions for saving and removing selected dates (unchanged)
+// Firebase functions for saving and removing selected dates
 async function saveSelectedDateToFirebase(dateStr) {
     try {
         await addDoc(collection(db, "selectedDates"), { date: dateStr });
@@ -184,7 +184,7 @@ async function removeSelectedDateFromFirebase(dateStr) {
     }
 }
 
-// Load selected dates from Firebase on page load (unchanged)
+// Load selected dates from Firebase on page load
 async function loadSelectedDates() {
     try {
         const querySnapshot = await getDocs(collection(db, "selectedDates"));
@@ -198,7 +198,7 @@ async function loadSelectedDates() {
     }
 }
 
-// Todo List Functions (unchanged)
+// Todo List Functions
 async function addTask(taskText) {
     try {
         const docRef = await addDoc(collection(db, "todos"), {
@@ -257,7 +257,7 @@ async function deleteTask(taskId) {
     }
 }
 
-// Cenas dos Comentários Functions (New)
+// Cenas dos Comentários Functions
 async function addComment(commentText) {
     try {
         const docRef = await addDoc(collection(db, "comments"), {
@@ -357,7 +357,7 @@ function setupEventListeners() {
         }
     });
 
-    // Comment form (New)
+    // Comment form
     document.getElementById('comment-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const input = document.getElementById('comment-input');
@@ -379,7 +379,7 @@ function setupEventListeners() {
     });
 }
 
-// Initialization (unchanged)
+// Initialization
 async function init() {
     try {
         // Load reservations
@@ -395,7 +395,7 @@ async function init() {
         // Load tasks
         await loadTasks();
         
-        // Load comments (New)
+        // Load comments
         await loadComments();
         
         // Setup event listeners
