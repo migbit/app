@@ -11,9 +11,9 @@
 <body>
     <header>
         <h1>Cenas</h1>
-         <!-- Ícone de menu "hambúrguer" para mobile -->
+        <!-- Mobile menu icon -->
         <div class="menu-icon" id="menu-icon">
-            &#9776; <!-- Ícone de três linhas -->
+            &#9776; <!-- Hamburger icon (three lines) -->
         </div>
 
         <nav id="nav-menu">
@@ -26,7 +26,7 @@
                 <li><a href="tarefas.html">Tarefas</a></li>
                 <li><a href="ficheiros.html">Ficheiros</a></li>
                 <li><a href="cenas.html">Cenas</a></li>
-                <!-- Botões de login/logout -->
+                <!-- Login/Logout Buttons -->
                 <li><a href="#" id="login-btn">Login com Google</a></li>
                 <li><a href="#" id="logout-btn" style="display:none;">Logout</a></li>
                 <li id="user-info" style="display:none;">
@@ -37,6 +37,7 @@
     </header>
 
     <main>
+        <!-- Calendar Section -->
         <section class="calendar-container">
             <div class="calendar-header">
                 <button id="prev-month">&lt;</button>
@@ -56,19 +57,22 @@
                     </tr>
                 </thead>
                 <tbody id="calendar-body">
+                    <!-- Calendar dates will be dynamically populated here -->
                 </tbody>
             </table>
         </section>
 
+        <!-- To-Do List Section -->
         <section class="todo-section">
-            <h2>Cenas a fazer</h2>
+            <h2>Cenas a Fazer</h2>
             <form id="todo-form">
-                <input type="text" id="todo-input" placeholder="Nova tarefa">
+                <input type="text" id="todo-input" placeholder="Nova tarefa" required>
                 <button type="submit">Adicionar</button>
             </form>
-            <ul id="todo-list"></ul>
+            <ul id="todo-list">
+                <!-- To-do list will be dynamically populated here -->
+            </ul>
         </section>
-    </main>
 
     <footer>
         <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
@@ -78,7 +82,7 @@
     <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script type="module" src="../js/cenas.js"></script>
 
-    <!-- Script for mobile menu toggle -->
+    <!-- Mobile Menu Toggle Script -->
     <script>
         const menuIcon = document.getElementById('menu-icon');
         const navMenu = document.getElementById('nav-menu');
