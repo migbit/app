@@ -1,33 +1,33 @@
 // Define a cache name
 const CACHE_NAME = 'app-cache-v1';
 
-// Files to cache (all needed assets)
+// Files to cache (all needed assets with the correct paths for GitHub Pages)
 const ASSETS_TO_CACHE = [
-    './',  // The root index.html
-    './index.html',  // Main HTML
-    './css/styles.css',  // CSS styles
-    './js/caixa.js',  // JavaScript files
-    './js/cenas.js',
-    './js/compras.js',
-    './js/faturas.js',
-    './js/mensagens.js',
-    './js/reparações.js',
-    './js/script.js',
-    './js/tarefas.js',
-    './favicon.ico',  // Favicon
-    './icons/icon-192.png',  // Icons for PWA
-    './icons/icon-512.png',
-    './modules/caixa.html',  // Other HTML pages in the "modules" folder
-    './modules/cenas.html',
-    './modules/compras.html',
-    './modules/faturas.html',
-    './modules/ficheiros.html',
-    './modules/mensagens.html',
-    './modules/reparações.html',
-    './modules/tarefas.html',
-    './maps/123.jpg',  // Images from the "maps" folder
-    './maps/1248.jpg',
-    './modules/mensagensData.json'  // JSON file for data
+    '/app/',  // The root index.html
+    '/app/index.html',  // Main HTML
+    '/app/css/styles.css',  // CSS styles
+    '/app/js/caixa.js',  // JavaScript files
+    '/app/js/cenas.js',
+    '/app/js/compras.js',
+    '/app/js/faturas.js',
+    '/app/js/mensagens.js',
+    '/app/js/reparações.js',
+    '/app/js/script.js',
+    '/app/js/tarefas.js',
+    '/app/favicon.ico',  // Favicon
+    '/app/icons/icon-192.png',  // Icons for PWA
+    '/app/icons/icon-512.png',
+    '/app/modules/caixa.html',  // Other HTML pages in the "modules" folder
+    '/app/modules/cenas.html',
+    '/app/modules/compras.html',
+    '/app/modules/faturas.html',
+    '/app/modules/ficheiros.html',
+    '/app/modules/mensagens.html',
+    '/app/modules/reparações.html',
+    '/app/modules/tarefas.html',
+    '/app/maps/123.jpg',  // Images from the "maps" folder
+    '/app/maps/1248.jpg',
+    '/app/modules/mensagensData.json'  // JSON file for data
 ];
 
 // Install event: Cache all the necessary assets
