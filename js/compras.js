@@ -16,7 +16,7 @@ const listaCompras = {
     "WC": [
         "Papel Higiénico", "Gel WC Sanitas", "Toalhitas", "Toalhitas Desmaquilhantes",
         "Blocos Sanitários", "Anticalcário", "Limpeza Chuveiro", "Desentupidor de Canos",
-        "Manutenção Canos", "Papel Higiénico Húmido"
+        "Manutenção Canos", "Papel Higiénico Húmido", "Sabonete Líquido"
     ],
     "Cozinha": [
         "Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas",
