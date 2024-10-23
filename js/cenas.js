@@ -258,8 +258,9 @@ async function deleteTask(taskId) {
 }
 
 // Cenas dos Comentários Functions
-async function addComment(commentText) {
+async function addComment(guestName, ratingOption) {
     try {
+        const commentText = `${guestName} - ${ratingOption}`;
         const docRef = await addDoc(collection(db, "comments"), {
             text: commentText,
             timestamp: new Date()
@@ -315,6 +316,31 @@ async function deleteComment(commentId) {
         alert('Erro ao apagar comentário');
     }
 }
+
+// Event Listener for Comment Form
+document.getElementById('comment-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Get the values from the form fields
+    const guestName = document.getElementById('guest-name').value.trim();
+    const ratingOption = document.getElementById('rating-option').value;
+
+    // Validate inputs
+    if (!guestName || !ratingOption) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+    }
+
+    // Save the comment (guest name + dropdown selection)
+    try {
+        await addComment(guestName, ratingOption);
+        document.getElementById('guest-name').value = ''; // Clear input
+        document.getElementById('rating-option').value = ''; // Reset dropdown
+        await loadComments(); // Reload comments list
+    } catch (error) {
+        alert('Erro ao adicionar comentário');
+    }
+});
 
 // Event Listeners (extended to support comments)
 function setupEventListeners() {
