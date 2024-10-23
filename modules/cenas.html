@@ -68,46 +68,6 @@
             </form>
             <ul id="todo-list"></ul>
         </section>
-
-        <section class="guest-list-section">
-            <h2>Lista de Hóspedes</h2>
-            <form id="guest-form">
-                <div class="form-group">
-                    <label for="nome">Nome:</label>
-                    <input type="text" id="nome" required>
-                </div>
-        
-                <div class="form-group">
-                    <label for="estrelas">Vão deixar 5 estrelas?</label>
-                    <select id="estrelas">
-                        <option value="?">?</option>
-                        <option value="yes">Sim</option>
-                        <option value="no">Não</option>
-                    </select>
-                </div>
-        
-                <div class="form-group">
-                    <label for="comentario">Escrever comentário?</label>
-                    <select id="comentario">
-                        <option value="yes">Sim</option>
-                        <option value="no">Não</option>
-                    </select>
-                </div>
-        
-                <div class="form-group">
-                    <label for="check-in-date">Data de Entrada:</label>
-                    <input type="date" id="check-in-date" required>
-                </div>
-        
-                <button type="submit">Adicionar Hóspede</button>
-            </form>
-        
-            <ul id="guest-list">
-                <!-- Guest entries will appear here -->
-            </ul>
-        </section>
-
-
     </main>
 
     <footer>
@@ -115,8 +75,7 @@
     </footer>
 
     <!-- Required Scripts -->
-    <!-- Use the unminified version -->
-    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ical.js@1.5.0/build/ical.min.js"></script>
     <script type="module" src="../js/cenas.js"></script>
 
     <!-- Script for mobile menu toggle -->
