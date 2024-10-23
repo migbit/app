@@ -216,9 +216,17 @@
   }
 },
 "Comentário": {
-  "Português": "Receber [GUEST] e o seu grupo foi um verdadeiro prazer. Se tiver a oportunidade de os acolher, não hesite! Deixaram o apartamento em perfeito estado, demonstrando um cuidado e respeito excepcionais pelo espaço. Espero sinceramente ter a oportunidade de recebê-los novamente no Porto um dia.",
-  "Inglês": "Hosting [GUEST] and their group was an absolute delight. If you ever have the chance to welcome them, don’t hesitate! They left the apartment in immaculate condition, showing exceptional care and respect for the space. I sincerely hope to have the opportunity to welcome them back to Porto someday.",
-  "Espanhol": "Alojar a [GUEST] y su grupo fue un verdadero placer. Si alguna vez tienes la oportunidad de recibirlos, ¡no lo dudes! Dejaron el apartamento en perfecto estado, mostrando un cuidado y respeto excepcionales por el espacio. Espero sinceramente tener la oportunidad de darles la bienvenida de nuevo en Oporto algún día.",
-  "Francês": "Accueillir [GUEST] et son groupe a été un véritable plaisir. Si vous avez l'occasion de les accueillir, n'hésitez pas ! Ils ont laissé l'appartement dans un état impeccable, faisant preuve d'un soin et d'un respect exceptionnels pour l'espace. J'espère sincèrement avoir l'occasion de les accueillir à nouveau à Porto un jour."
+    "Comentário Grupo": {
+      "Português": "Receber [GUEST] e o seu grupo foi um verdadeiro prazer. Se tiver a oportunidade de os acolher, não hesite! Deixaram o apartamento em perfeito estado, demonstrando um cuidado e respeito excepcionais pelo espaço. Espero sinceramente ter a oportunidade de recebê-los novamente no Porto um dia.",
+      "Inglês": "Hosting [GUEST] and their group was an absolute delight. If you ever have the chance to welcome them, don’t hesitate! They left the apartment in immaculate condition, showing exceptional care and respect for the space. I sincerely hope to have the opportunity to welcome them back to Porto someday.",
+      "Espanhol": "Alojar a [GUEST] y su grupo fue un verdadero placer. Si alguna vez tienes la oportunidad de recibirlos, ¡no lo dudes! Dejaron el apartamento en perfecto estado, mostrando un cuidado y respeto excepcionales por el espacio. Espero sinceramente tener la oportunidad de darles la bienvenida de nuevo en Oporto algún día.",
+      "Francês": "Accueillir [GUEST] et son groupe a été un véritable plaisir. Si vous avez l'occasion de les accueillir, n'hésitez pas ! Ils ont laissé l'appartement dans un état impeccable, faisant preuve d'un soin et d'un respect exceptionnels pour l'espace. J'espère sincèrement avoir l'occasion de les accueillir à nouveau à Porto un jour."
+    },
+    "Comentário Família": {
+      "Português": "Receber [GUEST] e sua família foi um verdadeiro prazer. Se tiver a oportunidade de os acolher, não hesite! Deixaram o apartamento em perfeito estado, demonstrando um cuidado e respeito excepcionais pelo espaço. Espero sinceramente ter a oportunidade de recebê-los novamente no Porto um dia.",
+      "Inglês": "Hosting [GUEST] and their family was an absolute delight. If you ever have the chance to welcome them, don’t hesitate! They left the apartment in immaculate condition, showing exceptional care and respect for the space. I sincerely hope to have the opportunity to welcome them back to Porto someday.",
+      "Espanhol": "Alojar a [GUEST] y su familia fue un verdadero placer. Si alguna vez tienes la oportunidad de recibirlos, ¡no lo dudes! Dejaron el apartamento en perfecto estado, mostrando un cuidado y respeto excepcionales por el espacio. Espero sinceramente tener la oportunidad de darles la bienvenida de nuevo en Oporto algún día.",
+      "Francês": "Accueillir [GUEST] et sa famille a été un véritable plaisir. Si vous avez l'occasion de les accueillir, n'hésitez pas ! Ils ont laissé l'appartement dans un état impeccable, faisant preuve d'un soin et d'un respect exceptionnels pour l'espace. J'espère sincèrement avoir l'occasion de les accueillir à nouveau à Porto un jour."
+    }
 }
 }
