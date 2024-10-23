@@ -3,13 +3,13 @@ const CACHE_NAME = 'app-cache-v1';
 
 // Files to cache
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  '/js/script.js',
-  '/favicon.ico',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+    './',  // Relative paths
+    './index.html',
+    './css/styles.css',
+    './js/script.js',
+    './favicon.ico',
+    './icons/icon-192.png',
+    './icons/icon-512.png'
 ];
 
 // Install event: Cache all the necessary assets
