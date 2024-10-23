@@ -869,11 +869,29 @@ h1 {
 }
 
 /* List Styles */
-#todo-list,
-#comment-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+#todo-list li, #comment-list li {
+    display: flex;
+    justify-content: space-between;  /* Aligns text to the left and button to the right */
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.delete-btn {
+    margin-left: 10px; /* Adds a little space between the text and the button */
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    align-self: flex-end;  /* Align button to the end of the container */
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
 }
 
 .list-group-item {
@@ -906,6 +924,16 @@ h1 {
     #todo-form,
     #comment-form {
         flex-direction: column;
+    }
+
+    #todo-list li, #comment-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .delete-btn {
+        align-self: flex-start;
+        margin-top: 5px;
     }
 
     #todo-input,
