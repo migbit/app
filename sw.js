@@ -1,5 +1,5 @@
 // Define a cache name
-const CACHE_NAME = 'app-cache-v1.1';
+const CACHE_NAME = 'app-cache-v2';
 
 // Files to cache (all needed assets with the correct paths for GitHub Pages)
 const ASSETS_TO_CACHE = [
