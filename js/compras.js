@@ -11,7 +11,7 @@ const listaCompras = {
     ],
     "Roupa": [
         "Detergente Roupa", "Amaciador", "Lixívia Roupa Branca", "Tira Nódoas",
-        "Tira Gorduras", "Oxi Active", "Branqueador"
+        "Tira Gorduras", "Oxi Active", "Branqueador", "Perfumador"
     ],
     "WC": [
         "Papel Higiénico", "Gel WC Sanitas", "Toalhitas", "Toalhitas Desmaquilhantes",
