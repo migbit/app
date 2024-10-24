@@ -9,6 +9,7 @@ import {
     doc, 
     query, 
     where, 
+    updateDoc, 
     orderBy 
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
@@ -260,11 +261,12 @@ async function deleteTask(taskId) {
 // Cenas dos Comentários Functions
 async function addComment(guestName, ratingOption) {
     try {
-        const commentText = `${guestName} - ${ratingOption}`;
-        const docRef = await addDoc(collection(db, "comments"), {
-            text: commentText,
+        const commentData = {
+            guestName: guestName,
+            ratingOption: ratingOption,
             timestamp: new Date()
-        });
+        };
+        const docRef = await addDoc(collection(db, "comments"), commentData);
         console.log("Comment added with ID:", docRef.id);
         return docRef.id;
     } catch (error) {
@@ -289,10 +291,32 @@ async function loadComments() {
             const comment = doc.data();
             const li = document.createElement('li');
             
-            const commentText = document.createElement('span');
-            commentText.textContent = comment.text;
-            li.appendChild(commentText);
+            const guestNameSpan = document.createElement('span');
+            guestNameSpan.textContent = comment.guestName + " ";
             
+            // Create dropdown for editing the selection
+            const dropdown = document.createElement('select');
+            dropdown.innerHTML = `
+                <option value="Vai Dar 5 Estrelas" ${comment.ratingOption === 'Vai Dar 5 Estrelas' ? 'selected' : ''}>Vai Dar 5 Estrelas</option>
+                <option value="Não sei o que vai dar" ${comment.ratingOption === 'Não sei o que vai dar' ? 'selected' : ''}>Não sei o que vai dar</option>
+                <option value="Não escrever comentário!!!" ${comment.ratingOption === 'Não escrever comentário!!!' ? 'selected' : ''}>Não escrever comentário!!!</option>
+            `;
+            
+            // Handle dropdown change
+            dropdown.addEventListener('change', async function() {
+                try {
+                    await updateComment(doc.id, dropdown.value);
+                    console.log('Comment updated:', dropdown.value);
+                } catch (error) {
+                    console.error('Error updating comment:', error);
+                }
+            });
+            
+            // Append guest name and dropdown to the list item
+            li.appendChild(guestNameSpan);
+            li.appendChild(dropdown);
+            
+            // Add delete button
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'Apagar';
             deleteBtn.classList.add('delete-btn');
@@ -307,6 +331,19 @@ async function loadComments() {
     }
 }
 
+// Function to update the ratingOption in Firestore
+async function updateComment(commentId, newRatingOption) {
+    try {
+        const commentRef = doc(db, "comments", commentId);
+        await updateDoc(commentRef, {
+            ratingOption: newRatingOption
+        });
+        console.log('Comment updated successfully');
+    } catch (error) {
+        console.error("Error updating comment:", error);
+    }
+}
+
 async function deleteComment(commentId) {
     try {
         await deleteDoc(doc(db, "comments", commentId));
@@ -317,26 +354,23 @@ async function deleteComment(commentId) {
     }
 }
 
-// Event Listener for Comment Form
+// Event Listener for Comment Form submission
 document.getElementById('comment-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Get the values from the form fields
     const guestName = document.getElementById('guest-name').value.trim();
     const ratingOption = document.getElementById('rating-option').value;
 
-    // Validate inputs
     if (!guestName || !ratingOption) {
         alert('Por favor, preencha todos os campos.');
         return;
     }
 
-    // Save the comment (guest name + dropdown selection)
     try {
         await addComment(guestName, ratingOption);
-        document.getElementById('guest-name').value = ''; // Clear input
-        document.getElementById('rating-option').value = ''; // Reset dropdown
-        await loadComments(); // Reload comments list
+        document.getElementById('guest-name').value = '';
+        document.getElementById('rating-option').value = '';
+        await loadComments();
     } catch (error) {
         alert('Erro ao adicionar comentário');
     }
@@ -380,27 +414,6 @@ function setupEventListeners() {
             await loadTasks();
         } catch (error) {
             alert('Erro ao adicionar tarefa');
-        }
-    });
-
-    // Comment form
-    document.getElementById('comment-form')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const input = document.getElementById('comment-input');
-        if (!input) return;
-
-        const commentText = input.value.trim();
-        if (!commentText) {
-            alert('Por favor, insira um comentário válido');
-            return;
-        }
-
-        try {
-            await addComment(commentText);
-            input.value = '';
-            await loadComments();
-        } catch (error) {
-            alert('Erro ao adicionar comentário');
         }
     });
 }
