@@ -77,34 +77,49 @@
         </section>
 
         <!-- Cenas dos Comentários Section -->
-<section class="comments-section card mt-4">
-    <h2 class="card-header">Cenas dos Comentários</h2>
-    <div class="card-body">
-        <form id="comment-form" class="form-inline">
-            <!-- Nome do Hóspede input -->
-            <div class="form-group mb-3">
-                <label for="guest-name">Nome do Hóspede:</label>
-                <input type="text" id="guest-name" class="form-control ml-2" placeholder="Nome do hóspede" required>
+        <section class="comments-section card mt-4">
+            <h2 class="card-header">Cenas dos Comentários</h2>
+            <div class="card-body">
+                <form id="comment-form" class="form-inline">
+                    <!-- Nome do Hóspede input -->
+                    <div class="form-group mb-3">
+                        <label for="guest-name">Nome do Hóspede:</label>
+                        <input type="text" id="guest-name" class="form-control ml-2" placeholder="Nome do hóspede" required>
+                    </div>
+                    <!-- Dropdown for comment rating options -->
+                    <div class="form-group mb-3">
+                        <label for="rating-option">Comentário:</label>
+                        <select id="rating-option" class="form-control ml-2" required>
+                            <option value="">Comentário</option>
+                            <option value="Vai Dar 5 Estrelas">Vai Dar 5 Estrelas</option>
+                            <option value="Não sei o que vai dar">Não sei o que vai dar</option>
+                            <option value="Não escrever comentário!!!">Não escrever comentário!!!</option>
+                        </select>
+                    </div>
+                    <!-- Dropdown for Fatura options -->
+                    <div class="form-group mb-3">
+                        <label for="fatura-option">Fatura:</label>
+                        <select id="fatura-option" class="form-control ml-2" required>
+                            <option value="">Fatura</option>
+                            <option value="Fatura Emitida">Fatura Emitida</option>
+                        </select>
+                    </div>
+                    <!-- Dropdown for SIBA options -->
+                    <div class="form-group mb-3">
+                        <label for="siba-option">SIBA:</label>
+                        <select id="siba-option" class="form-control ml-2" required>
+                            <option value="">SIBA</option>
+                            <option value="Enviado">Enviado</option>
+                        </select>
+                    </div>
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-success">Adicionar</button>
+                </form>
+                <ul id="comment-list" class="list-group mt-3">
+                    <!-- Comments will be dynamically populated here -->
+                </ul>
             </div>
-            <!-- Dropdown for star rating options -->
-            <div class="form-group mb-3">
-                <label for="rating-option">Selecione uma opção:</label>
-                <select id="rating-option" class="form-control ml-2" required>
-                    <option value="">Selecione uma opção</option>
-                    <option value="Vai Dar 5 Estrelas">Vai Dar 5 Estrelas</option>
-                    <option value="Não sei o que vai dar">Não sei o que vai dar</option>
-                    <option value="Não escrever comentário!!!">Não escrever comentário!!!</option>
-                </select>
-            </div>
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-success">Adicionar</button>
-        </form>
-        <ul id="comment-list" class="list-group mt-3">
-            <!-- Comments will be dynamically populated here -->
-        </ul>
-    </div>
-</section>
-
+        </section>
     </main>
 
     <footer class="text-center mt-5">
