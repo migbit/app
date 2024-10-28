@@ -836,12 +836,12 @@ h1 {
 }
 
 /* Form Styles */
-#todo-form,
 #comment-form {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 20px;
+    align-items: center;
 }
 
 #guest-name,
@@ -856,13 +856,11 @@ h1 {
     border-radius: 4px;
 }
 
-/* Dropdown Label Styling */
 #comment-form label {
     font-size: 1em;
     margin-right: 5px;
 }
 
-/* Button Styles */
 .btn-success {
     padding: 10px 20px;
     background-color: #28a745;
@@ -873,6 +871,7 @@ h1 {
     border-radius: 4px;
     transition: background-color 0.3s ease;
     min-width: 100px;
+    align-self: flex-start;
 }
 
 .btn-success:hover {
@@ -913,17 +912,6 @@ h1 {
     background-color: #c82333;
 }
 
-.list-group-item {
-    padding: 12px 15px;
-    border: none;
-    border-bottom: 1px solid #eee;
-    background-color: transparent;
-}
-
-.list-group-item:last-child {
-    border-bottom: none;
-}
-
 /* Responsive Design */
 @media (max-width: 600px) {
     .calendar-container,
@@ -940,7 +928,6 @@ h1 {
         margin: -15px -15px 15px -15px;
     }
 
-    #todo-form,
     #comment-form {
         flex-direction: column;
     }
