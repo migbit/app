@@ -831,27 +831,21 @@ h1 {
 }
 
 /* Additional styling for form alignment */
-#comment-form .form-group,
-#comment-list .form-group {
-    flex: 1;
+#comment-form {
     display: flex;
-    align-items: center;
+    flex-wrap: nowrap; /* Prevents wrapping */
+    gap: 10px;
+}
+
+#comment-form .form-group {
+    flex: 1;
 }
 
 #comment-form .form-group select,
-#comment-form .form-group input,
-#comment-list .form-group select {
+#comment-form .form-group input {
     width: 100%;
-    margin-right: 10px;
 }
 
-#comment-list .list-group-item {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    padding: 10px;
-}
-
-.btn-update, .btn-delete {
-    margin-left: 10px;
+.btn-success {
+    flex-shrink: 0; /* Keeps the button size fixed */
 }
