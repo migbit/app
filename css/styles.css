@@ -831,6 +831,7 @@ h1 {
 }
 
 /* Additional styling for form alignment */
+/* Additional styling for form alignment */
 #comment-form, #comment-list {
     display: flex;
     gap: 10px;
@@ -865,7 +866,6 @@ h1 {
     padding: 6px 12px;
     font-size: 0.9em;
     width: auto;
-    margin-right: 5px;
 }
 
 .update-btn {
@@ -873,6 +873,7 @@ h1 {
     color: #fff;
     border: none;
     border-radius: 4px;
+    margin-right: 5px;
 }
 
 .delete-btn {
@@ -891,5 +892,5 @@ h1 {
 
 .comment-actions {
     display: flex;
-    gap: 10px; /* Space between Atualizar and Apagar */
+    gap: 5px; /* Space between Atualizar and Apagar */
 }

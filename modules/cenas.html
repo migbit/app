@@ -80,12 +80,10 @@
             <h2 class="card-header">Cenas dos Comentários</h2>
             <div class="card-body">
                 <form id="comment-form" class="d-flex flex-wrap align-items-center gap-3">
-                    <!-- Nome do Hóspede input -->
                     <div class="form-group mb-3">
                         <input type="text" id="guest-name" class="form-control" placeholder="Nome do hóspede" required>
                     </div>
                     
-                    <!-- Dropdown for Comentário options -->
                     <div class="form-group mb-3">
                         <select id="rating-option" class="form-control" required>
                             <option value="">Comentário</option>
@@ -95,7 +93,6 @@
                         </select>
                     </div>
                     
-                    <!-- Dropdown for Fatura options -->
                     <div class="form-group mb-3">
                         <select id="fatura-option" class="form-control" required>
                             <option value="">Fatura</option>
@@ -104,7 +101,6 @@
                         </select>
                     </div>
                     
-                    <!-- Dropdown for SIBA options -->
                     <div class="form-group mb-3">
                         <select id="siba-option" class="form-control" required>
                             <option value="">SIBA</option>
@@ -113,28 +109,11 @@
                         </select>
                     </div>
                     
-                    <!-- Submit button -->
                     <button type="submit" class="btn btn-success">Adicionar</button>
                 </form>
                 
                 <ul id="comment-list" class="list-group mt-3">
-                    <!-- Example comment item structure -->
-                    <li class="comment-item d-flex align-items-center gap-3">
-                        <span>Guest Name</span>
-                        <select class="form-control">
-                            <!-- Options populated dynamically -->
-                        </select>
-                        <select class="form-control">
-                            <!-- Options populated dynamically -->
-                        </select>
-                        <select class="form-control">
-                            <!-- Options populated dynamically -->
-                        </select>
-                        <div class="comment-actions d-flex gap-2">
-                            <button class="btn btn-success btn-update">Atualizar</button>
-                            <button class="btn btn-danger btn-delete">Apagar</button>
-                        </div>
-                    </li>
+                    <!-- Comments will be dynamically populated here -->
                 </ul>
             </div>
         </section>
