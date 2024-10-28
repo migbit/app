@@ -394,7 +394,48 @@ document.getElementById('comment-form')?.addEventListener('submit', async (e) =>
     } catch (error) {
         alert('Erro ao adicionar comentário');
     }
-});
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    document.getElementById('prev-month')?.addEventListener('click', () => {
+        state.currentMonth--;
+        if (state.currentMonth < 0) {
+            state.currentMonth = 11;
+            state.currentYear--;
+        }
+        renderCalendar(state.currentMonth, state.currentYear);
+    });
+
+    document.getElementById('next-month')?.addEventListener('click', () => {
+        state.currentMonth++;
+        if (state.currentMonth > 11) {
+            state.currentMonth = 0;
+            state.currentYear++;
+        }
+        renderCalendar(state.currentMonth, state.currentYear);
+    });
+
+    document.getElementById('todo-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('todo-input');
+        if (!input) return;
+
+        const taskText = input.value.trim();
+        if (!taskText) {
+            alert('Por favor, insira uma tarefa válida');
+            return;
+        }
+
+        try {
+            await addTask(taskText);
+            input.value = '';
+            await loadTasks();
+        } catch (error) {
+            alert('Erro ao adicionar tarefa');
+        }
+    });
+}
 
 // Initialization
 async function init() {
