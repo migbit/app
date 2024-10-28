@@ -854,7 +854,7 @@ h1 {
 /* Form buttons */
 #comment-form button {
     align-self: flex-start;
-    margin-top: 24px; /* Align with the form fields */
+    margin-top: 5px; /* Align with the form fields */
 }
 
 /* Comment list item styling */
