@@ -809,7 +809,6 @@ h1 {
 }
 
 /*            -----------------------------------------------> Páginas cenas: Common Container Styles */
-/* Surrounding box for Cenas dos Comentários section */
 .comments-section {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -826,35 +825,41 @@ h1 {
 .form-control {
     background-color: #f8f9fa;
     border: 1px solid #ddd;
+    width: 200px;
+    margin-right: 8px;
 }
 
-#comment-form .form-control,
-#comment-list .form-control {
-    width: 200px;
+.input-line, .comment-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-#guest-name {
-    width: 200px;
+#comment-list {
+    list-style-type: disc;
+    padding-left: 20px;
 }
 
 .guest-name {
     margin-right: 8px;
 }
 
+.button-group {
+    display: flex;
+    gap: 4px;
+}
+
 .btn {
     white-space: nowrap;
-}
-
-#comment-list li {
-    padding: 0.5rem 0;
-}
-
-/* Make sure buttons stay close together */
-.btn + .btn {
-    margin-left: 4px;
 }
 
 /* Ensure consistent height across all elements */
 .form-control, .btn {
     height: 38px;
+}
+
+/* Remove margin from last form-control in each line */
+.input-line .form-control:last-of-type,
+.comment-line .form-control:last-of-type {
+    margin-right: 0;
 }
