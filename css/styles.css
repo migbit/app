@@ -810,106 +810,51 @@ h1 {
 
 /*            -----------------------------------------------> Páginas cenas: Common Container Styles */
 /* Surrounding box for Cenas dos Comentários section */
-.comments-section.card {
+.comments-section {
     background-color: #fff;
     border: 1px solid #ddd;
-    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 1200px;
-    margin: 0 auto 40px auto;
 }
 
 .comments-section .card-header {
-    background-color: #f0f0f0;
-    color: #333;
-    font-size: 1.5em;
-    padding: 15px 20px;
-    margin: -20px -20px 20px -20px;
+    background-color: #f8f9fa;
     border-bottom: 1px solid #ddd;
-    border-radius: 8px 8px 0 0;
+    padding: 1rem;
 }
 
-/* Form Styling */
-#comment-form .form-row {
-    margin: 0 -5px;
+.form-control {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
 }
 
-#comment-form .input-group {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: nowrap;
+#comment-form .form-control,
+#comment-list .form-control {
+    width: 200px;
 }
 
-#comment-form input,
-#comment-form select {
-    flex: 1;
-    min-width: 150px;
-    max-width: 200px;
+#guest-name {
+    width: 200px;
 }
 
-#comment-form button {
+.guest-name {
+    margin-right: 8px;
+}
+
+.btn {
     white-space: nowrap;
 }
 
-/* Comment List Styling */
-.comment-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    margin-bottom: 10px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
+#comment-list li {
+    padding: 0.5rem 0;
 }
 
-.comment-content {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex: 1;
+/* Make sure buttons stay close together */
+.btn + .btn {
+    margin-left: 4px;
 }
 
-.comment-content span {
-    min-width: 150px;
-    max-width: 200px;
-}
-
-.comment-content select {
-    flex: 1;
-    min-width: 150px;
-    max-width: 200px;
-}
-
-.comment-actions {
-    display: flex;
-    gap: 10px;
-    margin-left: 15px;
-}
-
-.btn-update,
-.btn-delete {
-    padding: 6px 12px;
-    font-size: 0.9em;
-    min-width: 90px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-    #comment-form .input-group,
-    .comment-item {
-        flex-wrap: wrap;
-    }
-    
-    .comment-content {
-        margin-bottom: 10px;
-    }
-    
-    #comment-form input,
-    #comment-form select,
-    .comment-content select {
-        min-width: 120px;
-    }
+/* Ensure consistent height across all elements */
+.form-control, .btn {
+    height: 38px;
 }
