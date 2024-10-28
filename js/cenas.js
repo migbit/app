@@ -356,10 +356,14 @@ async function loadComments() {
 }
 
 // Function to update the ratingOption in Firestore
-async function updateComment(commentId, field, newValue) {
+async function updateComment(commentId, updatedFields) {
     try {
         const commentRef = doc(db, "comments", commentId);
-        await updateDoc(commentRef, { [field]: newValue });
+        await updateDoc(commentRef, {
+            ratingOption: updatedFields.ratingOption,
+            faturaOption: updatedFields.faturaOption,
+            sibaOption: updatedFields.sibaOption
+        });
         console.log('Comment updated successfully');
     } catch (error) {
         console.error("Error updating comment:", error);
