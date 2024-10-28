@@ -831,41 +831,29 @@ h1 {
 }
 
 /* Additional styling for form alignment */
-#comment-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: center;
-    margin-bottom: 20px;
+#comment-form .form-group {
+    flex: 1 1 auto; /* Allows flexible width while keeping alignment */
+    min-width: 150px; /* Set a minimum width for each dropdown */
 }
 
-#comment-form .form-group {
-    flex: 1 1 100px;
-}
 
 #guest-name,
 #rating-option,
 #fatura-option,
 #siba-option {
-    width: 100%;
+    width: auto; /* Remove the 100% width to make them more compact */
     padding: 8px;
-    font-size: 1em;
+    font-size: 0.9em;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-.btn-success {
-    align-self: flex-start;
-    padding: 10px 20px;
-    background-color: #28a745;
-    border: none;
-    color: #fff;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+#comment-list select {
+    min-width: 150px;
+    margin-right: 8px;
 }
 
-.btn-success:hover {
-    background-color: #218838;
+.btn-success, .btn-danger {
+    padding: 5px 10px; /* Adjust padding to fit within line */
+    font-size: 0.9em;
 }
