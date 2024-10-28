@@ -833,19 +833,20 @@ h1 {
 /* Additional styling for form alignment */
 #comment-form {
     display: flex;
-    flex-wrap: nowrap; /* Prevents wrapping */
-    gap: 10px;
+    align-items: center;
+    gap: 10px; /* Controls spacing */
+    flex-wrap: nowrap;
 }
 
 #comment-form .form-group {
     flex: 1;
 }
 
-#comment-form .form-group select,
-#comment-form .form-group input {
+#comment-form .form-group input,
+#comment-form .form-group select {
     width: 100%;
 }
 
 .btn-success {
-    flex-shrink: 0; /* Keeps the button size fixed */
+    flex-shrink: 0; /* Fixed size for button */
 }
