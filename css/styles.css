@@ -849,7 +849,6 @@ h1 {
     flex-direction: column;
     flex: 1 1 180px; /* Grow and shrink, basis 180px */
     min-width: 150px;
-    margin-right: 5px; /* Adds small space to the right of each form group */
 }
 }
 
