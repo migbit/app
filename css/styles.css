@@ -809,7 +809,28 @@ h1 {
 }
 
 /*            -----------------------------------------------> Páginas cenas: Common Container Styles */
-/* Form Styles for Cenas dos Comentários Section */
+/* Surrounding box for Cenas dos Comentários section */
+.comments-section.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+}
+
+.comments-section .card-header {
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 1.5em;
+    padding: 15px 20px;
+    margin: -20px -20px 20px -20px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Additional styling for form alignment */
 #comment-form {
     display: flex;
     flex-wrap: wrap;
@@ -833,12 +854,6 @@ h1 {
     border-radius: 4px;
 }
 
-#comment-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
 .btn-success {
     align-self: flex-start;
     padding: 10px 20px;
@@ -853,29 +868,4 @@ h1 {
 
 .btn-success:hover {
     background-color: #218838;
-}
-
-/* Adjust list items for consistent alignment */
-#comment-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.delete-btn {
-    margin-left: 10px;
-    background-color: #dc3545;
-    border: none;
-    color: #fff;
-    padding: 5px 10px;
-    font-size: 0.9em;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
 }
