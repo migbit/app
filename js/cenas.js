@@ -259,13 +259,11 @@ async function deleteTask(taskId) {
 }
 
 // Cenas dos Comentários Functions
-async function addComment(guestName, ratingOption, fatura, siba) {
+async function addComment(guestName, ratingOption) {
     try {
         const commentData = {
             guestName: guestName,
             ratingOption: ratingOption,
-            fatura: fatura,
-            siba: siba,
             timestamp: new Date()
         };
         const docRef = await addDoc(collection(db, "comments"), commentData);
@@ -362,20 +360,16 @@ document.getElementById('comment-form')?.addEventListener('submit', async (e) =>
     
     const guestName = document.getElementById('guest-name').value.trim();
     const ratingOption = document.getElementById('rating-option').value;
-    const fatura = document.getElementById('fatura-option').value;
-    const siba = document.getElementById('siba-option').value;
 
-    if (!guestName || !ratingOption || !fatura || !siba) {
+    if (!guestName || !ratingOption) {
         alert('Por favor, preencha todos os campos.');
         return;
     }
 
     try {
-        await addComment(guestName, ratingOption, fatura, siba);
+        await addComment(guestName, ratingOption);
         document.getElementById('guest-name').value = '';
-        document.getElementById('rating-option').value = 'Comentários';
-        document.getElementById('fatura-option').value = 'Fatura Emitida';
-        document.getElementById('siba-option').value = 'SIBA enviado';
+        document.getElementById('rating-option').value = '';
         await loadComments();
     } catch (error) {
         alert('Erro ao adicionar comentário');
