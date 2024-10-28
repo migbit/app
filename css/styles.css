@@ -819,48 +819,45 @@ h1 {
 }
 
 #comment-form .form-group,
-.comment-item {
+#comment-list .comment-item {
     flex: 1;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Input and Select Styles */
-#comment-form input, #comment-form select, 
-.comment-item select {
+#comment-form select, 
+#comment-list select,
+#comment-form input, 
+#comment-list input {
     width: 100%;
     max-width: 180px;
 }
 
-/* Comment List Item */
-.comment-item {
+#comment-list .list-group-item {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px;
-    flex-wrap: wrap;
 }
 
-/* Action Buttons */
 .update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
+    width: auto;
+    margin-right: 5px;
 }
 
 .update-btn {
     background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
 }
 
 .delete-btn {
     background-color: #dc3545;
-}
-
-/* Action Container */
-.comment-actions {
-    display: flex;
-    gap: 10px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
 }
