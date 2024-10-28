@@ -264,8 +264,8 @@ async function addComment(guestName, ratingOption, faturaOption, sibaOption) {
         const commentData = {
             guestName: guestName,
             ratingOption: ratingOption,
-            faturaOption: faturaOption,
-            sibaOption: sibaOption,
+            faturaOption: faturaOption,  // Added faturaOption
+            sibaOption: sibaOption,      // Added sibaOption
             timestamp: new Date()
         };
         const docRef = await addDoc(collection(db, "comments"), commentData);
@@ -373,7 +373,7 @@ document.getElementById('comment-form')?.addEventListener('submit', async (e) =>
     }
 
     try {
-        await addComment(guestName, ratingOption, faturaOption, sibaOption);
+        await addComment(guestName, ratingOption, faturaOption, sibaOption);  // Pass all fields
         document.getElementById('guest-name').value = '';
         document.getElementById('rating-option').value = '';
         document.getElementById('fatura-option').value = '';
