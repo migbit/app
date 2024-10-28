@@ -259,11 +259,13 @@ async function deleteTask(taskId) {
 }
 
 // Cenas dos Comentários Functions
-async function addComment(guestName, ratingOption) {
+async function addComment(guestName, ratingOption, faturaOption, sibaOption) {
     try {
         const commentData = {
-            guestName: guestName,
-            ratingOption: ratingOption,
+            guestName,
+            ratingOption,
+            faturaOption,
+            sibaOption,
             timestamp: new Date()
         };
         const docRef = await addDoc(collection(db, "comments"), commentData);
@@ -280,49 +282,61 @@ async function loadComments() {
     if (!commentList) return;
 
     commentList.innerHTML = '<li>Carregando comentários...</li>';
-    
+
     try {
         const q = query(collection(db, "comments"), orderBy("timestamp", "asc"));
         const querySnapshot = await getDocs(q);
-        
+
         commentList.innerHTML = '';
-        
+
         querySnapshot.forEach((doc) => {
             const comment = doc.data();
             const li = document.createElement('li');
-            
             const guestNameSpan = document.createElement('span');
             guestNameSpan.textContent = comment.guestName + " ";
-            
-            // Create dropdown for editing the selection
-            const dropdown = document.createElement('select');
-            dropdown.innerHTML = `
+
+            // Dropdown for ratingOption
+            const ratingDropdown = document.createElement('select');
+            ratingDropdown.innerHTML = `
                 <option value="Vai Dar 5 Estrelas" ${comment.ratingOption === 'Vai Dar 5 Estrelas' ? 'selected' : ''}>Vai Dar 5 Estrelas</option>
                 <option value="Não sei o que vai dar" ${comment.ratingOption === 'Não sei o que vai dar' ? 'selected' : ''}>Não sei o que vai dar</option>
                 <option value="Não escrever comentário!!!" ${comment.ratingOption === 'Não escrever comentário!!!' ? 'selected' : ''}>Não escrever comentário!!!</option>
             `;
-            
-            // Handle dropdown change
-            dropdown.addEventListener('change', async function() {
-                try {
-                    await updateComment(doc.id, dropdown.value);
-                    console.log('Comment updated:', dropdown.value);
-                } catch (error) {
-                    console.error('Error updating comment:', error);
-                }
+            ratingDropdown.addEventListener('change', async function() {
+                await updateComment(doc.id, 'ratingOption', ratingDropdown.value);
             });
-            
-            // Append guest name and dropdown to the list item
+
+            // Dropdown for faturaOption
+            const faturaDropdown = document.createElement('select');
+            faturaDropdown.innerHTML = `
+                <option value="Fatura Emitida" ${comment.faturaOption === 'Fatura Emitida' ? 'selected' : ''}>Fatura Emitida</option>
+                <option value="Fatura Não Emitida" ${comment.faturaOption === 'Fatura Não Emitida' ? 'selected' : ''}>Fatura Não Emitida</option>
+            `;
+            faturaDropdown.addEventListener('change', async function() {
+                await updateComment(doc.id, 'faturaOption', faturaDropdown.value);
+            });
+
+            // Dropdown for sibaOption
+            const sibaDropdown = document.createElement('select');
+            sibaDropdown.innerHTML = `
+                <option value="SIBA Enviado" ${comment.sibaOption === 'SIBA Enviado' ? 'selected' : ''}>SIBA Enviado</option>
+                <option value="SIBA Não Enviado" ${comment.sibaOption === 'SIBA Não Enviado' ? 'selected' : ''}>SIBA Não Enviado</option>
+            `;
+            sibaDropdown.addEventListener('change', async function() {
+                await updateComment(doc.id, 'sibaOption', sibaDropdown.value);
+            });
+
             li.appendChild(guestNameSpan);
-            li.appendChild(dropdown);
-            
-            // Add delete button
+            li.appendChild(ratingDropdown);
+            li.appendChild(faturaDropdown);
+            li.appendChild(sibaDropdown);
+
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'Apagar';
             deleteBtn.classList.add('delete-btn');
             deleteBtn.onclick = () => deleteComment(doc.id);
             li.appendChild(deleteBtn);
-            
+
             commentList.appendChild(li);
         });
     } catch (error) {
@@ -332,12 +346,10 @@ async function loadComments() {
 }
 
 // Function to update the ratingOption in Firestore
-async function updateComment(commentId, newRatingOption) {
+async function updateComment(commentId, field, newValue) {
     try {
         const commentRef = doc(db, "comments", commentId);
-        await updateDoc(commentRef, {
-            ratingOption: newRatingOption
-        });
+        await updateDoc(commentRef, { [field]: newValue });
         console.log('Comment updated successfully');
     } catch (error) {
         console.error("Error updating comment:", error);
@@ -360,16 +372,20 @@ document.getElementById('comment-form')?.addEventListener('submit', async (e) =>
     
     const guestName = document.getElementById('guest-name').value.trim();
     const ratingOption = document.getElementById('rating-option').value;
+    const faturaOption = document.getElementById('fatura-option').value;
+    const sibaOption = document.getElementById('siba-option').value;
 
-    if (!guestName || !ratingOption) {
+    if (!guestName || !ratingOption || !faturaOption || !sibaOption) {
         alert('Por favor, preencha todos os campos.');
         return;
     }
 
     try {
-        await addComment(guestName, ratingOption);
+        await addComment(guestName, ratingOption, faturaOption, sibaOption);
         document.getElementById('guest-name').value = '';
         document.getElementById('rating-option').value = '';
+        document.getElementById('fatura-option').value = '';
+        document.getElementById('siba-option').value = '';
         await loadComments();
     } catch (error) {
         alert('Erro ao adicionar comentário');
