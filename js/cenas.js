@@ -292,11 +292,11 @@ async function loadComments() {
         querySnapshot.forEach((doc) => {
             const comment = doc.data();
             const li = document.createElement('li');
-            
+
             const guestNameSpan = document.createElement('span');
             guestNameSpan.textContent = comment.guestName + " ";
-
-            // Dropdowns for displaying saved options
+            
+            // Create dropdowns
             const ratingDropdown = document.createElement('select');
             ratingDropdown.innerHTML = `
                 <option value="Vai Dar 5 Estrelas" ${comment.ratingOption === 'Vai Dar 5 Estrelas' ? 'selected' : ''}>Vai Dar 5 Estrelas</option>
@@ -309,26 +309,44 @@ async function loadComments() {
                 <option value="Fatura Emitida" ${comment.faturaOption === 'Fatura Emitida' ? 'selected' : ''}>Fatura Emitida</option>
                 <option value="Fatura Não Emitida" ${comment.faturaOption === 'Fatura Não Emitida' ? 'selected' : ''}>Fatura Não Emitida</option>
             `;
-
+            
             const sibaDropdown = document.createElement('select');
             sibaDropdown.innerHTML = `
                 <option value="SIBA Enviado" ${comment.sibaOption === 'SIBA Enviado' ? 'selected' : ''}>SIBA Enviado</option>
                 <option value="SIBA Não Enviado" ${comment.sibaOption === 'SIBA Não Enviado' ? 'selected' : ''}>SIBA Não Enviado</option>
             `;
             
-            // Append elements
-            li.appendChild(guestNameSpan);
-            li.appendChild(ratingDropdown);
-            li.appendChild(faturaDropdown);
-            li.appendChild(sibaDropdown);
+            // Update button
+            const updateBtn = document.createElement('button');
+            updateBtn.textContent = 'Atualizar';
+            updateBtn.classList.add('update-btn');
+            updateBtn.onclick = async () => {
+                try {
+                    await updateComment(doc.id, {
+                        ratingOption: ratingDropdown.value,
+                        faturaOption: faturaDropdown.value,
+                        sibaOption: sibaDropdown.value
+                    });
+                    console.log('Comment updated successfully');
+                } catch (error) {
+                    console.error('Error updating comment:', error);
+                }
+            };
 
             // Delete button
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'Apagar';
             deleteBtn.classList.add('delete-btn');
             deleteBtn.onclick = () => deleteComment(doc.id);
+
+            // Append elements
+            li.appendChild(guestNameSpan);
+            li.appendChild(ratingDropdown);
+            li.appendChild(faturaDropdown);
+            li.appendChild(sibaDropdown);
+            li.appendChild(updateBtn);
             li.appendChild(deleteBtn);
-            
+
             commentList.appendChild(li);
         });
     } catch (error) {
