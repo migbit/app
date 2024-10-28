@@ -881,3 +881,15 @@ h1 {
     border: none;
     border-radius: 4px;
 }
+
+.comment-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap; /* Ensure wrapping if width is insufficient */
+}
+
+.comment-actions {
+    display: flex;
+    gap: 10px; /* Space between Atualizar and Apagar */
+}
