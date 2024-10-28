@@ -809,6 +809,7 @@ h1 {
 }
 
 /*            -----------------------------------------------> Páginas cenas: Common Container Styles */
+/* Common Container Styles */
 .calendar-container,
 .todo-section.card,
 .comments-section.card {
@@ -838,17 +839,27 @@ h1 {
 #todo-form,
 #comment-form {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-#todo-input,
-#comment-input {
+#guest-name,
+#rating-option,
+#fatura-option,
+#siba-option {
     flex: 1;
-    padding: 10px;
+    min-width: 150px;
+    padding: 8px;
     font-size: 1em;
     border: 1px solid #ddd;
     border-radius: 4px;
+}
+
+/* Dropdown Label Styling */
+#comment-form label {
+    font-size: 1em;
+    margin-right: 5px;
 }
 
 /* Button Styles */
@@ -871,14 +882,23 @@ h1 {
 /* List Styles */
 #todo-list li, #comment-list li {
     display: flex;
-    justify-content: space-between;  /* Aligns text to the left and button to the right */
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
 }
 
+#comment-list select {
+    min-width: 150px;
+    padding: 5px;
+    font-size: 0.9em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
 .delete-btn {
-    margin-left: 10px; /* Adds a little space between the text and the button */
     background-color: #dc3545;
     border: none;
     color: #fff;
@@ -887,7 +907,6 @@ h1 {
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-    align-self: flex-end;  /* Align button to the end of the container */
 }
 
 .delete-btn:hover {
@@ -936,11 +955,10 @@ h1 {
         margin-top: 5px;
     }
 
-    #todo-input,
-    #comment-input {
-        margin-bottom: 10px;
-    }
-
+    #guest-name,
+    #rating-option,
+    #fatura-option,
+    #siba-option,
     .btn-success {
         width: 100%;
     }
