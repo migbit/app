@@ -81,36 +81,52 @@
     <h2 class="card-header">Cenas dos Comentários</h2>
     <div class="card-body">
         <form id="comment-form">
-            <div class="form-row d-flex align-items-center gap-2">
-                <input type="text" id="guest-name" class="form-control" placeholder="Nome do hóspede" required>
-                <select id="rating-option" class="form-control" required>
-                    <option value="">Comentário</option>
-                    <option value="Vai Dar 5 Estrelas">Vai Dar 5 Estrelas</option>
-                    <option value="Não Sei">Não sei o que vai dar</option>
-                    <option value="Não Escrever!!!">Não escrever comentário!!!</option>
-                </select>
-                <select id="fatura-option" class="form-control" required>
-                    <option value="">Fatura</option>
-                    <option value="Fatura Emitida">Fatura Emitida</option>
-                    <option value="Fatura Não Emitida">Fatura Não Emitida</option>
-                </select>
-                <select id="siba-option" class="form-control" required>
-                    <option value="">SIBA</option>
-                    <option value="SIBA Enviado">SIBA Enviado</option>
-                    <option value="SIBA Não Enviado">SIBA Não Enviado</option>
-                </select>
-                <button type="submit" class="btn btn-success">Adicionar</button>
+            <div class="form-row">
+                <div class="input-line mb-2">
+                    <input type="text" id="guest-name" class="form-control" placeholder="Nome do hóspede" required>
+                    <select id="rating-option" class="form-control" required>
+                        <option value="">Comentário</option>
+                        <option value="Vai Dar 5 Estrelas">Vai Dar 5 Estrelas</option>
+                        <option value="Não Sei">Não sei o que vai dar</option>
+                        <option value="Não Escrever!!!">Não escrever comentário!!!</option>
+                    </select>
+                    <select id="fatura-option" class="form-control" required>
+                        <option value="">Fatura</option>
+                        <option value="Fatura Emitida">Fatura Emitida</option>
+                        <option value="Fatura Não Emitida">Fatura Não Emitida</option>
+                    </select>
+                </div>
+                <div class="input-line">
+                    <select id="siba-option" class="form-control" required>
+                        <option value="">SIBA</option>
+                        <option value="SIBA Enviado">SIBA Enviado</option>
+                        <option value="SIBA Não Enviado">SIBA Não Enviado</option>
+                    </select>
+                    <button type="submit" class="btn btn-success">Adicionar</button>
+                </div>
             </div>
         </form>
         
-        <ul id="comment-list" class="list-unstyled mt-3">
-            <li class="d-flex align-items-center gap-2 mb-2">
-                <span class="guest-name">teste2</span>
-                <select class="form-control"><!-- options --></select>
-                <select class="form-control"><!-- options --></select>
-                <select class="form-control"><!-- options --></select>
-                <button class="btn btn-success">Atualizar</button>
-                <button class="btn btn-danger">Apagar</button>
+        <ul id="comment-list" class="mt-3">
+            <li>
+                <div class="comment-line mb-2">
+                    <span class="guest-name">teste2</span>
+                    <select class="form-control">
+                        <option>Vai Dar 5 Estrelas</option>
+                    </select>
+                    <select class="form-control">
+                        <option>Fatura Emitida</option>
+                    </select>
+                </div>
+                <div class="comment-line">
+                    <select class="form-control">
+                        <option>SIBA Não Enviado</option>
+                    </select>
+                    <div class="button-group">
+                        <button class="btn btn-success">Atualizar</button>
+                        <button class="btn btn-danger">Apagar</button>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
