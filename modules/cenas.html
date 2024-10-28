@@ -75,7 +75,7 @@
                 </ul>
             </div>
         </section>
-
+:::
         <!-- Cenas dos Comentários Section -->
 <section class="comments-section card mt-4">
     <h2 class="card-header">Cenas dos Comentários</h2>
@@ -89,13 +89,25 @@
             <!-- Dropdown for star rating options -->
             <div class="form-group mb-3">
                 <label for="rating-option">Selecione uma opção:</label>
-                <select id="rating-option" class="form-control ml-2" required>
-                    <option value="">Selecione uma opção</option>
+                <select id="rating-option">
+                    <option value="Comentários">Comentários</option>
                     <option value="Vai Dar 5 Estrelas">Vai Dar 5 Estrelas</option>
                     <option value="Não sei o que vai dar">Não sei o que vai dar</option>
                     <option value="Não escrever comentário!!!">Não escrever comentário!!!</option>
                 </select>
-            </div>
+                </div>
+              
+                <select id="fatura-option">
+                    <option value="Fatura Emitida">Fatura Emitida</option>
+                </select>
+                </div>
+                
+                <select id="siba-option">
+                    <option value="SIBA enviado">SIBA enviado</option>
+                </select>
+                </div>
+                
+
             <!-- Submit button -->
             <button type="submit" class="btn btn-success">Adicionar</button>
         </form>
