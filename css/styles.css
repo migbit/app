@@ -816,7 +816,7 @@ h1 {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto 40px auto;
 }
 
@@ -830,58 +830,86 @@ h1 {
     border-radius: 8px 8px 0 0;
 }
 
-/* Additional styling for form alignment */
-/* Form and List Alignment */
-#comment-form, #comment-list {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
+/* Form Styling */
+#comment-form .form-row {
+    margin: 0 -5px;
 }
 
-#comment-form .form-group,
-.comment-item {
+#comment-form .input-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+#comment-form input,
+#comment-form select {
     flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    min-width: 150px;
+    max-width: 200px;
 }
 
-/* Input and Select Styles */
-#comment-form input, #comment-form select, 
-.comment-item select {
-    width: 100%;
-    max-width: 180px;
+#comment-form button {
+    white-space: nowrap;
 }
 
-/* Comment List Item */
+/* Comment List Styling */
 .comment-item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
-    flex-wrap: wrap;
-}
-
-/* Action Buttons */
-.update-btn, .delete-btn {
-    padding: 6px 12px;
-    font-size: 0.9em;
-    border: none;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
     border-radius: 4px;
-    color: #fff;
 }
 
-.update-btn {
-    background-color: #28a745;
+.comment-content {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex: 1;
 }
 
-.delete-btn {
-    background-color: #dc3545;
+.comment-content span {
+    min-width: 150px;
+    max-width: 200px;
 }
 
-/* Action Container */
+.comment-content select {
+    flex: 1;
+    min-width: 150px;
+    max-width: 200px;
+}
+
 .comment-actions {
     display: flex;
     gap: 10px;
+    margin-left: 15px;
+}
+
+.btn-update,
+.btn-delete {
+    padding: 6px 12px;
+    font-size: 0.9em;
+    min-width: 90px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    #comment-form .input-group,
+    .comment-item {
+        flex-wrap: wrap;
+    }
+    
+    .comment-content {
+        margin-bottom: 10px;
+    }
+    
+    #comment-form input,
+    #comment-form select,
+    .comment-content select {
+        min-width: 120px;
+    }
 }
