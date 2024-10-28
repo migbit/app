@@ -834,35 +834,36 @@ h1 {
 #comment-form {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; 
+    gap: 10px; /* Adjusts the spacing between elements */
     align-items: center;
     margin-bottom: 20px;
 }
 
-#guest-name, 
-#rating-option, 
-#fatura-option, 
-#siba-option {
-    flex: 1 1 150px;
-    padding: 8px;
-    font-size: 1em;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+#guest-name {
+    width: 150px; /* Fixed width for the guest name input */
 }
+
+#rating-option,
+#fatura-option,
+#siba-option {
+    width: auto; /* Width adjusts to content */
+}
+
 
 .form-group {
-    display: flex;
+    display: inline-flex; /* Changed to inline-flex to keep elements in line */
     align-items: center;
+    margin-right: 10px; /* Adds spacing between form groups */
 }
 
-/* Align Adicionar button with dropdowns */
-#comment-form .form-group:last-child {
-    flex: 1 1 150px; 
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+button[type="submit"] {
+    white-space: nowrap; /* Prevents the button text from wrapping */
 }
 
-#comment-form .form-group:last-child button {
-    margin-left: 10px; 
+/* For dynamically added form rows (Teste2 and similar) */
+.comment-item .form-group {
+  width: auto;  /* Ensures dropdowns size to their content */
+  margin-right: 10px;
 }
+.comment-item select { width: auto; } /* Ensures dropdowns size to content */
+.comment-item button { white-space: nowrap; } /* Prevent button text wrapping */
