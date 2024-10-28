@@ -259,11 +259,13 @@ async function deleteTask(taskId) {
 }
 
 // Cenas dos Comentários Functions
-async function addComment(guestName, ratingOption) {
+async function addComment(guestName, ratingOption, fatura, siba) {
     try {
         const commentData = {
             guestName: guestName,
             ratingOption: ratingOption,
+            fatura: fatura,
+            siba: siba,
             timestamp: new Date()
         };
         const docRef = await addDoc(collection(db, "comments"), commentData);
