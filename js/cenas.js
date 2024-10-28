@@ -29,7 +29,7 @@ const CONFIG = {
 // State
 const state = {
     reservedDates: new Set(),
-    selectedDates: new Set(),
+    selectedDates: new Set(), // Track selected dates
     today: new Date(),
     currentMonth: new Date().getMonth(),
     currentYear: new Date().getFullYear()
@@ -296,42 +296,27 @@ async function loadComments() {
             const guestNameSpan = document.createElement('span');
             guestNameSpan.textContent = comment.guestName + " ";
             
-            // Dropdown for rating option
-            const ratingDropdown = document.createElement('select');
-            ratingDropdown.innerHTML = `
+            // Create dropdown for editing the selection
+            const dropdown = document.createElement('select');
+            dropdown.innerHTML = `
                 <option value="Vai Dar 5 Estrelas" ${comment.ratingOption === 'Vai Dar 5 Estrelas' ? 'selected' : ''}>Vai Dar 5 Estrelas</option>
                 <option value="Não sei o que vai dar" ${comment.ratingOption === 'Não sei o que vai dar' ? 'selected' : ''}>Não sei o que vai dar</option>
                 <option value="Não escrever comentário!!!" ${comment.ratingOption === 'Não escrever comentário!!!' ? 'selected' : ''}>Não escrever comentário!!!</option>
             `;
-            ratingDropdown.addEventListener('change', async function() {
-                await updateComment(doc.id, 'ratingOption', ratingDropdown.value);
+            
+            // Handle dropdown change
+            dropdown.addEventListener('change', async function() {
+                try {
+                    await updateComment(doc.id, dropdown.value);
+                    console.log('Comment updated:', dropdown.value);
+                } catch (error) {
+                    console.error('Error updating comment:', error);
+                }
             });
-
-            // Dropdown for Fatura
-            const faturaDropdown = document.createElement('select');
-            faturaDropdown.innerHTML = `
-                <option value="Fatura Emitida" ${comment.fatura === 'Fatura Emitida' ? 'selected' : ''}>Fatura Emitida</option>
-                <option value="Fatura Não Emitida" ${comment.fatura === 'Fatura Não Emitida' ? 'selected' : ''}>Fatura Não Emitida</option>
-            `;
-            faturaDropdown.addEventListener('change', async function() {
-                await updateComment(doc.id, 'fatura', faturaDropdown.value);
-            });
-
-            // Dropdown for SIBA
-            const sibaDropdown = document.createElement('select');
-            sibaDropdown.innerHTML = `
-                <option value="SIBA Enviado" ${comment.siba === 'SIBA Enviado' ? 'selected' : ''}>SIBA Enviado</option>
-                <option value="SIBA Não Enviado" ${comment.siba === 'SIBA Não Enviado' ? 'selected' : ''}>SIBA Não Enviado</option>
-            `;
-            sibaDropdown.addEventListener('change', async function() {
-                await updateComment(doc.id, 'siba', sibaDropdown.value);
-            });
-
-            // Append elements to the list item
+            
+            // Append guest name and dropdown to the list item
             li.appendChild(guestNameSpan);
-            li.appendChild(ratingDropdown);
-            li.appendChild(faturaDropdown);
-            li.appendChild(sibaDropdown);
+            li.appendChild(dropdown);
             
             // Add delete button
             const deleteBtn = document.createElement('button');
@@ -349,11 +334,13 @@ async function loadComments() {
 }
 
 // Function to update the ratingOption in Firestore
-async function updateComment(commentId, field, newValue) {
+async function updateComment(commentId, newRatingOption) {
     try {
         const commentRef = doc(db, "comments", commentId);
-        await updateDoc(commentRef, { [field]: newValue });
-        console.log(`Comment ${field} updated successfully`);
+        await updateDoc(commentRef, {
+            ratingOption: newRatingOption
+        });
+        console.log('Comment updated successfully');
     } catch (error) {
         console.error("Error updating comment:", error);
     }
@@ -385,18 +372,15 @@ document.getElementById('comment-form')?.addEventListener('submit', async (e) =>
 
     try {
         await addComment(guestName, ratingOption, fatura, siba);
-        
-        // Reset the form to default 'Opção' values
         document.getElementById('guest-name').value = '';
-        document.getElementById('rating-option').value = '';
-        document.getElementById('fatura-option').value = '';
-        document.getElementById('siba-option').value = '';
-
+        document.getElementById('rating-option').value = 'Comentários';
+        document.getElementById('fatura-option').value = 'Fatura Emitida';
+        document.getElementById('siba-option').value = 'SIBA enviado';
         await loadComments();
     } catch (error) {
         alert('Erro ao adicionar comentário');
     }
-}
+});
 
 // Event Listeners (extended to support comments)
 function setupEventListeners() {
