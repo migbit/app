@@ -394,7 +394,7 @@ document.getElementById('comment-form')?.addEventListener('submit', async (e) =>
     } catch (error) {
         alert('Erro ao adicionar comentário');
     }
-}
+});
 
 // Initialization
 async function init() {
