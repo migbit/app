@@ -809,47 +809,24 @@ h1 {
 }
 
 /*            -----------------------------------------------> Páginas cenas: Common Container Styles */
-/* Common Container Styles */
-.calendar-container,
-.todo-section.card,
-.comments-section.card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 800px;
-    margin: 0 auto 40px auto;
-}
-
-/* Header Styles */
-.calendar-header,
-.todo-section .card-header,
-.comments-section .card-header {
-    background-color: #f0f0f0;
-    color: #333;
-    font-size: 1.5em;
-    padding: 15px 20px;
-    margin: -20px -20px 20px -20px;
-    border-bottom: 1px solid #ddd;
-    border-radius: 8px 8px 0 0;
-}
-
-/* Form Styles */
+/* Form Styles for Cenas dos Comentários Section */
 #comment-form {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 15px;
     align-items: center;
+    margin-bottom: 20px;
+}
+
+#comment-form .form-group {
+    flex: 1 1 100px;
 }
 
 #guest-name,
 #rating-option,
 #fatura-option,
 #siba-option {
-    flex: 1;
-    min-width: 150px;
+    width: 100%;
     padding: 8px;
     font-size: 1em;
     border: 1px solid #ddd;
@@ -857,11 +834,13 @@ h1 {
 }
 
 #comment-form label {
-    font-size: 1em;
-    margin-right: 5px;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
 .btn-success {
+    align-self: flex-start;
     padding: 10px 20px;
     background-color: #28a745;
     border: none;
@@ -870,34 +849,23 @@ h1 {
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-    min-width: 100px;
-    align-self: flex-start;
 }
 
 .btn-success:hover {
     background-color: #218838;
 }
 
-/* List Styles */
-#todo-list li, #comment-list li {
+/* Adjust list items for consistent alignment */
+#comment-list li {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
 }
 
-#comment-list select {
-    min-width: 150px;
-    padding: 5px;
-    font-size: 0.9em;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
 .delete-btn {
+    margin-left: 10px;
     background-color: #dc3545;
     border: none;
     color: #fff;
@@ -910,43 +878,4 @@ h1 {
 
 .delete-btn:hover {
     background-color: #c82333;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    .calendar-container,
-    .todo-section.card,
-    .comments-section.card {
-        padding: 15px;
-    }
-
-    .calendar-header,
-    .todo-section .card-header,
-    .comments-section .card-header {
-        font-size: 1.2em;
-        padding: 12px 15px;
-        margin: -15px -15px 15px -15px;
-    }
-
-    #comment-form {
-        flex-direction: column;
-    }
-
-    #todo-list li, #comment-list li {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .delete-btn {
-        align-self: flex-start;
-        margin-top: 5px;
-    }
-
-    #guest-name,
-    #rating-option,
-    #fatura-option,
-    #siba-option,
-    .btn-success {
-        width: 100%;
-    }
 }
