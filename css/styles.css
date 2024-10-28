@@ -809,7 +809,7 @@ h1 {
 }
 
 /*            -----------------------------------------------> Páginas cenas: Common Container Styles */
-/* Main container styling */
+/* Surrounding box for Cenas dos Comentários section */
 .comments-section.card {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -820,7 +820,6 @@ h1 {
     margin: 0 auto 40px auto;
 }
 
-/* Header styling */
 .comments-section .card-header {
     background-color: #f0f0f0;
     color: #333;
@@ -831,135 +830,27 @@ h1 {
     border-radius: 8px 8px 0 0;
 }
 
-/* Form container styling */
+/* Additional styling for form alignment */
 #comment-form {
     display: flex;
     flex-wrap: wrap;
+    gap: 10px; /* Adjusts the spacing between elements */
     align-items: center;
-    gap: 15px;
     margin-bottom: 20px;
-    padding: 10px 0;
 }
 
-/* Form groups styling */
+#guest-name,
+#rating-option,
+#fatura-option,
+#siba-option {
+    flex: 1 1 150px; /* Ensures consistent width for all fields */
+    padding: 8px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
 .form-group {
-    margin: 0;
-    flex: 0 0 auto;
     display: flex;
     align-items: center;
-}
-
-/* Input and select elements styling */
-.form-control {
-    min-width: 150px;
-    max-width: 200px;
-    height: 38px;
-    padding: 6px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    background-color: #fff;
-}
-
-/* Guest name input specific styling */
-#guest-name {
-    width: 150px;
-}
-
-/* Comment list container styling */
-#comment-list {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0 0 0;
-}
-
-/* Individual comment item styling */
-.comment-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    gap: 15px;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    margin-bottom: 8px;
-    border-radius: 4px;
-}
-
-/* Guest name span in comment items */
-.comment-item span {
-    min-width: 100px;
-    margin-right: 10px;
-}
-
-/* Select elements in comment items */
-.comment-item select {
-    min-width: 150px;
-    max-width: 200px;
-    height: 38px;
-}
-
-/* Button styling */
-.btn {
-    height: 38px;
-    padding: 6px 12px;
-    white-space: nowrap;
-    border-radius: 4px;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Success button specific styling */
-.btn-success {
-    background-color: #28a745;
-    border-color: #28a745;
-    color: white;
-}
-
-/* Info button specific styling */
-.btn-info {
-    background-color: #17a2b8;
-    border-color: #17a2b8;
-    color: white;
-}
-
-/* Danger button specific styling */
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: white;
-}
-
-/* Spacing between buttons */
-.btn + .btn {
-    margin-left: 8px;
-}
-
-/* Hover states for buttons */
-.btn:hover {
-    opacity: 0.9;
-}
-
-/* List group styling */
-.list-group-item {
-    border: 1px solid #dee2e6;
-    margin-bottom: 8px;
-    border-radius: 4px !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    #comment-form {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .form-control {
-        width: 100%;
-        max-width: none;
-    }
-    
-    .comment-item {
-        flex-wrap: wrap;
-    }
 }
