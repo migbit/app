@@ -76,62 +76,47 @@
             </div>
         </section>
 
-
         <section class="comments-section card mt-4">
             <h2 class="card-header">Cenas dos Comentários</h2>
             <div class="card-body">
-                <form id="comment-form" class="d-flex flex-wrap align-items-center gap-3">
-                    <!-- Nome do Hóspede input -->
-                    <div class="form-group mb-3">
-                        <input type="text" id="guest-name" class="form-control" placeholder="Nome do hóspede" required>
+                <form id="comment-form">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <input type="text" id="guest-name" class="form-control" placeholder="Nome do hóspede" required>
+                            
+                            <select id="rating-option" class="form-control" required>
+                                <option value="">Comentário</option>
+                                <option value="Vai Dar 5 Estrelas">Vai Dar 5 Estrelas</option>
+                                <option value="Não Sei">Não sei o que vai dar</option>
+                                <option value="Não Escrever!!!">Não escrever comentário!!!</option>
+                            </select>
+                            
+                            <select id="fatura-option" class="form-control" required>
+                                <option value="">Fatura</option>
+                                <option value="Fatura Emitida">Fatura Emitida</option>
+                                <option value="Fatura Não Emitida">Fatura Não Emitida</option>
+                            </select>
+                            
+                            <select id="siba-option" class="form-control" required>
+                                <option value="">SIBA</option>
+                                <option value="SIBA Enviado">SIBA Enviado</option>
+                                <option value="SIBA Não Enviado">SIBA Não Enviado</option>
+                            </select>
+                            
+                            <button type="submit" class="btn btn-success">Adicionar</button>
+                        </div>
                     </div>
-                    
-                    <!-- Dropdown for Comentário options -->
-                    <div class="form-group mb-3">
-                        <select id="rating-option" class="form-control" required>
-                            <option value="">Comentário</option>
-                            <option value="Vai Dar 5 Estrelas">Vai Dar 5 Estrelas</option>
-                            <option value="Não Sei">Não sei o que vai dar</option>
-                            <option value="Não Escrever!!!">Não escrever comentário!!!</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Dropdown for Fatura options -->
-                    <div class="form-group mb-3">
-                        <select id="fatura-option" class="form-control" required>
-                            <option value="">Fatura</option>
-                            <option value="Fatura Emitida">Fatura Emitida</option>
-                            <option value="Fatura Não Emitida">Fatura Não Emitida</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Dropdown for SIBA options -->
-                    <div class="form-group mb-3">
-                        <select id="siba-option" class="form-control" required>
-                            <option value="">SIBA</option>
-                            <option value="SIBA Enviado">SIBA Enviado</option>
-                            <option value="SIBA Não Enviado">SIBA Não Enviado</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Submit button -->
-                    <button type="submit" class="btn btn-success">Adicionar</button>
                 </form>
                 
-                <ul id="comment-list" class="list-group mt-3">
-                    <!-- Example comment item structure -->
-                    <li class="comment-item d-flex align-items-center gap-3">
-                        <span>Guest Name</span>
-                        <select class="form-control">
-                            <!-- Options populated dynamically -->
-                        </select>
-                        <select class="form-control">
-                            <!-- Options populated dynamically -->
-                        </select>
-                        <select class="form-control">
-                            <!-- Options populated dynamically -->
-                        </select>
-                        <div class="comment-actions d-flex gap-2">
+                <ul id="comment-list" class="list-group mt-4">
+                    <li class="comment-item">
+                        <div class="comment-content">
+                            <span class="guest-name"></span>
+                            <select class="form-control rating-select"></select>
+                            <select class="form-control fatura-select"></select>
+                            <select class="form-control siba-select"></select>
+                        </div>
+                        <div class="comment-actions">
                             <button class="btn btn-success btn-update">Atualizar</button>
                             <button class="btn btn-danger btn-delete">Apagar</button>
                         </div>
