@@ -834,34 +834,23 @@ h1 {
 #comment-form {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 10px; /* Adjusts the spacing between elements */
     align-items: center;
     margin-bottom: 20px;
-}
-
-#comment-form .form-group {
-    flex: 1 1 150px; /* Adjusted width for uniform size */
 }
 
 #guest-name,
 #rating-option,
 #fatura-option,
 #siba-option {
-    width: 100%; /* Ensures each field fills its container */
-    max-width: 200px; /* Sets a maximum width for consistency */
+    flex: 1 1 150px; /* Ensures consistent width for all fields */
     padding: 8px;
     font-size: 1em;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-.btn-success {
-    padding: 10px 20px;
-    background-color: #28a745;
-    border: none;
-    color: #fff;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+.form-group {
+    display: flex;
+    align-items: center;
 }
