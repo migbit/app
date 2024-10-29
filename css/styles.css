@@ -832,9 +832,10 @@ h1 {
 
 /* Additional styling for form alignment */
 /* Additional styling for form alignment */
+/* Remove horizontal spacing */
 #comment-form, #comment-list {
     display: flex;
-    gap: 15px; /* Increased horizontal spacing between form elements and comment items */
+    gap: 0px; /* No spacing between form elements and comment items */
     flex-wrap: wrap;
     align-items: center;
 }
@@ -844,71 +845,31 @@ h1 {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 15px; /* Increased horizontal spacing inside form groups and comment items */
+    gap: 0px; /* No spacing inside form groups and comment items */
 }
 
-/* Adjusted width for select and input elements */
+/* Adjusted width for select and input elements without spacing */
 #comment-form select, 
-#comment-list select {
-    width: auto; /* Let the width adjust to the content */
-    max-width: none; /* Remove the max-width constraint */
-    padding: 6px;
-    min-width: 120px; /* Slightly increased minimum width for better readability */
-    display: inline-block; /* Ensure proper inline-block behavior */
-}
-
+#comment-list select,
 #comment-form input, 
 #comment-list input {
-    width: 100%;
-    max-width: 200px; /* Increased max-width for inputs if desired */
+    width: auto;
+    max-width: none;
+    padding: 6px;
+    min-width: 100px;
 }
 
-#comment-list .list-group-item {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Increased horizontal spacing inside list group items */
-    padding: 10px;
-}
-
+/* Remove button margins */
 .update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
     width: auto;
+    margin: 0px;
 }
 
-.update-btn {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    margin-right: 15px; /* Increased horizontal spacing between update and delete buttons */
-}
-
-.delete-btn {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-}
-
-.comment-item {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Increased horizontal spacing inside comment items */
-    flex-wrap: wrap; /* Ensure wrapping if width is insufficient */
-}
-
+/* No gaps inside comment-actions */
 .comment-actions {
     display: flex;
-    gap: 15px; /* Increased horizontal spacing between 'Atualizar' and 'Apagar' buttons */
+    gap: 0px;
     align-items: center;
-}
-
-/* Additional specific styling for form-group and comment-item selects */
-.form-group select,
-.comment-item select {
-    width: auto; /* Adjust width based on content */
-    padding: 6px; /* Add padding for better appearance */
-    min-width: 120px; /* Slightly increased minimum width to keep them readable */
-    display: inline-block; /* Ensure the select adjusts correctly */
 }
