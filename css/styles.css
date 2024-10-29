@@ -849,62 +849,80 @@ h1 {
 }
 
 /* Comment Item Layout */
-.comment-item {
+/* Base styles for the form and list */
+#comment-form, #comment-list {
     display: flex;
-    gap: 10px; /* Space between dropdowns and buttons in each comment row */
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    gap: 10px; /* Ensure consistent spacing */
     align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd; /* Optional separator */
+    justify-content: flex-start;
 }
 
-/* Form Elements */
-#comment-form .form-group, .comment-item .form-group {
+#comment-form .form-group {
+    flex: 1 1 150px;
     display: flex;
     align-items: center;
 }
 
-/* Select and Input Widths */
-#comment-form input[type="text"], #comment-list select {
-    min-width: 120px;
-    max-width: 180px;
-    flex-grow: 1; /* Allows elements to adjust evenly */
+#comment-form input {
+    width: 100%;
+    max-width: 200px;
+    padding: 8px;
+    font-size: 1em;
 }
 
-#comment-list .list-group-item select {
-    width: auto;
-    flex-grow: 1;
-}
-
-/* Button Styles */
-#comment-form button, .update-btn, .delete-btn {
-    padding: 6px 16px;
+#comment-form button {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: #fff;
     border: none;
     border-radius: 4px;
-    font-size: 0.9em;
+    font-size: 1em;
     cursor: pointer;
-    flex-shrink: 0; /* Prevent buttons from stretching */
+}
+
+#comment-list .list-group-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+}
+
+.comment-item {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.comment-item select {
+    width: 100%;
+    max-width: 150px;
+    padding: 6px;
+    font-size: 0.9em;
+}
+
+.update-btn, .delete-btn {
+    padding: 6px 12px;
+    font-size: 0.9em;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .update-btn {
     background-color: #28a745;
-    color: #fff;
-    margin-right: 5px; /* Space between update and delete buttons */
 }
 
 .delete-btn {
     background-color: #dc3545;
-    color: #fff;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    #comment-form, .comment-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    #comment-form button {
-        margin-top: 10px;
-    }
+.comment-actions {
+    display: flex;
+    gap: 10px;
 }
+
