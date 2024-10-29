@@ -836,15 +836,14 @@ h1 {
 #comment-form, #comment-list {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Space between rows */
+    gap: 15px;
     align-items: stretch;
-    margin: 0;
 }
 
 /* Form Layout */
 #comment-form {
     display: flex;
-    gap: 10px; /* Space between form elements */
+    gap: 10px;
     align-items: center;
     justify-content: space-between;
 }
@@ -854,12 +853,11 @@ h1 {
 #comment-list .comment-item {
     display: flex;
     align-items: center;
-    gap: 10px; /* Horizontal spacing within items */
-    flex: 1;
+    gap: 10px;
 }
 
 /* Adjusted Select and Input Widths */
-#comment-form select, 
+#comment-form select,
 #comment-list select,
 #comment-form input {
     width: auto;
@@ -867,19 +865,19 @@ h1 {
     min-width: 120px;
 }
 
-/* Button Styling */
+/* Button Alignment and Styling */
 #comment-form button {
-    padding: 4px 12px;
+    align-self: center;
+    padding: 6px 16px;
     font-size: 0.9em;
-    height: 35px;
-    line-height: normal;
+    position: relative;
+    top: 0;
 }
 
 /* Comment Item Buttons */
 .update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
-    width: auto;
     margin: 0;
 }
 
@@ -889,10 +887,7 @@ h1 {
     gap: 5px;
 }
 
-/* Input and Dropdown Spacing */
+/* Space between Nome do hóspede and first dropdown */
 #guest-name {
     margin-right: 10px;
-}
-#comment-form select {
-    margin-right: 8px;
 }
