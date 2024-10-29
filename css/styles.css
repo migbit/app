@@ -832,55 +832,91 @@ h1 {
 
 
 /*      --------------->  General Form and List Container */
-/* General Container */
+/* General Form and List Container */
 #comment-form, #comment-list {
     display: flex;
     flex-direction: column;
     gap: 15px; /* Space between rows */
     align-items: stretch;
+    margin: 0;
 }
 
 /* Form Layout */
 #comment-form {
     display: flex;
     gap: 10px; /* Space between form elements */
+    flex-wrap: nowrap;
     align-items: center;
+    justify-content: space-between;
 }
 
-/* Form Input and Button */
-#guest-name {
-    flex: 1;
-    min-width: 150px;
-    margin-right: 8px; /* Spacing between input and Adicionar button */
-}
-
-#comment-form button {
-    padding: 6px 12px;
-    font-size: 0.9em;
-    align-self: center;
-    margin-left: 8px;
-}
-
-/* Comment Item Styling */
-.comment-item {
+/* Individual Form Group Styling */
+#comment-form .form-group,
+#comment-list .comment-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 10px; /* Horizontal spacing within items */
+    flex: 1;
 }
 
-.comment-item select {
-    min-width: 120px;
+/* Adjusted Select and Input Widths */
+#comment-form select, 
+#comment-list select,
+#comment-form input {
+    width: auto;
     padding: 6px;
+    min-width: 120px; /* Adjusted minimum width */
 }
 
-/* Buttons Styling */
+/* Button Alignment and Styling */
+#comment-form button {
+    align-self: center;
+    padding: 4px 12px; /* Reduced padding */
+    font-size: 0.9em; /* Optional: Adjust font size if needed */
+    height: 35; /* Altura */
+    line-height: normal; /* Ensures text is centered */
+    position: relative;
+    top: 0; /* Reset top adjustment */
+}
+
+/* Comment Item Buttons */
 .update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
+    width: auto;
     margin: 0;
+    gap: 5px;
 }
 
+/* Space between Atualizar and Apagar buttons */
 .comment-actions {
     display: flex;
-    gap: 5px; /* Space between Atualizar and Apagar buttons */
+    gap: 5px; /* Adjust this gap to control the space between Atualizar and Apagar */
+}
+
+.form-group.d-flex.align-items-center {
+    display: flex;
+    gap: 5px; /* Adjust spacing between input and button */
+}
+
+.form-group.d-flex.align-items-center input {
+    flex: 1; /* Make input take available space */
+}
+
+.btn-success {
+    height: auto; /* Align button with input height */
+}
+
+#comment-form select, 
+#comment-list select,
+#comment-form input, 
+#comment-list input {
+    margin-right: 8px; /* Adds space between dropdowns */
+    padding: 6px;
+    min-width: 100px;
+}
+
+/* Space between the input field and the first dropdown */
+#guest-name {
+    margin-right: 10px; /* Adjust the space between Nome do hóspede and the first dropdown */
 }
