@@ -890,9 +890,13 @@ h1 {
     gap: 5px;
 }
 
-/* Spacing for guest names in the comment list */
-.comment-item .guest-name {
-    display: inline-flex;
-    margin-right: 10px;
-    font-weight: bold;
+/* Spacing for guest name */
+.guest-name {
+    margin-right: 12px; /* Adjust spacing between guest name and dropdown */
+    font-weight: bold; /* Optional styling */
+}
+
+/* Dropdown alignment */
+#comment-list select {
+    margin-right: 8px; /* Spacing between dropdowns */
 }
