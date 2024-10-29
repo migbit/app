@@ -259,13 +259,13 @@ async function deleteTask(taskId) {
 }
 
 // Cenas dos Comentários Functions
-async function addComment(guestName, ratingOption, faturaOption, sibaOption) {
+async function addComment(guestName) {
     try {
         const commentData = {
             guestName: guestName,
-            ratingOption: ratingOption,
-            faturaOption: faturaOption,  // Added faturaOption
-            sibaOption: sibaOption,      // Added sibaOption
+            ratingOption: "",
+            faturaOption: "",
+            sibaOption: "",
             timestamp: new Date()
         };
         const docRef = await addDoc(collection(db, "comments"), commentData);
@@ -294,24 +294,27 @@ async function loadComments() {
             const li = document.createElement('li');
 
             const guestNameSpan = document.createElement('span');
-            guestNameSpan.textContent = comment.guestName + " ";
-            
-            // Create dropdowns
+            guestNameSpan.textContent = comment.guestName;
+
+            // Add editable dropdowns for other fields
             const ratingDropdown = document.createElement('select');
             ratingDropdown.innerHTML = `
+                <option value="" ${comment.ratingOption === '' ? 'selected' : ''}>Comentário</option>
                 <option value="5 Estrelas" ${comment.ratingOption === '5 Estrelas' ? 'selected' : ''}>5 Estrelas</option>
                 <option value="Não sei" ${comment.ratingOption === 'Não sei' ? 'selected' : ''}>Não sei</option>
                 <option value="Não escrever!" ${comment.ratingOption === 'Não escrever!' ? 'selected' : ''}>Não escrever!</option>
             `;
-            
+
             const faturaDropdown = document.createElement('select');
             faturaDropdown.innerHTML = `
+                <option value="" ${comment.faturaOption === '' ? 'selected' : ''}>Fatura</option>
                 <option value="Emitida" ${comment.faturaOption === 'Emitida' ? 'selected' : ''}>Emitida</option>
                 <option value="Não Emitida" ${comment.faturaOption === 'Não Emitida' ? 'selected' : ''}>Não Emitida</option>
             `;
-            
+
             const sibaDropdown = document.createElement('select');
             sibaDropdown.innerHTML = `
+                <option value="" ${comment.sibaOption === '' ? 'selected' : ''}>SIBA</option>
                 <option value="Enviado" ${comment.sibaOption === 'Enviado' ? 'selected' : ''}>Enviado</option>
                 <option value="Não Enviado" ${comment.sibaOption === 'Não Enviado' ? 'selected' : ''}>Não Enviado</option>
             `;
@@ -385,21 +388,15 @@ document.getElementById('comment-form')?.addEventListener('submit', async (e) =>
     e.preventDefault();
     
     const guestName = document.getElementById('guest-name').value.trim();
-    const ratingOption = document.getElementById('rating-option').value;
-    const faturaOption = document.getElementById('fatura-option').value;
-    const sibaOption = document.getElementById('siba-option').value;
 
-    if (!guestName || !ratingOption || !faturaOption || !sibaOption) {
-        alert('Por favor, preencha todos os campos.');
+    if (!guestName) {
+        alert('Por favor, preencha o nome do hóspede.');
         return;
     }
 
     try {
-        await addComment(guestName, ratingOption, faturaOption, sibaOption);  // Pass all fields
+        await addComment(guestName);
         document.getElementById('guest-name').value = '';
-        document.getElementById('rating-option').value = '';
-        document.getElementById('fatura-option').value = '';
-        document.getElementById('siba-option').value = '';
         await loadComments();
     } catch (error) {
         alert('Erro ao adicionar comentário');
