@@ -831,39 +831,51 @@ h1 {
 }
 
 /* Additional styling for form alignment */
-/* Additional styling for form alignment */
-/* Base form and list styling */
+/* Base styling */
 #comment-form, #comment-list {
     display: flex;
-    gap: 5px; /* Slight gap to avoid overlap */
-    flex-wrap: wrap;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
 }
 
-/* Form input and select elements */
-#comment-form .form-group,
-#comment-list .comment-item {
-    flex: 1;
+/* Adjust form group and item display for consistent alignment */
+#comment-form .form-group, .comment-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+#comment-list .list-group-item {
     display: flex;
     align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
 }
 
-#comment-form select, 
-#comment-form input, 
-#comment-form button {
-    height: 38px; /* Set height to align with the button */
+/* Set select and button widths */
+#comment-list select, #comment-form input, #comment-form button {
+    min-width: 100px;
+    max-width: 150px;
+    flex: 1;
 }
 
-/* Align button */
-#comment-form button {
-    align-self: center;
-    height: auto; /* Keep consistent height */
-    padding: 6px 16px;
-}
-
-/* Reset top positioning for alignment */
 .update-btn, .delete-btn {
-    margin: 0px;
-    padding: 6px 12px;
+    flex-shrink: 0;
+    padding: 5px 10px;
     font-size: 0.9em;
+    margin: 0;
+    border-radius: 4px;
+}
+
+/* Color styling for buttons */
+.update-btn {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
 }
