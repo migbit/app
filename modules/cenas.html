@@ -79,39 +79,13 @@
         <section class="comments-section card mt-4">
             <h2 class="card-header">Cenas dos Comentários</h2>
             <div class="card-body">
-                <form id="comment-form" class="d-flex flex-wrap align-items-center gap-3">
+                <form id="comment-form" class="d-flex align-items-center gap-3">
                     <div class="form-group mb-3">
                         <input type="text" id="guest-name" class="form-control" placeholder="Nome do hóspede" required>
                     </div>
-                    
-                    <div class="form-group mb-3">
-                        <select id="rating-option" class="form-control" required>
-                            <option value="">Comentário</option>
-                            <option value="Vai Dar 5 Estrelas">5 Estrelas</option>
-                            <option value="Não Sei">Não sei</option>
-                            <option value="Não Escrever!!!">Não escrever!</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <select id="fatura-option" class="form-control" required>
-                            <option value="">Fatura</option>
-                            <option value="Emitida">Emitida</option>
-                            <option value="Não Emitida">Não Emitida</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <select id="siba-option" class="form-control" required>
-                            <option value="">SIBA</option>
-                            <option value="Enviado">Enviado</option>
-                            <option value="Não Enviado">Não Enviado</option>
-                        </select>
-                    </div>
-                    
                     <button type="submit" class="btn btn-success">Adicionar</button>
                 </form>
-                
+        
                 <ul id="comment-list" class="list-group mt-3">
                     <!-- Comments will be dynamically populated here -->
                 </ul>
