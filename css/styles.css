@@ -830,7 +830,8 @@ h1 {
     border-radius: 8px 8px 0 0;
 }
 
-/* Additional styling for form alignment */
+
+/*      --------------->  General Form and List Container */
 /* General Form and List Container */
 #comment-form, #comment-list {
     display: flex;
@@ -844,7 +845,6 @@ h1 {
 #comment-form {
     display: flex;
     gap: 10px; /* Space between form elements */
-    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
 }
@@ -864,18 +864,15 @@ h1 {
 #comment-form input {
     width: auto;
     padding: 6px;
-    min-width: 120px; /* Adjusted minimum width */
+    min-width: 120px;
 }
 
-/* Button Alignment and Styling */
+/* Button Styling */
 #comment-form button {
-    align-self: center;
-    padding: 4px 12px; /* Reduced padding */
-    font-size: 0.9em; /* Optional: Adjust font size if needed */
-    height: 35; /* Altura */
-    line-height: normal; /* Ensures text is centered */
-    position: relative;
-    top: 0; /* Reset top adjustment */
+    padding: 4px 12px;
+    font-size: 0.9em;
+    height: 35px;
+    line-height: normal;
 }
 
 /* Comment Item Buttons */
@@ -884,39 +881,18 @@ h1 {
     font-size: 0.9em;
     width: auto;
     margin: 0;
-    gap: 5px;
 }
 
 /* Space between Atualizar and Apagar buttons */
 .comment-actions {
     display: flex;
-    gap: 5px; /* Adjust this gap to control the space between Atualizar and Apagar */
+    gap: 5px;
 }
 
-.form-group.d-flex.align-items-center {
-    display: flex;
-    gap: 5px; /* Adjust spacing between input and button */
-}
-
-.form-group.d-flex.align-items-center input {
-    flex: 1; /* Make input take available space */
-}
-
-.btn-success {
-    height: auto; /* Align button with input height */
-}
-
-#comment-form select, 
-#comment-list select,
-#comment-form input, 
-#comment-list input {
-    margin-right: 8px; /* Adds space between dropdowns */
-    padding: 6px;
-    min-width: 100px;
-}
-
-/* Space between the input field and the first dropdown */
+/* Input and Dropdown Spacing */
 #guest-name {
-    margin-right: 10px; /* Adjust the space between Nome do hóspede and the first dropdown */
+    margin-right: 10px;
 }
-
+#comment-form select {
+    margin-right: 8px;
+}
