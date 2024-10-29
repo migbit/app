@@ -832,50 +832,39 @@ h1 {
 
 /* Additional styling for form alignment */
 /* Additional styling for form alignment */
-/* Additional styling for form alignment */
+/* Base form and list styling */
 #comment-form, #comment-list {
     display: flex;
-    gap: 0px;
+    gap: 5px; /* Slight gap to avoid overlap */
     flex-wrap: wrap;
     align-items: center;
 }
 
+/* Form input and select elements */
 #comment-form .form-group,
 #comment-list .comment-item {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 0px;
 }
 
 #comment-form select, 
-#comment-list select,
 #comment-form input, 
-#comment-list input {
-    width: auto;
-    max-width: none;
-    padding: 6px;
-    min-width: 100px;
+#comment-form button {
+    height: 38px; /* Set height to align with the button */
+    padding: 6px 10px;
 }
 
+/* Align button */
 #comment-form button {
     align-self: center;
+    height: auto; /* Keep consistent height */
     padding: 6px 16px;
-    height: 30px; /* Adjust to match input height */
-    position: relative;
-    top: -10px; /* Adjust further if needed */
 }
 
-/* Remove button margins */
+/* Reset top positioning for alignment */
 .update-btn, .delete-btn {
+    margin: 0px;
     padding: 6px 12px;
     font-size: 0.9em;
-    width: auto;
-    margin: 0px;
-}
-
-.comment-actions {
-    display: flex;
-    gap: 0px;
-    align-items: center;
 }
