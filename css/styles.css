@@ -848,7 +848,6 @@ h1 {
     gap: 0px;
 }
 
-/* Adjusted width for select and input elements without spacing */
 #comment-form select, 
 #comment-list select,
 #comment-form input, 
@@ -859,12 +858,12 @@ h1 {
     min-width: 100px;
 }
 
-/* Center-align button and adjust padding */
 #comment-form button {
     align-self: center;
     padding: 6px 16px;
     height: calc(100% - 2px);
-    vertical-align: middle; /* New addition for alignment */
+    position: relative;
+    top: 1px; /* Adjust this value to fine-tune alignment */
 }
 
 /* Remove button margins */
@@ -875,7 +874,6 @@ h1 {
     margin: 0px;
 }
 
-/* No gaps inside comment-actions */
 .comment-actions {
     display: flex;
     gap: 0px;
