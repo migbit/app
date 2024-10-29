@@ -832,62 +832,55 @@ h1 {
 
 
 /*      --------------->  General Form and List Container */
-/* General Form and List Container */
+/* General Container */
 #comment-form, #comment-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 15px; /* Space between rows */
     align-items: stretch;
 }
 
 /* Form Layout */
 #comment-form {
     display: flex;
-    gap: 10px;
+    gap: 10px; /* Space between form elements */
     align-items: center;
-    justify-content: space-between;
 }
 
-/* Individual Form Group Styling */
-#comment-form .form-group,
-#comment-list .comment-item {
+/* Form Input and Button */
+#guest-name {
+    flex: 1;
+    min-width: 150px;
+    margin-right: 8px; /* Spacing between input and Adicionar button */
+}
+
+#comment-form button {
+    padding: 6px 12px;
+    font-size: 0.9em;
+    align-self: center;
+    margin-left: 8px;
+}
+
+/* Comment Item Styling */
+.comment-item {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Adjusted Select and Input Widths */
-#comment-form select,
-#comment-list select,
-#comment-form input {
-    width: auto;
-    padding: 6px;
+.comment-item select {
     min-width: 120px;
+    padding: 6px;
 }
 
-/* Button Alignment and Styling */
-#comment-form button {
-    align-self: center;
-    padding: 6px 16px;
-    font-size: 0.9em;
-    position: relative;
-    top: 0;
-}
-
-/* Comment Item Buttons */
+/* Buttons Styling */
 .update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
     margin: 0;
 }
 
-/* Space between Atualizar and Apagar buttons */
 .comment-actions {
     display: flex;
-    gap: 5px;
-}
-
-/* Space between Nome do hóspede and first dropdown */
-#guest-name {
-    margin-right: 10px;
+    gap: 5px; /* Space between Atualizar and Apagar buttons */
 }
