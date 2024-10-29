@@ -884,6 +884,7 @@ h1 {
     font-size: 0.9em;
     width: auto;
     margin: 0;
+    gap: 5px;
 }
 
 /* Space between Atualizar and Apagar buttons */
