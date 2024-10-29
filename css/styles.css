@@ -831,84 +831,65 @@ h1 {
 }
 
 /* Additional styling for form alignment */
-/* Additional styling for form alignment */
+/* Base styling for form and comment list containers */
 #comment-form, #comment-list {
     display: flex;
-    gap: 10px; /* Horizontal spacing between form elements and comment items */
     flex-wrap: wrap;
     align-items: center;
+    gap: 10px; /* Spacing between form elements and comment items */
 }
 
+/* Form field and comment item styling */
 #comment-form .form-group,
 #comment-list .comment-item {
-    flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px; /* Horizontal spacing inside form groups and comment items */
+    flex: 1;
+    gap: 15px; /* Adjusted spacing within form groups and comment items */
 }
 
-/* Adjusted width for select and input elements */
+/* Select and input fields styling */
 #comment-form select, 
-#comment-list select {
-    width: auto; /* Let the width adjust to the content */
-    max-width: none; /* Remove the max-width constraint */
-    padding: 6px;
-    min-width: 100px; /* Set a minimum width to keep them readable */
-    display: inline-block; /* Ensure proper inline-block behavior */
-}
-
+#comment-list select,
 #comment-form input, 
 #comment-list input {
-    width: 100%;
-    max-width: 180px; /* You can keep this for inputs if desired */
+    padding: 6px;
+    width: auto;
+    min-width: 120px; /* Minimum width to ensure readability */
 }
 
+/* List item styling */
 #comment-list .list-group-item {
     display: flex;
     align-items: center;
-    gap: 10px; /* Horizontal spacing inside list group items */
-    padding: 10px;
+    gap: 15px; /* Consistent spacing between elements */
+    padding: 10px 0;
 }
 
+/* Button styling */
 .update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
     width: auto;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .update-btn {
     background-color: #28a745;
     color: #fff;
-    border: none;
-    border-radius: 4px;
-    margin-right: 10px; /* Horizontal spacing between update and delete buttons */
+    margin-right: 5px; /* Consistent spacing between buttons */
 }
 
 .delete-btn {
     background-color: #dc3545;
     color: #fff;
-    border: none;
-    border-radius: 4px;
 }
 
-.comment-item {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Horizontal spacing inside comment items */
-    flex-wrap: wrap; /* Ensure wrapping if width is insufficient */
-}
-
+/* Comment actions container for alignment of buttons */
 .comment-actions {
     display: flex;
-    gap: 10px; /* Horizontal spacing between 'Atualizar' and 'Apagar' buttons */
+    gap: 10px;
     align-items: center;
-}
-
-/* Additional specific styling for form-group and comment-item selects */
-.form-group select,
-.comment-item select {
-    width: auto; /* Adjust width based on content */
-    padding: 6px; /* Add padding for better appearance */
-    min-width: 100px; /* Set a minimum width to keep them readable */
-    display: inline-block; /* Ensure the select adjusts correctly */
 }
