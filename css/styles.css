@@ -916,7 +916,7 @@ h1 {
     min-width: 100px;
 }
 
-/* Space between the input field and the first dropdown */
-#guest-name {
-    margin-right: 10px; /* Adjust the space between Nome do hóspede and the first dropdown */
+.comment-item .guest-name {
+    margin-right: 10px; /* Adds space after the guest name in the list */
+    font-weight: bold; /* Optional styling for emphasis */
 }
