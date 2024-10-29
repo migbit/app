@@ -850,79 +850,50 @@ h1 {
 
 /* Comment Item Layout */
 /* Base styles for the form and list */
+/* Additional styling for form alignment */
 #comment-form, #comment-list {
     display: flex;
+    gap: 0px;
     flex-wrap: wrap;
-    gap: 10px; /* Ensure consistent spacing */
     align-items: center;
-    justify-content: flex-start;
 }
 
-#comment-form .form-group {
-    flex: 1 1 150px;
+#comment-form .form-group,
+#comment-list .comment-item {
+    flex: 1;
     display: flex;
     align-items: center;
+    gap: 0px;
 }
 
-#comment-form input {
-    width: 100%;
-    max-width: 200px;
-    padding: 8px;
-    font-size: 1em;
+#comment-form select, 
+#comment-list select,
+#comment-form input, 
+#comment-list input {
+    width: auto;
+    max-width: none;
+    padding: 6px;
+    min-width: 100px;
 }
 
 #comment-form button {
-    flex-shrink: 0;
-    padding: 8px 16px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 1em;
-    cursor: pointer;
+    align-self: center;
+    padding: 6px 16px;
+    height: calc(100% - 2px);
+    position: relative;
+    top: 1px; /* Adjust this value to fine-tune alignment */
 }
 
-#comment-list .list-group-item {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    padding: 10px;
-}
-
-.comment-item {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.comment-item select {
-    width: 100%;
-    max-width: 150px;
-    padding: 6px;
-    font-size: 0.9em;
-}
-
+/* Remove button margins */
 .update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.update-btn {
-    background-color: #28a745;
-}
-
-.delete-btn {
-    background-color: #dc3545;
+    width: auto;
+    margin: 0px;
 }
 
 .comment-actions {
     display: flex;
-    gap: 10px;
+    gap: 0px;
+    align-items: center;
 }
-
