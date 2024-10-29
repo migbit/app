@@ -292,31 +292,36 @@ async function loadComments() {
         querySnapshot.forEach((doc) => {
             const comment = doc.data();
             const li = document.createElement('li');
+            li.classList.add('comment-item'); // Adds class for consistent styling
 
+            // Guest Name Display
             const guestNameSpan = document.createElement('span');
             guestNameSpan.textContent = comment.guestName;
+            guestNameSpan.classList.add('guest-name'); // Adds specific class to style the guest name
 
-            // Add editable dropdowns for other fields with default selected values
-const ratingDropdown = document.createElement('select');
-ratingDropdown.innerHTML = `
-    <option value="Não sei" ${comment.ratingOption === 'Não sei' ? 'selected' : ''}>Não sei</option>
-    <option value="5 Estrelas" ${comment.ratingOption === '5 Estrelas' ? 'selected' : ''}>5 Estrelas</option>
-    <option value="Não escrever!" ${comment.ratingOption === 'Não escrever!' ? 'selected' : ''}>Não escrever!</option>
-`;
+            // Rating Dropdown
+            const ratingDropdown = document.createElement('select');
+            ratingDropdown.innerHTML = `
+                <option value="Não sei" ${comment.ratingOption === 'Não sei' ? 'selected' : ''}>Não sei</option>
+                <option value="5 Estrelas" ${comment.ratingOption === '5 Estrelas' ? 'selected' : ''}>5 Estrelas</option>
+                <option value="Não escrever!" ${comment.ratingOption === 'Não escrever!' ? 'selected' : ''}>Não escrever!</option>
+            `;
 
-const faturaDropdown = document.createElement('select');
-faturaDropdown.innerHTML = `
-    <option value="Não Emitida" ${comment.faturaOption === 'Não Emitida' ? 'selected' : ''}>Não Emitida</option>
-    <option value="Emitida" ${comment.faturaOption === 'Emitida' ? 'selected' : ''}>Emitida</option>
-`;
+            // Fatura Dropdown
+            const faturaDropdown = document.createElement('select');
+            faturaDropdown.innerHTML = `
+                <option value="Não Emitida" ${comment.faturaOption === 'Não Emitida' ? 'selected' : ''}>Não Emitida</option>
+                <option value="Emitida" ${comment.faturaOption === 'Emitida' ? 'selected' : ''}>Emitida</option>
+            `;
 
-const sibaDropdown = document.createElement('select');
-sibaDropdown.innerHTML = `
-    <option value="Não Enviado" ${comment.sibaOption === 'Não Enviado' ? 'selected' : ''}>Não Enviado</option>
-    <option value="Enviado" ${comment.sibaOption === 'Enviado' ? 'selected' : ''}>Enviado</option>
-`;
-            
-            // Update button
+            // SIBA Dropdown
+            const sibaDropdown = document.createElement('select');
+            sibaDropdown.innerHTML = `
+                <option value="Não Enviado" ${comment.sibaOption === 'Não Enviado' ? 'selected' : ''}>Não Enviado</option>
+                <option value="Enviado" ${comment.sibaOption === 'Enviado' ? 'selected' : ''}>Enviado</option>
+            `;
+
+            // Update Button
             const updateBtn = document.createElement('button');
             updateBtn.textContent = 'Atualizar';
             updateBtn.classList.add('update-btn');
@@ -333,13 +338,13 @@ sibaDropdown.innerHTML = `
                 }
             };
 
-            // Delete button
+            // Delete Button
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'Apagar';
             deleteBtn.classList.add('delete-btn');
             deleteBtn.onclick = () => deleteComment(doc.id);
 
-            // Append elements
+            // Append elements in the correct order
             li.appendChild(guestNameSpan);
             li.appendChild(ratingDropdown);
             li.appendChild(faturaDropdown);
@@ -354,6 +359,7 @@ sibaDropdown.innerHTML = `
         commentList.innerHTML = '<li>Erro ao carregar comentários</li>';
     }
 }
+
 
 // Function to update the ratingOption in Firestore
 async function updateComment(commentId, updatedFields) {
