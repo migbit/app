@@ -831,7 +831,6 @@ h1 {
 }
 
 /* Additional styling for form alignment */
-/* Additional styling for form alignment */
 #comment-form, #comment-list {
     display: flex;
     gap: 10px;
@@ -847,12 +846,20 @@ h1 {
     gap: 10px;
 }
 
+/* Adjusted width for select and input elements */
 #comment-form select, 
-#comment-list select,
+#comment-list select {
+    width: auto; /* Let the width adjust to the content */
+    max-width: none; /* Remove the max-width constraint */
+    padding: 6px; /* Add padding for better appearance */
+    min-width: 100px; /* Set a minimum width to keep them readable */
+    display: inline-block; /* Ensure proper inline-block behavior */
+}
+
 #comment-form input, 
 #comment-list input {
     width: 100%;
-    max-width: 180px;
+    max-width: 180px; /* You can keep this for inputs if desired */
 }
 
 #comment-list .list-group-item {
@@ -896,9 +903,11 @@ h1 {
     align-items: center;
 }
 
+/* Additional specific styling for form-group and comment-item selects */
 .form-group select,
 .comment-item select {
     width: auto; /* Adjust width based on content */
-    padding: 6px;
+    padding: 6px; /* Add padding for better appearance */
     min-width: 100px; /* Set a minimum width to keep them readable */
+    display: inline-block; /* Ensure the select adjusts correctly */
 }
