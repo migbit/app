@@ -900,5 +900,5 @@ h1 {
 .comment-item select {
     width: auto; /* Adjust width based on content */
     padding: 6px;
-    min-width: 150px; /* Set a minimum width to keep them readable */
+    min-width: 100px; /* Set a minimum width to keep them readable */
 }
