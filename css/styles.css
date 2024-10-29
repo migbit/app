@@ -835,7 +835,7 @@ h1 {
 #comment-form, #comment-list {
     display: flex;
     gap: 10px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
 }
 
