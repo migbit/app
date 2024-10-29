@@ -861,7 +861,7 @@ h1 {
 #comment-form button {
     align-self: center;
     padding: 6px 16px;
-    height: 38px; /* Adjust to match input height */
+    height: 20px; /* Adjust to match input height */
     position: relative;
     top: 0px; /* Adjust further if needed */
 }
