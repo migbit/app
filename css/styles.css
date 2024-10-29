@@ -847,7 +847,7 @@ h1 {
     gap: 10px; /* Space between form elements */
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 /* Individual Form Group Styling */
@@ -872,11 +872,8 @@ h1 {
 #comment-form button {
     align-self: center;
     padding: 4px 12px; /* Reduced padding */
-    font-size: 0.9em; /* Optional: Adjust font size if needed */
-    height: 35; /* Altura */
-    line-height: normal; /* Ensures text is centered */
-    position: relative;
-    top: 0; /* Reset top adjustment */
+    font-size: 0.9em;
+    line-height: normal;
 }
 
 /* Comment Item Buttons */
@@ -885,38 +882,17 @@ h1 {
     font-size: 0.9em;
     width: auto;
     margin: 0;
-    gap: 5px;
 }
 
 /* Space between Atualizar and Apagar buttons */
 .comment-actions {
     display: flex;
-    gap: 15px; /* Adjust this gap to control the space between Atualizar and Apagar */
+    gap: 5px;
 }
 
-.form-group.d-flex.align-items-center {
-    display: flex;
-    gap: 5px; /* Adjust spacing between input and button */
-}
-
-.form-group.d-flex.align-items-center input {
-    flex: 1; /* Make input take available space */
-}
-
-.btn-success {
-    height: auto; /* Align button with input height */
-}
-
-#comment-form select, 
-#comment-list select,
-#comment-form input, 
-#comment-list input {
-    margin-right: 8px; /* Adds space between dropdowns */
-    padding: 6px;
-    min-width: 100px;
-}
-
+/* Spacing for guest names in the comment list */
 .comment-item .guest-name {
-    margin-right: 10px; /* Adds space after the guest name in the list */
-    font-weight: bold; /* Optional styling for emphasis */
+    display: inline-flex;
+    margin-right: 10px;
+    font-weight: bold;
 }
