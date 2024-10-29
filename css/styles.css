@@ -872,7 +872,7 @@ h1 {
     align-self: center;
     padding: 4px 12px; /* Reduced padding */
     font-size: 0.9em; /* Optional: Adjust font size if needed */
-    height: 30; /* Altura */
+    height: 35; /* Altura */
     line-height: normal; /* Ensures text is centered */
     position: relative;
     top: 0; /* Reset top adjustment */
@@ -886,11 +886,10 @@ h1 {
     margin: 0;
 }
 
-/* Comment Item Actions Layout */
+/* Space between Atualizar and Apagar buttons */
 .comment-actions {
     display: flex;
-    gap: 10px; /* Spacing between 'Atualizar' and 'Apagar' buttons */
-    align-items: center;
+    gap: 5px; /* Adjust this gap to control the space between Atualizar and Apagar */
 }
 
 .form-group.d-flex.align-items-center {
@@ -914,3 +913,9 @@ h1 {
     padding: 6px;
     min-width: 100px;
 }
+
+/* Space between the input field and the first dropdown */
+#guest-name {
+    margin-right: 10px; /* Adjust the space between Nome do hóspede and the first dropdown */
+}
+
