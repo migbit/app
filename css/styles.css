@@ -831,98 +831,66 @@ h1 {
 }
 
 /* Additional styling for form alignment */
-/* Base styles for the form and list */
-#comment-form,
-#comment-list {
+/* Additional styling for form alignment */
+#comment-form, #comment-list {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-#comment-form {
+    gap: 10px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
-/* Form fields styling */
-#comment-form .form-group {
+#comment-form .form-group,
+#comment-list .comment-item {
+    flex: 1;
     display: flex;
-    flex-direction: column;
-    flex: 1 1 180px; /* Grow and shrink, basis 180px */
-    min-width: 150px;
-}
-
-/* Form buttons */
-#comment-form button {
-    align-self: flex-start;
-    margin-top: 5px; /* Align with the form fields */
-}
-
-/* Comment list item styling */
-#comment-list .list-group-item {
-    display: flex;
-    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
 }
 
-/* Guest name styling */
-.comment-item .guest-name {
-    flex: 1 1 150px;
-    min-width: 100px;
-    font-weight: bold;
-}
-
-/* Dropdowns styling */
-.comment-item select,
-#comment-form select,
-#comment-form input {
-    flex: 1 1 180px;
+#comment-form select, 
+#comment-list select,
+#comment-form input, 
+#comment-list input {
+    width: 100%;
     max-width: 180px;
 }
 
-/* Actions container styling */
-.comment-actions {
+#comment-list .list-group-item {
     display: flex;
+    align-items: center;
     gap: 10px;
-    flex: 1 1 auto;
-    justify-content: flex-end;
-    min-width: 150px;
+    padding: 10px;
 }
 
-/* Buttons styling */
-.update-btn,
-.delete-btn {
+.update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    width: auto;
 }
 
 .update-btn {
     background-color: #28a745;
     color: #fff;
+    border: none;
+    border-radius: 4px;
+    margin-right: 5px;
 }
 
 .delete-btn {
     background-color: #dc3545;
     color: #fff;
+    border: none;
+    border-radius: 4px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    #comment-form,
-    #comment-list .list-group-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.comment-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap; /* Ensure wrapping if width is insufficient */
+}
 
-    #comment-form button {
-        margin-top: 0;
-    }
-
-    .comment-actions {
-        justify-content: flex-start;
-        margin-top: 10px;
-    }
+.comment-actions {
+    display: flex;
+    gap: 5px; /* Space between Atualizar and Apagar */
 }
