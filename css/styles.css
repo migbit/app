@@ -892,3 +892,16 @@ h1 {
     gap: 10px; /* Spacing between 'Atualizar' and 'Apagar' buttons */
     align-items: center;
 }
+
+.form-group.d-flex.align-items-center {
+    display: flex;
+    gap: 5px; /* Adjust spacing between input and button */
+}
+
+.form-group.d-flex.align-items-center input {
+    flex: 1; /* Make input take available space */
+}
+
+.btn-success {
+    height: auto; /* Align button with input height */
+}
