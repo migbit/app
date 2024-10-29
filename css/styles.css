@@ -831,12 +831,12 @@ h1 {
 }
 
 /* Additional styling for form alignment */
-/* Container Styles */
+/* General Form and List Container */
 #comment-form, #comment-list {
     display: flex;
     flex-direction: column;
+    gap: 15px; /* Space between rows */
     align-items: stretch;
-    gap: 15px; /* Space between each row */
     margin: 0;
 }
 
@@ -846,54 +846,49 @@ h1 {
     gap: 10px; /* Space between form elements */
     flex-wrap: nowrap;
     align-items: center;
+    justify-content: space-between;
 }
 
-/* Comment Item Layout */
-/* Base styles for the form and list */
-/* Additional styling for form alignment */
-#comment-form, #comment-list {
-    display: flex;
-    gap: 0px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
+/* Individual Form Group Styling */
 #comment-form .form-group,
 #comment-list .comment-item {
-    flex: 1;
     display: flex;
     align-items: center;
-    gap: 0px;
+    gap: 10px; /* Horizontal spacing within items */
+    flex: 1;
 }
 
+/* Adjusted Select and Input Widths */
 #comment-form select, 
 #comment-list select,
-#comment-form input, 
-#comment-list input {
+#comment-form input {
     width: auto;
-    max-width: none;
     padding: 6px;
-    min-width: 100px;
+    min-width: 120px; /* Adjusted minimum width */
 }
 
+/* Button Alignment and Styling */
 #comment-form button {
     align-self: center;
     padding: 6px 16px;
-    height: calc(100% - 2px);
-    position: relative;
-    top: 1px; /* Adjust this value to fine-tune alignment */
+    height: 38px; /* Uniform button height */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto; /* Align the button to the right */
 }
 
-/* Remove button margins */
+/* Comment Item Buttons */
 .update-btn, .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
     width: auto;
-    margin: 0px;
+    margin: 0;
 }
 
+/* Comment Item Actions Layout */
 .comment-actions {
     display: flex;
-    gap: 0px;
+    gap: 10px; /* Spacing between 'Atualizar' and 'Apagar' buttons */
     align-items: center;
 }
