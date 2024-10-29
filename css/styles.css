@@ -835,7 +835,7 @@ h1 {
 /* Additional styling for form alignment */
 #comment-form, #comment-list {
     display: flex;
-    gap: 0px; /* No spacing between form elements and comment items */
+    gap: 0px;
     flex-wrap: wrap;
     align-items: center;
 }
@@ -845,7 +845,7 @@ h1 {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 0px; /* No spacing inside form groups and comment items */
+    gap: 0px;
 }
 
 /* Adjusted width for select and input elements without spacing */
@@ -863,7 +863,8 @@ h1 {
 #comment-form button {
     align-self: center;
     padding: 6px 16px;
-    height: calc(100% - 2px); /* Match height with other elements */
+    height: calc(100% - 2px);
+    vertical-align: middle; /* New addition for alignment */
 }
 
 /* Remove button margins */
