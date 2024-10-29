@@ -834,7 +834,7 @@ h1 {
 /* Additional styling for form alignment */
 #comment-form, #comment-list {
     display: flex;
-    gap: 10px; /* Horizontal spacing between form elements and comment items */
+    gap: 15px;
     flex-wrap: wrap;
     align-items: center;
 }
@@ -844,29 +844,29 @@ h1 {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px; /* Horizontal spacing inside form groups and comment items */
+    gap: 15px;
 }
 
 /* Adjusted width for select and input elements */
 #comment-form select, 
 #comment-list select {
-    width: auto; /* Let the width adjust to the content */
-    max-width: none; /* Remove the max-width constraint */
+    width: auto;
+    max-width: none;
     padding: 6px;
-    min-width: 100px; /* Set a minimum width to keep them readable */
-    display: inline-block; /* Ensure proper inline-block behavior */
+    min-width: 100px;
+    display: inline-block;
 }
 
 #comment-form input, 
 #comment-list input {
     width: 100%;
-    max-width: 180px; /* You can keep this for inputs if desired */
+    max-width: 180px;
 }
 
 #comment-list .list-group-item {
     display: flex;
     align-items: center;
-    gap: 10px; /* Horizontal spacing inside list group items */
+    gap: 15px;
     padding: 10px;
 }
 
@@ -881,7 +881,7 @@ h1 {
     color: #fff;
     border: none;
     border-radius: 4px;
-    margin-right: 10px; /* Horizontal spacing between update and delete buttons */
+    margin-right: 15px;
 }
 
 .delete-btn {
@@ -894,21 +894,21 @@ h1 {
 .comment-item {
     display: flex;
     align-items: center;
-    gap: 10px; /* Horizontal spacing inside comment items */
-    flex-wrap: wrap; /* Ensure wrapping if width is insufficient */
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 .comment-actions {
     display: flex;
-    gap: 10px; /* Horizontal spacing between 'Atualizar' and 'Apagar' buttons */
+    gap: 15px;
     align-items: center;
 }
 
 /* Additional specific styling for form-group and comment-item selects */
 .form-group select,
 .comment-item select {
-    width: auto; /* Adjust width based on content */
-    padding: 6px; /* Add padding for better appearance */
-    min-width: 100px; /* Set a minimum width to keep them readable */
-    display: inline-block; /* Ensure the select adjusts correctly */
+    width: auto;
+    padding: 6px;
+    min-width: 100px;
+    display: inline-block;
 }
