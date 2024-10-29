@@ -296,28 +296,25 @@ async function loadComments() {
             const guestNameSpan = document.createElement('span');
             guestNameSpan.textContent = comment.guestName;
 
-            // Add editable dropdowns for other fields
-            const ratingDropdown = document.createElement('select');
-            ratingDropdown.innerHTML = `
-                <option value="" ${comment.ratingOption === '' ? 'selected' : ''}>Comentário</option>
-                <option value="5 Estrelas" ${comment.ratingOption === '5 Estrelas' ? 'selected' : ''}>5 Estrelas</option>
-                <option value="Não sei" ${comment.ratingOption === 'Não sei' ? 'selected' : ''}>Não sei</option>
-                <option value="Não escrever!" ${comment.ratingOption === 'Não escrever!' ? 'selected' : ''}>Não escrever!</option>
-            `;
+            // Add editable dropdowns for other fields with default selected values
+const ratingDropdown = document.createElement('select');
+ratingDropdown.innerHTML = `
+    <option value="Não sei" ${comment.ratingOption === 'Não sei' ? 'selected' : ''}>Não sei</option>
+    <option value="5 Estrelas" ${comment.ratingOption === '5 Estrelas' ? 'selected' : ''}>5 Estrelas</option>
+    <option value="Não escrever!" ${comment.ratingOption === 'Não escrever!' ? 'selected' : ''}>Não escrever!</option>
+`;
 
-            const faturaDropdown = document.createElement('select');
-            faturaDropdown.innerHTML = `
-                <option value="" ${comment.faturaOption === '' ? 'selected' : ''}>Fatura</option>
-                <option value="Emitida" ${comment.faturaOption === 'Emitida' ? 'selected' : ''}>Emitida</option>
-                <option value="Não Emitida" ${comment.faturaOption === 'Não Emitida' ? 'selected' : ''}>Não Emitida</option>
-            `;
+const faturaDropdown = document.createElement('select');
+faturaDropdown.innerHTML = `
+    <option value="Não Emitida" ${comment.faturaOption === 'Não Emitida' ? 'selected' : ''}>Não Emitida</option>
+    <option value="Emitida" ${comment.faturaOption === 'Emitida' ? 'selected' : ''}>Emitida</option>
+`;
 
-            const sibaDropdown = document.createElement('select');
-            sibaDropdown.innerHTML = `
-                <option value="" ${comment.sibaOption === '' ? 'selected' : ''}>SIBA</option>
-                <option value="Enviado" ${comment.sibaOption === 'Enviado' ? 'selected' : ''}>Enviado</option>
-                <option value="Não Enviado" ${comment.sibaOption === 'Não Enviado' ? 'selected' : ''}>Não Enviado</option>
-            `;
+const sibaDropdown = document.createElement('select');
+sibaDropdown.innerHTML = `
+    <option value="Não Enviado" ${comment.sibaOption === 'Não Enviado' ? 'selected' : ''}>Não Enviado</option>
+    <option value="Enviado" ${comment.sibaOption === 'Enviado' ? 'selected' : ''}>Enviado</option>
+`;
             
             // Update button
             const updateBtn = document.createElement('button');
