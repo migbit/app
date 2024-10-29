@@ -835,7 +835,7 @@ h1 {
 #comment-form, #comment-list {
     display: flex;
     gap: 10px;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -892,5 +892,13 @@ h1 {
 
 .comment-actions {
     display: flex;
-    gap: 5px; /* Space between Atualizar and Apagar */
+    gap: 5px; /* Space between 'Atualizar' and 'Apagar' buttons */
+    align-items: center;
+}
+
+.form-group select,
+.comment-item select {
+    padding: 6px;
+    margin-right: 5px; /* Additional spacing between dropdowns */
+    flex: 1 1 180px;
 }
