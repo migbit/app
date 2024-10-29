@@ -872,7 +872,7 @@ h1 {
     align-self: center;
     padding: 4px 12px; /* Reduced padding */
     font-size: 0.9em; /* Optional: Adjust font size if needed */
-    height: auto; /* Remove fixed height */
+    height: 30; /* Altura */
     line-height: normal; /* Ensures text is centered */
     position: relative;
     top: 0; /* Reset top adjustment */
@@ -904,4 +904,13 @@ h1 {
 
 .btn-success {
     height: auto; /* Align button with input height */
+}
+
+#comment-form select, 
+#comment-list select,
+#comment-form input, 
+#comment-list input {
+    margin-right: 8px; /* Adds space between dropdowns */
+    padding: 6px;
+    min-width: 100px;
 }
