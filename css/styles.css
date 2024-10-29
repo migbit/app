@@ -831,22 +831,6 @@ h1 {
 }
 
 /* Additional styling for form alignment */
-#comment-form, #comment-list {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-#comment-form .form-group,
-#comment-list .comment-item {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Adjusted width for select and input elements */
 /* Additional styling for form alignment */
 #comment-form, #comment-list {
     display: flex;
