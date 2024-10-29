@@ -898,7 +898,7 @@ h1 {
 
 .form-group select,
 .comment-item select {
+    width: auto; /* Adjust width based on content */
     padding: 6px;
-    margin-right: 5px; /* Additional spacing between dropdowns */
-    flex: 1 1 180px;
+    min-width: 150px; /* Set a minimum width to keep them readable */
 }
