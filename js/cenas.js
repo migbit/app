@@ -299,21 +299,21 @@ async function loadComments() {
             // Create dropdowns
             const ratingDropdown = document.createElement('select');
             ratingDropdown.innerHTML = `
-                <option value="Vai Dar 5 Estrelas" ${comment.ratingOption === 'Vai Dar 5 Estrelas' ? 'selected' : ''}>Vai Dar 5 Estrelas</option>
-                <option value="Não sei o que vai dar" ${comment.ratingOption === 'Não sei o que vai dar' ? 'selected' : ''}>Não sei o que vai dar</option>
-                <option value="Não escrever comentário!!!" ${comment.ratingOption === 'Não escrever comentário!!!' ? 'selected' : ''}>Não escrever comentário!!!</option>
+                <option value="5 Estrelas" ${comment.ratingOption === '5 Estrelas' ? 'selected' : ''}>5 Estrelas</option>
+                <option value="Não sei" ${comment.ratingOption === 'Não sei' ? 'selected' : ''}>Não sei</option>
+                <option value="Não escrever!" ${comment.ratingOption === 'Não escrever!' ? 'selected' : ''}>Não escrever!</option>
             `;
             
             const faturaDropdown = document.createElement('select');
             faturaDropdown.innerHTML = `
-                <option value="Fatura Emitida" ${comment.faturaOption === 'Fatura Emitida' ? 'selected' : ''}>Fatura Emitida</option>
-                <option value="Fatura Não Emitida" ${comment.faturaOption === 'Fatura Não Emitida' ? 'selected' : ''}>Fatura Não Emitida</option>
+                <option value="Emitida" ${comment.faturaOption === 'Emitida' ? 'selected' : ''}>Emitida</option>
+                <option value="Não Emitida" ${comment.faturaOption === 'Não Emitida' ? 'selected' : ''}>Não Emitida</option>
             `;
             
             const sibaDropdown = document.createElement('select');
             sibaDropdown.innerHTML = `
-                <option value="SIBA Enviado" ${comment.sibaOption === 'SIBA Enviado' ? 'selected' : ''}>SIBA Enviado</option>
-                <option value="SIBA Não Enviado" ${comment.sibaOption === 'SIBA Não Enviado' ? 'selected' : ''}>SIBA Não Enviado</option>
+                <option value="Enviado" ${comment.sibaOption === 'Enviado' ? 'selected' : ''}>Enviado</option>
+                <option value="Não Enviado" ${comment.sibaOption === 'Não Enviado' ? 'selected' : ''}>Não Enviado</option>
             `;
             
             // Update button
