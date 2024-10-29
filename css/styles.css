@@ -885,13 +885,13 @@ h1 {
     font-size: 0.9em;
     width: auto;
     margin: 0;
-    gap: 50px;
+    gap: 5px;
 }
 
 /* Space between Atualizar and Apagar buttons */
 .comment-actions {
     display: flex;
-    gap: 5px; /* Adjust this gap to control the space between Atualizar and Apagar */
+    gap: 15px; /* Adjust this gap to control the space between Atualizar and Apagar */
 }
 
 .form-group.d-flex.align-items-center {
