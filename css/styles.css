@@ -161,16 +161,18 @@ nav ul li a:hover {
 footer {
     background-color: #333; /* Dark background for contrast */
     color: #fff; /* White text for readability */
-    padding: 20px; /* Add some padding for spacing */
+    padding: 20px 0; /* Top and bottom padding only */
     font-size: 14px; /* Adjust font size for a professional look */
 }
 
-/* Flexbox container for the footer */
+/* Centered container with max-width for consistent alignment */
 .footer-container {
+    max-width: 1200px; /* Adjust width as needed to match your main content */
+    margin: 0 auto; /* Center the footer container */
+    padding: 0 20px; /* Side padding for alignment on wider screens */
     display: flex;
     justify-content: space-between; /* Space between left and right sections */
     align-items: center; /* Vertically center the items */
-    flex-wrap: wrap; /* Ensures proper wrapping on smaller screens */
 }
 
 /* Left section of the footer */
