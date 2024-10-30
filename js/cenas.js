@@ -481,10 +481,13 @@ async function init() {
 const checklists = {
     aulaRPM: [
         "Calções", "Camisola", "Meias Bike", "Fita Banda Cardíaca", "Banda Cardíaca", 
-        "Sapatilhas Bike", "Chinelos", "Calções banho", "Toalha pequena", "Toalha grande"
+        "Sapatilhas Bike", "Chinelos", "Calções banho", "Toalha pequena", "Toalha grande", "Água"
     ],
     bikeRide: [
         "Banda Cardíaca", "Óculos"
+    ],
+    Ginásio: [
+        "Toalha Pequena", "Toalha Grande", "Calções", "T-Shirt", "Chinelos", "Sapatilhas"
     ]
 };
 
