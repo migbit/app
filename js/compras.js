@@ -1,8 +1,8 @@
-// js/compras.js
+// Import Firebase modules
 import { db } from './script.js';
-import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Structure of the shopping list
+// Define the structure of the shopping list
 const listaCompras = {
     "Produtos Limpeza": [
         "Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF",
@@ -28,10 +28,10 @@ const listaCompras = {
     ]
 };
 
-// Create the shopping list UI dynamically
+// Helper functions to create and manage the UI
+
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
-    
     Object.entries(listaCompras).forEach(([categoria, itens]) => {
         const categoriaDiv = document.createElement('div');
         categoriaDiv.className = 'categoria';
@@ -45,7 +45,6 @@ function criarListaCompras() {
         form.appendChild(categoriaDiv);
     });
     
-    // Add blank fields for additional items
     const diversosDiv = document.createElement('div');
     diversosDiv.className = 'categoria';
     diversosDiv.innerHTML = '<h3>Itens Adicionais</h3>';
@@ -56,7 +55,6 @@ function criarListaCompras() {
     form.appendChild(diversosDiv);
 }
 
-// Create an item element in the shopping list
 function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
@@ -75,7 +73,6 @@ function criarItemCompra(item) {
     return itemDiv;
 }
 
-// Create a blank item input for adding new items
 function criarItemCompraEmBranco() {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
@@ -94,7 +91,8 @@ function criarItemCompraEmBranco() {
     return itemDiv;
 }
 
-// Save the current shopping list to Firestore
+// Functions for Firebase synchronization and UI updates
+
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
@@ -114,108 +112,55 @@ async function salvarListaCompras() {
             itens: listaParaSalvar,
             ultimaAtualizacao: Timestamp.now()
         });
-        console.log("Lista de compras atualizada com sucesso!");
     } catch (e) {
         console.error("Erro ao salvar a lista de compras: ", e);
         alert('Ocorreu um erro ao salvar a lista de compras.');
     }
 }
 
-// Load the shopping list from Firestore
-async function carregarListaCompras() {
-    try {
-        const docRef = doc(db, "listas_compras", "lista_atual");
-        const docSnap = await getDoc(docRef);
+// Clear the UI before reloading data
+function clearComprasUI() {
+    const form = document.getElementById('compras-form');
+    form.innerHTML = '';
+}
 
+// Populate the UI with items from Firebase
+function populateComprasUI(itens) {
+    criarListaCompras();  // Recreate the base UI
+    
+    document.querySelectorAll('.item-compra').forEach(item => {
+        const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
+        const nome = nomeElement.textContent || nomeElement.value;
+        if (itens[nome]) {
+            item.querySelector('.item-quantidade').value = itens[nome].quantidade;
+            item.setAttribute('data-local', itens[nome].local);
+
+            if (itens[nome].local.includes('C')) {
+                item.querySelector('.btn-local-c').classList.add('active');
+            }
+        }
+    });
+}
+
+// Real-time listener for Firebase updates
+function monitorListaCompras() {
+    const docRef = doc(db, "listas_compras", "lista_atual");
+
+    onSnapshot(docRef, (docSnap) => {
         if (docSnap.exists()) {
             const data = docSnap.data();
-            const itens = data.itens;
-
-            document.querySelectorAll('.item-compra').forEach(item => {
-                const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-                const nome = nomeElement.textContent || nomeElement.value;
-                if (itens[nome]) {
-                    item.querySelector('.item-quantidade').value = itens[nome].quantidade;
-                    item.setAttribute('data-local', itens[nome].local);
-                    
-                    if (itens[nome].local.includes('C')) {
-                        item.querySelector('.btn-local-c').classList.add('active');
-                    }
-                }
-            });
-        }
-    } catch (e) {
-        console.error("Erro ao carregar a lista de compras: ", e);
-    }
-}
-
-// Helper function to update local data based on button state
-function updateLocalData(item) {
-    const localC = item.querySelector('.btn-local-c').classList.contains('active') ? 'C' : '';
-    const locaisSelecionados = localC || 'Não definido';
-
-    item.setAttribute('data-local', locaisSelecionados);
-}
-
-// Generate the summary of the shopping list
-function gerarResumo() {
-    const itens = document.querySelectorAll('.item-compra');
-    let resumo = '';
-
-    itens.forEach(item => {
-        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
-        const quantidade = item.querySelector('.item-quantidade').value;
-        const local = item.getAttribute('data-local');
-
-        if (nome && parseInt(quantidade) > 0) {
-            let localDisplay = '';
-            if (local === 'C') {
-                localDisplay = ' (Casa)';
-            }
-            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
+            clearComprasUI();
+            populateComprasUI(data.itens);
+        } else {
+            console.log("No such document!");
         }
     });
-
-    return resumo;
 }
 
-// Display the summary and save the list
-async function exibirResumoESalvar() {
-    const resumo = gerarResumo();
-    const resumoConteudo = document.getElementById('resumo-conteudo');
-    resumoConteudo.innerHTML = resumo.replace(/\n/g, '<br>');
-    document.getElementById('resumo').style.display = 'block';
+// Initialize and set up listeners
 
-    await salvarListaCompras();
-}
-
-// Send the shopping list by email using EmailJS
-function enviarEmailListaCompras(resumo) {
-    if (typeof emailjs === 'undefined') {
-        console.error('EmailJS não está definido.');
-        alert('Erro ao enviar o e-mail.');
-        return;
-    }
-
-    emailjs.send('service_tuglp9h', 'template_4micnki', {
-        to_name: "apartments.oporto@gmail.com",
-        from_name: "Apartments Oporto",
-        subject: "Lista de Compras",
-        message: resumo
-    })
-    .then(function(response) {
-        console.log('E-mail enviado com sucesso!', response.status, response.text);
-        alert('E-mail enviado com sucesso!');
-    }, function(error) {
-        console.error('Erro ao enviar e-mail:', error);
-        alert('Erro ao enviar o e-mail.');
-    });
-}
-
-// Event listeners
 document.addEventListener('DOMContentLoaded', () => {
-    criarListaCompras();
-    carregarListaCompras();
+    monitorListaCompras();
 
     document.getElementById('compras-form').addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-aumentar')) {
@@ -237,6 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.getElementById('btn-requisitar').addEventListener('click', exibirResumoESalvar);
-    document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
+    document.getElementById('btn-requisitar').addEventListener('click', async () => {
+        const resumo = gerarResumo();
+        const resumoConteudo = document.getElementById('resumo-conteudo');
+        resumoConteudo.innerHTML = resumo.replace(/\n/g, '<br>');
+        document.getElementById('resumo').style.display = 'block';
+        await salvarListaCompras();
+    });
 });
