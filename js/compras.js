@@ -4,32 +4,14 @@ import { collection, doc, setDoc, onSnapshot, Timestamp } from "https://www.gsta
 
 // Define the structure of the shopping list
 const listaCompras = {
-    "Produtos Limpeza": [
-        "Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF",
-        "Limpeza Chão (Lava Tudo)", "Limpeza Chão (Madeira)", "Limpa Vidros",
-        "Limpeza Potente", "Limpeza Placas", "Vinagre"
-    ],
-    "Roupa": [
-        "Detergente Roupa", "Amaciador", "Lixívia Roupa Branca", "Tira Nódoas",
-        "Tira Gorduras", "Oxi Active", "Branqueador", "Perfumador"
-    ],
-    "WC": [
-        "Papel Higiénico", "Gel WC Sanitas", "Toalhitas", "Toalhitas Desmaquilhantes",
-        "Blocos Sanitários", "Anticalcário", "Limpeza Chuveiro", "Desentupidor de Canos",
-        "Manutenção Canos", "Papel Higiénico Húmido", "Sabonete Líquido"
-    ],
-    "Cozinha": [
-        "Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas",
-        "Chá", "Lava-Loiça", "Esfregões", "Película Transparente", "Papel Alumínio",
-        "Sacos congelação"
-    ],
-    "Diversos": [
-        "Varetas Difusoras (Ambientador)"
-    ]
+    "Produtos Limpeza": ["Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF", "Limpeza Chão (Lava Tudo)", "Limpeza Chão (Madeira)", "Limpa Vidros", "Limpeza Potente", "Limpeza Placas", "Vinagre"],
+    "Roupa": ["Detergente Roupa", "Amaciador", "Lixívia Roupa Branca", "Tira Nódoas", "Tira Gorduras", "Oxi Active", "Branqueador", "Perfumador"],
+    "WC": ["Papel Higiénico", "Gel WC Sanitas", "Toalhitas", "Toalhitas Desmaquilhantes", "Blocos Sanitários", "Anticalcário", "Limpeza Chuveiro", "Desentupidor de Canos", "Manutenção Canos", "Papel Higiénico Húmido", "Sabonete Líquido"],
+    "Cozinha": ["Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas", "Chá", "Lava-Loiça", "Esfregões", "Película Transparente", "Papel Alumínio", "Sacos congelação"],
+    "Diversos": ["Varetas Difusoras (Ambientador)"]
 };
 
-// Helper functions to create and manage the UI
-
+// Create the shopping list UI
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
     Object.entries(listaCompras).forEach(([categoria, itens]) => {
@@ -44,7 +26,7 @@ function criarListaCompras() {
         
         form.appendChild(categoriaDiv);
     });
-    
+
     const diversosDiv = document.createElement('div');
     diversosDiv.className = 'categoria';
     diversosDiv.innerHTML = '<h3>Itens Adicionais</h3>';
@@ -55,6 +37,7 @@ function criarListaCompras() {
     form.appendChild(diversosDiv);
 }
 
+// Helper function to create and populate UI elements
 function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
@@ -91,8 +74,7 @@ function criarItemCompraEmBranco() {
     return itemDiv;
 }
 
-// Functions for Firebase synchronization and UI updates
-
+// Save the current shopping list to Firebase
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
@@ -118,15 +100,14 @@ async function salvarListaCompras() {
     }
 }
 
-// Clear the UI before reloading data
+// Clear and repopulate UI with Firebase data
 function clearComprasUI() {
     const form = document.getElementById('compras-form');
     form.innerHTML = '';
 }
 
-// Populate the UI with items from Firebase
 function populateComprasUI(itens) {
-    criarListaCompras();  // Recreate the base UI
+    criarListaCompras();  // Create the base UI elements
     
     document.querySelectorAll('.item-compra').forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
@@ -134,7 +115,6 @@ function populateComprasUI(itens) {
         if (itens[nome]) {
             item.querySelector('.item-quantidade').value = itens[nome].quantidade;
             item.setAttribute('data-local', itens[nome].local);
-
             if (itens[nome].local.includes('C')) {
                 item.querySelector('.btn-local-c').classList.add('active');
             }
@@ -142,7 +122,7 @@ function populateComprasUI(itens) {
     });
 }
 
-// Real-time listener for Firebase updates
+// Set up real-time listener for Firebase updates
 function monitorListaCompras() {
     const docRef = doc(db, "listas_compras", "lista_atual");
 
@@ -151,17 +131,15 @@ function monitorListaCompras() {
             const data = docSnap.data();
             clearComprasUI();
             populateComprasUI(data.itens);
+            attachEventListeners();  // Re-attach listeners after reloading data
         } else {
             console.log("No such document!");
         }
     });
 }
 
-// Initialize and set up listeners
-
-document.addEventListener('DOMContentLoaded', () => {
-    monitorListaCompras();
-
+// Function to attach all event listeners
+function attachEventListeners() {
     document.getElementById('compras-form').addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-aumentar')) {
             const input = e.target.previousElementSibling;
@@ -189,4 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('resumo').style.display = 'block';
         await salvarListaCompras();
     });
+}
+
+// Initialize listeners and UI setup
+document.addEventListener('DOMContentLoaded', () => {
+    monitorListaCompras();  // Starts the real-time listener
+    attachEventListeners(); // Initial attachment of event listeners
 });
