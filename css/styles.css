@@ -190,6 +190,13 @@ footer {
     font-size: 14px; /* Ensure a consistent font size */
 }
 
+/* Ensure that the Logout link and user info are inline */
+.footer-login a,
+#user-info {
+    display: inline-block;
+    vertical-align: middle; /* Aligns the elements vertically */
+}
+
 /* Footer links styles */
 .footer-login a {
     color: #fff; /* White color for links */
