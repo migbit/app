@@ -186,14 +186,16 @@ footer {
 
 /* Footer login/logout section */
 .footer-login {
-    display: inline-block; /* Keep login and user-info in the same block */
+    display: inline-flex; /* Keep login and user-info in the same line */
+    align-items: center; /* Align items vertically in the center */
     font-size: 14px; /* Ensure a consistent font size */
 }
 
 /* Make sure the Logout link and user info are inline */
 .footer-login a,
 #user-info {
-    display: inline-block; /* Ensure inline-block to prevent line breaks */
+    display: inline-flex; /* Ensure inline-flex to prevent line breaks */
+    align-items: center; /* Vertically align items within */
     vertical-align: middle; /* Align them vertically in the middle */
 }
 
@@ -214,7 +216,8 @@ footer {
 #user-info {
     margin-left: 10px; /* Space between user info and logout link */
     font-weight: bold; /* Make the user info stand out */
-    display: inline-block; /* Ensure it's inline with the logout link */
+    display: inline-flex; /* Ensure it's inline with the logout link */
+    align-items: center; /* Align vertically */
 }
 
 /* Responsive adjustments for smaller screens */
@@ -229,6 +232,7 @@ footer {
         text-align: center; /* Center-align the login/logout section */
     }
 }
+
 
 /* Main Content Styles */
 main {
