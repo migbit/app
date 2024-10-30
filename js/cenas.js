@@ -476,5 +476,64 @@ async function init() {
     }
 }
 
+// Checklist Data
+const checklists = {
+    aulaRPM: [
+        "Calções", "Camisola", "Meias Bike", "Fita Banda Cardíaca", "Banda Cardíaca", 
+        "Sapatilhas Bike", "Chinelos", "Calções banho", "Toalha pequena", "Toalha grande"
+    ],
+    bikeRide: [
+        "Banda Cardíaca", "Óculos"
+    ]
+};
+
+// Function to load checklist items based on selection
+function loadChecklist() {
+    const checklistDropdown = document.getElementById("checklist-dropdown");
+    const checklistItemsContainer = document.getElementById("checklist-items");
+
+    // Clear previous checklist
+    checklistItemsContainer.innerHTML = '';
+    checklistItemsContainer.style.display = 'none';
+
+    // Get selected checklist
+    const selectedChecklist = checklistDropdown.value;
+    if (selectedChecklist && checklists[selectedChecklist]) {
+        checklists[selectedChecklist].forEach((item, index) => {
+            // Create list item with checkbox
+            const listItem = document.createElement("li");
+            listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+
+            const label = document.createElement("label");
+            label.textContent = item;
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "form-check-input";
+            checkbox.id = `checklist-item-${index}`;
+
+            // Event listener to check if all items are completed
+            checkbox.addEventListener("change", () => {
+                const allChecked = [...checklistItemsContainer.querySelectorAll("input[type='checkbox']")]
+                    .every(checkbox => checkbox.checked);
+                if (allChecked) {
+                    checklistItemsContainer.style.display = 'none';
+                }
+            });
+
+            listItem.appendChild(label);
+            listItem.appendChild(checkbox);
+            checklistItemsContainer.appendChild(listItem);
+        });
+
+        // Show checklist
+        checklistItemsContainer.style.display = 'block';
+    }
+}
+
+// Event Listener for Dropdown Change
+document.getElementById("checklist-dropdown").addEventListener("change", loadChecklist);
+
+
 // Start the application when DOM is ready
 document.addEventListener('DOMContentLoaded', init);
