@@ -11,7 +11,7 @@ const listaCompras = {
     "Diversos": ["Varetas Difusoras (Ambientador)"]
 };
 
-// Create the shopping list UI
+// Cria a interface da lista de compras
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
     Object.entries(listaCompras).forEach(([categoria, itens]) => {
@@ -27,17 +27,17 @@ function criarListaCompras() {
         form.appendChild(categoriaDiv);
     });
 
-    const diversosDiv = document.createElement('div');
-    diversosDiv.className = 'categoria';
-    diversosDiv.innerHTML = '<h3>Itens Adicionais</h3>';
+    const adicionaisDiv = document.createElement('div');
+    adicionaisDiv.className = 'categoria';
+    adicionaisDiv.innerHTML = '<h3>Itens Adicionais</h3>';
     for (let i = 0; i < 5; i++) {
         const itemDiv = criarItemCompraEmBranco();
-        diversosDiv.appendChild(itemDiv);
+        adicionaisDiv.appendChild(itemDiv);
     }
-    form.appendChild(diversosDiv);
+    form.appendChild(adicionaisDiv);
 }
 
-// Helper functions to create and populate UI elements
+// Funções auxiliares para criar e popular elementos da UI
 function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
@@ -74,7 +74,7 @@ function criarItemCompraEmBranco() {
     return itemDiv;
 }
 
-// Save the current shopping list to Firebase
+// Salva a lista de compras atual no Firebase
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
@@ -100,7 +100,7 @@ async function salvarListaCompras() {
     }
 }
 
-// Generate summary of the shopping list
+// Gera o resumo da lista de compras
 function gerarResumo() {
     const itens = document.querySelectorAll('.item-compra');
     let resumo = '';
@@ -119,7 +119,7 @@ function gerarResumo() {
     return resumo;
 }
 
-// Send the shopping list by email using EmailJS
+// Envia a lista de compras por email usando EmailJS
 function enviarEmailListaCompras(resumo) {
     if (typeof emailjs === 'undefined') {
         console.error('EmailJS não está definido.');
@@ -142,14 +142,14 @@ function enviarEmailListaCompras(resumo) {
     });
 }
 
-// Clear and repopulate UI with Firebase data
+// Limpa e repopula a UI com dados do Firebase
 function clearComprasUI() {
     const form = document.getElementById('compras-form');
     form.innerHTML = '';
 }
 
 function populateComprasUI(itens) {
-    criarListaCompras();  // Create the base UI elements
+    criarListaCompras();  // Cria os elementos básicos da UI
     
     document.querySelectorAll('.item-compra').forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
@@ -162,9 +162,11 @@ function populateComprasUI(itens) {
             }
         }
     });
+
+    aplicarFiltro(document.getElementById('search-input').value); // Aplica o filtro atual após carregar os dados
 }
 
-// Set up real-time listener for Firebase updates
+// Configura o listener em tempo real para atualizações do Firebase
 function monitorListaCompras() {
     const docRef = doc(db, "listas_compras", "lista_atual");
 
@@ -173,14 +175,33 @@ function monitorListaCompras() {
             const data = docSnap.data();
             clearComprasUI();
             populateComprasUI(data.itens);
-            attachEventListeners();  // Re-attach listeners after reloading data
+            attachEventListeners();  // Re-anexa os listeners após recarregar os dados
         } else {
-            console.log("No such document!");
+            console.log("Nenhum documento encontrado!");
         }
     });
 }
 
-// Function to attach all event listeners
+// Atualiza os dados de localidade
+function updateLocalData(item) {
+    const local = item.getAttribute('data-local') === 'C' ? 'Não definido' : 'C';
+    item.setAttribute('data-local', local);
+}
+
+// Função para aplicar o filtro de busca
+function aplicarFiltro(filtro) {
+    const filtroLower = filtro.toLowerCase();
+    document.querySelectorAll('.item-compra').forEach(item => {
+        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        if (nome.toLowerCase().includes(filtroLower)) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Função para anexar todos os event listeners
 function attachEventListeners() {
     document.getElementById('compras-form').addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-aumentar')) {
@@ -211,10 +232,23 @@ function attachEventListeners() {
     });
 
     document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
+
+    // Event listeners para a barra de busca
+    const searchInput = document.getElementById('search-input');
+    const clearSearchBtn = document.getElementById('clear-search');
+
+    searchInput.addEventListener('input', (e) => {
+        aplicarFiltro(e.target.value);
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        aplicarFiltro('');
+    });
 }
 
-// Initialize listeners and UI setup
+// Inicializa os listeners e a configuração da UI
 document.addEventListener('DOMContentLoaded', () => {
-    monitorListaCompras();  // Starts the real-time listener
-    attachEventListeners(); // Initial attachment of event listeners
+    monitorListaCompras();  // Inicia o listener em tempo real
+    attachEventListeners(); // Anexa os event listeners iniciais
 });
