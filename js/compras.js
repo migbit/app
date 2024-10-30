@@ -122,6 +122,25 @@ function populateComprasUI(itens) {
     });
 }
 
+// Generate summary of the shopping list
+function gerarResumo() {
+    const itens = document.querySelectorAll('.item-compra');
+    let resumo = '';
+
+    itens.forEach(item => {
+        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        const quantidade = item.querySelector('.item-quantidade').value;
+        const local = item.getAttribute('data-local');
+
+        if (nome && parseInt(quantidade) > 0) {
+            let localDisplay = local === 'C' ? ' (Casa)' : '';
+            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
+        }
+    });
+
+    return resumo;
+}
+
 // Set up real-time listener for Firebase updates
 function monitorListaCompras() {
     const docRef = doc(db, "listas_compras", "lista_atual");
