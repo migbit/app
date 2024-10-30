@@ -1,6 +1,6 @@
 // Import Firebase modules
 import { db } from './script.js';
-import { collection, doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, doc, setDoc, getDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Define the structure of the shopping list
 const listaCompras = {
@@ -37,7 +37,7 @@ function criarListaCompras() {
     form.appendChild(diversosDiv);
 }
 
-// Helper function to create and populate UI elements
+// Helper functions to create and populate UI elements
 function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
@@ -100,6 +100,48 @@ async function salvarListaCompras() {
     }
 }
 
+// Generate summary of the shopping list
+function gerarResumo() {
+    const itens = document.querySelectorAll('.item-compra');
+    let resumo = '';
+
+    itens.forEach(item => {
+        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        const quantidade = item.querySelector('.item-quantidade').value;
+        const local = item.getAttribute('data-local');
+
+        if (nome && parseInt(quantidade) > 0) {
+            let localDisplay = local === 'C' ? ' (Casa)' : '';
+            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
+        }
+    });
+
+    return resumo;
+}
+
+// Send the shopping list by email using EmailJS
+function enviarEmailListaCompras(resumo) {
+    if (typeof emailjs === 'undefined') {
+        console.error('EmailJS não está definido.');
+        alert('Erro ao enviar o e-mail.');
+        return;
+    }
+
+    emailjs.send('service_tuglp9h', 'template_4micnki', {
+        to_name: "apartments.oporto@gmail.com",
+        from_name: "Apartments Oporto",
+        subject: "Lista de Compras",
+        message: resumo
+    })
+    .then(function(response) {
+        console.log('E-mail enviado com sucesso!', response.status, response.text);
+        alert('E-mail enviado com sucesso!');
+    }, function(error) {
+        console.error('Erro ao enviar e-mail:', error);
+        alert('Erro ao enviar o e-mail.');
+    });
+}
+
 // Clear and repopulate UI with Firebase data
 function clearComprasUI() {
     const form = document.getElementById('compras-form');
@@ -120,25 +162,6 @@ function populateComprasUI(itens) {
             }
         }
     });
-}
-
-// Generate summary of the shopping list
-function gerarResumo() {
-    const itens = document.querySelectorAll('.item-compra');
-    let resumo = '';
-
-    itens.forEach(item => {
-        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
-        const quantidade = item.querySelector('.item-quantidade').value;
-        const local = item.getAttribute('data-local');
-
-        if (nome && parseInt(quantidade) > 0) {
-            let localDisplay = local === 'C' ? ' (Casa)' : '';
-            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
-        }
-    });
-
-    return resumo;
 }
 
 // Set up real-time listener for Firebase updates
@@ -186,6 +209,8 @@ function attachEventListeners() {
         document.getElementById('resumo').style.display = 'block';
         await salvarListaCompras();
     });
+
+    document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
 }
 
 // Initialize listeners and UI setup
