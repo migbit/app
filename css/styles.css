@@ -167,7 +167,7 @@ footer {
 
 /* Centered container with max-width for consistent alignment */
 .footer-container {
-    max-width: 1200px; /* Adjust width as needed to match your main content */
+    max-width: 1200px; /* Adjust width to match your main content */
     margin: 0 auto; /* Center the footer container */
     padding: 0 20px; /* Side padding for alignment on wider screens */
     display: flex;
@@ -178,6 +178,7 @@ footer {
 /* Left section of the footer */
 .footer-left {
     flex: 1; /* Takes up available space */
+    text-align: left;
 }
 
 /* Right section of the footer */
@@ -234,6 +235,7 @@ footer {
         text-align: center; /* Center-align the login/logout section */
     }
 }
+
 
 
 /* Main Content Styles */
