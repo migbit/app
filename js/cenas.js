@@ -315,10 +315,7 @@ async function init() {
         
         // Load tasks
         await loadTasks();
-        
-        // Load comments
-        await loadComments();
-        
+
         // Setup event listeners
         setupEventListeners();
         
