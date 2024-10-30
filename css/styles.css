@@ -157,6 +157,71 @@ nav ul li a:hover {
     }
 }
 
+/* General footer styling */
+footer {
+    background-color: #333; /* Dark background for contrast */
+    color: #fff; /* White text for readability */
+    padding: 20px; /* Add some padding for spacing */
+    font-size: 14px; /* Adjust font size for a professional look */
+}
+
+/* Flexbox container for the footer */
+.footer-container {
+    display: flex;
+    justify-content: space-between; /* Space between left and right sections */
+    align-items: center; /* Vertically center the items */
+    flex-wrap: wrap; /* Ensures proper wrapping on smaller screens */
+}
+
+/* Left section of the footer */
+.footer-left {
+    flex: 1; /* Takes up available space */
+}
+
+/* Right section of the footer */
+.footer-right {
+    flex: 1; /* Takes up available space */
+    text-align: right; /* Aligns content to the right */
+}
+
+/* Footer login/logout section */
+.footer-login {
+    display: inline-block;
+    font-size: 14px; /* Ensure a consistent font size */
+}
+
+/* Footer links styles */
+.footer-login a {
+    color: #fff; /* White color for links */
+    text-decoration: none; /* Removes underline from links */
+    margin-left: 10px; /* Space between login and logout links */
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* On hover, change link color */
+.footer-login a:hover {
+    color: #ddd; /* Lighter color on hover */
+}
+
+/* User info styling */
+#user-info {
+    margin-left: 10px; /* Space between user info and logout link */
+    font-weight: bold; /* Make the user info stand out */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .footer-container {
+        flex-direction: column; /* Stack footer items vertically */
+        text-align: center; /* Center-align all text */
+    }
+    
+    .footer-right {
+        margin-top: 15px; /* Add some space between sections */
+        text-align: center; /* Center-align the login/logout section */
+    }
+}
+
 /* Main Content Styles */
 main {
     flex: 1;
