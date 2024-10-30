@@ -75,23 +75,23 @@
                 </ul>
             </div>
         </section>
-
-        <section class="comments-section card mt-4">
-            <h2 class="card-header">Cenas dos Comentários</h2>
+        
+        <section class="checklist-section card mt-4">
+            <h2 class="card-header">Cena das Checklists</h2>
             <div class="card-body">
-                <form id="comment-form" class="d-flex align-items-center gap-3">
-                    <div class="form-group mb-3 d-flex align-items-center">
-                        <input type="text" id="guest-name" class="form-control" placeholder="Nome do hóspede" required>
-                        <button type="submit" class="btn btn-success">Adicionar</button>
-                    </div>
-                </form>    
-                <ul id="comment-list" class="list-group mt-3">
-                    <!-- Comments will be dynamically populated here -->
+                <label for="checklist-dropdown">Selecione uma lista:</label>
+                <select id="checklist-dropdown" class="form-control">
+                    <option value="">Escolha uma lista...</option>
+                    <option value="aulaRPM">Aula RPM</option>
+                    <option value="bikeRide">Passeio de Bike</option>
+                    <option value="Ginásio">Ginásio</option>
+                </select>
+                <ul id="checklist-items" class="list-group mt-3" style="display: none;">
+                    <!-- Checklist items will be populated here by JavaScript -->
                 </ul>
             </div>
         </section>
-        
-                
+               
     <footer class="text-center mt-5">
         <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
     </footer>
