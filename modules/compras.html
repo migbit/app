@@ -12,7 +12,7 @@
     <header>
         <h1>Lista de Compras</h1>
 
-         <!-- Ícone de menu "hambúrguer" para mobile -->
+        <!-- Ícone de menu "hambúrguer" para mobile -->
         <div class="menu-icon" id="menu-icon">
             &#9776; <!-- Ícone de três linhas -->
         </div>
@@ -33,9 +33,13 @@
         </nav>
     </header>
 
-
     <main>
         <section id="lista-compras">
+            <!-- Barra de busca adicionada -->
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Procurar itens..." />
+                <button id="clear-search" title="Limpar busca">&times;</button>
+            </div>
             <form id="compras-form">
                 <!-- Aqui serão adicionados os itens de compra via JavaScript -->
             </form>
@@ -78,15 +82,15 @@
        })();
     </script>
 
-        <!-- Script para alternar o menu no mobile -->
-<script>
-    const menuIcon = document.getElementById('menu-icon');
-    const navMenu = document.getElementById('nav-menu');
+    <!-- Script para alternar o menu no mobile -->
+    <script>
+        const menuIcon = document.getElementById('menu-icon');
+        const navMenu = document.getElementById('nav-menu');
 
-    menuIcon.addEventListener('click', function() {
-        navMenu.classList.toggle('active');
-    });
-</script>
+        menuIcon.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+    </script>
 
 </body>
 </html>
