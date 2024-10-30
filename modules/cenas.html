@@ -28,12 +28,6 @@
                 <li><a href="tarefas.html">Tarefas</a></li>             
                 <li><a href="cenas.html" class="active">Cenas</a></li>
                 <li><a href="hospedes.html">Hóspedes</a></li>
-                <!-- Login/Logout Buttons -->
-                <li><a href="#" id="login-btn">Login com Google</a></li>
-                <li><a href="#" id="logout-btn" style="display:none;">Logout</a></li>
-                <li id="user-info" style="display:none;">
-                    <span id="user-name"></span> | <span id="user-email"></span>
-                </li>
             </ul>
         </nav>
     </header>
@@ -94,9 +88,18 @@
             </div>
         </section>
                
-    <footer class="text-center mt-5">
-        <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
-    </footer>
+        <footer>
+            <p>&copy; 2024 OM&MT. Todos os direitos reservados.</p>
+            
+            <!-- Login/Logout and User Info moved to footer -->
+            <div class="footer-login">
+                <a href="#" id="login-btn">Login com Google</a>
+                <a href="#" id="logout-btn" style="display:none;">Logout</a>
+                <span id="user-info" style="display:none;">
+                    <span id="user-name"></span> | <span id="user-email"></span>
+                </span>
+            </div>
+        </footer>
 
     <!-- Required Scripts -->
     <script src="../js/ical.min.js"></script>
