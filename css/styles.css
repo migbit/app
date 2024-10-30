@@ -1,61 +1,111 @@
-/* Reset and Base Styles */
-* {
+/* ------------------------------------ */
+/*             CSS RESET                */
+/* ------------------------------------ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
+/* ------------------------------------ */
+/*           CSS VARIABLES               */
+/* ------------------------------------ */
+:root {
+    /* Color Palette */
+    --color-primary: #34495e;
+    --color-secondary: #2c3e50;
+    --color-accent: #1abc9c;
+    --color-accent-dark: #16a085;
+    --color-background: #ecf0f1;
+    --color-white: #ffffff;
+    --color-gray-light: #f4f4f4;
+    --color-gray: #bdc3c7;
+    --color-gray-dark: #95a5a6;
+    --color-red: #e74c3c;
+    --color-red-dark: #c0392b;
+    --color-blue: #3498db;
+    --color-blue-active: #2ecc71;
+    --color-hover-bg: #202f3e;
+    --color-footer-bg: #34495e;
+    --color-footer-text: #ffffff;
+    
+    /* Font Sizes */
+    --font-size-base: 1rem;
+    --font-size-small: 0.875rem;
+    --font-size-large: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-xxl: 2rem;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    
+    /* Border Radius */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-circle: 50%;
+    
+    /* Shadows */
+    --shadow-light: 0 2px 5px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    /* Transition */
+    --transition-default: all 0.3s ease;
+    
+    /* Font Family */
+    --font-family: 'Roboto', sans-serif;
+}
+
+/* ------------------------------------ */
+/*           BASE STYLES                 */
+/* ------------------------------------ */
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #ecf0f1;
-    color: #2c3e50;
+    font-family: var(--font-family);
+    background-color: var(--color-background);
+    color: var(--color-secondary);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     line-height: 1.6;
 }
 
-/* Header Styles */
+/* ------------------------------------ */
+/*           HEADER STYLES               */
+/* ------------------------------------ */
 header {
-    background-color: #34495e;
-    padding: 0.75rem;
-    color: white;
+    background-color: var(--color-primary);
+    padding: var(--spacing-sm);
+    color: var(--color-white);
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-light);
 }
 
-/* Ensures the title text in the header remains white */
 header h1 {
-    color: white;
+    color: var(--color-white);
+    font-size: var(--font-size-xxl);
 }
 
-/* Menu and Navigation */
-nav ul li a {
-    background-color: transparent;
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem 0.75rem;
-    text-align: center;
-    transition: background-color 0.3s ease;
-}
-
-/* Active Link Styling */
-nav ul li a.active {
-    font-weight: bold;
-    border-bottom: 2px solid white; /* Adds an underline to the active link */
-    color: #ffffff; /* Optional: Change color to highlight the active link */
-}
-
-/* Hover effect */
-nav ul li a:hover {
-    background-color: #202f3e;
-}
-
-/* Menu and Navigation */
+/* ------------------------------------ */
+/*           NAVIGATION STYLES           */
+/* ------------------------------------ */
 nav {
-    display: block; /* Menu is visible by default */
-    background-color: #34495e;
+    background-color: var(--color-primary);
+    position: relative;
+}
+
+nav .menu-icon {
+    display: none;
+    font-size: 2rem;
+    color: var(--color-white);
+    cursor: pointer;
+    text-align: center;
+    padding: var(--spacing-sm);
+    background-color: var(--color-primary);
 }
 
 nav ul {
@@ -63,244 +113,159 @@ nav ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-sm);
 }
 
 nav ul li {
-    margin: 0 0.75rem;
-}
-
-nav ul li a.active {
-    color: white;  /* Ensure the selected link's text remains white */
-    font-weight: bold;  /* Optional: to differentiate the selected link */
+    margin: 0 var(--spacing-sm);
 }
 
 nav ul li a {
     display: block;
     background-color: transparent;
-    color: white;
+    color: var(--color-white);
     text-decoration: none;
     font-weight: 500;
-    padding: 0.5rem 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
     text-align: center;
-    transition: background-color 0.3s ease;
+    transition: var(--transition-default);
+    border-radius: var(--border-radius-sm);
 }
 
 nav ul li a:hover {
-    background-color: #202f3e;
+    background-color: var(--color-hover-bg);
 }
 
+nav ul li a.active {
+    font-weight: bold;
+    border-bottom: 2px solid var(--color-white);
+    color: var(--color-white);
+}
+
+/* Separator Styling */
 #nav-menu ul li.separator {
-    font-size: 20px; /* Slightly larger for visibility (optional) */
-    vertical-align: middle; /* Align it properly with the other text */
-    color: #aaa; /* Optional: Change the color to something subtle */
-    margin: 0 5px; /* Adjust space around the separator */
+    font-size: var(--font-size-lg);
+    vertical-align: middle;
+    color: #aaa;
+    margin: 0 var(--spacing-xs);
 }
 
 /* Login/Logout Button Styles */
-#login-btn, #logout-btn {
+#login-btn,
+#logout-btn {
     background-color: transparent;
     border: none;
-    color: white;
+    color: var(--color-white);
     cursor: pointer;
     font-weight: 500;
-    padding: 0.5rem 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
     text-align: center;
     text-decoration: none;
-    transition: background-color 0.3s ease;
-    display: block; /* Ensures buttons look like links */
+    transition: var(--transition-default);
+    display: block;
+    border-radius: var(--border-radius-sm);
 }
 
-#login-btn:hover, #logout-btn:hover {
-    background-color: #202f3e;
+#login-btn:hover,
+#logout-btn:hover {
+    background-color: var(--color-hover-bg);
 }
 
 #user-info {
-    color: white;
+    color: var(--color-white);
     font-weight: 500;
-    padding: 0.5rem 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
 }
 
-/* Mobile Menu and "Hamburger" Icon */
-.menu-icon {
-    display: none; /* Hidden by default */
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-    text-align: center;
-    padding: 0.5rem;
-    background-color: #34495e;
-}
-
-/* Mobile Styles */
+/* Mobile Menu Styles */
 @media (max-width: 768px) {
-    .menu-icon {
-        display: block;
-    }
-
-    nav {
-        display: none; /* Hidden by default on mobile */
-        padding: 1rem;
-    }
-
-    nav.active {
+    nav .menu-icon {
         display: block;
     }
 
     nav ul {
         flex-direction: column;
         align-items: center;
+        display: none;
+        padding: var(--spacing-md);
+    }
+
+    nav.active ul {
+        display: flex;
     }
 
     nav ul li {
-        margin: 0.75rem 0;
+        margin: var(--spacing-sm) 0;
     }
 }
 
-/* General footer styling */
-footer {
-    background-color: #333; /* Dark background for contrast */
-    color: #fff; /* White text for readability */
-    padding: 20px 0; /* Top and bottom padding only */
-    font-size: 14px; /* Adjust font size for a professional look */
-}
-
-/* Centered container with max-width for consistent alignment */
-.footer-container {
-    max-width: 1200px; /* Adjust width to match your main content */
-    margin: 0 auto; /* Center the footer container */
-    padding: 0 20px; /* Side padding for alignment on wider screens */
-    display: flex;
-    justify-content: space-between; /* Space between left and right sections */
-    align-items: center; /* Vertically center the items */
-}
-
-/* Left section of the footer */
-.footer-left {
-    flex: 1; /* Takes up available space */
-    text-align: left;
-}
-
-/* Right section of the footer */
-.footer-right {
-    flex: 1; /* Takes up available space */
-    text-align: right; /* Aligns content to the right */
-}
-
-/* Footer login/logout section */
-.footer-login {
-    display: inline-flex; /* Keep login and user-info in the same line */
-    align-items: center; /* Align items vertically in the center */
-    font-size: 14px; /* Ensure a consistent font size */
-}
-
-/* Make sure the Logout link and user info are inline */
-.footer-login a,
-#user-info {
-    display: inline-flex; /* Ensure inline-flex to prevent line breaks */
-    align-items: center; /* Vertically align items within */
-    vertical-align: middle; /* Align them vertically in the middle */
-}
-
-/* Footer links styles */
-.footer-login a {
-    color: #fff; /* White color for links */
-    text-decoration: none; /* Removes underline from links */
-    margin-left: 10px; /* Space between login and logout links */
-    transition: color 0.3s ease; /* Smooth transition for hover effect */
-}
-
-/* On hover, change link color */
-.footer-login a:hover {
-    color: #ddd; /* Lighter color on hover */
-}
-
-/* User info styling */
-#user-info {
-    margin-left: 10px; /* Space between user info and logout link */
-    font-weight: bold; /* Make the user info stand out */
-    display: inline-flex; /* Ensure it's inline with the logout link */
-    align-items: center; /* Align vertically */
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 600px) {
-    .footer-container {
-        flex-direction: column; /* Stack footer items vertically */
-        text-align: center; /* Center-align all text */
-    }
-    
-    .footer-right {
-        margin-top: 15px; /* Add some space between sections */
-        text-align: center; /* Center-align the login/logout section */
-    }
-}
-
-
-
-/* Main Content Styles */
+/* ------------------------------------ */
+/*           MAIN CONTENT                */
+/* ------------------------------------ */
 main {
     flex: 1;
-    padding: 1rem;
+    padding: var(--spacing-md);
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Form Styles */
-.form-section, .report-section {
-    background-color: white;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Form and Report Sections */
+.form-section,
+.report-section {
+    background-color: var(--color-white);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-medium);
 }
 
 .form-group {
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--spacing-sm);
 }
 
 label {
     display: block;
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--spacing-xs);
     font-weight: bold;
-    font-size: 0.875rem;
-    color: #34495e;
+    font-size: var(--font-size-small);
+    color: var(--color-primary);
 }
 
-input[type="number"], select, input[type="checkbox"] {
+input[type="number"],
+select,
+input[type="checkbox"] {
     width: 100%;
-    padding: 0.375rem;
-    border: 1px solid #bdc3c7;
-    border-radius: 4px;
+    padding: var(--spacing-xs);
+    border: 1px solid var(--color-gray);
+    border-radius: var(--border-radius-sm);
     max-width: 300px;
-    font-size: 0.875rem;
-    margin-bottom: 0.375rem;
+    font-size: var(--font-size-small);
+    margin-bottom: var(--spacing-xs);
 }
 
-/* Buttons */
 button {
-    padding: 0.375rem 0.75rem;
-    background-color: #1abc9c;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-accent);
     border: none;
-    color: white;
+    color: var(--color-white);
     cursor: pointer;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    transition: background-color 0.3s ease;
-    margin-top: 0.5rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-small);
+    transition: var(--transition-default);
+    margin-top: var(--spacing-sm);
 }
 
 button:hover {
-    background-color: #16a085;
+    background-color: var(--color-accent-dark);
 }
 
 /* Message Container */
 #mensagem-container {
-    margin-top: 0.75rem;
-    padding: 0.75rem;
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
     background-color: #f0f0f0;
-    border-radius: 4px;
-    font-size: 1rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-base);
     line-height: 1.5;
 }
 
@@ -308,23 +273,24 @@ button:hover {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1rem 0;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: var(--spacing-md) 0;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-light);
 }
 
-th, td {
-    padding: 0.75rem;
+th,
+td {
+    padding: var(--spacing-sm);
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #34495e;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 0.75rem;
+    font-size: var(--font-size-small);
 }
 
 tr:nth-child(even) {
@@ -337,15 +303,15 @@ tr:hover {
 
 /* Shopping List Styles */
 .categoria {
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
     border-bottom: 1px solid #ccc;
 }
 
 .categoria h3 {
-    margin-bottom: 0.75rem;
-    color: #2c3e50;
-    font-size: 1rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-secondary);
+    font-size: var(--font-size-base);
 }
 
 .item-compra {
@@ -353,35 +319,35 @@ tr:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
-    padding: 0.375rem 0.375rem;
+    padding: var(--spacing-xs);
     background-color: #f9f9f9;
-    border-radius: 4px;
+    border-radius: var(--border-radius-sm);
 }
 
 .item-info {
     display: flex;
     align-items: center;
     flex: 1;
-    gap: 0.5rem;
+    gap: var(--spacing-xs);
     height: 100%;
 }
 
 .item-nome,
 .item-nome-custom {
     flex: 1;
-    margin-right: 0.5rem;
+    margin-right: var(--spacing-xs);
 }
 
 .item-nome-custom {
     border: 1px solid #ccc;
     padding: 0.25rem;
-    border-radius: 3px;
+    border-radius: var(--border-radius-sm);
 }
 
 .item-controles {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--spacing-xs);
     height: 100%;
 }
 
@@ -390,44 +356,54 @@ tr:hover {
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: var(--border-radius-sm);
     height: 2rem;
     line-height: 2rem;
 }
 
-.btn-aumentar, .btn-diminuir, .btn-zero, .btn-local-c {
+.btn-aumentar,
+.btn-diminuir,
+.btn-zero,
+.btn-local-c {
     width: 1.75rem;
     height: 1.75rem;
-    background-color: #2c3e50;
-    color: white;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
     border: none;
-    border-radius: 50%;
+    border-radius: var(--border-radius-circle);
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: var(--font-size-small);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
+    transition: var(--transition-default);
 }
 
 .btn-zero {
-    background-color: #e74c3c;
+    background-color: var(--color-red);
 }
 
 .btn-zero:hover {
-    background-color: #c0392b;
+    background-color: var(--color-red-dark);
 }
 
 .btn-local-c {
-    background-color: #3498db;
+    background-color: var(--color-blue);
 }
 
 .btn-local-c.active {
-    background-color: #2ecc71;
+    background-color: var(--color-blue-active);
 }
 
-/* Centralizing all elements */
-.item-info, .item-controles, .item-nome, .item-quantidade, .btn-aumentar, .btn-diminuir, .btn-zero, .btn-local-c {
+/* Centralizing Elements */
+.item-info,
+.item-controles,
+.item-nome,
+.item-quantidade,
+.btn-aumentar,
+.btn-diminuir,
+.btn-zero,
+.btn-local-c {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -435,8 +411,7 @@ tr:hover {
 
 /* Caixa Page Styles */
 #relatorio-caixa h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
+    margin: 1.5rem 0 1rem 0;
     font-size: 1.25rem;
     color: #333;
     border-bottom: 2px solid #333;
@@ -449,14 +424,15 @@ tr:hover {
     margin-bottom: 1.5rem;
 }
 
-.btn-entrada, .btn-saida {
+.btn-entrada,
+.btn-saida {
     padding: 0.5rem 1rem;
     margin: 0.25rem;
     border: none;
     cursor: pointer;
     font-weight: bold;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-default);
 }
 
 .btn-entrada {
@@ -471,12 +447,12 @@ tr:hover {
 
 .btn-entrada.btn-active {
     background-color: #2ecc71;
-    color: white;
+    color: var(--color-white);
 }
 
 .btn-saida.btn-active {
     background-color: #e74c3c;
-    color: white;
+    color: var(--color-white);
 }
 
 .valor-positivo {
@@ -491,9 +467,9 @@ tr:hover {
     font-weight: bold;
     font-size: 1.1rem;
     margin-top: 1rem;
-    padding: 0.75rem;
+    padding: var(--spacing-sm);
     background-color: #fafafa;
-    border-radius: 4px;
+    border-radius: var(--border-radius-sm);
     text-align: center;
 }
 
@@ -505,22 +481,20 @@ tr:hover {
 
 .reparado {
     text-decoration: line-through;
-    color: #95a5a6;
+    color: var(--color-gray-dark);
 }
 
 /* Message Page Styles */
 #mensagem-selecionada {
-    margin-left: 0;
-    padding-left: 1rem;
+    padding-left: var(--spacing-sm);
     max-width: 100%;
     text-align: left;
-    margin-top: 1rem;
+    margin-top: var(--spacing-md);
 }
 
 #mensagem-titulo {
-    margin-top: 2rem;
-    margin-left: 0;
-    padding-left: 1rem;
+    margin: 2rem 0 0 0;
+    padding-left: var(--spacing-sm);
     font-size: 1.5rem;
     font-weight: bold;
 }
@@ -529,7 +503,7 @@ tr:hover {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 1rem 2rem;
+    padding: var(--spacing-sm) var(--spacing-xl);
     max-width: 90%;
 }
 
@@ -537,16 +511,83 @@ tr:hover {
     margin-bottom: 2rem;
 }
 
-/* Footer Styles */
+/* ------------------------------------ */
+/*              FOOTER STYLES            */
+/* ------------------------------------ */
 footer {
-    background-color: #34495e;
-    color: white;
+    background-color: var(--color-footer-bg);
+    color: var(--color-footer-text);
     text-align: center;
-    padding: 1rem 0;
+    padding: var(--spacing-sm) 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive Styles */
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-left,
+.footer-right {
+    flex: 1;
+}
+
+.footer-left {
+    text-align: left;
+}
+
+.footer-right {
+    text-align: right;
+}
+
+.footer-login {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--font-size-small);
+}
+
+.footer-login a,
+#user-info {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.footer-login a {
+    color: var(--color-white);
+    text-decoration: none;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+}
+
+.footer-login a:hover {
+    color: #ddd;
+}
+
+#user-info {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-right {
+        margin-top: 15px;
+        text-align: center;
+    }
+}
+
+/* ------------------------------------ */
+/*          RESPONSIVE STYLES            */
+/* ------------------------------------ */
 @media (max-width: 768px) {
     nav ul {
         flex-direction: column;
@@ -554,24 +595,24 @@ footer {
     }
 
     nav ul li {
-        margin: 0.25rem 0;
+        margin: var(--spacing-xs) 0;
         text-align: center;
     }
 
     nav ul li a {
-        display: block;
-        padding: 0.5rem;
+        padding: var(--spacing-sm);
     }
 
     .item-compra {
         flex-direction: column;
         align-items: stretch;
-        padding: 0.5rem;
+        padding: var(--spacing-xs);
     }
 
-    .item-info, .item-acoes {
+    .item-info,
+    .item-acoes {
         width: 100%;
-        margin-bottom: 0.5rem;
+        margin-bottom: var(--spacing-xs);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -590,8 +631,7 @@ footer {
 
     #relatorio-caixa h3 {
         font-size: 1.1rem;
-        margin-top: 1rem;
-        margin-bottom: 0.75rem;
+        margin: 1rem 0 0.75rem 0;
         text-align: center;
     }
 
@@ -600,159 +640,150 @@ footer {
         margin-bottom: 1rem;
     }
 
-    .btn-entrada, .btn-saida {
+    .btn-entrada,
+    .btn-saida {
         width: 100%;
-        padding: 0.75rem;
+        padding: var(--spacing-sm);
         font-size: 1rem;
     }
 
-    .btn-entrada.btn-active, .btn-saida.btn-active {
-        color: white;
+    .btn-entrada.btn-active,
+    .btn-saida.btn-active {
+        color: var(--color-white);
     }
 
     .total-caixa {
         font-size: 1.05rem;
         margin-top: 0.75rem;
-        padding: 0.5rem;
+        padding: var(--spacing-xs);
         text-align: center;
     }
 }
 
-/*                                                               -----------------------------> CENAS */
-/*                                -----------------------------------------> Calendário    */
-/* Reset some default browser styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+@media (max-width: 600px) {
+    /* Additional Responsive Adjustments */
+    #todo-form {
+        flex-direction: column;
+    }
+
+    #todo-form input[type="text"] {
+        margin-right: 0;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    #todo-form button {
+        width: 100%;
+    }
+
+    #todo-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .delete-btn {
+        margin-top: var(--spacing-xs);
+    }
 }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f4;
-    padding: 20px;
-}
-
-/* Title */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-/* Calendar Container */
-.calendar-container {
-    background-color: #fff;
+/* ------------------------------------ */
+/*           CALENDAR STYLES             */
+/* ------------------------------------ */
+.calendar-container,
+#calendario > div,
+.todo-section,
+.comments-section.card,
+.checklist-section {
+    background-color: var(--color-white);
     border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-medium);
     max-width: 800px;
     margin: 0 auto 40px auto;
 }
 
-/* Calendar Header */
 .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: var(--spacing-sm);
 }
 
 .calendar-header h2 {
-    font-size: 1.5em;
-    color: #333;
+    font-size: var(--font-size-xl);
+    color: var(--color-secondary);
 }
 
 .nav-button {
     padding: 8px 12px;
     background-color: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     font-size: 1.2em;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-default);
 }
 
 .nav-button:hover {
-    background-color: transparent;
+    background-color: var(--color-primary);
 }
 
-/* Calendar Table */
 .calendar {
     width: 100%;
     border-collapse: collapse;
 }
 
-.calendar th, .calendar td {
+.calendar th,
+.calendar td {
     width: 14.28%;
     height: 80px;
     text-align: center;
     vertical-align: top;
     border: 1px solid #ddd;
-    padding: 5px;
+    padding: var(--spacing-xs);
     position: relative;
+    transition: background-color 0.2s ease;
 }
 
 .calendar th {
     background-color: #f0f0f0;
-    color: #333;
+    color: var(--color-secondary);
 }
 
 .calendar td:hover {
     background-color: #f9f9f9;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
-/* Highlight for Reserved Days */
 .reserved {
     background-color: #000;
-    color: #fff;
-    border-radius: 50%;
+    color: var(--color-white);
+    border-radius: var(--border-radius-circle);
     width: 30px;
     height: 30px;
     display: inline-block;
     line-height: 30px;
 }
 
-/* Highlight for Today */
-.today {
-    background-color: #ffeb3b;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: inline-block;
-    line-height: 30px;
-}
-/* Highlight for Selected */
+.today,
 .selected {
-    background-color: #3498db; /* Blue */
-    color: #fff;
-    border-radius: 50%;
+    background-color: #ffeb3b;
+    border-radius: var(--border-radius-circle);
     width: 30px;
     height: 30px;
     display: inline-block;
     line-height: 30px;
 }
-/* Reservations Section */
-#calendario {
-    max-width: 800px;
-    margin: 0 auto;
-}
 
-#calendario > div {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.selected {
+    background-color: #3498db;
+    color: var(--color-white);
 }
 
 #calendario h2 {
-    margin-bottom: 10px;
-    color: #333;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-secondary);
 }
 
 #calendario ul {
@@ -760,7 +791,7 @@ h1 {
 }
 
 #calendario li {
-    padding: 5px 0;
+    padding: var(--spacing-xs) 0;
     border-bottom: 1px solid #eee;
 }
 
@@ -768,13 +799,13 @@ h1 {
     color: red;
 }
 
-/* Responsive Design */
 @media (max-width: 600px) {
     .calendar-header h2 {
         font-size: 1.2em;
     }
 
-    .calendar th, .calendar td {
+    .calendar th,
+    .calendar td {
         height: 60px;
     }
 
@@ -784,53 +815,43 @@ h1 {
     }
 
     #calendario > div {
-        padding: 10px;
+        padding: var(--spacing-sm);
     }
 }
 
-/*                                                 -------------------------> To Do*/
-
-/* To-Do List Section */
-.todo-section {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 800px;
-    margin: 0 auto 40px auto;
-}
-
+/* ------------------------------------ */
+/*           TO-DO LIST STYLES           */
+/* ------------------------------------ */
 .todo-section h2 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 15px;
+    font-size: var(--font-size-xl);
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-sm);
 }
 
 #todo-form {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
 }
 
 #todo-form input[type="text"] {
     flex: 1;
-    padding: 10px;
+    padding: var(--spacing-sm);
     font-size: 1em;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 10px;
+    border-radius: var(--border-radius-sm);
+    margin-right: var(--spacing-sm);
 }
 
 #todo-form button {
-    padding: 10px 20px;
+    padding: var(--spacing-sm) var(--spacing-md);
     background-color: #28a745;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     font-size: 1em;
     cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-default);
 }
 
 #todo-form button:hover {
@@ -846,7 +867,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: var(--spacing-sm);
     border-bottom: 1px solid #eee;
 }
 
@@ -857,29 +878,26 @@ h1 {
 .delete-btn {
     background-color: #dc3545;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     padding: 5px 10px;
     font-size: 0.9em;
     cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-default);
 }
 
 .delete-btn:hover {
     background-color: #c82333;
 }
 
-/* Responsive Design */
 @media (max-width: 600px) {
-    /* Existing responsive styles... */
-
     #todo-form {
         flex-direction: column;
     }
 
     #todo-form input[type="text"] {
         margin-right: 0;
-        margin-bottom: 10px;
+        margin-bottom: var(--spacing-sm);
     }
 
     #todo-form button {
@@ -892,165 +910,116 @@ h1 {
     }
 
     .delete-btn {
-        margin-top: 5px;
+        margin-top: var(--spacing-xs);
     }
 }
 
-/*            -----------------------------------------------> Páginas cenas: Common Container Styles */
-/* Surrounding box for Cenas dos Comentários section */
-.comments-section.card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 800px;
-    margin: 0 auto 40px auto;
-}
-
-.comments-section .card-header {
+/* ------------------------------------ */
+/*         COMMENTS SECTION STYLES       */
+/* ------------------------------------ */
+.comments-section.card .card-header {
     background-color: #f0f0f0;
-    color: #333;
-    font-size: 1.5em;
-    padding: 15px 20px;
-    margin: -20px -20px 20px -20px;
+    color: var(--color-secondary);
+    font-size: var(--font-size-xl);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: -var(--spacing-md) -var(--spacing-md) var(--spacing-sm) -var(--spacing-md);
     border-bottom: 1px solid #ddd;
-    border-radius: 8px 8px 0 0;
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
 }
 
-
-/*      --------------->  General Form and List Container */
-/* General Form and List Container */
-#comment-form, #comment-list {
+#comment-form,
+#comment-list {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Space between rows */
+    gap: var(--spacing-sm);
     align-items: stretch;
     margin: 0;
 }
 
-/* Form Layout */
 #comment-form {
     display: flex;
-    gap: 10px; /* Space between form elements */
-    flex-wrap: nowrap;
+    gap: var(--spacing-sm);
     align-items: center;
     justify-content: flex-start;
 }
 
-/* Individual Form Group Styling */
 #comment-form .form-group,
 #comment-list .comment-item {
     display: flex;
     align-items: center;
-    gap: 10px; /* Horizontal spacing within items */
+    gap: var(--spacing-sm);
     flex: 1;
 }
 
-/* Adjusted Select and Input Widths */
-#comment-form select, 
+#comment-form select,
 #comment-list select,
 #comment-form input {
     width: auto;
     padding: 6px;
-    min-width: 120px; /* Adjusted minimum width */
+    min-width: 120px;
 }
 
-/* Button Alignment and Styling */
 #comment-form button {
     align-self: center;
-    padding: 4px 12px; /* Reduced padding */
+    padding: 4px 12px;
     font-size: 0.9em;
     line-height: normal;
+    border-radius: var(--border-radius-sm);
 }
 
-/* Comment Item Buttons */
-.update-btn, .delete-btn {
+.update-btn,
+.delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
     width: auto;
     margin: 0;
+    border-radius: var(--border-radius-sm);
 }
 
-/* Space between Atualizar and Apagar buttons */
 .comment-actions {
     display: flex;
     gap: 5px;
 }
 
-/* Spacing for guest name */
 .guest-name {
-    margin-right: 12px; /* Adjust spacing between guest name and dropdown */
-    font-weight: bold; /* Optional styling */
+    margin-right: 12px;
+    font-weight: bold;
 }
 
-/* Dropdown alignment */
 #comment-list select {
-    margin-right: 8px; /* Spacing between dropdowns */
+    margin-right: 8px;
 }
 
-/*      ----------------------------------> Cena das Checklists! */
-/* General Card Styles for Section Cards */
-.card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 800px;
-    margin: 0 auto 40px auto;
-}
-
-/* Card Header Style */
-.card-header {
-    font-size: 1.5em;
-    color: #333;
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-    margin: -20px -20px 20px -20px;
-    background-color: #f0f0f0;
-    border-radius: 8px 8px 0 0;
-}
-
-/* Checklist Section Styles */
-/* Checklist Section Styles */
-.checklist-section {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: 20px auto;
-}
-
+/* ------------------------------------ */
+/*         CHECKLIST SECTION STYLES      */
+/* ------------------------------------ */
 .checklist-section h2 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 15px;
+    font-size: var(--font-size-xl);
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-sm);
 }
 
 #checklist-dropdown {
     width: 100%;
-    padding: 0.5rem;
+    padding: var(--spacing-sm);
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: var(--border-radius-sm);
     font-size: 1em;
-    margin-bottom: 15px;
+    margin-bottom: var(--spacing-sm);
 }
 
 #checklist-items {
     list-style: none;
     padding: 0;
-    margin-top: 15px;
+    margin-top: var(--spacing-sm);
 }
 
 #checklist-items .checklist-item {
     cursor: pointer;
     padding: 8px 10px;
     border-bottom: 1px solid #eee;
-    color: red; /* Initial color */
-    transition: color 0.3s ease; /* Smooth color transition */
+    color: red;
+    transition: color 0.3s ease;
 }
 
 #checklist-items .checklist-item:last-child {
@@ -1059,4 +1028,16 @@ h1 {
 
 #checklist-items .checklist-item.green {
     color: green;
+}
+
+/* ------------------------------------ */
+/*            RESPONSIVE GRID             */
+/* ------------------------------------ */
+@media (max-width: 768px) {
+    .calendar-container,
+    .todo-section,
+    .comments-section.card,
+    .checklist-section {
+        padding: var(--spacing-sm);
+    }
 }
