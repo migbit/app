@@ -90,16 +90,6 @@ nav ul li a:hover {
     background-color: #202f3e;
 }
 
-/* Style the separators */
-nav ul li {
-    display: inline;
-    color: #ffffff;
-}
-
-nav ul li a {
-    margin-right: 8px;
-}
-
 /* Login/Logout Button Styles */
 #login-btn, #logout-btn {
     background-color: transparent;
