@@ -41,10 +41,11 @@ nav ul li a {
     transition: background-color 0.3s ease;
 }
 
-/* Active link styling */
+/* Active Link Styling */
 nav ul li a.active {
-    color: white; /* Keeps the active link's text color white */
-    font-weight: bold; /* Optional: makes the active link bold */
+    font-weight: bold;
+    border-bottom: 2px solid white; /* Adds an underline to the active link */
+    color: #ffffff; /* Optional: Change color to highlight the active link */
 }
 
 /* Hover effect */
