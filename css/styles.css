@@ -925,6 +925,7 @@ h1 {
 }
 
 /* Checklist Section Styles */
+/* Checklist Section Styles */
 .checklist-section {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -956,25 +957,18 @@ h1 {
     margin-top: 15px;
 }
 
-#checklist-items .list-group-item {
-    display: flex;
-    align-items: center; /* Align items vertically */
-    justify-content: space-between;
+#checklist-items .checklist-item {
+    cursor: pointer;
     padding: 8px 10px;
     border-bottom: 1px solid #eee;
+    color: red; /* Initial color */
+    transition: color 0.3s ease; /* Smooth color transition */
 }
 
-#checklist-items .list-group-item:last-child {
+#checklist-items .checklist-item:last-child {
     border-bottom: none;
 }
 
-#checklist-items .list-group-item label {
-    flex: 1;
-    margin-right: 10px; /* Adjust spacing as needed */
-}
-
-#checklist-items .form-check-input {
-    margin-left: 0; /* Remove extra spacing to bring checkbox closer */
-    transform: scale(1.2); /* Slightly larger checkbox for clarity (optional) */
-    cursor: pointer;
+#checklist-items .checklist-item.green {
+    color: green;
 }

@@ -477,6 +477,7 @@ async function init() {
 }
 
 // Checklist Data
+// Checklist Data
 const checklists = {
     aulaRPM: [
         "Calções", "Camisola", "Meias Bike", "Fita Banda Cardíaca", "Banda Cardíaca", 
@@ -499,30 +500,27 @@ function loadChecklist() {
     // Get selected checklist
     const selectedChecklist = checklistDropdown.value;
     if (selectedChecklist && checklists[selectedChecklist]) {
-        checklists[selectedChecklist].forEach((item, index) => {
-            // Create list item with checkbox
+        checklists[selectedChecklist].forEach((item) => {
+            // Create list item with color change on click
             const listItem = document.createElement("li");
-            listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+            listItem.className = "list-group-item checklist-item";
+            listItem.textContent = item;
+            listItem.style.color = "red"; // Initial color
 
-            const label = document.createElement("label");
-            label.textContent = item;
-
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.className = "form-check-input";
-            checkbox.id = `checklist-item-${index}`;
-
-            // Event listener to check if all items are completed
-            checkbox.addEventListener("change", () => {
-                const allChecked = [...checklistItemsContainer.querySelectorAll("input[type='checkbox']")]
-                    .every(checkbox => checkbox.checked);
-                if (allChecked) {
+            // Event listener to toggle color on click
+            listItem.addEventListener("click", () => {
+                if (listItem.style.color === "red") {
+                    listItem.style.color = "green";
+                }
+                
+                // Check if all items are green
+                const allGreen = [...checklistItemsContainer.querySelectorAll(".checklist-item")]
+                    .every(item => item.style.color === "green");
+                if (allGreen) {
                     checklistItemsContainer.style.display = 'none';
                 }
             });
 
-            listItem.appendChild(label);
-            listItem.appendChild(checkbox);
             checklistItemsContainer.appendChild(listItem);
         });
 
@@ -533,6 +531,7 @@ function loadChecklist() {
 
 // Event Listener for Dropdown Change
 document.getElementById("checklist-dropdown").addEventListener("change", loadChecklist);
+
 
 
 // Start the application when DOM is ready
