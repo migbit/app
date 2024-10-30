@@ -186,15 +186,15 @@ footer {
 
 /* Footer login/logout section */
 .footer-login {
-    display: inline-block;
+    display: inline-block; /* Keep login and user-info in the same block */
     font-size: 14px; /* Ensure a consistent font size */
 }
 
-/* Ensure that the Logout link and user info are inline */
+/* Make sure the Logout link and user info are inline */
 .footer-login a,
 #user-info {
-    display: inline-block;
-    vertical-align: middle; /* Aligns the elements vertically */
+    display: inline-block; /* Ensure inline-block to prevent line breaks */
+    vertical-align: middle; /* Align them vertically in the middle */
 }
 
 /* Footer links styles */
@@ -214,6 +214,7 @@ footer {
 #user-info {
     margin-left: 10px; /* Space between user info and logout link */
     font-weight: bold; /* Make the user info stand out */
+    display: inline-block; /* Ensure it's inline with the logout link */
 }
 
 /* Responsive adjustments for smaller screens */
