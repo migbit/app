@@ -90,6 +90,13 @@ nav ul li a:hover {
     background-color: #202f3e;
 }
 
+#nav-menu ul li.separator {
+    font-size: 20px; /* Slightly larger for visibility (optional) */
+    vertical-align: middle; /* Align it properly with the other text */
+    color: #aaa; /* Optional: Change the color to something subtle */
+    margin: 0 5px; /* Adjust space around the separator */
+}
+
 /* Login/Logout Button Styles */
 #login-btn, #logout-btn {
     background-color: transparent;
