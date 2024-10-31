@@ -264,4 +264,5 @@ function attachEventListeners() {
 document.addEventListener('DOMContentLoaded', () => {
     monitorListaCompras();  // Inicia o listener em tempo real
     attachEventListeners(); // Anexa os event listeners iniciais (apenas uma vez)
+    criarListaCompras();    // Cria a lista inicialmente
 });
