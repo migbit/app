@@ -557,7 +557,7 @@ input[type=number]::-webkit-inner-spin-button {
     .item-controles {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
+        gap: 0.05rem; /* Reduzido de 0.5rem para 0.25rem */
     }
 }
 
@@ -716,8 +716,9 @@ footer {
 
     .item-controles {
         display: flex;
-        justify-content: space-between;
+        justify-content: center; /* space-between!!!!!!!!!*/
         width: 100%;
+        gap: 0.05rem;
     }
 
     .item-quantidade {
