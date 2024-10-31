@@ -2,7 +2,7 @@
 import { db } from './script.js';
 import { collection, doc, setDoc, getDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Define the structure of the shopping list
+// Define a estrutura da lista de compras
 const listaCompras = {
     "Produtos Limpeza": ["Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF", "Limpeza Chão (Lava Tudo)", "Limpeza Chão (Madeira)", "Limpa Vidros", "Limpeza Potente", "Limpeza Placas", "Vinagre"],
     "Roupa": ["Detergente Roupa", "Amaciador", "Lixívia Roupa Branca", "Tira Nódoas", "Tira Gorduras", "Oxi Active", "Branqueador", "Perfumador"],
@@ -44,9 +44,9 @@ function criarItemCompra(item) {
     itemDiv.innerHTML = `
         <div class="item-info">
             <span class="item-nome">${item}</span>
+            <input type="number" class="item-quantidade" value="0" min="0" readonly />
         </div>
         <div class="item-controles">
-            <input type="number" value="0" min="0" class="item-quantidade">
             <button type="button" class="btn-aumentar">+</button>
             <button type="button" class="btn-diminuir">-</button>
             <button type="button" class="btn-zero">0</button>
@@ -62,9 +62,9 @@ function criarItemCompraEmBranco() {
     itemDiv.innerHTML = `
         <div class="item-info">
             <input type="text" class="item-nome-custom" placeholder="Novo item">
+            <input type="number" class="item-quantidade" value="0" min="0" readonly />
         </div>
         <div class="item-controles">
-            <input type="number" value="0" min="0" class="item-quantidade">
             <button type="button" class="btn-aumentar">+</button>
             <button type="button" class="btn-diminuir">-</button>
             <button type="button" class="btn-zero">0</button>
@@ -80,7 +80,8 @@ async function salvarListaCompras() {
     let listaParaSalvar = {};
 
     itens.forEach(item => {
-        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
+        const nome = nomeElement.textContent || nomeElement.value;
         const quantidade = parseInt(item.querySelector('.item-quantidade').value);
         const local = item.getAttribute('data-local') || 'Não definido';
 
@@ -106,7 +107,8 @@ function gerarResumo() {
     let resumo = '';
 
     itens.forEach(item => {
-        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
+        const nome = nomeElement.textContent || nomeElement.value;
         const quantidade = item.querySelector('.item-quantidade').value;
         const local = item.getAttribute('data-local');
 
@@ -205,20 +207,24 @@ function aplicarFiltro(filtro) {
 function attachEventListeners() {
     document.getElementById('compras-form').addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-aumentar')) {
-            const input = e.target.previousElementSibling;
+            const item = e.target.closest('.item-compra');
+            const input = item.querySelector('.item-quantidade');
             input.value = parseInt(input.value) + 1;
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-diminuir')) {
-            const input = e.target.previousElementSibling.previousElementSibling;
+            const item = e.target.closest('.item-compra');
+            const input = item.querySelector('.item-quantidade');
             input.value = Math.max(0, parseInt(input.value) - 1);
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-zero')) {
-            const input = e.target.previousElementSibling.previousElementSibling.previousElementSibling;
+            const item = e.target.closest('.item-compra');
+            const input = item.querySelector('.item-quantidade');
             input.value = 0;
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-local-c')) {
+            const item = e.target.closest('.item-compra');
             e.target.classList.toggle('active');
-            updateLocalData(e.target.closest('.item-compra'));
+            updateLocalData(item);
             salvarListaCompras();
         }
     });
@@ -238,11 +244,17 @@ function attachEventListeners() {
     const clearSearchBtn = document.getElementById('clear-search');
 
     searchInput.addEventListener('input', (e) => {
+        if (e.target.value.trim() !== '') {
+            clearSearchBtn.classList.add('visible');
+        } else {
+            clearSearchBtn.classList.remove('visible');
+        }
         aplicarFiltro(e.target.value);
     });
 
     clearSearchBtn.addEventListener('click', () => {
         searchInput.value = '';
+        clearSearchBtn.classList.remove('visible');
         aplicarFiltro('');
     });
 }
