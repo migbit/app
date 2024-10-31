@@ -108,7 +108,7 @@ function gerarResumo() {
 
     itens.forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
+        const nome = nomeElement.textContent.trim() || item.querySelector('.item-nome-custom').value.trim();
         const quantidade = item.querySelector('.item-quantidade').value;
         const local = item.getAttribute('data-local');
 
@@ -155,7 +155,7 @@ function populateComprasUI(itens) {
     
     document.querySelectorAll('.item-compra').forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
+        const nome = nomeElement.textContent.trim() || item.querySelector('.item-nome-custom').value.trim();
         if (itens[nome]) {
             item.querySelector('.item-quantidade').value = itens[nome].quantidade;
             item.setAttribute('data-local', itens[nome].local);
