@@ -44,13 +44,13 @@ function criarItemCompra(item) {
     itemDiv.innerHTML = `
         <div class="item-info">
             <span class="item-nome">${item}</span>
-            <input type="number" class="item-quantidade" value="0" min="0" readonly />
+            <input type="number" class="item-quantidade" value="0" min="0" max="99" readonly />
         </div>
         <div class="item-controles">
-            <button type="button" class="btn-aumentar">+</button>
-            <button type="button" class="btn-diminuir">-</button>
-            <button type="button" class="btn-zero">0</button>
-            <button type="button" class="btn-local-c">C</button>
+            <button type="button" class="btn-aumentar" aria-label="Aumentar quantidade">+</button>
+            <button type="button" class="btn-diminuir" aria-label="Diminuir quantidade">-</button>
+            <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
+            <button type="button" class="btn-local-c" aria-label="Marcar como Casa">C</button>
         </div>
     `;
     return itemDiv;
@@ -62,13 +62,13 @@ function criarItemCompraEmBranco() {
     itemDiv.innerHTML = `
         <div class="item-info">
             <input type="text" class="item-nome-custom" placeholder="Novo item">
-            <input type="number" class="item-quantidade" value="0" min="0" readonly />
+            <input type="number" class="item-quantidade" value="0" min="0" max="99" readonly />
         </div>
         <div class="item-controles">
-            <button type="button" class="btn-aumentar">+</button>
-            <button type="button" class="btn-diminuir">-</button>
-            <button type="button" class="btn-zero">0</button>
-            <button type="button" class="btn-local-c">C</button>
+            <button type="button" class="btn-aumentar" aria-label="Aumentar quantidade">+</button>
+            <button type="button" class="btn-diminuir" aria-label="Diminuir quantidade">-</button>
+            <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
+            <button type="button" class="btn-local-c" aria-label="Marcar como Casa">C</button>
         </div>
     `;
     return itemDiv;
@@ -81,7 +81,7 @@ async function salvarListaCompras() {
 
     itens.forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent || nomeElement.value;
+        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
         const quantidade = parseInt(item.querySelector('.item-quantidade').value);
         const local = item.getAttribute('data-local') || 'Não definido';
 
@@ -108,7 +108,7 @@ function gerarResumo() {
 
     itens.forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent || nomeElement.value;
+        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
         const quantidade = item.querySelector('.item-quantidade').value;
         const local = item.getAttribute('data-local');
 
@@ -155,7 +155,7 @@ function populateComprasUI(itens) {
     
     document.querySelectorAll('.item-compra').forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent || nomeElement.value;
+        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
         if (itens[nome]) {
             item.querySelector('.item-quantidade').value = itens[nome].quantidade;
             item.setAttribute('data-local', itens[nome].local);
@@ -177,7 +177,6 @@ function monitorListaCompras() {
             const data = docSnap.data();
             clearComprasUI();
             populateComprasUI(data.itens);
-            attachEventListeners();  // Re-anexa os listeners após recarregar os dados
         } else {
             console.log("Nenhum documento encontrado!");
         }
@@ -194,7 +193,7 @@ function updateLocalData(item) {
 function aplicarFiltro(filtro) {
     const filtroLower = filtro.toLowerCase();
     document.querySelectorAll('.item-compra').forEach(item => {
-        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        const nome = item.querySelector('.item-nome')?.textContent.trim() || item.querySelector('.item-nome-custom')?.value.trim();
         if (nome.toLowerCase().includes(filtroLower)) {
             item.style.display = 'flex';
         } else {
@@ -203,32 +202,33 @@ function aplicarFiltro(filtro) {
     });
 }
 
-// Função para anexar todos os event listeners
+// Função para anexar todos os event listeners (anexada apenas uma vez)
 function attachEventListeners() {
+    // Utilizando Event Delegation para eficiência
     document.getElementById('compras-form').addEventListener('click', (e) => {
+        const item = e.target.closest('.item-compra');
+        if (!item) return; // Clique fora de um item-compra
+
         if (e.target.classList.contains('btn-aumentar')) {
-            const item = e.target.closest('.item-compra');
             const input = item.querySelector('.item-quantidade');
-            input.value = parseInt(input.value) + 1;
+            input.value = Math.min(parseInt(input.value) + 1, 99);
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-diminuir')) {
-            const item = e.target.closest('.item-compra');
             const input = item.querySelector('.item-quantidade');
-            input.value = Math.max(0, parseInt(input.value) - 1);
+            input.value = Math.max(parseInt(input.value) - 1, 0);
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-zero')) {
-            const item = e.target.closest('.item-compra');
             const input = item.querySelector('.item-quantidade');
             input.value = 0;
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-local-c')) {
-            const item = e.target.closest('.item-compra');
             e.target.classList.toggle('active');
             updateLocalData(item);
             salvarListaCompras();
         }
     });
 
+    // Botão Requisitar
     document.getElementById('btn-requisitar').addEventListener('click', async () => {
         const resumo = gerarResumo();
         const resumoConteudo = document.getElementById('resumo-conteudo');
@@ -237,6 +237,7 @@ function attachEventListeners() {
         await salvarListaCompras();
     });
 
+    // Botão Enviar Email
     document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
 
     // Event listeners para a barra de busca
@@ -262,5 +263,5 @@ function attachEventListeners() {
 // Inicializa os listeners e a configuração da UI
 document.addEventListener('DOMContentLoaded', () => {
     monitorListaCompras();  // Inicia o listener em tempo real
-    attachEventListeners(); // Anexa os event listeners iniciais
+    attachEventListeners(); // Anexa os event listeners iniciais (apenas uma vez)
 });
