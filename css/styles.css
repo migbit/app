@@ -301,7 +301,19 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Shopping List Styles */
+/* ------------------------------------------------------>   Shopping List Styles */
+/* Remover spinners dos inputs de número em todos os dispositivos */
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* --- */
+
 .categoria {
     margin-bottom: var(--spacing-sm);
     padding-bottom: var(--spacing-xs);
@@ -316,8 +328,9 @@ tr:hover {
 
 .item-compra {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     margin-bottom: 0.5rem;
     padding: var(--spacing-xs);
     background-color: #f9f9f9;
@@ -327,50 +340,42 @@ tr:hover {
 .item-info {
     display: flex;
     align-items: center;
-    flex: 1;
     gap: var(--spacing-xs);
-    height: 100%;
+    width: 100%;
+    justify-content: center;
 }
 
-.item-nome,
-.item-nome-custom {
+.item-nome {
     flex: 1;
-    margin-right: var(--spacing-xs);
-}
-
-.item-nome-custom {
-    border: 1px solid #ccc;
-    padding: 0.25rem;
-    border-radius: var(--border-radius-sm);
-}
-
-.item-controles {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    height: 100%;
+    text-align: right;
 }
 
 .item-quantidade {
-    width: 2.5rem;
+    width: 3rem;
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
     border-radius: var(--border-radius-sm);
     height: 2rem;
     line-height: 2rem;
+    margin-left: 0.5rem;
+    background-color: #fff;
 }
 
-.btn-aumentar,
-.btn-diminuir,
-.btn-zero,
-.btn-local-c {
-    width: 1.75rem;
-    height: 1.75rem;
+.item-controles {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+}
+
+.item-controles button {
+    width: 2rem;
+    height: 2rem;
     background-color: var(--color-secondary);
     color: var(--color-white);
     border: none;
-    border-radius: var(--border-radius-circle);
+    border-radius: var(--border-radius-sm);
     cursor: pointer;
     font-size: var(--font-size-small);
     display: flex;
@@ -395,7 +400,7 @@ tr:hover {
     background-color: var(--color-blue-active);
 }
 
-/* Centralizing Elements */
+/* Centralizando Elementos */
 .item-info,
 .item-controles,
 .item-nome,
@@ -485,7 +490,8 @@ tr:hover {
 #btn-enviar-email:hover {
     background-color: var(--color-secondary-dark);
 }
-/* Caixa Page Styles */
+
+/*   ----------------------------------------------------------->  Caixa Page Styles */
 #relatorio-caixa h3 {
     margin: 1.5rem 0 1rem 0;
     font-size: 1.25rem;
