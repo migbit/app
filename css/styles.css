@@ -354,14 +354,15 @@ input[type=number]::-webkit-inner-spin-button {
 .item-info {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
     justify-content: center; /* Centraliza o conteúdo horizontalmente */
 }
 
-.item-nome {
+.item-nome,
+.item-nome-custom {
     text-align: center; /* Centraliza o texto do item */
-    font-size: 1rem;
-    color: #333; /* Cor do texto */
+    font-size: 1.1rem; /* Aumenta o tamanho da fonte */
+    color: #000000; /* Preto */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -384,8 +385,8 @@ input[type=number]::-webkit-inner-spin-button {
 .item-controles {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
+    margin-top: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
 }
 
 .item-controles button {
@@ -446,6 +447,7 @@ input[type=number]::-webkit-inner-spin-button {
 .item-info,
 .item-controles,
 .item-nome,
+.item-nome-custom,
 .item-quantidade,
 .btn-aumentar,
 .btn-diminuir,
@@ -541,19 +543,21 @@ input[type=number]::-webkit-inner-spin-button {
         align-items: center;
     }
 
-    .item-nome {
+    .item-nome,
+    .item-nome-custom {
         text-align: center;
         white-space: nowrap;
     }
 
     .item-quantidade {
         margin-left: 0;
-        margin-top: 0.5rem;
+        margin-top: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
     }
 
     .item-controles {
         flex-wrap: wrap;
         justify-content: center;
+        gap: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
     }
 }
 
