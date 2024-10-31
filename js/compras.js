@@ -1,6 +1,6 @@
 // Import Firebase modules
 import { db } from './script.js';
-import { collection, doc, setDoc, getDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Define a estrutura da lista de compras
 const listaCompras = {
@@ -82,7 +82,7 @@ async function salvarListaCompras() {
     itens.forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
         const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
-        const quantidade = parseInt(item.querySelector('.item-quantidade').value);
+        const quantidade = parseInt(item.querySelector('.item-quantidade').value, 10);
         const local = item.getAttribute('data-local') || 'Não definido';
 
         if (nome && quantidade > 0) {
@@ -112,7 +112,7 @@ function gerarResumo() {
         const quantidade = item.querySelector('.item-quantidade').value;
         const local = item.getAttribute('data-local');
 
-        if (nome && parseInt(quantidade) > 0) {
+        if (nome && parseInt(quantidade, 10) > 0) {
             let localDisplay = local === 'C' ? ' (Casa)' : '';
             resumo += `${nome}: ${quantidade}${localDisplay}\n`;
         }
@@ -211,11 +211,11 @@ function attachEventListeners() {
 
         if (e.target.classList.contains('btn-aumentar')) {
             const input = item.querySelector('.item-quantidade');
-            input.value = Math.min(parseInt(input.value) + 1, 99);
+            input.value = Math.min(parseInt(input.value, 10) + 1, 99);
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-diminuir')) {
             const input = item.querySelector('.item-quantidade');
-            input.value = Math.max(parseInt(input.value) - 1, 0);
+            input.value = Math.max(parseInt(input.value, 10) - 1, 0);
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-zero')) {
             const input = item.querySelector('.item-quantidade');
