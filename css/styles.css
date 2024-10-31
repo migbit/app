@@ -409,6 +409,82 @@ tr:hover {
     justify-content: center;
 }
 
+/* Estilos para a barra de busca */
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+}
+
+#search-input {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: var(--font-size-base);
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius-sm);
+}
+
+#clear-search {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #888;
+    display: none; /* Inicialmente escondido */
+}
+
+#clear-search.visible {
+    display: block;
+}
+
+#clear-search:hover {
+    color: #000;
+}
+
+/* Botão Requisitar */
+#btn-requisitar {
+    margin-top: var(--spacing-sm);
+    padding: 0.5rem 1rem;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    transition: var(--transition-default);
+}
+
+#btn-requisitar:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* Seção Resumo */
+#resumo {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-sm);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius-sm);
+}
+
+#btn-enviar-email {
+    margin-top: var(--spacing-sm);
+    padding: 0.5rem 1rem;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    transition: var(--transition-default);
+}
+
+#btn-enviar-email:hover {
+    background-color: var(--color-secondary-dark);
+}
 /* Caixa Page Styles */
 #relatorio-caixa h3 {
     margin: 1.5rem 0 1rem 0;
