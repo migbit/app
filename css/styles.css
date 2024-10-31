@@ -354,7 +354,7 @@ input[type=number]::-webkit-inner-spin-button {
 .item-info {
     display: flex;
     align-items: center;
-    gap: 0.1rem; /* Reduzido de 0.5rem para 0.25rem */
+    gap: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
     justify-content: center; /* Centraliza o conteúdo horizontalmente */
 }
 
@@ -385,8 +385,8 @@ input[type=number]::-webkit-inner-spin-button {
 .item-controles {
     display: flex;
     align-items: center;
-    gap: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
-    margin-top: 0.25rem; /* Reduzido de 0.5rem para 0.25rem */
+    gap: 0.1rem; /* Reduzido de 0.5rem para 0.25rem */
+    margin-top: 0.1rem; /* Reduzido de 0.5rem para 0.25rem */
 }
 
 .item-controles button {
