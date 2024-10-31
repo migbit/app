@@ -302,8 +302,6 @@ tr:hover {
 }
 
 /* ------------------------------------------------------>   Shopping List Styles */
-/* Variáveis CSS removidas; utilizaremos códigos de cores diretamente */
-
 /* Remover spinners dos inputs de número em todos os dispositivos */
 input[type=number] {
     appearance: textfield; /* Padrão */
@@ -365,6 +363,8 @@ input[type=number]::-webkit-inner-spin-button {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 1rem;
+    color: #333; /* Cor do texto */
 }
 
 .item-quantidade {
@@ -422,25 +422,25 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .btn-zero {
-    background-color: #dc3545; /* Vermelho */
+    background-color: #6c757d; /* Cinza */
     color: #ffffff;
 }
 
 .btn-zero:hover {
-    background-color: #a71d2a;
+    background-color: #5a6268;
 }
 
 .btn-local-c {
-    background-color: #17a2b8; /* Azul claro */
+    background-color: #6c757d; /* Cinza */
     color: #ffffff;
 }
 
 .btn-local-c.active {
-    background-color: #117a8b;
+    background-color: #007bff; /* Azul */
 }
 
 .btn-local-c:hover {
-    background-color: #117a8b;
+    background-color: #0056b3;
 }
 
 /* Centralizando Elementos */
@@ -497,7 +497,7 @@ input[type=number]::-webkit-inner-spin-button {
 #btn-requisitar {
     margin-top: 0.5rem;
     padding: 0.5rem 1rem;
-    background-color: #007BFF; /* Azul */
+    background-color: #28a745; /* Verde */
     color: #ffffff;
     border: none;
     border-radius: 4px;
@@ -507,7 +507,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 #btn-requisitar:hover {
-    background-color: #0056b3;
+    background-color: #1e7e34;
 }
 
 /* Seção Resumo */
@@ -522,7 +522,7 @@ input[type=number]::-webkit-inner-spin-button {
 #btn-enviar-email {
     margin-top: 0.5rem;
     padding: 0.5rem 1rem;
-    background-color: #28a745; /* Verde */
+    background-color: #007bff; /* Azul */
     color: #ffffff;
     border: none;
     border-radius: 4px;
@@ -532,7 +532,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 #btn-enviar-email:hover {
-    background-color: #1e7e34;
+    background-color: #0056b3;
 }
 
 /* Responsividade para evitar que o nome do item quebre a linha */
