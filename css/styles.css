@@ -664,98 +664,22 @@ input[type=number]::-webkit-inner-spin-button {
     margin-bottom: 2rem;
 }
 
-/* ------------------------------------ */
-/*              FOOTER STYLES            */
-/* ------------------------------------ */
+/* Footer Styling */
 footer {
     background-color: var(--color-footer-bg);
     color: var(--color-footer-text);
     padding: var(--spacing-sm) 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    text-align: left; /* Removed center alignment */
+    text-align: center;
 }
 
 .footer-container {
-    max-width: 1200px; /* Consistent with header */
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 var(--spacing-xl);
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center-aligns content */
     align-items: center;
-    flex-wrap: nowrap; /* Prevent wrapping on larger screens */
-}
-
-.footer-left,
-.footer-right {
-    flex: 1;
-    display: flex;
-    align-items: center;
-}
-
-.footer-left {
-    justify-content: flex-start;
-}
-
-.footer-right {
-    justify-content: flex-end;
-}
-
-.footer-login {
-    display: flex;
-    align-items: center;
-}
-
-.footer-login a,
-#user-info {
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
-}
-
-.footer-login a {
-    color: var(--color-white);
-    text-decoration: none;
-    margin-left: 10px;
-    transition: color 0.3s ease;
-}
-
-.footer-login a:hover {
-    color: #ddd;
-}
-
-#user-info {
-    margin-left: 10px;
-    font-weight: bold;
-}
-
-/* Responsive Adjustments for Footer */
-@media (max-width: 768px) {
-    .footer-container {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .footer-left,
-    .footer-right {
-        justify-content: center;
-        margin-bottom: var(--spacing-sm);
-    }
-
-    .footer-login {
-        justify-content: center;
-    }
-}
-
-@media (max-width: 600px) {
-    /* Further adjustments for very small screens */
-    .footer-container {
-        padding: 0 var(--spacing-md);
-    }
-
-    .footer-login a,
-    #user-info {
-        margin-left: 5px;
-    }
 }
 
 /* ------------------------------------ */
