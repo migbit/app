@@ -302,28 +302,42 @@ tr:hover {
 }
 
 /* ------------------------------------------------------>   Shopping List Styles */
+/* Variáveis CSS removidas; utilizaremos códigos de cores diretamente */
+
 /* Remover spinners dos inputs de número em todos os dispositivos */
 input[type=number] {
+    appearance: textfield; /* Padrão */
     -moz-appearance: textfield; /* Firefox */
+    -webkit-appearance: none; /* WebKit */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    height: 2rem;
+    width: 3rem; /* Limita a largura para 2 dígitos */
+    text-align: center;
+    background-color: #fff;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
+/* Esconder spinners no WebKit (Chrome, Safari) */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-/* --- */
 
+/* Shopping List Styles */
 .categoria {
-    margin-bottom: var(--spacing-sm);
-    padding-bottom: var(--spacing-xs);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
     border-bottom: 1px solid #ccc;
 }
 
 .categoria h3 {
-    margin-bottom: var(--spacing-sm);
-    color: var(--color-secondary);
-    font-size: var(--font-size-base);
+    margin-bottom: 0.5rem;
+    color: #28a745; /* Verde */
+    font-size: 1rem;
 }
 
 .item-compra {
@@ -332,72 +346,101 @@ input[type=number]::-webkit-inner-spin-button {
     align-items: center;
     justify-content: center;
     margin-bottom: 0.5rem;
-    padding: var(--spacing-xs);
+    padding: 0.25rem;
     background-color: #f9f9f9;
-    border-radius: var(--border-radius-sm);
+    border-radius: 4px;
 }
 
 .item-info {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: 0.5rem;
     width: 100%;
     justify-content: center;
 }
 
 .item-nome {
     flex: 1;
-    text-align: right;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item-quantidade {
-    width: 3rem;
+    width: 3rem; /* Limita a largura para 2 dígitos */
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
-    border-radius: var(--border-radius-sm);
+    border-radius: 4px;
     height: 2rem;
     line-height: 2rem;
     margin-left: 0.5rem;
     background-color: #fff;
+    font-size: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .item-controles {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    margin-top: var(--spacing-xs);
+    gap: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .item-controles button {
     width: 2rem;
     height: 2rem;
-    background-color: var(--color-secondary);
-    color: var(--color-white);
     border: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: 4px;
     cursor: pointer;
-    font-size: var(--font-size-small);
+    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition-default);
+    transition: background-color 0.3s ease;
+}
+
+/* Botões específicos */
+.btn-aumentar {
+    background-color: #28a745; /* Verde */
+    color: #ffffff;
+}
+
+.btn-aumentar:hover {
+    background-color: #1e7e34;
+}
+
+.btn-diminuir {
+    background-color: #dc3545; /* Vermelho */
+    color: #ffffff;
+}
+
+.btn-diminuir:hover {
+    background-color: #a71d2a;
 }
 
 .btn-zero {
-    background-color: var(--color-red);
+    background-color: #dc3545; /* Vermelho */
+    color: #ffffff;
 }
 
 .btn-zero:hover {
-    background-color: var(--color-red-dark);
+    background-color: #a71d2a;
 }
 
 .btn-local-c {
-    background-color: var(--color-blue);
+    background-color: #17a2b8; /* Azul claro */
+    color: #ffffff;
 }
 
 .btn-local-c.active {
-    background-color: var(--color-blue-active);
+    background-color: #117a8b;
+}
+
+.btn-local-c:hover {
+    background-color: #117a8b;
 }
 
 /* Centralizando Elementos */
@@ -418,16 +461,17 @@ input[type=number]::-webkit-inner-spin-button {
 .search-container {
     display: flex;
     align-items: center;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0.5rem;
     position: relative;
+    width: 100%;
 }
 
 #search-input {
     flex: 1;
     padding: 0.5rem;
-    font-size: var(--font-size-base);
+    font-size: 1rem;
     border: 1px solid #ccc;
-    border-radius: var(--border-radius-sm);
+    border-radius: 4px;
 }
 
 #clear-search {
@@ -451,45 +495,69 @@ input[type=number]::-webkit-inner-spin-button {
 
 /* Botão Requisitar */
 #btn-requisitar {
-    margin-top: var(--spacing-sm);
+    margin-top: 0.5rem;
     padding: 0.5rem 1rem;
-    background-color: var(--color-primary);
-    color: var(--color-white);
+    background-color: #007BFF; /* Azul */
+    color: #ffffff;
     border: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: 4px;
     cursor: pointer;
-    font-size: var(--font-size-base);
-    transition: var(--transition-default);
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
 #btn-requisitar:hover {
-    background-color: var(--color-primary-dark);
+    background-color: #0056b3;
 }
 
 /* Seção Resumo */
 #resumo {
-    margin-top: var(--spacing-lg);
-    padding: var(--spacing-sm);
-    background-color: #fff;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: var(--border-radius-sm);
+    border-radius: 4px;
 }
 
 #btn-enviar-email {
-    margin-top: var(--spacing-sm);
+    margin-top: 0.5rem;
     padding: 0.5rem 1rem;
-    background-color: var(--color-secondary);
-    color: var(--color-white);
+    background-color: #28a745; /* Verde */
+    color: #ffffff;
     border: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: 4px;
     cursor: pointer;
-    font-size: var(--font-size-base);
-    transition: var(--transition-default);
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
 #btn-enviar-email:hover {
-    background-color: var(--color-secondary-dark);
+    background-color: #1e7e34;
 }
+
+/* Responsividade para evitar que o nome do item quebre a linha */
+@media (max-width: 600px) {
+    .item-info {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .item-nome {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .item-quantidade {
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+
+    .item-controles {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
 
 /*   ----------------------------------------------------------->  Caixa Page Styles */
 #relatorio-caixa h3 {
