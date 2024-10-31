@@ -13,24 +13,24 @@
 /*           CSS VARIABLES               */
 /* ------------------------------------ */
 :root {
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-lg: 1rem;
-    --color-primary: #007BFF; /* Azul */
-    --color-primary-dark: #0056b3;
-    --color-secondary: #28a745; /* Verde */
-    --color-secondary-dark: #1e7e34;
-    --color-red: #dc3545; /* Vermelho */
-    --color-red-dark: #a71d2a;
-    --color-blue: #17a2b8; /* Azul claro */
-    --color-blue-active: #117a8b;
+    /* Color Palette */
+    --color-primary: #34495e;
+    --color-secondary: #2c3e50;
+    --color-accent: #1abc9c;
+    --color-accent-dark: #16a085;
+    --color-background: #ecf0f1;
     --color-white: #ffffff;
-    --border-radius-sm: 0.25rem;
-    --border-radius-circle: 50%;
-    --font-size-base: 1rem;
-    --font-size-small: 0.875rem;
-    --transition-default: all 0.3s ease;
-
+    --color-gray-light: #f4f4f4;
+    --color-gray: #bdc3c7;
+    --color-gray-dark: #95a5a6;
+    --color-red: #e74c3c;
+    --color-red-dark: #c0392b;
+    --color-blue: #3498db;
+    --color-blue-active: #290d99;
+    --color-hover-bg: #202f3e;
+    --color-footer-bg: #34495e;
+    --color-footer-text: #ffffff;
+    
     /* Font Sizes */
     --font-size-base: 1rem;
     --font-size-small: 0.875rem;
@@ -314,7 +314,6 @@ input[type=number]::-webkit-inner-spin-button {
 }
 /* --- */
 
-/* Shopping List Styles */
 .categoria {
     margin-bottom: var(--spacing-sm);
     padding-bottom: var(--spacing-xs);
@@ -348,14 +347,11 @@ input[type=number]::-webkit-inner-spin-button {
 
 .item-nome {
     flex: 1;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: right;
 }
 
 .item-quantidade {
-    width: 2.5rem; /* Limita a largura para 2 dígitos */
+    width: 3rem;
     text-align: center;
     padding: 0.25rem;
     border: 1px solid #ccc;
@@ -364,9 +360,6 @@ input[type=number]::-webkit-inner-spin-button {
     line-height: 2rem;
     margin-left: 0.5rem;
     background-color: #fff;
-    font-size: var(--font-size-base);
-    overflow: hidden;
-    white-space: nowrap;
 }
 
 .item-controles {
@@ -379,38 +372,20 @@ input[type=number]::-webkit-inner-spin-button {
 .item-controles button {
     width: 2rem;
     height: 2rem;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
     border: none;
     border-radius: var(--border-radius-sm);
     cursor: pointer;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-small);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: var(--transition-default);
 }
 
-/* Botões específicos */
-.btn-aumentar {
-    background-color: var(--color-secondary); /* Verde */
-    color: var(--color-white);
-}
-
-.btn-aumentar:hover {
-    background-color: var(--color-secondary-dark);
-}
-
-.btn-diminuir {
-    background-color: var(--color-red); /* Vermelho */
-    color: var(--color-white);
-}
-
-.btn-diminuir:hover {
-    background-color: var(--color-red-dark);
-}
-
 .btn-zero {
-    background-color: var(--color-red); /* Vermelho */
-    color: var(--color-white);
+    background-color: var(--color-red);
 }
 
 .btn-zero:hover {
@@ -418,15 +393,10 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .btn-local-c {
-    background-color: var(--color-blue); /* Azul claro */
-    color: var(--color-white);
+    background-color: var(--color-blue);
 }
 
 .btn-local-c.active {
-    background-color: var(--color-blue-active);
-}
-
-.btn-local-c:hover {
     background-color: var(--color-blue-active);
 }
 
@@ -450,7 +420,6 @@ input[type=number]::-webkit-inner-spin-button {
     align-items: center;
     margin-bottom: var(--spacing-sm);
     position: relative;
-    width: 100%;
 }
 
 #search-input {
@@ -520,29 +489,6 @@ input[type=number]::-webkit-inner-spin-button {
 
 #btn-enviar-email:hover {
     background-color: var(--color-secondary-dark);
-}
-
-/* Responsividade para evitar que o nome do item quebre a linha */
-@media (max-width: 600px) {
-    .item-info {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .item-nome {
-        text-align: center;
-        white-space: nowrap;
-    }
-
-    .item-quantidade {
-        margin-left: 0;
-        margin-top: var(--spacing-xs);
-    }
-
-    .item-controles {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
 }
 
 /*   ----------------------------------------------------------->  Caixa Page Styles */
