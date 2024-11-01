@@ -402,6 +402,11 @@ input[type=number]::-webkit-inner-spin-button {
     transition: background-color 0.3s ease;
 }
 
+/* Destacar itens com quantidade > 0 */
+.item-comprado {
+    background-color: #fff9c4; /* Amarelo claro */
+}
+
 /* Botões específicos */
 .btn-aumentar {
     background-color: #28a745; /* Verde */
