@@ -1147,7 +1147,7 @@ footer {
 
 .comment-item .notes-section {
     width: 100%;
-    margin-top: var(--spacing-sm);
+    margin-top: var(--spacing-sm); /* Reduzido o espaçamento */
 }
 
 .comment-item .notes-section textarea {
@@ -1160,11 +1160,11 @@ footer {
 }
 
 .actions {
-    display: flex; /* Ensure it's a flex container */
+    display: flex; /* Flex container */
     flex-direction: row; /* Arrange buttons horizontally */
     justify-content: flex-end; /* Align buttons to the right */
     gap: 5px; /* Space between buttons */
-    margin-top: var(--spacing-sm); /* Space above the buttons */
+    margin-top: 4px; /* Diminuição do espaço entre a caixa de texto e os botões */
 }
 
 @media (min-width: 600px) {
@@ -1174,7 +1174,7 @@ footer {
     }
     
     .comment-item {
-        flex-direction: column; /* Keep as column to place buttons below notes */
+        flex-direction: column; /* Mantém como coluna para colocar botões abaixo das notas */
         align-items: flex-start;
     }
     
@@ -1185,7 +1185,7 @@ footer {
     .comment-item .actions {
         flex: 1;
         display: flex;
-        flex-direction: row; /* Ensure buttons are in a row */
+        flex-direction: row; /* Certifique-se de que os botões estão em uma linha */
         align-items: flex-start;
         gap: 5px;
     }
