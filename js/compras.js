@@ -162,11 +162,19 @@ function populateComprasUI(itens) {
             if (itens[nome].local.includes('C')) {
                 item.querySelector('.btn-local-c').classList.add('active');
             }
+
+            // Adicionar ou remover a classe 'item-comprado' baseado na quantidade
+            if (itens[nome].quantidade > 0) {
+                item.classList.add('item-comprado');
+            } else {
+                item.classList.remove('item-comprado');
+            }
         }
     });
 
     aplicarFiltro(document.getElementById('search-input').value); // Aplica o filtro atual após carregar os dados
 }
+
 
 // Configura o listener em tempo real para atualizações do Firebase
 function monitorListaCompras() {
@@ -212,14 +220,31 @@ function attachEventListeners() {
         if (e.target.classList.contains('btn-aumentar')) {
             const input = item.querySelector('.item-quantidade');
             input.value = Math.min(parseInt(input.value, 10) + 1, 99);
+
+            if (parseInt(input.value, 10) > 0) {
+                item.classList.add('item-comprado');
+            } else {
+                item.classList.remove('item-comprado');
+            }
+
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-diminuir')) {
             const input = item.querySelector('.item-quantidade');
             input.value = Math.max(parseInt(input.value, 10) - 1, 0);
+
+            if (parseInt(input.value, 10) > 0) {
+                item.classList.add('item-comprado');
+            } else {
+                item.classList.remove('item-comprado');
+            }
+
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-zero')) {
             const input = item.querySelector('.item-quantidade');
             input.value = 0;
+
+            item.classList.remove('item-comprado');
+
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-local-c')) {
             e.target.classList.toggle('active');
