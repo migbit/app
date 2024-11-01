@@ -99,7 +99,6 @@ function atualizarInterface(user) {
     const logoutBtn = document.getElementById('logout-btn');
     const userInfo = document.getElementById('user-info');
     const userName = document.getElementById('user-name');
-    const userEmail = document.getElementById('user-email');
 
     if (user) {
         // Utilizador autenticado
