@@ -1018,8 +1018,20 @@ footer {
 }
 
 /* ------------------------------------ */
-/*         COMMENTS SECTION STYLES       */
+/*                                                              COMMENTS SECTION STYLES       */
 /* ------------------------------------ */
+
+/* ------------------------------------ */
+/*         COMMENTS SECTION STYLES      */
+/* ------------------------------------ */
+.comments-section.card {
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
 .comments-section.card .card-header {
     background-color: #f0f0f0;
     color: var(--color-secondary);
@@ -1049,25 +1061,30 @@ footer {
 #comment-form .form-group,
 #comment-list .comment-item {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: var(--spacing-sm);
     flex: 1;
 }
 
 #comment-form select,
 #comment-list select,
-#comment-form input {
-    width: auto;
+#comment-form input,
+#comment-list input,
+#comment-list textarea {
+    width: 100%;
     padding: 6px;
     min-width: 120px;
+    box-sizing: border-box;
 }
 
 #comment-form button {
     align-self: center;
-    padding: 4px 12px;
+    padding: 6px 12px;
     font-size: 0.9em;
     line-height: normal;
     border-radius: var(--border-radius-sm);
+    cursor: pointer;
 }
 
 .update-btn,
@@ -1075,23 +1092,85 @@ footer {
     padding: 6px 12px;
     font-size: 0.9em;
     width: auto;
-    margin: 0;
+    margin-right: 5px;
+    border: none;
     border-radius: var(--border-radius-sm);
+    cursor: pointer;
+}
+
+.update-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
 }
 
 .comment-actions {
     display: flex;
     gap: 5px;
+    margin-top: 5px;
 }
 
 .guest-name {
-    margin-right: 12px;
     font-weight: bold;
+    font-size: 1.1em;
 }
 
-#comment-list select {
-    margin-right: 8px;
+.comment-item {
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    background-color: #fafafa;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
+
+.comment-item .dropdowns {
+    display: flex;
+    gap: var(--spacing-sm);
+    width: 100%;
+}
+
+.comment-item .notes-section {
+    width: 100%;
+    margin-top: var(--spacing-sm);
+}
+
+.comment-item .notes-section textarea {
+    width: 100%;
+    height: 60px;
+    resize: vertical;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius-sm);
+}
+
+@media (min-width: 600px) {
+    #comment-form .form-group {
+        flex-direction: row;
+        width: 100%;
+    }
+    
+    .comment-item {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .comment-item .details {
+        flex: 2;
+    }
+    
+    .comment-item .actions {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+    }
+}
+
 
 /* ------------------------------------ */
 /*         CHECKLIST SECTION STYLES      */
