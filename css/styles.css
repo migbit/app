@@ -1020,7 +1020,6 @@ footer {
 /* ------------------------------------ */
 /*                                                              COMMENTS SECTION STYLES       */
 /* ------------------------------------ */
-
 /* ------------------------------------ */
 /*         COMMENTS SECTION STYLES      */
 /* ------------------------------------ */
@@ -1054,17 +1053,16 @@ footer {
 #comment-form {
     display: flex;
     gap: var(--spacing-sm);
-    align-items: center;
+    align-items: center; /* Vertically center the form elements */
     justify-content: flex-start;
 }
 
-#comment-form .form-group,
-#comment-list .comment-item {
+#comment-form .form-group {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-sm);
+    flex-direction: row; /* Arrange input and button in a row */
+    align-items: center; /* Vertically center the input and button */
     flex: 1;
+    gap: var(--spacing-sm); /* Space between input and button */
 }
 
 #comment-form select,
@@ -1078,21 +1076,25 @@ footer {
     box-sizing: border-box;
 }
 
+#comment-form input {
+    flex: 1; /* Allow the input to take up available space */
+    padding: 8px; /* Increase padding for better height */
+    font-size: 1em; /* Ensure consistent font size */
+    box-sizing: border-box;
+}
+
 #comment-form button {
-    align-self: center;
-    padding: 6px 12px;
-    font-size: 0.9em;
-    line-height: normal;
+    padding: 8px 16px; /* Increase padding for better height */
+    font-size: 1em; /* Ensure consistent font size */
     border-radius: var(--border-radius-sm);
     cursor: pointer;
+    white-space: nowrap; /* Prevent button text from wrapping */
 }
 
 .update-btn,
 .delete-btn {
     padding: 6px 12px;
     font-size: 0.9em;
-    width: auto;
-    margin-right: 5px;
     border: none;
     border-radius: var(--border-radius-sm);
     cursor: pointer;
@@ -1111,7 +1113,7 @@ footer {
 .comment-actions {
     display: flex;
     gap: 5px;
-    margin-top: 5px;
+    /* Removed if not needed */
 }
 
 .guest-name {
@@ -1125,6 +1127,16 @@ footer {
     padding: var(--spacing-md);
     background-color: #fafafa;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column; /* Default to column for mobile */
+    gap: var(--spacing-sm);
+}
+
+.comment-item .details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    width: 100%;
 }
 
 .comment-item .dropdowns {
@@ -1147,6 +1159,14 @@ footer {
     border-radius: var(--border-radius-sm);
 }
 
+.actions {
+    flex: 1;
+    display: flex; /* Ensure it's a flex container */
+    flex-direction: row; /* Arrange items in a row */
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 5px; /* Space between buttons */
+}
+
 @media (min-width: 600px) {
     #comment-form .form-group {
         flex-direction: row;
@@ -1154,7 +1174,7 @@ footer {
     }
     
     .comment-item {
-        flex-direction: row;
+        flex-direction: row; /* Arrange details and actions side by side */
         align-items: flex-start;
     }
     
@@ -1165,11 +1185,12 @@ footer {
     .comment-item .actions {
         flex: 1;
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
+        flex-direction: row; /* Ensure buttons are in a row */
+        align-items: flex-start;
         gap: 5px;
     }
 }
+
 
 
 /* ------------------------------------ */
