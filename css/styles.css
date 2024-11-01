@@ -1160,11 +1160,11 @@ footer {
 }
 
 .actions {
-    flex: 1;
     display: flex; /* Ensure it's a flex container */
-    flex-direction: row; /* Arrange items in a row */
+    flex-direction: row; /* Arrange buttons horizontally */
     justify-content: flex-end; /* Align buttons to the right */
     gap: 5px; /* Space between buttons */
+    margin-top: var(--spacing-sm); /* Space above the buttons */
 }
 
 @media (min-width: 600px) {
@@ -1174,7 +1174,7 @@ footer {
     }
     
     .comment-item {
-        flex-direction: row; /* Arrange details and actions side by side */
+        flex-direction: column; /* Keep as column to place buttons below notes */
         align-items: flex-start;
     }
     
