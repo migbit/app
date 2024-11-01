@@ -90,7 +90,6 @@ async function loadComments() {
             const notesDiv = document.createElement('div');
             notesDiv.classList.add('notes-section');
             const notesLabel = document.createElement('label');
-            notesLabel.textContent = "Notas:";
             const notesTextarea = document.createElement('textarea');
             notesTextarea.value = guest.notes || "";
             notesTextarea.placeholder = "Escreva notas sobre o hóspede...";
