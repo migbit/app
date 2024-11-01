@@ -108,7 +108,6 @@ function atualizarInterface(user) {
         if (userInfo) {
             userInfo.style.display = 'block';
             userName.textContent = user.displayName;
-            userEmail.textContent = user.email;
         }
     } else {
         // Nenhum utilizador autenticado
