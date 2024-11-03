@@ -1141,13 +1141,13 @@ footer {
 
 .comment-item .dropdowns {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: 5px;
     width: 100%;
 }
 
 .comment-item .notes-section {
     width: 100%;
-    margin-top: var(--spacing-sm); /* Reduzido o espaçamento */
+    margin-top: 5px;
 }
 
 .comment-item .notes-section textarea {
@@ -1164,7 +1164,7 @@ footer {
     flex-direction: row; /* Arrange buttons horizontally */
     justify-content: flex-end; /* Align buttons to the right */
     gap: 5px; /* Space between buttons */
-    margin-top: 4px; /* Diminuição do espaço entre a caixa de texto e os botões */
+    margin-top: 3px; /* Diminuição do espaço entre a caixa de texto e os botões */
 }
 
 @media (min-width: 600px) {
