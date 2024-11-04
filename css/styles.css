@@ -231,6 +231,7 @@ label {
     color: var(--color-primary);
 }
 
+/* Global Input Styles */
 input[type="number"],
 select,
 input[type="checkbox"] {
@@ -301,7 +302,7 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/* ------------------------------------------------------>   Shopping List Styles */
+/* ------------------------------------------------------> Shopping List Styles */
 /* Remover spinners dos inputs de número em todos os dispositivos */
 input[type=number] {
     appearance: textfield; /* Padrão */
@@ -1018,9 +1019,6 @@ footer {
 }
 
 /* ------------------------------------ */
-/*                                                              COMMENTS SECTION STYLES       */
-/* ------------------------------------ */
-/* ------------------------------------ */
 /*         COMMENTS SECTION STYLES      */
 /* ------------------------------------ */
 .comments-section.card {
@@ -1192,7 +1190,6 @@ footer {
 }
 
 
-
 /* ------------------------------------ */
 /*         CHECKLIST SECTION STYLES      */
 /* ------------------------------------ */
@@ -1245,53 +1242,88 @@ footer {
     }
 }
 
-/* Specific Styles for Faturas / Recibos Page */
+/* ------------------------------------ */
+/*    Specific Styles for Faturas Page    */
+/* ------------------------------------ */
+
+/* Remove conflicting fixed width for input[type="number"] within fatura-form */
 #fatura-form input[type="number"],
 #fatura-form input[type="text"],
 #fatura-form select {
-    /* Remove or override general width if necessary */
-    /* For example, you can set width to auto to allow specific widths */
-    width: auto;
+    width: auto; /* Allow the input to define its own width */
+    max-width: none; /* Remove the max-width constraint */
 }
 
 /* Taxa AirBnB (€): Max 3 digits + ,00 */
-#taxa-airbnb {
-    width: 6ch; /* or 100px */
-    max-width: 100%;
+#fatura-form #taxa-airbnb {
+    width: 120px; /* Adjust as needed */
+    padding: 0.5rem; /* Ensure adequate padding */
 }
 
 /* Valor da Transferência (€): Max 5 digits + ,00 */
-#valor-transferencia {
-    width: 8ch; /* or 150px */
-    max-width: 100%;
+#fatura-form #valor-transferencia {
+    width: 200px; /* Adjust as needed */
+    padding: 0.5rem;
 }
 
 /* Valor Pago Operador Turístico (€): Max 3 digits + ,00 */
-#valor-operador {
-    width: 6ch; /* or 100px */
-    max-width: 100%;
+#fatura-form #valor-operador {
+    width: 120px; /* Adjust as needed */
+    padding: 0.5rem;
 }
 
 /* Noites Extra 7 dias: Max 2 digits */
-#noites-extra {
-    width: 3ch; /* or 60px */
-    max-width: 100%;
+#fatura-form #noites-extra {
+    width: 80px; /* Adjust as needed */
+    padding: 0.5rem;
 }
 
 /* Noites Crianças: Max 2 digits */
-#noites-criancas {
-    width: 3ch; /* or 60px */
-    max-width: 100%;
+#fatura-form #noites-criancas {
+    width: 80px; /* Adjust as needed */
+    padding: 0.5rem;
 }
 
 /* Valor Pago Diretamente (€): Max 3 digits + ,00 */
-#valor-direto {
-    width: 6ch; /* or 100px */
-    max-width: 100%;
+#fatura-form #valor-direto {
+    width: 120px; /* Adjust as needed */
+    padding: 0.5rem;
 }
 
 /* Valor T.M.T por noite (€): Max 3 digits + ,00 */
-#valor-tmt {
-    width: 6ch; /* or 100px */
-    max-width: 100%;
+#fatura-form #valor-tmt {
+    width: 120px; /* Adjust as needed */
+    padding: 0.5rem;
+}
+
+/* Responsive Adjustments for Faturas Page */
+@media (max-width: 768px) {
+    /* Ensure inputs take full width on smaller screens */
+    #fatura-form #taxa-airbnb,
+    #fatura-form #valor-transferencia,
+    #fatura-form #valor-operador,
+    #fatura-form #noites-extra,
+    #fatura-form #noites-criancas,
+    #fatura-form #valor-direto,
+    #fatura-form #valor-tmt {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Ensure inputs stack vertically on very small screens */
+    #fatura-form .form-group {
+        flex-direction: column;
+    }
+
+    #fatura-form #taxa-airbnb,
+    #fatura-form #valor-transferencia,
+    #fatura-form #valor-operador,
+    #fatura-form #noites-extra,
+    #fatura-form #noites-criancas,
+    #fatura-form #valor-direto,
+    #fatura-form #valor-tmt {
+        width: 100%;
+        margin-bottom: var(--spacing-sm);
+    }
 }
