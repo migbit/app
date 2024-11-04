@@ -1234,7 +1234,7 @@ footer {
 }
 
 /* ------------------------------------ */
-/*            RESPONSIVE GRID             */
+/*          RESPONSIVE GRID             */
 /* ------------------------------------ */
 @media (max-width: 768px) {
     .calendar-container,
@@ -1243,4 +1243,55 @@ footer {
     .checklist-section {
         padding: var(--spacing-sm);
     }
+}
+
+/* Specific Styles for Faturas / Recibos Page */
+#fatura-form input[type="number"],
+#fatura-form input[type="text"],
+#fatura-form select {
+    /* Remove or override general width if necessary */
+    /* For example, you can set width to auto to allow specific widths */
+    width: auto;
+}
+
+/* Taxa AirBnB (€): Max 3 digits + ,00 */
+#taxa-airbnb {
+    width: 6ch; /* or 100px */
+    max-width: 100%;
+}
+
+/* Valor da Transferência (€): Max 5 digits + ,00 */
+#valor-transferencia {
+    width: 8ch; /* or 150px */
+    max-width: 100%;
+}
+
+/* Valor Pago Operador Turístico (€): Max 3 digits + ,00 */
+#valor-operador {
+    width: 6ch; /* or 100px */
+    max-width: 100%;
+}
+
+/* Noites Extra 7 dias: Max 2 digits */
+#noites-extra {
+    width: 3ch; /* or 60px */
+    max-width: 100%;
+}
+
+/* Noites Crianças: Max 2 digits */
+#noites-criancas {
+    width: 3ch; /* or 60px */
+    max-width: 100%;
+}
+
+/* Valor Pago Diretamente (€): Max 3 digits + ,00 */
+#valor-direto {
+    width: 6ch; /* or 100px */
+    max-width: 100%;
+}
+
+/* Valor T.M.T por noite (€): Max 3 digits + ,00 */
+#valor-tmt {
+    width: 6ch; /* or 100px */
+    max-width: 100%;
 }
