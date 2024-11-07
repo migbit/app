@@ -517,6 +517,24 @@ input[type=number]::-webkit-inner-spin-button {
     background-color: #1e7e34;
 }
 
+/* Botão Adicionar Item - Same as Resumo */
+#btn-adicionar-custom-item {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #28a745; /* Verde */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+#btn-adicionar-custom-item:hover {
+    background-color: #1e7e34;
+}
+
+
 /* Seção Resumo */
 #resumo {
     margin-top: 1rem;
