@@ -2,7 +2,7 @@
 import { db } from './script.js';
 import { doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Define a estrutura da lista de compras
+// Define shopping list structure
 const listaCompras = {
     "Produtos Limpeza": ["Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF", "Limpeza Chão (Lava Tudo)", "Limpeza Chão (Madeira)", "Limpa Vidros", "Limpeza Potente", "Limpeza Placas", "Vinagre"],
     "Roupa": ["Detergente Roupa", "Amaciador", "Lixívia Roupa Branca", "Tira Nódoas", "Tira Gorduras", "Oxi Active", "Branqueador", "Perfumador"],
@@ -11,7 +11,7 @@ const listaCompras = {
     "Diversos": ["Varetas Difusoras (Ambientador)", "Toalhitas Óculos"]
 };
 
-// Cria a interface da lista de compras
+// Initialize shopping list UI
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
     Object.entries(listaCompras).forEach(([categoria, itens]) => {
@@ -19,25 +19,18 @@ function criarListaCompras() {
         categoriaDiv.className = 'categoria';
         categoriaDiv.innerHTML = `<h3>${categoria}</h3>`;
         
-        itens.forEach(item => {
-            const itemDiv = criarItemCompra(item);
-            categoriaDiv.appendChild(itemDiv);
-        });
-        
+        itens.forEach(item => categoriaDiv.appendChild(criarItemCompra(item)));
         form.appendChild(categoriaDiv);
     });
 
     const adicionaisDiv = document.createElement('div');
     adicionaisDiv.className = 'categoria';
     adicionaisDiv.innerHTML = '<h3>Itens Adicionais</h3>';
-    for (let i = 0; i < 5; i++) {
-        const itemDiv = criarItemCompraEmBranco();
-        adicionaisDiv.appendChild(itemDiv);
-    }
+    for (let i = 0; i < 5; i++) adicionaisDiv.appendChild(criarItemCompraEmBranco());
     form.appendChild(adicionaisDiv);
 }
 
-// Funções auxiliares para criar e popular elementos da UI
+// Helper functions for creating UI elements
 function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
@@ -71,23 +64,30 @@ function criarItemCompraEmBranco() {
             <button type="button" class="btn-local-c" aria-label="Marcar como Casa">C</button>
         </div>
     `;
+
+    // Save custom name to data attribute
+    const nomeCustomInput = itemDiv.querySelector('.item-nome-custom');
+    nomeCustomInput.addEventListener('input', () => {
+        itemDiv.setAttribute('data-nome-custom', nomeCustomInput.value.trim());
+    });
+
     return itemDiv;
 }
 
-// Salva a lista de compras atual no Firebase
+// Save shopping list to Firebase
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
 
     itens.forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
+        const nome = nomeElement.classList.contains('item-nome-custom') 
+                     ? item.getAttribute('data-nome-custom') || nomeElement.value.trim()
+                     : nomeElement.textContent.trim();
         const quantidade = parseInt(item.querySelector('.item-quantidade').value, 10);
         const local = item.getAttribute('data-local') || 'Não definido';
 
-        if (nome && quantidade > 0) {
-            listaParaSalvar[nome] = { quantidade, local };
-        }
+        if (nome && quantidade > 0) listaParaSalvar[nome] = { quantidade, local };
     });
 
     try {
@@ -101,14 +101,16 @@ async function salvarListaCompras() {
     }
 }
 
-// Gera o resumo da lista de compras
+// Generate shopping list summary
 function gerarResumo() {
     const itens = document.querySelectorAll('.item-compra');
     let resumo = '';
 
     itens.forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || item.querySelector('.item-nome-custom').value.trim();
+        const nome = nomeElement.classList.contains('item-nome-custom')
+                     ? item.getAttribute('data-nome-custom') || nomeElement.value.trim()
+                     : nomeElement.textContent.trim();
         const quantidade = item.querySelector('.item-quantidade').value;
         const local = item.getAttribute('data-local');
 
@@ -121,7 +123,7 @@ function gerarResumo() {
     return resumo;
 }
 
-// Envia a lista de compras por email usando EmailJS
+// Send shopping list by email using EmailJS
 function enviarEmailListaCompras(resumo) {
     if (typeof emailjs === 'undefined') {
         console.error('EmailJS não está definido.');
@@ -134,117 +136,85 @@ function enviarEmailListaCompras(resumo) {
         from_name: "Apartments Oporto",
         subject: "Lista de Compras",
         message: resumo
-    })
-    .then(function(response) {
+    }).then(response => {
         console.log('E-mail enviado com sucesso!', response.status, response.text);
         alert('E-mail enviado com sucesso!');
-    }, function(error) {
+    }).catch(error => {
         console.error('Erro ao enviar e-mail:', error);
         alert('Erro ao enviar o e-mail.');
     });
 }
 
-// Limpa e repopula a UI com dados do Firebase
+// Clear and populate UI from Firebase data
 function clearComprasUI() {
-    const form = document.getElementById('compras-form');
-    form.innerHTML = '';
+    document.getElementById('compras-form').innerHTML = '';
 }
 
 function populateComprasUI(itens) {
-    criarListaCompras();  // Cria os elementos básicos da UI
+    criarListaCompras();
     
     document.querySelectorAll('.item-compra').forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || item.querySelector('.item-nome-custom').value.trim();
+        const nome = nomeElement.classList.contains('item-nome-custom')
+                     ? item.getAttribute('data-nome-custom') || nomeElement.value.trim()
+                     : nomeElement.textContent.trim();
         if (itens[nome]) {
             item.querySelector('.item-quantidade').value = itens[nome].quantidade;
             item.setAttribute('data-local', itens[nome].local);
-            if (itens[nome].local.includes('C')) {
-                item.querySelector('.btn-local-c').classList.add('active');
-            }
-
-            // Adicionar ou remover a classe 'item-comprado' baseado na quantidade
-            if (itens[nome].quantidade > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
+            if (itens[nome].local.includes('C')) item.querySelector('.btn-local-c').classList.add('active');
+            item.classList.toggle('item-comprado', itens[nome].quantidade > 0);
         }
     });
 
-    aplicarFiltro(document.getElementById('search-input').value); // Aplica o filtro atual após carregar os dados
+    aplicarFiltro(document.getElementById('search-input').value);
 }
 
-
-// Configura o listener em tempo real para atualizações do Firebase
+// Real-time Firebase listener
 function monitorListaCompras() {
     const docRef = doc(db, "listas_compras", "lista_atual");
-
     onSnapshot(docRef, (docSnap) => {
         if (docSnap.exists()) {
-            const data = docSnap.data();
             clearComprasUI();
-            populateComprasUI(data.itens);
+            populateComprasUI(docSnap.data().itens);
         } else {
             console.log("Nenhum documento encontrado!");
         }
     });
 }
 
-// Atualiza os dados de localidade
+// Update local data for items
 function updateLocalData(item) {
     const local = item.getAttribute('data-local') === 'C' ? 'Não definido' : 'C';
     item.setAttribute('data-local', local);
 }
 
-// Função para aplicar o filtro de busca
+// Apply search filter
 function aplicarFiltro(filtro) {
     const filtroLower = filtro.toLowerCase();
     document.querySelectorAll('.item-compra').forEach(item => {
         const nome = item.querySelector('.item-nome')?.textContent.trim() || item.querySelector('.item-nome-custom')?.value.trim();
-        if (nome.toLowerCase().includes(filtroLower)) {
-            item.style.display = 'flex';
-        } else {
-            item.style.display = 'none';
-        }
+        item.style.display = nome.toLowerCase().includes(filtroLower) ? 'flex' : 'none';
     });
 }
 
-// Função para anexar todos os event listeners (anexada apenas uma vez)
+// Attach event listeners for interactive elements
 function attachEventListeners() {
-    // Utilizando Event Delegation para eficiência
     document.getElementById('compras-form').addEventListener('click', (e) => {
         const item = e.target.closest('.item-compra');
-        if (!item) return; // Clique fora de um item-compra
+        if (!item) return;
 
+        const input = item.querySelector('.item-quantidade');
         if (e.target.classList.contains('btn-aumentar')) {
-            const input = item.querySelector('.item-quantidade');
             input.value = Math.min(parseInt(input.value, 10) + 1, 99);
-
-            if (parseInt(input.value, 10) > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
-
+            item.classList.toggle('item-comprado', parseInt(input.value, 10) > 0);
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-diminuir')) {
-            const input = item.querySelector('.item-quantidade');
             input.value = Math.max(parseInt(input.value, 10) - 1, 0);
-
-            if (parseInt(input.value, 10) > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
-
+            item.classList.toggle('item-comprado', parseInt(input.value, 10) > 0);
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-zero')) {
-            const input = item.querySelector('.item-quantidade');
             input.value = 0;
-
             item.classList.remove('item-comprado');
-
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-local-c')) {
             e.target.classList.toggle('active');
@@ -253,28 +223,21 @@ function attachEventListeners() {
         }
     });
 
-    // Botão Requisitar
+    // Button listeners for Requisitar and Email
     document.getElementById('btn-requisitar').addEventListener('click', async () => {
-        const resumo = gerarResumo();
-        const resumoConteudo = document.getElementById('resumo-conteudo');
-        resumoConteudo.innerHTML = resumo.replace(/\n/g, '<br>');
+        document.getElementById('resumo-conteudo').innerHTML = gerarResumo().replace(/\n/g, '<br>');
         document.getElementById('resumo').style.display = 'block';
         await salvarListaCompras();
     });
 
-    // Botão Enviar Email
     document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
 
-    // Event listeners para a barra de busca
+    // Search bar listeners
     const searchInput = document.getElementById('search-input');
     const clearSearchBtn = document.getElementById('clear-search');
 
     searchInput.addEventListener('input', (e) => {
-        if (e.target.value.trim() !== '') {
-            clearSearchBtn.classList.add('visible');
-        } else {
-            clearSearchBtn.classList.remove('visible');
-        }
+        clearSearchBtn.classList.toggle('visible', e.target.value.trim() !== '');
         aplicarFiltro(e.target.value);
     });
 
@@ -285,9 +248,9 @@ function attachEventListeners() {
     });
 }
 
-// Inicializa os listeners e a configuração da UI
+// Initialize event listeners and UI
 document.addEventListener('DOMContentLoaded', () => {
-    monitorListaCompras();  // Inicia o listener em tempo real
-    attachEventListeners(); // Anexa os event listeners iniciais (apenas uma vez)
-    criarListaCompras();    // Cria a lista inicialmente
+    monitorListaCompras();
+    attachEventListeners();
+    criarListaCompras();
 });
