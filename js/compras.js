@@ -1,6 +1,6 @@
 // js/compras.js
 import { db } from './script.js';
-import { doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Structure of the shopping list
 const listaCompras = {
@@ -20,8 +20,8 @@ const listaCompras = {
     ],
     "Cozinha": [
         "Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas",
-        "Chá", "Lava-Loiça", "Esfregões Verdes", "Esfregões Bravo", "Película Transparente",
-        "Papel Alumínio", "Sacos congelação"
+        "Chá", "Lava-Loiça", "Esfregão Verde", "Esfregão Bravo", "Película Transparente", "Papel Alumínio",
+        "Sacos congelação"
     ],
     "Diversos": [
         "Varetas Difusoras (Ambientador)", "Toalhitas Óculos"
@@ -86,9 +86,9 @@ function criarItemCompraEmBranco() {
     itemDiv.innerHTML = `
         <div class="item-info">
             <input type="text" class="item-nome-custom" placeholder="Novo item">
+            <input type="number" class="item-quantidade" value="0" min="0" max="99">
         </div>
         <div class="item-controles">
-            <input type="number" class="item-quantidade" value="0" min="0" max="99">
             <button type="button" class="btn-aumentar" aria-label="Aumentar quantidade">+</button>
             <button type="button" class="btn-diminuir" aria-label="Diminuir quantidade">-</button>
             <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
@@ -120,7 +120,9 @@ function adicionarNovoItem() {
     if (adicionaisDiv) {
         const novoItem = criarItemCompraEmBranco();
         adicionaisDiv.appendChild(novoItem);
+        // Optionally, scroll to the new item
         novoItem.scrollIntoView({ behavior: 'smooth' });
+        // Focus the new item's name input
         novoItem.querySelector('.item-nome-custom').focus();
     }
 }
@@ -138,7 +140,7 @@ async function salvarListaCompras() {
         const quantidade = parseInt(item.querySelector('.item-quantidade').value, 10);
         const local = item.getAttribute('data-local') || 'Não definido';
 
-        console.log(`Processing item: ${nome}, Quantity: ${quantidade}, Local: ${local}`);
+        console.log(`Salvando Item: ${nome}, Quantidade: ${quantidade}, Local: ${local}`);
 
         if (nome && quantidade > 0) {
             if (listaParaSalvar[nome]) {
@@ -165,8 +167,6 @@ async function salvarListaCompras() {
         alert('Existem itens com nomes vazios. Por favor, preencha todos os nomes de itens.');
         return;
     }
-
-    console.log("Lista para salvar:", listaParaSalvar);
 
     try {
         await setDoc(doc(db, "listas_compras", "lista_atual"), {
@@ -243,7 +243,17 @@ function gerarResumo() {
     return resumo;
 }
 
-// Send the shopping list via email using EmailJS
+// Display the summary and save the list
+async function exibirResumoESalvar() {
+    const resumo = gerarResumo();
+    const resumoConteudo = document.getElementById('resumo-conteudo');
+    resumoConteudo.innerHTML = resumo.replace(/\n/g, '<br>');
+    document.getElementById('resumo').style.display = 'block';
+
+    await salvarListaCompras();
+}
+
+// Send the shopping list by email using EmailJS
 function enviarEmailListaCompras(resumo) {
     if (typeof emailjs === 'undefined') {
         console.error('EmailJS não está definido.');
@@ -266,156 +276,65 @@ function enviarEmailListaCompras(resumo) {
     });
 }
 
-// Clear the UI
-function clearComprasUI() {
-    const form = document.getElementById('compras-form');
-    form.innerHTML = '';
-}
-
-// Populate the UI with data from Firestore
-function populateComprasUI(itens) {
-    document.querySelectorAll('.item-compra').forEach(item => {
-        const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || (nomeElement.value ? nomeElement.value.trim() : '');
-        if (itens[nome]) {
-            item.querySelector('.item-quantidade').value = itens[nome].quantidade;
-            item.setAttribute('data-local', itens[nome].local);
-            if (itens[nome].local.includes('C')) {
-                item.querySelector('.btn-local-c').classList.add('active');
-            } else {
-                item.querySelector('.btn-local-c').classList.remove('active');
-            }
-
-            // Add or remove the 'item-comprado' class based on quantity
-            if (itens[nome].quantidade > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
-        } else {
-            // For custom items not present in Firestore, reset their fields
-            if (item.querySelector('.item-nome-custom')) {
-                item.querySelector('.item-quantidade').value = 0;
-                item.setAttribute('data-local', 'Não definido');
-                item.querySelector('.btn-local-c').classList.remove('active');
-                item.classList.remove('item-comprado');
-            }
-        }
-    });
-
-    aplicarFiltro(document.getElementById('search-input').value); // Apply current filter after loading data
-}
-
-// Monitor real-time updates from Firebase
-function monitorListaCompras() {
-    const docRef = doc(db, "listas_compras", "lista_atual");
-
-    onSnapshot(docRef, (docSnap) => {
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            clearComprasUI();
-            criarListaCompras();
-            populateComprasUI(data.itens);
-        } else {
-            console.log("Nenhum documento encontrado!");
-        }
-    });
-}
-
-// Apply search filter
-function aplicarFiltro(filtro) {
-    const filtroLower = filtro.toLowerCase();
-    document.querySelectorAll('.item-compra').forEach(item => {
-        const nome = item.querySelector('.item-nome')?.textContent.trim() || item.querySelector('.item-nome-custom')?.value.trim();
-        if (nome.toLowerCase().includes(filtroLower)) {
-            item.style.display = 'flex';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-}
-
-// Attach all event listeners
-function attachEventListeners() {
-    // Event Delegation for item controls
-    document.getElementById('compras-form').addEventListener('click', (e) => {
-        const item = e.target.closest('.item-compra');
-        if (!item) return; // Click outside an item-compra
-
-        if (e.target.classList.contains('btn-aumentar')) {
-            const input = item.querySelector('.item-quantidade');
-            input.value = Math.min(parseInt(input.value, 10) + 1, 99);
-
-            if (parseInt(input.value, 10) > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
-
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-diminuir')) {
-            const input = item.querySelector('.item-quantidade');
-            input.value = Math.max(parseInt(input.value, 10) - 1, 0);
-
-            if (parseInt(input.value, 10) > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
-
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-zero')) {
-            const input = item.querySelector('.item-quantidade');
-            input.value = 0;
-
-            item.classList.remove('item-comprado');
-
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-local-c')) {
-            e.target.classList.toggle('active');
-            updateLocalData(item);
-            salvarListaCompras();
-        }
-    });
-
-    // Button Requisitar
-    document.getElementById('btn-requisitar').addEventListener('click', async () => {
-        const resumo = gerarResumo();
-        const resumoConteudo = document.getElementById('resumo-conteudo');
-        resumoConteudo.innerHTML = resumo.replace(/\n/g, '<br>');
-        document.getElementById('resumo').style.display = 'block';
-        await salvarListaCompras();
-    });
-
-    // Button Enviar Email
-    document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
-
-    // Search Bar Event Listeners
-    const searchInput = document.getElementById('search-input');
-    const clearSearchBtn = document.getElementById('clear-search');
-
-    searchInput.addEventListener('input', (e) => {
-        if (e.target.value.trim() !== '') {
-            clearSearchBtn.classList.add('visible');
-        } else {
-            clearSearchBtn.classList.remove('visible');
-        }
-        aplicarFiltro(e.target.value);
-    });
-
-    clearSearchBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        clearSearchBtn.classList.remove('visible');
-        aplicarFiltro('');
-    });
-
-    // Add Item Button Event Listener
-    // The button is added dynamically, so event listener is already attached in 'adicionarBotaoAdicionarItem'
-}
-
-// Initialize listeners and UI configuration
+// Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     criarListaCompras();
     carregarListaCompras();
     attachEventListeners();
 });
+
+// Attach all event listeners
+function attachEventListeners() {
+    // Event Delegation for item controls
+    document.getElementById('compras-form').addEventListener('click', (e) => {
+        const itemCompra = e.target.closest('.item-compra');
+        if (!itemCompra) return; // Click outside an item-compra
+
+        const quantidadeInput = itemCompra.querySelector('.item-quantidade');
+
+        if (e.target.classList.contains('btn-aumentar')) {
+            quantidadeInput.value = Math.min(parseInt(quantidadeInput.value, 10) + 1, 99);
+            if (parseInt(quantidadeInput.value, 10) > 0) {
+                itemCompra.classList.add('item-comprado');
+            } else {
+                itemCompra.classList.remove('item-comprado');
+            }
+            salvarListaCompras();
+        } else if (e.target.classList.contains('btn-diminuir')) {
+            quantidadeInput.value = Math.max(0, parseInt(quantidadeInput.value, 10) - 1);
+            if (parseInt(quantidadeInput.value, 10) > 0) {
+                itemCompra.classList.add('item-comprado');
+            } else {
+                itemCompra.classList.remove('item-comprado');
+            }
+            salvarListaCompras();
+        } else if (e.target.classList.contains('btn-zero')) {
+            quantidadeInput.value = 0;
+            itemCompra.classList.remove('item-comprado');
+            salvarListaCompras();
+        } else if (e.target.classList.contains('btn-local-c')) {
+            e.target.classList.toggle('active');
+            updateLocalData(itemCompra);
+            salvarListaCompras();
+        }
+    });
+
+    // Input event listener for manual quantity changes
+    document.getElementById('compras-form').addEventListener('input', (e) => {
+        if (e.target.classList.contains('item-quantidade')) {
+            const itemCompra = e.target.closest('.item-compra');
+            if (parseInt(e.target.value, 10) > 0) {
+                itemCompra.classList.add('item-comprado');
+            } else {
+                itemCompra.classList.remove('item-comprado');
+            }
+            salvarListaCompras();
+        }
+    });
+
+    // Button Requisitar
+    document.getElementById('btn-requisitar').addEventListener('click', exibirResumoESalvar);
+
+    // Button Enviar Email
+    document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
+}
