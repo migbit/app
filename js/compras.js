@@ -64,14 +64,11 @@ const listaCompras = {
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
 
-    // Clear existing content to prevent duplication
-    form.innerHTML = '';
-
     // Create predefined categories and items
     Object.entries(listaCompras).forEach(([categoria, itens]) => {
         const categoriaDiv = document.createElement('div');
         categoriaDiv.className = 'categoria';
-        categoriaDiv.innerHTML = `<h3>${categoria}</h3>`; // Fixed: Used backticks for template literals
+        categoriaDiv.innerHTML = `<h3>${categoria}</h3>`; // Use backticks for template literals
 
         itens.forEach(item => {
             const itemDiv = criarItemCompra(item);
@@ -92,13 +89,6 @@ function criarListaCompras() {
         <button type="button" id="btn-adicionar-custom-item">Adicionar Item</button>
     `;
     form.appendChild(adicionaisDiv);
-
-    // Attach event listener to the "Adicionar Item" button
-    document.getElementById('btn-adicionar-custom-item').addEventListener('click', () => {
-        const customItemsContainer = document.getElementById('custom-items-container');
-        const newCustomItem = criarItemCompraEmBranco();
-        customItemsContainer.appendChild(newCustomItem);
-    });
 }
 
 // Function to create a predefined shopping item
@@ -172,6 +162,7 @@ async function salvarListaCompras() {
             itens: listaParaSalvar,
             ultimaAtualizacao: Timestamp.now()
         });
+        console.log("Lista de compras salva com sucesso!");
     } catch (e) {
         console.error("Erro ao salvar a lista de compras: ", e);
         alert('Ocorreu um erro ao salvar a lista de compras.');
@@ -221,25 +212,15 @@ function enviarEmailListaCompras(resumo) {
     });
 }
 
-// Function to clear the shopping list UI
-function clearComprasUI() {
-    const form = document.getElementById('compras-form');
-    form.innerHTML = '';
-}
-
 // Function to populate the shopping list UI with data from Firebase
 function populateComprasUI(itens) {
-    criarListaCompras();  // Create the basic UI elements
+    // No need to call criarListaCompras() here, as UI is already created
 
     // Create a Set of predefined item names for easy lookup
     const predefinedItems = new Set();
     Object.values(listaCompras).forEach(itensCategoria => {
         itensCategoria.forEach(itemName => predefinedItems.add(itemName));
     });
-
-    // Collect all custom item inputs
-    const customInputs = Array.from(document.querySelectorAll('.item-compra')).filter(item => item.querySelector('.item-nome-custom'));
-    let customInputIndex = 0;
 
     // Iterate through all saved items
     for (const [nome, detalhes] of Object.entries(itens)) {
@@ -263,31 +244,35 @@ function populateComprasUI(itens) {
                 } else {
                     predefinedItem.classList.remove('item-comprado');
                 }
+            } else {
+                console.warn(`Item pré-definido "${nome}" não encontrado na UI.`);
             }
         } else {
             // Handle custom items
-            if (customInputIndex < customInputs.length) {
-                const customItem = customInputs[customInputIndex];
-                const nomeCustomInput = customItem.querySelector('.item-nome-custom');
-                nomeCustomInput.value = nome;
-                customItem.querySelector('.item-quantidade').value = detalhes.quantidade;
-                customItem.setAttribute('data-local', detalhes.local);
+            const customItemsContainer = document.getElementById('custom-items-container');
+
+            // Check if a custom item with the same name already exists
+            const existingCustomItem = Array.from(customItemsContainer.querySelectorAll('.item-compra')).find(item => {
+                const nomeCustomInput = item.querySelector('.item-nome-custom');
+                return nomeCustomInput && nomeCustomInput.value.trim() === nome;
+            });
+
+            if (existingCustomItem) {
+                // If exists, update its quantity and local
+                existingCustomItem.querySelector('.item-quantidade').value = detalhes.quantidade;
+                existingCustomItem.setAttribute('data-local', detalhes.local);
                 if (detalhes.local.includes('C')) {
-                    customItem.querySelector('.btn-local-c').classList.add('active');
+                    existingCustomItem.querySelector('.btn-local-c').classList.add('active');
                 }
 
                 // Add or remove 'item-comprado' class based on quantity
                 if (detalhes.quantidade > 0) {
-                    customItem.classList.add('item-comprado');
+                    existingCustomItem.classList.add('item-comprado');
                 } else {
-                    customItem.classList.remove('item-comprado');
+                    existingCustomItem.classList.remove('item-comprado');
                 }
-
-                customInputIndex++;
             } else {
-                // If no available custom inputs, create a new one
-                const form = document.getElementById('compras-form');
-                const adicionaisDiv = document.querySelector('.categoria:last-child'); // Assuming 'Itens Adicionais' is last
+                // If not exists, create a new custom item
                 const newCustomItem = criarItemCompraEmBranco();
                 const nomeCustomInput = newCustomItem.querySelector('.item-nome-custom');
                 nomeCustomInput.value = nome;
@@ -304,7 +289,7 @@ function populateComprasUI(itens) {
                     newCustomItem.classList.remove('item-comprado');
                 }
 
-                adicionaisDiv.querySelector('#custom-items-container').appendChild(newCustomItem);
+                customItemsContainer.appendChild(newCustomItem);
             }
         }
     }
@@ -319,11 +304,13 @@ function monitorListaCompras() {
     onSnapshot(docRef, (docSnap) => {
         if (docSnap.exists()) {
             const data = docSnap.data();
-            clearComprasUI();
+            console.log("Dados recebidos do Firebase:", data);
             populateComprasUI(data.itens);
         } else {
             console.log("Nenhum documento encontrado!");
         }
+    }, (error) => {
+        console.error("Erro ao monitorar a lista de compras: ", error);
     });
 }
 
@@ -393,6 +380,13 @@ function attachEventListeners() {
         }
     });
 
+    // "Adicionar Item" Button
+    document.getElementById('btn-adicionar-custom-item').addEventListener('click', () => {
+        const customItemsContainer = document.getElementById('custom-items-container');
+        const newCustomItem = criarItemCompraEmBranco();
+        customItemsContainer.appendChild(newCustomItem);
+    });
+
     // "Requisitar" Button
     document.getElementById('btn-requisitar').addEventListener('click', async () => {
         const resumo = gerarResumo();
@@ -427,7 +421,7 @@ function attachEventListeners() {
 
 // Initialize listeners and UI setup on DOM content loaded
 document.addEventListener('DOMContentLoaded', () => {
-    monitorListaCompras();  // Start real-time listener
-    attachEventListeners(); // Attach event listeners (only once)
     criarListaCompras();    // Create the list initially
+    attachEventListeners(); // Attach event listeners (only once)
+    monitorListaCompras();  // Start real-time listener
 });
