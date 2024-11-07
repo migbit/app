@@ -6,7 +6,8 @@
     <title>Lista de Compras</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Removed EmailJS v3 to prevent conflicts -->
 </head>
 <body>
     <header>
@@ -67,8 +68,7 @@
         </div>
     </footer>
 
-    <script type="module" src="../js/script.js"></script>
-    <script type="module" src="../js/compras.js"></script>
+    <!-- Include EmailJS v4 script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
@@ -86,5 +86,8 @@
         });
     </script>
 
+    <!-- Include your JavaScript files as modules after EmailJS is initialized -->
+    <script type="module" src="../js/script.js"></script>
+    <script type="module" src="../js/compras.js"></script>
 </body>
 </html>
