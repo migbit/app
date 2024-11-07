@@ -1,8 +1,8 @@
-// Import Firebase modules
+// js/compras.js
 import { db } from './script.js';
 import { doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Define the shopping list structure
+// Structure of the shopping list
 const listaCompras = {
     "Produtos Limpeza": [
         "Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF",
@@ -86,9 +86,9 @@ function criarItemCompraEmBranco() {
     itemDiv.innerHTML = `
         <div class="item-info">
             <input type="text" class="item-nome-custom" placeholder="Novo item">
-            <input type="number" class="item-quantidade" value="0" min="0" max="99">
         </div>
         <div class="item-controles">
+            <input type="number" class="item-quantidade" value="0" min="0" max="99">
             <button type="button" class="btn-aumentar" aria-label="Aumentar quantidade">+</button>
             <button type="button" class="btn-diminuir" aria-label="Diminuir quantidade">-</button>
             <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
@@ -120,9 +120,7 @@ function adicionarNovoItem() {
     if (adicionaisDiv) {
         const novoItem = criarItemCompraEmBranco();
         adicionaisDiv.appendChild(novoItem);
-        // Optionally, scroll to the new item
         novoItem.scrollIntoView({ behavior: 'smooth' });
-        // Focus the new item's name input
         novoItem.querySelector('.item-nome-custom').focus();
     }
 }
@@ -139,6 +137,8 @@ async function salvarListaCompras() {
         const nome = nomeElement.textContent.trim() || (nomeElement.value ? nomeElement.value.trim() : '');
         const quantidade = parseInt(item.querySelector('.item-quantidade').value, 10);
         const local = item.getAttribute('data-local') || 'Não definido';
+
+        console.log(`Processing item: ${nome}, Quantity: ${quantidade}, Local: ${local}`);
 
         if (nome && quantidade > 0) {
             if (listaParaSalvar[nome]) {
@@ -165,6 +165,8 @@ async function salvarListaCompras() {
         alert('Existem itens com nomes vazios. Por favor, preencha todos os nomes de itens.');
         return;
     }
+
+    console.log("Lista para salvar:", listaParaSalvar);
 
     try {
         await setDoc(doc(db, "listas_compras", "lista_atual"), {
@@ -270,11 +272,8 @@ function clearComprasUI() {
     form.innerHTML = '';
 }
 
-// Populate the UI with data from Firebase
+// Populate the UI with data from Firestore
 function populateComprasUI(itens) {
-    // Remove this line to prevent resetting the UI
-    // criarListaCompras();
-
     document.querySelectorAll('.item-compra').forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
         const nome = nomeElement.textContent.trim() || (nomeElement.value ? nomeElement.value.trim() : '');
@@ -420,16 +419,3 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarListaCompras();
     attachEventListeners();
 });
-
-// Function to add a new custom item (as defined earlier)
-function adicionarNovoItem() {
-    const form = document.getElementById('compras-form');
-    const adicionaisDiv = Array.from(form.children).find(div => div.querySelector('h3')?.textContent === 'Itens Adicionais');
-
-    if (adicionaisDiv) {
-        const novoItem = criarItemCompraEmBranco();
-        adicionaisDiv.appendChild(novoItem);
-        novoItem.scrollIntoView({ behavior: 'smooth' });
-        novoItem.querySelector('.item-nome-custom').focus();
-    }
-}
