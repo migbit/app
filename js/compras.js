@@ -15,6 +15,7 @@ const listaCompras = {
         "Limpeza Potente",
         "Limpeza Placas",
         "Vinagre"
+        "Álcool"
     ],
     "Roupa": [
         "Detergente Roupa",
