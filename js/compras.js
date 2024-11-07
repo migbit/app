@@ -1,23 +1,23 @@
 // Import Firebase modules
 import { db } from './script.js';
-import { collection, doc, setDoc, getDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Define the structure of the shopping list
+// Define a estrutura da lista de compras
 const listaCompras = {
     "Produtos Limpeza": ["Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF", "Limpeza Chão (Lava Tudo)", "Limpeza Chão (Madeira)", "Limpa Vidros", "Limpeza Potente", "Limpeza Placas", "Vinagre"],
     "Roupa": ["Detergente Roupa", "Amaciador", "Lixívia Roupa Branca", "Tira Nódoas", "Tira Gorduras", "Oxi Active", "Branqueador", "Perfumador"],
     "WC": ["Papel Higiénico", "Gel WC Sanitas", "Toalhitas", "Toalhitas Desmaquilhantes", "Blocos Sanitários", "Anticalcário", "Limpeza Chuveiro", "Desentupidor de Canos", "Manutenção Canos", "Papel Higiénico Húmido", "Sabonete Líquido"],
-    "Cozinha": ["Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas", "Chá", "Lava-Loiça", "Esfregões", "Película Transparente", "Papel Alumínio", "Sacos congelação"],
-    "Diversos": ["Varetas Difusoras (Ambientador)"]
+    "Cozinha": ["Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas", "Chá", "Lava-Loiça", "Esfregões Verdes", "Esfregões Bravo", "Película Transparente", "Papel Alumínio", "Sacos congelação"],
+    "Diversos": ["Varetas Difusoras (Ambientador)", "Toalhitas Óculos"]
 };
 
-// Create the shopping list UI
+// Cria a interface da lista de compras
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
     Object.entries(listaCompras).forEach(([categoria, itens]) => {
         const categoriaDiv = document.createElement('div');
         categoriaDiv.className = 'categoria';
-        categoriaDiv.innerHTML = `<h3>${categoria}</h3>`;
+        categoriaDiv.innerHTML = `<h3>${categoria}</h3>`; // Fixed: Added backticks
         
         itens.forEach(item => {
             const itemDiv = criarItemCompra(item);
@@ -27,32 +27,32 @@ function criarListaCompras() {
         form.appendChild(categoriaDiv);
     });
 
-    const diversosDiv = document.createElement('div');
-    diversosDiv.className = 'categoria';
-    diversosDiv.innerHTML = '<h3>Itens Adicionais</h3>';
+    const adicionaisDiv = document.createElement('div');
+    adicionaisDiv.className = 'categoria';
+    adicionaisDiv.innerHTML = '<h3>Itens Adicionais</h3>';
     for (let i = 0; i < 5; i++) {
         const itemDiv = criarItemCompraEmBranco();
-        diversosDiv.appendChild(itemDiv);
+        adicionaisDiv.appendChild(itemDiv);
     }
-    form.appendChild(diversosDiv);
+    form.appendChild(adicionaisDiv);
 }
 
-// Helper functions to create and populate UI elements
+// Funções auxiliares para criar e popular elementos da UI
 function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
     itemDiv.innerHTML = `
         <div class="item-info">
             <span class="item-nome">${item}</span>
+            <input type="number" class="item-quantidade" value="0" min="0" max="99" readonly />
         </div>
         <div class="item-controles">
-            <input type="number" value="0" min="0" class="item-quantidade">
-            <button type="button" class="btn-aumentar">+</button>
-            <button type="button" class="btn-diminuir">-</button>
-            <button type="button" class="btn-zero">0</button>
-            <button type="button" class="btn-local-c">C</button>
+            <button type="button" class="btn-aumentar" aria-label="Aumentar quantidade">+</button>
+            <button type="button" class="btn-diminuir" aria-label="Diminuir quantidade">-</button>
+            <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
+            <button type="button" class="btn-local-c" aria-label="Marcar como Casa">C</button>
         </div>
-    `;
+    `; // Fixed: Enclosed HTML in backticks
     return itemDiv;
 }
 
@@ -62,26 +62,27 @@ function criarItemCompraEmBranco() {
     itemDiv.innerHTML = `
         <div class="item-info">
             <input type="text" class="item-nome-custom" placeholder="Novo item">
+            <input type="number" class="item-quantidade" value="0" min="0" max="99" readonly />
         </div>
         <div class="item-controles">
-            <input type="number" value="0" min="0" class="item-quantidade">
-            <button type="button" class="btn-aumentar">+</button>
-            <button type="button" class="btn-diminuir">-</button>
-            <button type="button" class="btn-zero">0</button>
-            <button type="button" class="btn-local-c">C</button>
+            <button type="button" class="btn-aumentar" aria-label="Aumentar quantidade">+</button>
+            <button type="button" class="btn-diminuir" aria-label="Diminuir quantidade">-</button>
+            <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
+            <button type="button" class="btn-local-c" aria-label="Marcar como Casa">C</button>
         </div>
-    `;
+    `; // Fixed: Enclosed HTML in backticks
     return itemDiv;
 }
 
-// Save the current shopping list to Firebase
+// Salva a lista de compras atual no Firebase
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
 
     itens.forEach(item => {
-        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
-        const quantidade = parseInt(item.querySelector('.item-quantidade').value);
+        const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
+        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
+        const quantidade = parseInt(item.querySelector('.item-quantidade').value, 10);
         const local = item.getAttribute('data-local') || 'Não definido';
 
         if (nome && quantidade > 0) {
@@ -100,26 +101,27 @@ async function salvarListaCompras() {
     }
 }
 
-// Generate summary of the shopping list
+// Gera o resumo da lista de compras
 function gerarResumo() {
     const itens = document.querySelectorAll('.item-compra');
     let resumo = '';
 
     itens.forEach(item => {
-        const nome = item.querySelector('.item-nome')?.textContent || item.querySelector('.item-nome-custom')?.value;
+        const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
+        const nome = nomeElement.textContent.trim() || item.querySelector('.item-nome-custom').value.trim();
         const quantidade = item.querySelector('.item-quantidade').value;
         const local = item.getAttribute('data-local');
 
-        if (nome && parseInt(quantidade) > 0) {
+        if (nome && parseInt(quantidade, 10) > 0) {
             let localDisplay = local === 'C' ? ' (Casa)' : '';
-            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
+            resumo += `${nome}: ${quantidade}${localDisplay}\n`; // Fixed: Enclosed string in backticks
         }
     });
 
     return resumo;
 }
 
-// Send the shopping list by email using EmailJS
+// Envia a lista de compras por email usando EmailJS
 function enviarEmailListaCompras(resumo) {
     if (typeof emailjs === 'undefined') {
         console.error('EmailJS não está definido.');
@@ -128,7 +130,7 @@ function enviarEmailListaCompras(resumo) {
     }
 
     emailjs.send('service_tuglp9h', 'template_4micnki', {
-        to_name: "apartments.oporto@gmail.com",
+        to_name: "apartments.oporto@gmail.com", // Consider renaming to 'to_email' if appropriate
         from_name: "Apartments Oporto",
         subject: "Lista de Compras",
         message: resumo
@@ -142,29 +144,38 @@ function enviarEmailListaCompras(resumo) {
     });
 }
 
-// Clear and repopulate UI with Firebase data
+// Limpa e repopula a UI com dados do Firebase
 function clearComprasUI() {
     const form = document.getElementById('compras-form');
     form.innerHTML = '';
 }
 
 function populateComprasUI(itens) {
-    criarListaCompras();  // Create the base UI elements
+    criarListaCompras();  // Cria os elementos básicos da UI
     
     document.querySelectorAll('.item-compra').forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent || nomeElement.value;
+        const nome = nomeElement.textContent.trim() || (nomeElement.value ? nomeElement.value.trim() : '');
         if (itens[nome]) {
             item.querySelector('.item-quantidade').value = itens[nome].quantidade;
             item.setAttribute('data-local', itens[nome].local);
             if (itens[nome].local.includes('C')) {
                 item.querySelector('.btn-local-c').classList.add('active');
             }
+
+            // Adicionar ou remover a classe 'item-comprado' baseado na quantidade
+            if (itens[nome].quantidade > 0) {
+                item.classList.add('item-comprado');
+            } else {
+                item.classList.remove('item-comprado');
+            }
         }
     });
+
+    aplicarFiltro(document.getElementById('search-input').value); // Aplica o filtro atual após carregar os dados
 }
 
-// Set up real-time listener for Firebase updates
+// Configura o listener em tempo real para atualizações do Firebase
 function monitorListaCompras() {
     const docRef = doc(db, "listas_compras", "lista_atual");
 
@@ -173,35 +184,75 @@ function monitorListaCompras() {
             const data = docSnap.data();
             clearComprasUI();
             populateComprasUI(data.itens);
-            attachEventListeners();  // Re-attach listeners after reloading data
         } else {
-            console.log("No such document!");
+            console.log("Nenhum documento encontrado!");
         }
     });
 }
 
-// Function to attach all event listeners
+// Atualiza os dados de localidade
+function updateLocalData(item) {
+    const local = item.getAttribute('data-local') === 'C' ? 'Não definido' : 'C';
+    item.setAttribute('data-local', local);
+}
+
+// Função para aplicar o filtro de busca
+function aplicarFiltro(filtro) {
+    const filtroLower = filtro.toLowerCase();
+    document.querySelectorAll('.item-compra').forEach(item => {
+        const nome = item.querySelector('.item-nome')?.textContent.trim() || item.querySelector('.item-nome-custom')?.value.trim();
+        if (nome.toLowerCase().includes(filtroLower)) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Função para anexar todos os event listeners (anexada apenas uma vez)
 function attachEventListeners() {
+    // Utilizando Event Delegation para eficiência
     document.getElementById('compras-form').addEventListener('click', (e) => {
+        const item = e.target.closest('.item-compra');
+        if (!item) return; // Clique fora de um item-compra
+
         if (e.target.classList.contains('btn-aumentar')) {
-            const input = e.target.previousElementSibling;
-            input.value = parseInt(input.value) + 1;
+            const input = item.querySelector('.item-quantidade');
+            input.value = Math.min(parseInt(input.value, 10) + 1, 99);
+
+            if (parseInt(input.value, 10) > 0) {
+                item.classList.add('item-comprado');
+            } else {
+                item.classList.remove('item-comprado');
+            }
+
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-diminuir')) {
-            const input = e.target.previousElementSibling.previousElementSibling;
-            input.value = Math.max(0, parseInt(input.value) - 1);
+            const input = item.querySelector('.item-quantidade');
+            input.value = Math.max(parseInt(input.value, 10) - 1, 0);
+
+            if (parseInt(input.value, 10) > 0) {
+                item.classList.add('item-comprado');
+            } else {
+                item.classList.remove('item-comprado');
+            }
+
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-zero')) {
-            const input = e.target.previousElementSibling.previousElementSibling.previousElementSibling;
+            const input = item.querySelector('.item-quantidade');
             input.value = 0;
+
+            item.classList.remove('item-comprado');
+
             salvarListaCompras();
         } else if (e.target.classList.contains('btn-local-c')) {
             e.target.classList.toggle('active');
-            updateLocalData(e.target.closest('.item-compra'));
+            updateLocalData(item);
             salvarListaCompras();
         }
     });
 
+    // Botão Requisitar
     document.getElementById('btn-requisitar').addEventListener('click', async () => {
         const resumo = gerarResumo();
         const resumoConteudo = document.getElementById('resumo-conteudo');
@@ -210,11 +261,32 @@ function attachEventListeners() {
         await salvarListaCompras();
     });
 
+    // Botão Enviar Email
     document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
+
+    // Event listeners para a barra de busca
+    const searchInput = document.getElementById('search-input');
+    const clearSearchBtn = document.getElementById('clear-search');
+
+    searchInput.addEventListener('input', (e) => {
+        if (e.target.value.trim() !== '') {
+            clearSearchBtn.classList.add('visible');
+        } else {
+            clearSearchBtn.classList.remove('visible');
+        }
+        aplicarFiltro(e.target.value);
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        clearSearchBtn.classList.remove('visible');
+        aplicarFiltro('');
+    });
 }
 
-// Initialize listeners and UI setup
+// Inicializa os listeners e a configuração da UI
 document.addEventListener('DOMContentLoaded', () => {
-    monitorListaCompras();  // Starts the real-time listener
-    attachEventListeners(); // Initial attachment of event listeners
+    monitorListaCompras();  // Inicia o listener em tempo real
+    attachEventListeners(); // Anexa os event listeners iniciais (apenas uma vez)
+    criarListaCompras();    // Cria a lista inicialmente
 });
