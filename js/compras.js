@@ -1,43 +1,107 @@
 // Import Firebase modules
-import { db } from './script.js';
+import { db } from './script.js'; // Ensure that './script.js' correctly exports the initialized Firestore instance
 import { doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Define a estrutura da lista de compras
+// Define the structure of the shopping list
 const listaCompras = {
-    "Produtos Limpeza": ["Lixívia tradicional", "Multiusos com Lixívia", "Gel com Lixívia", "CIF", "Limpeza Chão (Lava Tudo)", "Limpeza Chão (Madeira)", "Limpa Vidros", "Limpeza Potente", "Limpeza Placas", "Vinagre"],
-    "Roupa": ["Detergente Roupa", "Amaciador", "Lixívia Roupa Branca", "Tira Nódoas", "Tira Gorduras", "Oxi Active", "Branqueador", "Perfumador"],
-    "WC": ["Papel Higiénico", "Gel WC Sanitas", "Toalhitas", "Toalhitas Desmaquilhantes", "Blocos Sanitários", "Anticalcário", "Limpeza Chuveiro", "Desentupidor de Canos", "Manutenção Canos", "Papel Higiénico Húmido", "Sabonete Líquido"],
-    "Cozinha": ["Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas", "Chá", "Lava-Loiça", "Esfregões Verdes", "Esfregões Bravo", "Película Transparente", "Papel Alumínio", "Sacos congelação"],
-    "Diversos": ["Varetas Difusoras (Ambientador)", "Toalhitas Óculos"]
+    "Produtos Limpeza": [
+        "Lixívia tradicional",
+        "Multiusos com Lixívia",
+        "Gel com Lixívia",
+        "CIF",
+        "Limpeza Chão (Lava Tudo)",
+        "Limpeza Chão (Madeira)",
+        "Limpa Vidros",
+        "Limpeza Potente",
+        "Limpeza Placas",
+        "Vinagre"
+    ],
+    "Roupa": [
+        "Detergente Roupa",
+        "Amaciador",
+        "Lixívia Roupa Branca",
+        "Tira Nódoas",
+        "Tira Gorduras",
+        "Oxi Active",
+        "Branqueador",
+        "Perfumador"
+    ],
+    "WC": [
+        "Papel Higiénico",
+        "Gel WC Sanitas",
+        "Toalhitas",
+        "Toalhitas Desmaquilhantes",
+        "Blocos Sanitários",
+        "Anticalcário",
+        "Limpeza Chuveiro",
+        "Desentupidor de Canos",
+        "Manutenção Canos",
+        "Papel Higiénico Húmido",
+        "Sabonete Líquido"
+    ],
+    "Cozinha": [
+        "Água 1.5l",
+        "Água 5l",
+        "Café",
+        "Rolo de Cozinha",
+        "Guardanapos",
+        "Bolachas",
+        "Chá",
+        "Lava-Loiça",
+        "Esfregões Verdes",
+        "Esfregões Bravo",
+        "Película Transparente",
+        "Papel Alumínio",
+        "Sacos congelação"
+    ],
+    "Diversos": [
+        "Varetas Difusoras (Ambientador)",
+        "Toalhitas Óculos"
+    ]
 };
 
-// Cria a interface da lista de compras
+// Function to create the shopping list UI
 function criarListaCompras() {
     const form = document.getElementById('compras-form');
+
+    // Clear existing content to prevent duplication
+    form.innerHTML = '';
+
+    // Create predefined categories and items
     Object.entries(listaCompras).forEach(([categoria, itens]) => {
         const categoriaDiv = document.createElement('div');
         categoriaDiv.className = 'categoria';
-        categoriaDiv.innerHTML = `<h3>${categoria}</h3>`; // Fixed: Added backticks
-        
+        categoriaDiv.innerHTML = `<h3>${categoria}</h3>`; // Fixed: Used backticks for template literals
+
         itens.forEach(item => {
             const itemDiv = criarItemCompra(item);
             categoriaDiv.appendChild(itemDiv);
         });
-        
+
         form.appendChild(categoriaDiv);
     });
 
+    // Create 'Itens Adicionais' category for custom items
     const adicionaisDiv = document.createElement('div');
     adicionaisDiv.className = 'categoria';
-    adicionaisDiv.innerHTML = '<h3>Itens Adicionais</h3>';
-    for (let i = 0; i < 5; i++) {
-        const itemDiv = criarItemCompraEmBranco();
-        adicionaisDiv.appendChild(itemDiv);
-    }
+    adicionaisDiv.innerHTML = `
+        <h3>Itens Adicionais</h3>
+        <div id="custom-items-container">
+            <!-- Custom items will be appended here -->
+        </div>
+        <button type="button" id="btn-adicionar-custom-item">Adicionar Item</button>
+    `;
     form.appendChild(adicionaisDiv);
+
+    // Attach event listener to the "Adicionar Item" button
+    document.getElementById('btn-adicionar-custom-item').addEventListener('click', () => {
+        const customItemsContainer = document.getElementById('custom-items-container');
+        const newCustomItem = criarItemCompraEmBranco();
+        customItemsContainer.appendChild(newCustomItem);
+    });
 }
 
-// Funções auxiliares para criar e popular elementos da UI
+// Function to create a predefined shopping item
 function criarItemCompra(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
@@ -52,10 +116,11 @@ function criarItemCompra(item) {
             <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
             <button type="button" class="btn-local-c" aria-label="Marcar como Casa">C</button>
         </div>
-    `; // Fixed: Enclosed HTML in backticks
+    `;
     return itemDiv;
 }
 
+// Function to create a custom shopping item (initially blank)
 function criarItemCompraEmBranco() {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item-compra';
@@ -69,24 +134,36 @@ function criarItemCompraEmBranco() {
             <button type="button" class="btn-diminuir" aria-label="Diminuir quantidade">-</button>
             <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
             <button type="button" class="btn-local-c" aria-label="Marcar como Casa">C</button>
+            <button type="button" class="btn-remover-custom-item" aria-label="Remover item">🗑️</button>
         </div>
-    `; // Fixed: Enclosed HTML in backticks
+    `;
     return itemDiv;
 }
 
-// Salva a lista de compras atual no Firebase
+// Function to save the current shopping list to Firebase
 async function salvarListaCompras() {
     const itens = document.querySelectorAll('.item-compra');
     let listaParaSalvar = {};
 
     itens.forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
+        let nome = '';
+        if (nomeElement.classList.contains('item-nome')) {
+            nome = nomeElement.textContent.trim();
+        } else if (nomeElement.classList.contains('item-nome-custom')) {
+            nome = nomeElement.value.trim();
+        }
+
         const quantidade = parseInt(item.querySelector('.item-quantidade').value, 10);
         const local = item.getAttribute('data-local') || 'Não definido';
 
         if (nome && quantidade > 0) {
-            listaParaSalvar[nome] = { quantidade, local };
+            if (listaParaSalvar[nome]) {
+                // Handle duplicate names by aggregating quantities
+                listaParaSalvar[nome].quantidade += quantidade;
+            } else {
+                listaParaSalvar[nome] = { quantidade, local };
+            }
         }
     });
 
@@ -101,27 +178,27 @@ async function salvarListaCompras() {
     }
 }
 
-// Gera o resumo da lista de compras
+// Function to generate a summary of the shopping list
 function gerarResumo() {
     const itens = document.querySelectorAll('.item-compra');
     let resumo = '';
 
     itens.forEach(item => {
         const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || item.querySelector('.item-nome-custom').value.trim();
+        const nome = nomeElement.textContent.trim() || nomeElement.value.trim();
         const quantidade = item.querySelector('.item-quantidade').value;
         const local = item.getAttribute('data-local');
 
         if (nome && parseInt(quantidade, 10) > 0) {
             let localDisplay = local === 'C' ? ' (Casa)' : '';
-            resumo += `${nome}: ${quantidade}${localDisplay}\n`; // Fixed: Enclosed string in backticks
+            resumo += `${nome}: ${quantidade}${localDisplay}\n`;
         }
     });
 
     return resumo;
 }
 
-// Envia a lista de compras por email usando EmailJS
+// Function to send the shopping list via EmailJS
 function enviarEmailListaCompras(resumo) {
     if (typeof emailjs === 'undefined') {
         console.error('EmailJS não está definido.');
@@ -130,7 +207,7 @@ function enviarEmailListaCompras(resumo) {
     }
 
     emailjs.send('service_tuglp9h', 'template_4micnki', {
-        to_name: "apartments.oporto@gmail.com", // Consider renaming to 'to_email' if appropriate
+        to_name: "apartments.oporto@gmail.com", // Verify if this should be 'to_email'
         from_name: "Apartments Oporto",
         subject: "Lista de Compras",
         message: resumo
@@ -144,38 +221,98 @@ function enviarEmailListaCompras(resumo) {
     });
 }
 
-// Limpa e repopula a UI com dados do Firebase
+// Function to clear the shopping list UI
 function clearComprasUI() {
     const form = document.getElementById('compras-form');
     form.innerHTML = '';
 }
 
+// Function to populate the shopping list UI with data from Firebase
 function populateComprasUI(itens) {
-    criarListaCompras();  // Cria os elementos básicos da UI
-    
-    document.querySelectorAll('.item-compra').forEach(item => {
-        const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        const nome = nomeElement.textContent.trim() || (nomeElement.value ? nomeElement.value.trim() : '');
-        if (itens[nome]) {
-            item.querySelector('.item-quantidade').value = itens[nome].quantidade;
-            item.setAttribute('data-local', itens[nome].local);
-            if (itens[nome].local.includes('C')) {
-                item.querySelector('.btn-local-c').classList.add('active');
-            }
+    criarListaCompras();  // Create the basic UI elements
 
-            // Adicionar ou remover a classe 'item-comprado' baseado na quantidade
-            if (itens[nome].quantidade > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
-        }
+    // Create a Set of predefined item names for easy lookup
+    const predefinedItems = new Set();
+    Object.values(listaCompras).forEach(itensCategoria => {
+        itensCategoria.forEach(itemName => predefinedItems.add(itemName));
     });
 
-    aplicarFiltro(document.getElementById('search-input').value); // Aplica o filtro atual após carregar os dados
+    // Collect all custom item inputs
+    const customInputs = Array.from(document.querySelectorAll('.item-compra')).filter(item => item.querySelector('.item-nome-custom'));
+    let customInputIndex = 0;
+
+    // Iterate through all saved items
+    for (const [nome, detalhes] of Object.entries(itens)) {
+        if (predefinedItems.has(nome)) {
+            // Handle predefined items
+            const predefinedItem = Array.from(document.querySelectorAll('.item-compra')).find(item => {
+                const nomeElement = item.querySelector('.item-nome');
+                return nomeElement && nomeElement.textContent.trim() === nome;
+            });
+
+            if (predefinedItem) {
+                predefinedItem.querySelector('.item-quantidade').value = detalhes.quantidade;
+                predefinedItem.setAttribute('data-local', detalhes.local);
+                if (detalhes.local.includes('C')) {
+                    predefinedItem.querySelector('.btn-local-c').classList.add('active');
+                }
+
+                // Add or remove 'item-comprado' class based on quantity
+                if (detalhes.quantidade > 0) {
+                    predefinedItem.classList.add('item-comprado');
+                } else {
+                    predefinedItem.classList.remove('item-comprado');
+                }
+            }
+        } else {
+            // Handle custom items
+            if (customInputIndex < customInputs.length) {
+                const customItem = customInputs[customInputIndex];
+                const nomeCustomInput = customItem.querySelector('.item-nome-custom');
+                nomeCustomInput.value = nome;
+                customItem.querySelector('.item-quantidade').value = detalhes.quantidade;
+                customItem.setAttribute('data-local', detalhes.local);
+                if (detalhes.local.includes('C')) {
+                    customItem.querySelector('.btn-local-c').classList.add('active');
+                }
+
+                // Add or remove 'item-comprado' class based on quantity
+                if (detalhes.quantidade > 0) {
+                    customItem.classList.add('item-comprado');
+                } else {
+                    customItem.classList.remove('item-comprado');
+                }
+
+                customInputIndex++;
+            } else {
+                // If no available custom inputs, create a new one
+                const form = document.getElementById('compras-form');
+                const adicionaisDiv = document.querySelector('.categoria:last-child'); // Assuming 'Itens Adicionais' is last
+                const newCustomItem = criarItemCompraEmBranco();
+                const nomeCustomInput = newCustomItem.querySelector('.item-nome-custom');
+                nomeCustomInput.value = nome;
+                newCustomItem.querySelector('.item-quantidade').value = detalhes.quantidade;
+                newCustomItem.setAttribute('data-local', detalhes.local);
+                if (detalhes.local.includes('C')) {
+                    newCustomItem.querySelector('.btn-local-c').classList.add('active');
+                }
+
+                // Add or remove 'item-comprado' class based on quantity
+                if (detalhes.quantidade > 0) {
+                    newCustomItem.classList.add('item-comprado');
+                } else {
+                    newCustomItem.classList.remove('item-comprado');
+                }
+
+                adicionaisDiv.querySelector('#custom-items-container').appendChild(newCustomItem);
+            }
+        }
+    }
+
+    aplicarFiltro(document.getElementById('search-input').value); // Apply the current filter after loading data
 }
 
-// Configura o listener em tempo real para atualizações do Firebase
+// Function to monitor real-time updates from Firebase
 function monitorListaCompras() {
     const docRef = doc(db, "listas_compras", "lista_atual");
 
@@ -190,13 +327,13 @@ function monitorListaCompras() {
     });
 }
 
-// Atualiza os dados de localidade
+// Function to update the 'data-local' attribute
 function updateLocalData(item) {
     const local = item.getAttribute('data-local') === 'C' ? 'Não definido' : 'C';
     item.setAttribute('data-local', local);
 }
 
-// Função para aplicar o filtro de busca
+// Function to apply the search filter
 function aplicarFiltro(filtro) {
     const filtroLower = filtro.toLowerCase();
     document.querySelectorAll('.item-compra').forEach(item => {
@@ -209,12 +346,12 @@ function aplicarFiltro(filtro) {
     });
 }
 
-// Função para anexar todos os event listeners (anexada apenas uma vez)
+// Function to attach all event listeners
 function attachEventListeners() {
-    // Utilizando Event Delegation para eficiência
+    // Use Event Delegation for efficiency
     document.getElementById('compras-form').addEventListener('click', (e) => {
         const item = e.target.closest('.item-compra');
-        if (!item) return; // Clique fora de um item-compra
+        if (!item) return; // Click outside an item-compra
 
         if (e.target.classList.contains('btn-aumentar')) {
             const input = item.querySelector('.item-quantidade');
@@ -249,10 +386,14 @@ function attachEventListeners() {
             e.target.classList.toggle('active');
             updateLocalData(item);
             salvarListaCompras();
+        } else if (e.target.classList.contains('btn-remover-custom-item')) {
+            // Remove the custom item from the UI
+            item.remove();
+            salvarListaCompras();
         }
     });
 
-    // Botão Requisitar
+    // "Requisitar" Button
     document.getElementById('btn-requisitar').addEventListener('click', async () => {
         const resumo = gerarResumo();
         const resumoConteudo = document.getElementById('resumo-conteudo');
@@ -261,10 +402,10 @@ function attachEventListeners() {
         await salvarListaCompras();
     });
 
-    // Botão Enviar Email
+    // "Enviar Email" Button
     document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
 
-    // Event listeners para a barra de busca
+    // Event listeners for the search bar
     const searchInput = document.getElementById('search-input');
     const clearSearchBtn = document.getElementById('clear-search');
 
@@ -284,9 +425,9 @@ function attachEventListeners() {
     });
 }
 
-// Inicializa os listeners e a configuração da UI
+// Initialize listeners and UI setup on DOM content loaded
 document.addEventListener('DOMContentLoaded', () => {
-    monitorListaCompras();  // Inicia o listener em tempo real
-    attachEventListeners(); // Anexa os event listeners iniciais (apenas uma vez)
-    criarListaCompras();    // Cria a lista inicialmente
+    monitorListaCompras();  // Start real-time listener
+    attachEventListeners(); // Attach event listeners (only once)
+    criarListaCompras();    // Create the list initially
 });
