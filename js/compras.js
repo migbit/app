@@ -1,6 +1,6 @@
 // js/compras.js
 import { db } from './script.js';
-import { collection, doc, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { doc, setDoc, onSnapshot, Timestamp, getDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Structure of the shopping list
 const listaCompras = {
@@ -20,8 +20,8 @@ const listaCompras = {
     ],
     "Cozinha": [
         "Água 1.5l", "Água 5l", "Café", "Rolo de Cozinha", "Guardanapos", "Bolachas",
-        "Chá", "Lava-Loiça", "Esfregão Verde", "Esfregão Bravo", "Película Transparente", "Papel Alumínio",
-        "Sacos congelação"
+        "Chá", "Lava-Loiça", "Esfregões Verdes", "Esfregões Bravo", "Película Transparente",
+        "Papel Alumínio", "Sacos congelação"
     ],
     "Diversos": [
         "Varetas Difusoras (Ambientador)", "Toalhitas Óculos"
@@ -56,7 +56,7 @@ function criarListaCompras() {
     }
     form.appendChild(adicionaisDiv);
 
-    // Optionally, add the "Add Item" button
+    // Add the "Add Item" button dynamically
     adicionarBotaoAdicionarItem();
 }
 
@@ -86,9 +86,9 @@ function criarItemCompraEmBranco() {
     itemDiv.innerHTML = `
         <div class="item-info">
             <input type="text" class="item-nome-custom" placeholder="Novo item">
-            <input type="number" class="item-quantidade" value="0" min="0" max="99">
         </div>
         <div class="item-controles">
+            <input type="number" class="item-quantidade" value="0" min="0" max="99">
             <button type="button" class="btn-aumentar" aria-label="Aumentar quantidade">+</button>
             <button type="button" class="btn-diminuir" aria-label="Diminuir quantidade">-</button>
             <button type="button" class="btn-zero" aria-label="Zerar quantidade">0</button>
@@ -140,7 +140,7 @@ async function salvarListaCompras() {
         const quantidade = parseInt(item.querySelector('.item-quantidade').value, 10);
         const local = item.getAttribute('data-local') || 'Não definido';
 
-        console.log(`Salvando Item: ${nome}, Quantidade: ${quantidade}, Local: ${local}`);
+        console.log(`Salvando Item: "${nome}", Quantidade: ${quantidade}, Local: ${local}`);
 
         if (nome && quantidade > 0) {
             if (listaParaSalvar[nome]) {
@@ -276,65 +276,9 @@ function enviarEmailListaCompras(resumo) {
     });
 }
 
-// Event listeners
+// Initialize listeners and UI configuration
 document.addEventListener('DOMContentLoaded', () => {
     criarListaCompras();
     carregarListaCompras();
     attachEventListeners();
 });
-
-// Attach all event listeners
-function attachEventListeners() {
-    // Event Delegation for item controls
-    document.getElementById('compras-form').addEventListener('click', (e) => {
-        const itemCompra = e.target.closest('.item-compra');
-        if (!itemCompra) return; // Click outside an item-compra
-
-        const quantidadeInput = itemCompra.querySelector('.item-quantidade');
-
-        if (e.target.classList.contains('btn-aumentar')) {
-            quantidadeInput.value = Math.min(parseInt(quantidadeInput.value, 10) + 1, 99);
-            if (parseInt(quantidadeInput.value, 10) > 0) {
-                itemCompra.classList.add('item-comprado');
-            } else {
-                itemCompra.classList.remove('item-comprado');
-            }
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-diminuir')) {
-            quantidadeInput.value = Math.max(0, parseInt(quantidadeInput.value, 10) - 1);
-            if (parseInt(quantidadeInput.value, 10) > 0) {
-                itemCompra.classList.add('item-comprado');
-            } else {
-                itemCompra.classList.remove('item-comprado');
-            }
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-zero')) {
-            quantidadeInput.value = 0;
-            itemCompra.classList.remove('item-comprado');
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-local-c')) {
-            e.target.classList.toggle('active');
-            updateLocalData(itemCompra);
-            salvarListaCompras();
-        }
-    });
-
-    // Input event listener for manual quantity changes
-    document.getElementById('compras-form').addEventListener('input', (e) => {
-        if (e.target.classList.contains('item-quantidade')) {
-            const itemCompra = e.target.closest('.item-compra');
-            if (parseInt(e.target.value, 10) > 0) {
-                itemCompra.classList.add('item-comprado');
-            } else {
-                itemCompra.classList.remove('item-comprado');
-            }
-            salvarListaCompras();
-        }
-    });
-
-    // Button Requisitar
-    document.getElementById('btn-requisitar').addEventListener('click', exibirResumoESalvar);
-
-    // Button Enviar Email
-    document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
-}
