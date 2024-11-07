@@ -6,9 +6,7 @@
     <title>Lista de Compras</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    
-    <!-- Load EmailJS v4 with defer to ensure it's available before other scripts -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
     <header>
@@ -51,17 +49,15 @@
                 <button id="clear-search" title="Limpar busca">&times;</button>
             </div>
             <form id="compras-form">
-                <!-- Itens de compra serão adicionados via JavaScript -->
+                <!-- Aqui serão adicionados os itens de compra via JavaScript -->
             </form>
-            <!-- "Adicionar Item" Button -->
-            <button type="button" id="btn-add-item">Adicionar Item</button>
-            <button type="button" id="btn-requisitar">Resumo</button>
+            <button id="btn-requisitar">Requisitar</button>
         </section>
 
         <section id="resumo" style="display: none;">
             <h2>Resumo da Lista de Compras</h2>
             <div id="resumo-conteudo"></div>
-            <button type="button" id="btn-enviar-email">Enviar por E-mail</button>
+            <button id="btn-enviar-email">Enviar por E-mail</button>
         </section>
     </main>
 
@@ -71,28 +67,24 @@
         </div>
     </footer>
 
-    <!-- Initialize EmailJS after the script is loaded -->
-    <script type="text/javascript" defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize EmailJS with your public key
-            emailjs.init("dRbsNarrwt7bsIiDK"); // Substitua pela sua chave pública
-        });
+    <script type="module" src="../js/script.js"></script>
+    <script type="module" src="../js/compras.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init("dRbsNarrwt7bsIiDK"); // Substitua pela sua chave pública
+       })();
     </script>
-
-    <!-- Load custom scripts with defer to ensure dependencies are loaded first -->
-    <script type="module" src="../js/script.js" defer></script>
-    <script type="module" src="../js/compras.js" defer></script>
 
     <!-- Script para alternar o menu no mobile -->
-    <script type="text/javascript" defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuIcon = document.getElementById('menu-icon');
-            const navMenu = document.getElementById('nav-menu');
+    <script>
+        const menuIcon = document.getElementById('menu-icon');
+        const navMenu = document.getElementById('nav-menu');
 
-            menuIcon.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
-            });
+        menuIcon.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
         });
     </script>
+
 </body>
 </html>
