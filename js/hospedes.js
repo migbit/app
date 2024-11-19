@@ -57,7 +57,7 @@ async function loadComments() {
             // Rating Dropdown
             const ratingDropdown = document.createElement('select');
             ratingDropdown.innerHTML = `
-                <option value="">Selecione uma opção</option>
+                <option value="">Comentário</option>
                 <option value="Não sei" ${guest.ratingOption === 'Não sei' ? 'selected' : ''}>Não sei</option>
                 <option value="5 Estrelas" ${guest.ratingOption === '5 Estrelas' ? 'selected' : ''}>5 Estrelas</option>
                 <option value="Não escrever!" ${guest.ratingOption === 'Não escrever!' ? 'selected' : ''}>Não escrever!</option>
@@ -67,7 +67,7 @@ async function loadComments() {
             // Fatura Dropdown
             const faturaDropdown = document.createElement('select');
             faturaDropdown.innerHTML = `
-                <option value="">Selecione uma opção</option>
+                <option value="">Fatura</option>
                 <option value="Não Emitida" ${guest.faturaOption === 'Não Emitida' ? 'selected' : ''}>Não Emitida</option>
                 <option value="Emitida" ${guest.faturaOption === 'Emitida' ? 'selected' : ''}>Emitida</option>
             `;
@@ -76,7 +76,7 @@ async function loadComments() {
             // SIBA Dropdown
             const sibaDropdown = document.createElement('select');
             sibaDropdown.innerHTML = `
-                <option value="">Selecione uma opção</option>
+                <option value="">SIBA</option>
                 <option value="Não Enviado" ${guest.sibaOption === 'Não Enviado' ? 'selected' : ''}>Não Enviado</option>
                 <option value="Enviado" ${guest.sibaOption === 'Enviado' ? 'selected' : ''}>Enviado</option>
             `;
@@ -92,7 +92,7 @@ async function loadComments() {
             const notesLabel = document.createElement('label');
             const notesTextarea = document.createElement('textarea');
             notesTextarea.value = guest.notes || "";
-            notesTextarea.placeholder = "Escreva notas sobre o hóspede...";
+            notesTextarea.placeholder = "Notas sobre o hóspede...";
             notesTextarea.addEventListener('input', () => {
                 // Optional: Auto-save notes on input
             });
