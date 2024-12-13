@@ -333,7 +333,7 @@ const checklists = {
         "Sapatilhas Bike", "Chinelos", "Calções banho", "Toalha pequena", "Toalha grande", "Água", "Meias", "Boxers"
     ],
     bikeRide: [
-        "Banda Cardíaca", "Óculos", "Luz", "Eletrólitos", "Dinheiro", "Capacete", "Energético", "H20", "GPS", "Saco tlmv"
+        "Banda Cardíaca", "Óculos", "Luz", "Eletrólitos", "Dinheiro", "Capacete", "Energético", "H20", "GPS", "Luvas", "Saco tlmv", "Pressão 6 bar"
     ],
     Ginásio: [
         "Toalha Pequena", "Toalha Grande", "Calções", "T-Shirt", "Chinelos", "Sapatilhas"
