@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Personalized Cycling Training App</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Include Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <div class="container mt-4">
+    <h1>Cycling Training Tracker</h1>
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link active"
+          id="ciclismo-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#ciclismo"
+          type="button"
+          role="tab"
+        >
+          Ciclismo Estrada
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="rpm-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#rpm"
+          type="button"
+          role="tab"
+        >
+          Aula RPM
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="forca-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#forca"
+          type="button"
+          role="tab"
+        >
+          Treino de Força
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="alongamentos-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#alongamentos"
+          type="button"
+          role="tab"
+        >
+          Alongamentos
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="caminhada-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#caminhada"
+          type="button"
+          role="tab"
+        >
+          Caminhada
+        </button>
+      </li>
+      <!-- New Profile tab for Weight Management -->
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="profile-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#profile"
+          type="button"
+          role="tab"
+        >
+          Profile
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab Contents -->
+    <div class="tab-content" id="myTabContent">
+      <!-- 1. Ciclismo Estrada -->
+      <div class="tab-pane fade show active" id="ciclismo" role="tabpanel">
+        <form id="ciclismoForm" class="mt-3">
+          <h3>Ciclismo Estrada</h3>
+          <div class="mb-3">
+            <label for="ciclismoData" class="form-label">Data</label>
+            <input
+              type="date"
+              class="form-control"
+              id="ciclismoData"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="tipoExercicio" class="form-label">Tipo de exercício</label>
+            <select class="form-select" id="tipoExercicio" required>
+              <option value="Zona 2">Zona 2</option>
+              <option value="Recuperação ativa">Recuperação ativa</option>
+              <option value="Treino intervalado">Treino intervalado</option>
+              <option value="100k">100k</option>
+              <option value="Escalada">Escalada</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="velocidadeMedia" class="form-label">Velocidade Média (kph)</label>
+            <input
+              type="number"
+              step="0.1"
+              class="form-control"
+              id="velocidadeMedia"
+              required
+            />
+          </div>
+          <!-- Add other fields as needed -->
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+
+      <!-- 2. Aula RPM -->
+      <div class="tab-pane fade" id="rpm" role="tabpanel">
+        <form id="rpmForm" class="mt-3">
+          <h3>Aula RPM</h3>
+          <div class="mb-3">
+            <label for="rpmTempoTotal" class="form-label">Tempo Total (min)</label>
+            <input
+              type="number"
+              step="1"
+              class="form-control"
+              id="rpmTempoTotal"
+              required
+            />
+          </div>
+          <!-- Add other fields as needed -->
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+
+      <!-- 3. Treino de Força -->
+      <div class="tab-pane fade" id="forca" role="tabpanel">
+        <form id="forcaForm" class="mt-3">
+          <h3>Treino de Força</h3>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="forcaCompleted" />
+            <label class="form-check-label" for="forcaCompleted">
+              Treino de Força Concluído
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary mt-2">Salvar</button>
+        </form>
+      </div>
+
+      <!-- 4. Alongamentos -->
+      <div class="tab-pane fade" id="alongamentos" role="tabpanel">
+        <form id="alongamentosForm" class="mt-3">
+          <h3>Alongamentos</h3>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="alongamentosCompleted"
+            />
+            <label class="form-check-label" for="alongamentosCompleted">
+              Alongamentos Concluídos
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary mt-2">Salvar</button>
+        </form>
+      </div>
+
+      <!-- 5. Caminhada -->
+      <div class="tab-pane fade" id="caminhada" role="tabpanel">
+        <form id="caminhadaForm" class="mt-3">
+          <h3>Caminhada</h3>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="caminhadaCompleted"
+            />
+            <label class="form-check-label" for="caminhadaCompleted">
+              Caminhada Concluída
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary mt-2">Salvar</button>
+        </form>
+      </div>
+
+      <!-- 6. Profile Tab for Weight Management -->
+      <div class="tab-pane fade" id="profile" role="tabpanel">
+        <form id="weightForm" class="mt-3">
+          <h3>Update Your Weight</h3>
+          <div class="mb-3">
+            <label for="profileDate" class="form-label">Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="profileDate"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="profileWeight" class="form-label">Weight (kg)</label>
+            <input
+              type="number"
+              step="0.1"
+              class="form-control"
+              id="profileWeight"
+              required
+            />
+          </div>
+          <!-- Optional: let user specify a target weight for comparison -->
+          <!-- <div class="mb-3">
+            <label for="profileTargetWeight" class="form-label">Target Weight (kg)</label>
+            <input
+              type="number"
+              step="0.1"
+              class="form-control"
+              id="profileTargetWeight"
+            />
+          </div> -->
+          <button type="submit" class="btn btn-primary">Save Weight</button>
+        </form>
+
+        <!-- Display the latest weight + indicator -->
+        <div class="mt-4" id="weightIndicator"></div>
+      </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="mt-5">
+      <h2>Training Dashboard</h2>
+      <canvas id="performanceChart"></canvas>
+
+      <!-- Optional: Weight Chart -->
+      <h2 class="mt-5">Weight History</h2>
+      <canvas id="weightChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Include Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
+  <!-- Include Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Include Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Include main JavaScript file -->
+  <script src="bike.js" type="module"></script>
+</body>
+</html>
