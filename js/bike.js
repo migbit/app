@@ -1,26 +1,81 @@
+// Import necessary Firebase functions and Chart.js components
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import Chart from 'https://cdn.jsdelivr.net/npm/chart.js';
+import { Chart, registerables } from 'https://cdn.jsdelivr.net/npm/chart.js';
 
-// Function to log 'Ciclismo Estrada' activity
-async function logCiclismoEstrada(data) {
-    try {
-        const docRef = await addDoc(collection(db, "ciclismo_estrada"), data);
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
+// Register all necessary Chart.js components
+Chart.register(...registerables);
+
+// -----------------------------
+// Utility Functions
+// -----------------------------
+
+/**
+ * Converts a time input (hh:mm:ss) to total seconds.
+ * @param {string} timeStr - Time string in hh:mm:ss format.
+ * @returns {number|null} - Total seconds or null if invalid.
+ */
+function timeToSeconds(timeStr) {
+    if (!timeStr) return null;
+    const parts = timeStr.split(':').map(part => parseInt(part));
+    if (parts.length !== 3 || parts.some(isNaN)) return null;
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
 }
 
-// Handle 'Ciclismo Estrada' form submission
-document.getElementById('ciclismoForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = {
+/**
+ * Formats a date string (YYYY-MM-DD) to a more readable format.
+ * @param {string} dateStr - Date string in YYYY-MM-DD format.
+ * @returns {string} - Formatted date string.
+ */
+function formatDate(dateStr) {
+    if (!dateStr) return 'Data Não Disponível';
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('pt-PT', options);
+}
+
+// -----------------------------
+// Form Submission Handlers
+// -----------------------------
+
+/**
+ * Handles form submissions by logging data to Firestore and updating the dashboard.
+ * @param {string} formId - The ID of the form.
+ * @param {string} collectionName - The Firestore collection name.
+ * @param {Function} dataExtractor - Function to extract and process form data.
+ */
+async function handleFormSubmission(formId, collectionName, dataExtractor) {
+    const form = document.getElementById(formId);
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = dataExtractor();
+        try {
+            await addDoc(collection(db, collectionName), data);
+            alert(`${collectionName.replace('_', ' ')} registrado com sucesso!`);
+            form.reset();
+            fetchAndDisplayData();
+        } catch (error) {
+            console.error(`Erro ao adicionar documento em ${collectionName}:`, error);
+            alert(`Erro ao registrar ${collectionName.replace('_', ' ')}. Tente novamente.`);
+        }
+    });
+}
+
+// -----------------------------
+// Specific Form Data Extractors
+// -----------------------------
+
+/**
+ * Extracts data from the Ciclismo Estrada form.
+ * @returns {Object} - Processed form data.
+ */
+function extractCiclismoEstradaData() {
+    return {
         data: document.getElementById('ciclismoData').value || null,
         tipo_exercicio: document.getElementById('tipoExercicio').value || null,
         velocidade_media: parseFloat(document.getElementById('velocidadeMedia').value) || null,
         velocidade_maxima: parseFloat(document.getElementById('velocidadeMaxima').value) || null,
-        tempo_total: document.getElementById('tempoTotal').value || null,
+        tempo_total: timeToSeconds(document.getElementById('tempoTotal').value),
         ritmo_cardiaco_medio: parseInt(document.getElementById('ritmoCardiacoMedio').value) || null,
         ritmo_cardiaco_maximo: parseInt(document.getElementById('ritmoCardiacoMaximo').value) || null,
         potencia_media: parseFloat(document.getElementById('potenciaMedia').value) || null,
@@ -39,26 +94,14 @@ document.getElementById('ciclismoForm').addEventListener('submit', async (e) => 
         temperatura_media: parseFloat(document.getElementById('temperaturaMedia').value) || null,
         total_pedaladas: parseInt(document.getElementById('totalPedaladas').value) || null
     };
-    await logCiclismoEstrada(data);
-    alert('Ciclismo Estrada registrado com sucesso!');
-    document.getElementById('ciclismoForm').reset();
-    fetchAndDisplayData();
-});
-
-// Function to log 'Aula RPM' activity
-async function logAulaRPM(data) {
-    try {
-        const docRef = await addDoc(collection(db, "aula_rpm"), data);
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
 }
 
-// Handle 'Aula RPM' form submission
-document.getElementById('rpmForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = {
+/**
+ * Extracts data from the Aula RPM form.
+ * @returns {Object} - Processed form data.
+ */
+function extractAulaRPMData() {
+    return {
         tempo_total: parseInt(document.getElementById('rpmTempoTotal').value) || null,
         distancia_total: parseFloat(document.getElementById('rpmDistanciaTotal').value) || null,
         ritmo_cardiaco_medio: parseInt(document.getElementById('rpmRitmoCardiacoMedio').value) || null,
@@ -67,116 +110,77 @@ document.getElementById('rpmForm').addEventListener('submit', async (e) => {
         media_watt: parseFloat(document.getElementById('rpmMediaWatt').value) || null,
         media_rpm: parseInt(document.getElementById('rpmMediaRPM').value) || null
     };
-    await logAulaRPM(data);
-    alert('Aula RPM registrada com sucesso!');
-    document.getElementById('rpmForm').reset();
-    fetchAndDisplayData();
-});
-
-// Function to log 'Treino de Força' activity
-async function logTreinoForca(data) {
-    try {
-        const docRef = await addDoc(collection(db, "treino_forca"), data);
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
 }
 
-// Handle 'Treino de Força' form submission
-document.getElementById('forcaForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const completed = document.getElementById('forcaCompleted').checked;
-    const data = {
+/**
+ * Extracts data from the Treino de Força form.
+ * @returns {Object} - Processed form data.
+ */
+function extractTreinoForcaData() {
+    return {
         data: new Date().toISOString(),
-        concluido: completed
+        concluido: document.getElementById('forcaCompleted').checked
     };
-    await logTreinoForca(data);
-    alert('Treino de Força registrado com sucesso!');
-    document.getElementById('forcaForm').reset();
-    fetchAndDisplayData();
-});
-
-// Function to log 'Alongamentos' activity
-async function logAlongamentos(data) {
-    try {
-        const docRef = await addDoc(collection(db, "alongamentos"), data);
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
 }
 
-// Handle 'Alongamentos' form submission
-document.getElementById('alongamentosForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const completed = document.getElementById('alongamentosCompleted').checked;
-    const data = {
+/**
+ * Extracts data from the Alongamentos form.
+ * @returns {Object} - Processed form data.
+ */
+function extractAlongamentosData() {
+    return {
         data: new Date().toISOString(),
-        concluido: completed
+        concluido: document.getElementById('alongamentosCompleted').checked
     };
-    await logAlongamentos(data);
-    alert('Alongamentos registrados com sucesso!');
-    document.getElementById('alongamentosForm').reset();
-    fetchAndDisplayData();
-});
-
-// Function to log 'Caminhada' activity
-async function logCaminhada(data) {
-    try {
-        const docRef = await addDoc(collection(db, "caminhada"), data);
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
 }
 
-// Handle 'Caminhada' form submission
-document.getElementById('caminhadaForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const completed = document.getElementById('caminhadaCompleted').checked;
-    const data = {
+/**
+ * Extracts data from the Caminhada form.
+ * @returns {Object} - Processed form data.
+ */
+function extractCaminhadaData() {
+    return {
         data: new Date().toISOString(),
-        concluido: completed
+        concluido: document.getElementById('caminhadaCompleted').checked
     };
-    await logCaminhada(data);
-    alert('Caminhada registrada com sucesso!');
-    document.getElementById('caminhadaForm').reset();
-    fetchAndDisplayData();
-});
-
-// Function to log 'Peso' activity
-async function logPeso(data) {
-    try {
-        const docRef = await addDoc(collection(db, "peso"), data);
-        console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error adding document: ", e);
-    }
 }
 
-// Handle 'Peso' form submission
-document.getElementById('pesoForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = {
+/**
+ * Extracts data from the Peso form.
+ * @returns {Object} - Processed form data.
+ */
+function extractPesoData() {
+    return {
         data: document.getElementById('pesoData').value || new Date().toISOString(),
         peso_atual: parseFloat(document.getElementById('pesoAtual').value) || null
     };
-    await logPeso(data);
-    alert('Peso registrado com sucesso!');
-    document.getElementById('pesoForm').reset();
-    fetchAndDisplayData();
-    provideWeightRecommendation(data.peso_atual);
-});
+}
 
-// Function to provide weight recommendations
+// -----------------------------
+// Initialize Form Handlers
+// -----------------------------
+
+handleFormSubmission('ciclismoForm', 'ciclismo_estrada', extractCiclismoEstradaData);
+handleFormSubmission('rpmForm', 'aula_rpm', extractAulaRPMData);
+handleFormSubmission('forcaForm', 'treino_forca', extractTreinoForcaData);
+handleFormSubmission('alongamentosForm', 'alongamentos', extractAlongamentosData);
+handleFormSubmission('caminhadaForm', 'caminhada', extractCaminhadaData);
+handleFormSubmission('pesoForm', 'peso', extractPesoData);
+
+// -----------------------------
+// Weight Recommendation
+// -----------------------------
+
+/**
+ * Provides weight recommendations based on BMI.
+ * @param {number} currentWeight - Current weight in kg.
+ */
 function provideWeightRecommendation(currentWeight) {
     if (!currentWeight) {
         document.getElementById('recomendacaoTexto').innerText = "Insira seu peso para receber recomendações.";
         return;
     }
     const height = 176; // in cm
-    const age = 40; // in years
     const bmi = currentWeight / ((height / 100) ** 2);
     let recommendation = "";
     if (bmi < 21) {
@@ -191,63 +195,103 @@ function provideWeightRecommendation(currentWeight) {
     document.getElementById('recomendacaoTexto').innerText = `Seu BMI atual é ${bmi.toFixed(1)}. ${recommendation}`;
 }
 
-// Function to fetch and display data on dashboard
+// -----------------------------
+// Data Fetching and Visualization
+// -----------------------------
+
+/**
+ * Fetches data from Firestore and updates the charts.
+ */
 async function fetchAndDisplayData() {
-    // Fetch Ciclismo Estrada Data
-    const ciclismoQuery = query(collection(db, "ciclismo_estrada"), orderBy("data", "desc"));
-    const ciclismoSnapshot = await getDocs(ciclismoQuery);
-    const ciclismoData = [];
-    ciclismoSnapshot.forEach((doc) => {
-        ciclismoData.push(doc.data());
-    });
+    try {
+        // Fetch Ciclismo Estrada Data
+        const ciclismoQuery = query(collection(db, "ciclismo_estrada"), orderBy("data", "desc"));
+        const ciclismoSnapshot = await getDocs(ciclismoQuery);
+        const ciclismoData = [];
+        ciclismoSnapshot.forEach((doc) => {
+            ciclismoData.push(doc.data());
+        });
 
-    // Fetch Weight Data
-    const pesoQuery = query(collection(db, "peso"), orderBy("data", "desc"));
-    const pesoSnapshot = await getDocs(pesoQuery);
-    const pesoData = [];
-    pesoSnapshot.forEach((doc) => {
-        pesoData.push(doc.data());
-    });
+        // Fetch Peso Data
+        const pesoQuery = query(collection(db, "peso"), orderBy("data", "desc"));
+        const pesoSnapshot = await getDocs(pesoQuery);
+        const pesoData = [];
+        pesoSnapshot.forEach((doc) => {
+            pesoData.push(doc.data());
+        });
 
-    // Create Performance Chart
+        // Create or Update Performance Chart
+        createOrUpdatePerformanceChart(ciclismoData);
+
+        // Create or Update Weight Chart
+        createOrUpdateWeightChart(pesoData);
+
+        // Generate Training Recommendations for Next 5 Days
+        generateTrainingRecommendations();
+    } catch (error) {
+        console.error("Erro ao buscar dados para os gráficos:", error);
+    }
+}
+
+/**
+ * Creates or updates the Performance Chart.
+ * @param {Array} data - Array of ciclismo_estrada documents.
+ */
+function createOrUpdatePerformanceChart(data) {
     const ctx = document.getElementById('performanceChart').getContext('2d');
     if (window.performanceChart) {
         window.performanceChart.destroy();
     }
+
     window.performanceChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ciclismoData.map(entry => entry.data),
-            datasets: [{
-                label: 'Velocidade Média (kph)',
-                data: ciclismoData.map(entry => entry.velocidade_media),
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2,
-                fill: false
-            },
-            {
-                label: 'Potência Média (W)',
-                data: ciclismoData.map(entry => entry.potencia_media),
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 2,
-                fill: false
-            },
-            {
-                label: 'Ritmo Cardíaco Médio (bpm)',
-                data: ciclismoData.map(entry => entry.ritmo_cardiaco_medio),
-                borderColor: 'rgba(255, 159, 64, 1)',
-                borderWidth: 2,
-                fill: false
-            }]
+            labels: data.map(entry => formatDate(entry.data)),
+            datasets: [
+                {
+                    label: 'Velocidade Média (kph)',
+                    data: data.map(entry => entry.velocidade_media),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true
+                },
+                {
+                    label: 'Potência Média (W)',
+                    data: data.map(entry => entry.potencia_media),
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true
+                },
+                {
+                    label: 'Ritmo Cardíaco Médio (bpm)',
+                    data: data.map(entry => entry.ritmo_cardiaco_medio),
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true
+                }
+            ]
         },
         options: {
             responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Desempenho de Ciclismo Estrada'
+                }
+            },
             scales: {
                 x: { 
                     title: { 
                         display: true, 
                         text: 'Data' 
-                    } 
+                    },
+                    ticks: {
+                        maxRotation: 90,
+                        minRotation: 45
+                    }
                 },
                 y: { 
                     title: { 
@@ -259,32 +303,51 @@ async function fetchAndDisplayData() {
             }
         }
     });
+}
 
-    // Create Weight Chart
+/**
+ * Creates or updates the Weight Chart.
+ * @param {Array} data - Array of peso documents.
+ */
+function createOrUpdateWeightChart(data) {
     const ctxPeso = document.getElementById('weightChart').getContext('2d');
     if (window.weightChart) {
         window.weightChart.destroy();
     }
+
     window.weightChart = new Chart(ctxPeso, {
         type: 'line',
         data: {
-            labels: pesoData.map(entry => entry.data),
-            datasets: [{
-                label: 'Peso (kg)',
-                data: pesoData.map(entry => entry.peso_atual),
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 2,
-                fill: false
-            }]
+            labels: data.map(entry => formatDate(entry.data)),
+            datasets: [
+                {
+                    label: 'Peso (kg)',
+                    data: data.map(entry => entry.peso_atual),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true
+                }
+            ]
         },
         options: {
             responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Rastreamento de Peso'
+                }
+            },
             scales: {
                 x: { 
                     title: { 
                         display: true, 
                         text: 'Data' 
-                    } 
+                    },
+                    ticks: {
+                        maxRotation: 90,
+                        minRotation: 45
+                    }
                 },
                 y: { 
                     title: { 
@@ -296,14 +359,16 @@ async function fetchAndDisplayData() {
             }
         }
     });
-
-    // Generate Training Recommendations for Next 5 Days
-    generateTrainingRecommendations();
 }
 
-// Function to generate training recommendations for next 5 days
+// -----------------------------
+// Training Recommendations
+// -----------------------------
+
+/**
+ * Generates training recommendations for the next 5 days based on current routine.
+ */
 async function generateTrainingRecommendations() {
-    // Fetch the latest training data
     const today = new Date();
     const recommendations = [];
 
@@ -349,7 +414,7 @@ async function generateTrainingRecommendations() {
 
         // Highlight the most recommended training (first option)
         recommendations.push({
-            date: nextDay.toISOString().split('T')[0],
+            date: formatDate(nextDay.toISOString().split('T')[0]),
             options: recommendedTrainings,
             recommended: recommendedTrainings[0]
         });
@@ -359,18 +424,14 @@ async function generateTrainingRecommendations() {
     displayTrainingRecommendations(recommendations);
 }
 
-// Function to display training recommendations
+/**
+ * Displays training recommendations in the dashboard.
+ * @param {Array} recommendations - Array of recommendation objects.
+ */
 function displayTrainingRecommendations(recommendations) {
-    const dashboard = document.getElementById('dashboard');
-    // Create a new section for recommendations
-    let recSection = document.getElementById('recommendations');
-    if (!recSection) {
-        recSection = document.createElement('div');
-        recSection.id = 'recommendations';
-        recSection.classList.add('mt-5');
-        dashboard.appendChild(recSection);
-    }
+    const recSection = document.getElementById('recommendations');
     recSection.innerHTML = `<h3>Próximos 5 Dias de Treino</h3>`;
+
     recommendations.forEach(rec => {
         const recDiv = document.createElement('div');
         recDiv.classList.add('mb-3');
@@ -389,7 +450,9 @@ function displayTrainingRecommendations(recommendations) {
     });
 }
 
-// Call the function on page load
-window.onload = fetchAndDisplayData;
+// -----------------------------
+// Initialize on Page Load
+// -----------------------------
 
-// Additional functionalities for recommendations and adaptive training can be implemented here
+// Fetch and display data when the window loads
+window.addEventListener('load', fetchAndDisplayData);
