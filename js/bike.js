@@ -1,4 +1,4 @@
-import { db, auth } from './firebaseConfig.js';
+import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 import Chart from 'https://cdn.jsdelivr.net/npm/chart.js';
 
@@ -12,40 +12,38 @@ async function logCiclismoEstrada(data) {
     }
 }
 
-// Function to handle 'Ciclismo Estrada' form submission
+// Handle 'Ciclismo Estrada' form submission
 document.getElementById('ciclismoForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = {
-        data: document.getElementById('ciclismoData').value,
-        tipo_exercicio: document.getElementById('tipoExercicio').value,
-        velocidade_media: parseFloat(document.getElementById('velocidadeMedia').value),
-        velocidade_maxima: parseFloat(document.getElementById('velocidadeMaxima').value),
-        tempo_total: document.getElementById('tempoTotal').value,
-        ritmo_cardiaco_medio: parseInt(document.getElementById('ritmoCardiacoMedio').value),
-        ritmo_cardiaco_maximo: parseInt(document.getElementById('ritmoCardiacoMaximo').value),
-        potencia_media: parseFloat(document.getElementById('potenciaMedia').value),
-        potencia_maxima: parseFloat(document.getElementById('potenciaMaxima').value),
-        max_potencia_media_20m: parseFloat(document.getElementById('maxPotenciaMedia20m').value),
-        equilibrio_ed: parseFloat(document.getElementById('equilibrioED').value),
-        potencia_normalizada: parseFloat(document.getElementById('potenciaNormalizada').value),
-        fator_intensidade: parseFloat(document.getElementById('fatorIntensidade').value),
-        pontuacao_stress: parseInt(document.getElementById('pontuacaoStress').value),
-        definicao_ftp: parseFloat(document.getElementById('definicaoFTP').value),
-        exercicio_kj: parseFloat(document.getElementById('exercicioKj').value),
-        cadencia_media: parseInt(document.getElementById('cadenciaMedia').value),
-        cadencia_maxima: parseInt(document.getElementById('cadenciaMaxima').value),
-        subida_total: parseInt(document.getElementById('subidaTotal').value),
-        elevacao_maxima: parseInt(document.getElementById('elevacaoMaxima').value),
-        temperatura_media: parseFloat(document.getElementById('temperaturaMedia').value),
-        total_pedaladas: parseInt(document.getElementById('totalPedaladas').value)
+        data: document.getElementById('ciclismoData').value || null,
+        tipo_exercicio: document.getElementById('tipoExercicio').value || null,
+        velocidade_media: parseFloat(document.getElementById('velocidadeMedia').value) || null,
+        velocidade_maxima: parseFloat(document.getElementById('velocidadeMaxima').value) || null,
+        tempo_total: document.getElementById('tempoTotal').value || null,
+        ritmo_cardiaco_medio: parseInt(document.getElementById('ritmoCardiacoMedio').value) || null,
+        ritmo_cardiaco_maximo: parseInt(document.getElementById('ritmoCardiacoMaximo').value) || null,
+        potencia_media: parseFloat(document.getElementById('potenciaMedia').value) || null,
+        potencia_maxima: parseFloat(document.getElementById('potenciaMaxima').value) || null,
+        max_potencia_media_20m: parseFloat(document.getElementById('maxPotenciaMedia20m').value) || null,
+        equilibrio_ed: parseFloat(document.getElementById('equilibrioED').value) || null,
+        potencia_normalizada: parseFloat(document.getElementById('potenciaNormalizada').value) || null,
+        fator_intensidade: parseFloat(document.getElementById('fatorIntensidade').value) || null,
+        pontuacao_stress: parseInt(document.getElementById('pontuacaoStress').value) || null,
+        definicao_ftp: parseFloat(document.getElementById('definicaoFTP').value) || null,
+        exercicio_kj: parseFloat(document.getElementById('exercicioKj').value) || null,
+        cadencia_media: parseInt(document.getElementById('cadenciaMedia').value) || null,
+        cadencia_maxima: parseInt(document.getElementById('cadenciaMaxima').value) || null,
+        subida_total: parseInt(document.getElementById('subidaTotal').value) || null,
+        elevacao_maxima: parseInt(document.getElementById('elevacaoMaxima').value) || null,
+        temperatura_media: parseFloat(document.getElementById('temperaturaMedia').value) || null,
+        total_pedaladas: parseInt(document.getElementById('totalPedaladas').value) || null
     };
     await logCiclismoEstrada(data);
     alert('Ciclismo Estrada registrado com sucesso!');
     document.getElementById('ciclismoForm').reset();
     fetchAndDisplayData();
 });
-
-// Similar functions for other exercise types...
 
 // Function to log 'Aula RPM' activity
 async function logAulaRPM(data) {
@@ -61,13 +59,13 @@ async function logAulaRPM(data) {
 document.getElementById('rpmForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = {
-        tempo_total: parseInt(document.getElementById('rpmTempoTotal').value),
-        distancia_total: parseFloat(document.getElementById('rpmDistanciaTotal').value),
-        ritmo_cardiaco_medio: parseInt(document.getElementById('rpmRitmoCardiacoMedio').value),
-        ritmo_cardiaco_maximo: parseInt(document.getElementById('rpmRitmoCardiacoMaximo').value),
-        watt_maximo: parseFloat(document.getElementById('rpmWattMaximo').value),
-        media_watt: parseFloat(document.getElementById('rpmMediaWatt').value),
-        media_rpm: parseInt(document.getElementById('rpmMediaRPM').value)
+        tempo_total: parseInt(document.getElementById('rpmTempoTotal').value) || null,
+        distancia_total: parseFloat(document.getElementById('rpmDistanciaTotal').value) || null,
+        ritmo_cardiaco_medio: parseInt(document.getElementById('rpmRitmoCardiacoMedio').value) || null,
+        ritmo_cardiaco_maximo: parseInt(document.getElementById('rpmRitmoCardiacoMaximo').value) || null,
+        watt_maximo: parseFloat(document.getElementById('rpmWattMaximo').value) || null,
+        media_watt: parseFloat(document.getElementById('rpmMediaWatt').value) || null,
+        media_rpm: parseInt(document.getElementById('rpmMediaRPM').value) || null
     };
     await logAulaRPM(data);
     alert('Aula RPM registrada com sucesso!');
@@ -161,21 +159,25 @@ async function logPeso(data) {
 document.getElementById('pesoForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = {
-        data: document.getElementById('pesoData').value,
-        peso_atual: parseFloat(document.getElementById('pesoAtual').value)
+        data: document.getElementById('pesoData').value || new Date().toISOString(),
+        peso_atual: parseFloat(document.getElementById('pesoAtual').value) || null
     };
     await logPeso(data);
     alert('Peso registrado com sucesso!');
     document.getElementById('pesoForm').reset();
     fetchAndDisplayData();
     provideWeightRecommendation(data.peso_atual);
-}
+});
 
 // Function to provide weight recommendations
-async function provideWeightRecommendation(currentWeight) {
+function provideWeightRecommendation(currentWeight) {
+    if (!currentWeight) {
+        document.getElementById('recomendacaoTexto').innerText = "Insira seu peso para receber recomendações.";
+        return;
+    }
     const height = 176; // in cm
     const age = 40; // in years
-    const bmi = (currentWeight) / ((height / 100) ** 2);
+    const bmi = currentWeight / ((height / 100) ** 2);
     let recommendation = "";
     if (bmi < 21) {
         recommendation = "Seu BMI está abaixo do ideal para desempenho de ciclismo. Considere ganhar um pouco de peso para melhorar a força e resistência.";
@@ -294,10 +296,100 @@ async function fetchAndDisplayData() {
             }
         }
     });
+
+    // Generate Training Recommendations for Next 5 Days
+    generateTrainingRecommendations();
+}
+
+// Function to generate training recommendations for next 5 days
+async function generateTrainingRecommendations() {
+    // Fetch the latest training data
+    const today = new Date();
+    const recommendations = [];
+
+    for (let i = 1; i <= 5; i++) {
+        const nextDay = new Date();
+        nextDay.setDate(today.getDate() + i);
+        const dayOfWeek = nextDay.getDay(); // 0 (Sun) to 6 (Sat)
+
+        let recommendedTrainings = [];
+
+        // Example logic based on day of week and existing routine
+        if (dayOfWeek === 2 || dayOfWeek === 5) { // Tuesdays & Fridays: Gym Cycling Classes
+            recommendedTrainings.push({
+                type: "Aula RPM",
+                description: "Aula RPM (45 minutos)"
+            });
+        }
+        if (dayOfWeek === 0) { // Sundays: Long Ride
+            recommendedTrainings.push({
+                type: "Ciclismo Estrada",
+                description: "Long Ride (100 km)"
+            });
+        }
+        if (dayOfWeek !== 0 && dayOfWeek !== 2 && dayOfWeek !== 5) {
+            // Weekdays: Zone 2 Training or Active Recovery
+            recommendedTrainings.push({
+                type: "Ciclismo Estrada",
+                description: "Zone 2 Training (60 minutos)"
+            });
+            recommendedTrainings.push({
+                type: "Caminhada",
+                description: "Caminhada leve (30 minutos)"
+            });
+        }
+
+        // Option to reduce load during winter phase or manage tendinitis
+        // Placeholder: Implement seasonal logic based on current date or user selection
+        // For simplicity, assume current date is winter
+        recommendedTrainings.push({
+            type: "Alongamentos",
+            description: "Sessão de Alongamentos (20 minutos)"
+        });
+
+        // Highlight the most recommended training (first option)
+        recommendations.push({
+            date: nextDay.toISOString().split('T')[0],
+            options: recommendedTrainings,
+            recommended: recommendedTrainings[0]
+        });
+    }
+
+    // Display recommendations on the dashboard
+    displayTrainingRecommendations(recommendations);
+}
+
+// Function to display training recommendations
+function displayTrainingRecommendations(recommendations) {
+    const dashboard = document.getElementById('dashboard');
+    // Create a new section for recommendations
+    let recSection = document.getElementById('recommendations');
+    if (!recSection) {
+        recSection = document.createElement('div');
+        recSection.id = 'recommendations';
+        recSection.classList.add('mt-5');
+        dashboard.appendChild(recSection);
+    }
+    recSection.innerHTML = `<h3>Próximos 5 Dias de Treino</h3>`;
+    recommendations.forEach(rec => {
+        const recDiv = document.createElement('div');
+        recDiv.classList.add('mb-3');
+        recDiv.innerHTML = `
+            <h5>${rec.date}</h5>
+            <ul>
+                ${rec.options.map(option => `
+                    <li ${option === rec.recommended ? 'class="fw-bold"' : ''}>
+                        ${option.description} (${option.type})
+                        ${option === rec.recommended ? ' <span class="badge bg-success">Recomendado</span>' : ''}
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+        recSection.appendChild(recDiv);
+    });
 }
 
 // Call the function on page load
 window.onload = fetchAndDisplayData;
 
-// Recommendation Engine Placeholder
-// Future implementation: Analyze data to provide training recommendations
+// Additional functionalities for recommendations and adaptive training can be implemented here

@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalized Cycling Training App</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Bike Training Tracker</title>
+    <link rel="stylesheet" href="../css/styles.css">
     <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1 class="mt-4">Cycling Training Tracker</h1>
+    <header>
+        <h1>Bike Training Tracker</h1>
+    </header>
+    <div class="container mt-4">
         <!-- Navigation Tabs -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -37,14 +39,15 @@
             <div class="tab-pane fade show active" id="ciclismo" role="tabpanel">
                 <form id="ciclismoForm">
                     <h3 class="mt-3">Ciclismo Estrada</h3>
-                    <!-- Add input fields as specified -->
+                    <!-- All input fields are optional -->
                     <div class="mb-3">
                         <label for="ciclismoData" class="form-label">Data</label>
-                        <input type="date" class="form-control" id="ciclismoData" required>
+                        <input type="date" class="form-control" id="ciclismoData">
                     </div>
                     <div class="mb-3">
                         <label for="tipoExercicio" class="form-label">Tipo de exercício</label>
-                        <select class="form-select" id="tipoExercicio" required>
+                        <select class="form-select" id="tipoExercicio">
+                            <option value="">Selecione...</option>
                             <option value="Zona 2">Zona 2</option>
                             <option value="Recuperação ativa">Recuperação ativa</option>
                             <option value="Treino intervalado">Treino intervalado</option>
@@ -53,105 +56,85 @@
                             <!-- Add more options as needed -->
                         </select>
                     </div>
-                    <!-- Example for Velocidade Média -->
                     <div class="mb-3">
                         <label for="velocidadeMedia" class="form-label">Velocidade Média (kph)</label>
-                        <input type="number" step="0.1" class="form-control" id="velocidadeMedia" required>
+                        <input type="number" step="0.1" class="form-control" id="velocidadeMedia">
                     </div>
-                    <!-- Velocidade Máxima -->
                     <div class="mb-3">
                         <label for="velocidadeMaxima" class="form-label">Velocidade Máxima (kph)</label>
-                        <input type="number" step="0.1" class="form-control" id="velocidadeMaxima" required>
+                        <input type="number" step="0.1" class="form-control" id="velocidadeMaxima">
                     </div>
-                    <!-- Tempo Total -->
                     <div class="mb-3">
                         <label for="tempoTotal" class="form-label">Tempo Total (hh:mm:ss)</label>
-                        <input type="time" class="form-control" id="tempoTotal" required>
+                        <input type="time" class="form-control" id="tempoTotal" step="1">
                     </div>
-                    <!-- Ritmo Cardíaco Médio -->
                     <div class="mb-3">
                         <label for="ritmoCardiacoMedio" class="form-label">Ritmo Cardíaco Médio (bpm)</label>
-                        <input type="number" class="form-control" id="ritmoCardiacoMedio" required>
+                        <input type="number" class="form-control" id="ritmoCardiacoMedio">
                     </div>
-                    <!-- Ritmo Cardíaco Máximo -->
                     <div class="mb-3">
                         <label for="ritmoCardiacoMaximo" class="form-label">Ritmo Cardíaco Máximo (bpm)</label>
-                        <input type="number" class="form-control" id="ritmoCardiacoMaximo" required>
+                        <input type="number" class="form-control" id="ritmoCardiacoMaximo">
                     </div>
-                    <!-- Potência Média -->
                     <div class="mb-3">
                         <label for="potenciaMedia" class="form-label">Potência Média (W)</label>
-                        <input type="number" step="1" class="form-control" id="potenciaMedia" required>
+                        <input type="number" step="1" class="form-control" id="potenciaMedia">
                     </div>
-                    <!-- Potência Máxima -->
                     <div class="mb-3">
                         <label for="potenciaMaxima" class="form-label">Potência Máxima (W)</label>
-                        <input type="number" step="1" class="form-control" id="potenciaMaxima" required>
+                        <input type="number" step="1" class="form-control" id="potenciaMaxima">
                     </div>
-                    <!-- Máxima Potência Média (20m) -->
                     <div class="mb-3">
                         <label for="maxPotenciaMedia20m" class="form-label">Máxima Potência Média (20m) (W)</label>
-                        <input type="number" step="1" class="form-control" id="maxPotenciaMedia20m" required>
+                        <input type="number" step="1" class="form-control" id="maxPotenciaMedia20m">
                     </div>
-                    <!-- Equilíbrio E/D -->
                     <div class="mb-3">
                         <label for="equilibrioED" class="form-label">Equilíbrio E/D (%)</label>
-                        <input type="number" step="0.1" class="form-control" id="equilibrioED" required>
+                        <input type="number" step="0.1" class="form-control" id="equilibrioED">
                     </div>
-                    <!-- Potência Normalizada -->
                     <div class="mb-3">
                         <label for="potenciaNormalizada" class="form-label">Potência Normalizada (NP) (W)</label>
-                        <input type="number" step="1" class="form-control" id="potenciaNormalizada" required>
+                        <input type="number" step="1" class="form-control" id="potenciaNormalizada">
                     </div>
-                    <!-- Fator Intensidade -->
                     <div class="mb-3">
                         <label for="fatorIntensidade" class="form-label">Fator Intensidade (IF)</label>
-                        <input type="number" step="0.01" class="form-control" id="fatorIntensidade" required>
+                        <input type="number" step="0.01" class="form-control" id="fatorIntensidade">
                     </div>
-                    <!-- Pontuação Stress Treino -->
                     <div class="mb-3">
                         <label for="pontuacaoStress" class="form-label">Pontuação Stress Treino (TSS)</label>
-                        <input type="number" step="1" class="form-control" id="pontuacaoStress" required>
+                        <input type="number" step="1" class="form-control" id="pontuacaoStress">
                     </div>
-                    <!-- Definição de FTP -->
                     <div class="mb-3">
                         <label for="definicaoFTP" class="form-label">Definição de FTP (W)</label>
-                        <input type="number" step="1" class="form-control" id="definicaoFTP" required>
+                        <input type="number" step="1" class="form-control" id="definicaoFTP">
                     </div>
-                    <!-- Exercício (kj) -->
                     <div class="mb-3">
                         <label for="exercicioKj" class="form-label">Exercício (kJ)</label>
-                        <input type="number" step="1" class="form-control" id="exercicioKj" required>
+                        <input type="number" step="1" class="form-control" id="exercicioKj">
                     </div>
-                    <!-- Cadência Média -->
                     <div class="mb-3">
                         <label for="cadenciaMedia" class="form-label">Cadência Média (rpm)</label>
-                        <input type="number" step="1" class="form-control" id="cadenciaMedia" required>
+                        <input type="number" step="1" class="form-control" id="cadenciaMedia">
                     </div>
-                    <!-- Cadência Máxima -->
                     <div class="mb-3">
                         <label for="cadenciaMaxima" class="form-label">Cadência Máxima (rpm)</label>
-                        <input type="number" step="1" class="form-control" id="cadenciaMaxima" required>
+                        <input type="number" step="1" class="form-control" id="cadenciaMaxima">
                     </div>
-                    <!-- Subida Total -->
                     <div class="mb-3">
                         <label for="subidaTotal" class="form-label">Subida Total (m)</label>
-                        <input type="number" step="1" class="form-control" id="subidaTotal" required>
+                        <input type="number" step="1" class="form-control" id="subidaTotal">
                     </div>
-                    <!-- Elevação Máxima -->
                     <div class="mb-3">
                         <label for="elevacaoMaxima" class="form-label">Elevação Máxima (m)</label>
-                        <input type="number" step="1" class="form-control" id="elevacaoMaxima" required>
+                        <input type="number" step="1" class="form-control" id="elevacaoMaxima">
                     </div>
-                    <!-- Temperatura Média -->
                     <div class="mb-3">
                         <label for="temperaturaMedia" class="form-label">Temperatura Média (°C)</label>
-                        <input type="number" step="0.1" class="form-control" id="temperaturaMedia" required>
+                        <input type="number" step="0.1" class="form-control" id="temperaturaMedia">
                     </div>
-                    <!-- Total Pedaladas -->
                     <div class="mb-3">
                         <label for="totalPedaladas" class="form-label">Total Pedaladas</label>
-                        <input type="number" step="1" class="form-control" id="totalPedaladas" required>
+                        <input type="number" step="1" class="form-control" id="totalPedaladas">
                     </div>
                     <button type="submit" class="btn btn-primary">Salvar</button>
                 </form>
@@ -160,34 +143,34 @@
             <div class="tab-pane fade" id="rpm" role="tabpanel">
                 <form id="rpmForm">
                     <h3 class="mt-3">Aula RPM</h3>
-                    <!-- Add input fields as specified -->
+                    <!-- All input fields are optional -->
                     <div class="mb-3">
                         <label for="rpmTempoTotal" class="form-label">Tempo Total (min)</label>
-                        <input type="number" step="1" class="form-control" id="rpmTempoTotal" required>
+                        <input type="number" step="1" class="form-control" id="rpmTempoTotal">
                     </div>
                     <div class="mb-3">
                         <label for="rpmDistanciaTotal" class="form-label">Distância Total (km)</label>
-                        <input type="number" step="0.1" class="form-control" id="rpmDistanciaTotal" required>
+                        <input type="number" step="0.1" class="form-control" id="rpmDistanciaTotal">
                     </div>
                     <div class="mb-3">
                         <label for="rpmRitmoCardiacoMedio" class="form-label">Ritmo Cardíaco Médio (bpm)</label>
-                        <input type="number" class="form-control" id="rpmRitmoCardiacoMedio" required>
+                        <input type="number" class="form-control" id="rpmRitmoCardiacoMedio">
                     </div>
                     <div class="mb-3">
                         <label for="rpmRitmoCardiacoMaximo" class="form-label">Ritmo Cardíaco Máximo (bpm)</label>
-                        <input type="number" class="form-control" id="rpmRitmoCardiacoMaximo" required>
+                        <input type="number" class="form-control" id="rpmRitmoCardiacoMaximo">
                     </div>
                     <div class="mb-3">
                         <label for="rpmWattMaximo" class="form-label">Watt Máximo (W)</label>
-                        <input type="number" step="1" class="form-control" id="rpmWattMaximo" required>
+                        <input type="number" step="1" class="form-control" id="rpmWattMaximo">
                     </div>
                     <div class="mb-3">
                         <label for="rpmMediaWatt" class="form-label">Média Watt (W)</label>
-                        <input type="number" step="1" class="form-control" id="rpmMediaWatt" required>
+                        <input type="number" step="1" class="form-control" id="rpmMediaWatt">
                     </div>
                     <div class="mb-3">
                         <label for="rpmMediaRPM" class="form-label">Média RPM</label>
-                        <input type="number" step="1" class="form-control" id="rpmMediaRPM" required>
+                        <input type="number" step="1" class="form-control" id="rpmMediaRPM">
                     </div>
                     <button type="submit" class="btn btn-primary">Salvar</button>
                 </form>
@@ -237,11 +220,11 @@
                     <h3 class="mt-3">Peso</h3>
                     <div class="mb-3">
                         <label for="pesoData" class="form-label">Data</label>
-                        <input type="date" class="form-control" id="pesoData" required>
+                        <input type="date" class="form-control" id="pesoData">
                     </div>
                     <div class="mb-3">
                         <label for="pesoAtual" class="form-label">Peso Atual (kg)</label>
-                        <input type="number" step="0.1" class="form-control" id="pesoAtual" required>
+                        <input type="number" step="0.1" class="form-control" id="pesoAtual">
                     </div>
                     <button type="submit" class="btn btn-primary">Salvar</button>
                 </form>
@@ -256,7 +239,11 @@
             <h2>Training Dashboard</h2>
             <canvas id="performanceChart"></canvas>
             <canvas id="weightChart" class="mt-5"></canvas>
-            <!-- Additional charts and summaries can be added here -->
+            <!-- Recommendations Section -->
+            <div id="recommendations" class="mt-5">
+                <h3>Próximos 5 Dias de Treino</h3>
+                <!-- Recommendations will be dynamically inserted here -->
+            </div>
         </div>
     </div>
     <!-- Include Firebase SDK -->
@@ -267,7 +254,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Include main JavaScript file -->
-    <script src="bike.js"></script>
+    <!-- Include main JavaScript files -->
+    <script type="module" src="../js/bike.js"></script>
+    <script type="module" src="../js/script.js"></script>
 </body>
 </html>
