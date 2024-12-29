@@ -1,285 +1,303 @@
-// app.js
-import { db, auth } from "./firebaseConfig.js";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { db, auth } from './firebaseConfig.js';
+import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import Chart from 'https://cdn.jsdelivr.net/npm/chart.js';
 
-// --------------------- Ciclismo Estrada ---------------------
+// Function to log 'Ciclismo Estrada' activity
 async function logCiclismoEstrada(data) {
-  try {
-    const docRef = await addDoc(collection(db, "ciclismo_estrada"), data);
-    console.log("Ciclismo Estrada Document ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error adding Ciclismo Estrada document: ", error);
-  }
+    try {
+        const docRef = await addDoc(collection(db, "ciclismo_estrada"), data);
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
-document.getElementById("ciclismoForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const data = {
-    data: document.getElementById("ciclismoData").value,
-    tipo_exercicio: document.getElementById("tipoExercicio").value,
-    velocidade_media: parseFloat(document.getElementById("velocidadeMedia").value),
-    // Add other fields similarly...
-    timestamp: new Date().getTime(), // optional
-  };
-  await logCiclismoEstrada(data);
-  alert("Ciclismo Estrada registrado com sucesso!");
-  e.target.reset();
+// Function to handle 'Ciclismo Estrada' form submission
+document.getElementById('ciclismoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        data: document.getElementById('ciclismoData').value,
+        tipo_exercicio: document.getElementById('tipoExercicio').value,
+        velocidade_media: parseFloat(document.getElementById('velocidadeMedia').value),
+        velocidade_maxima: parseFloat(document.getElementById('velocidadeMaxima').value),
+        tempo_total: document.getElementById('tempoTotal').value,
+        ritmo_cardiaco_medio: parseInt(document.getElementById('ritmoCardiacoMedio').value),
+        ritmo_cardiaco_maximo: parseInt(document.getElementById('ritmoCardiacoMaximo').value),
+        potencia_media: parseFloat(document.getElementById('potenciaMedia').value),
+        potencia_maxima: parseFloat(document.getElementById('potenciaMaxima').value),
+        max_potencia_media_20m: parseFloat(document.getElementById('maxPotenciaMedia20m').value),
+        equilibrio_ed: parseFloat(document.getElementById('equilibrioED').value),
+        potencia_normalizada: parseFloat(document.getElementById('potenciaNormalizada').value),
+        fator_intensidade: parseFloat(document.getElementById('fatorIntensidade').value),
+        pontuacao_stress: parseInt(document.getElementById('pontuacaoStress').value),
+        definicao_ftp: parseFloat(document.getElementById('definicaoFTP').value),
+        exercicio_kj: parseFloat(document.getElementById('exercicioKj').value),
+        cadencia_media: parseInt(document.getElementById('cadenciaMedia').value),
+        cadencia_maxima: parseInt(document.getElementById('cadenciaMaxima').value),
+        subida_total: parseInt(document.getElementById('subidaTotal').value),
+        elevacao_maxima: parseInt(document.getElementById('elevacaoMaxima').value),
+        temperatura_media: parseFloat(document.getElementById('temperaturaMedia').value),
+        total_pedaladas: parseInt(document.getElementById('totalPedaladas').value)
+    };
+    await logCiclismoEstrada(data);
+    alert('Ciclismo Estrada registrado com sucesso!');
+    document.getElementById('ciclismoForm').reset();
+    fetchAndDisplayData();
 });
 
-// --------------------- Aula RPM ---------------------
-async function logRPM(data) {
-  try {
-    const docRef = await addDoc(collection(db, "aula_rpm"), data);
-    console.log("Aula RPM Document ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error adding RPM document: ", error);
-  }
+// Similar functions for other exercise types...
+
+// Function to log 'Aula RPM' activity
+async function logAulaRPM(data) {
+    try {
+        const docRef = await addDoc(collection(db, "aula_rpm"), data);
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
-document.getElementById("rpmForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const data = {
-    tempo_total: parseInt(document.getElementById("rpmTempoTotal").value),
-    timestamp: new Date().getTime(),
-  };
-  await logRPM(data);
-  alert("Aula RPM registrada com sucesso!");
-  e.target.reset();
+// Handle 'Aula RPM' form submission
+document.getElementById('rpmForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        tempo_total: parseInt(document.getElementById('rpmTempoTotal').value),
+        distancia_total: parseFloat(document.getElementById('rpmDistanciaTotal').value),
+        ritmo_cardiaco_medio: parseInt(document.getElementById('rpmRitmoCardiacoMedio').value),
+        ritmo_cardiaco_maximo: parseInt(document.getElementById('rpmRitmoCardiacoMaximo').value),
+        watt_maximo: parseFloat(document.getElementById('rpmWattMaximo').value),
+        media_watt: parseFloat(document.getElementById('rpmMediaWatt').value),
+        media_rpm: parseInt(document.getElementById('rpmMediaRPM').value)
+    };
+    await logAulaRPM(data);
+    alert('Aula RPM registrada com sucesso!');
+    document.getElementById('rpmForm').reset();
+    fetchAndDisplayData();
 });
 
-// --------------------- Treino de Força ---------------------
-async function logForca(data) {
-  try {
-    const docRef = await addDoc(collection(db, "treino_forca"), data);
-    console.log("Treino de Força Document ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error adding Força document: ", error);
-  }
+// Function to log 'Treino de Força' activity
+async function logTreinoForca(data) {
+    try {
+        const docRef = await addDoc(collection(db, "treino_forca"), data);
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
-document.getElementById("forcaForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const forcaCompleted = document.getElementById("forcaCompleted").checked;
-  const data = {
-    completed: forcaCompleted,
-    timestamp: new Date().getTime(),
-  };
-  await logForca(data);
-  alert("Treino de Força registrado com sucesso!");
-  e.target.reset();
+// Handle 'Treino de Força' form submission
+document.getElementById('forcaForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const completed = document.getElementById('forcaCompleted').checked;
+    const data = {
+        data: new Date().toISOString(),
+        concluido: completed
+    };
+    await logTreinoForca(data);
+    alert('Treino de Força registrado com sucesso!');
+    document.getElementById('forcaForm').reset();
+    fetchAndDisplayData();
 });
 
-// --------------------- Alongamentos ---------------------
+// Function to log 'Alongamentos' activity
 async function logAlongamentos(data) {
-  try {
-    const docRef = await addDoc(collection(db, "alongamentos"), data);
-    console.log("Alongamentos Document ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error adding Alongamentos document: ", error);
-  }
+    try {
+        const docRef = await addDoc(collection(db, "alongamentos"), data);
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
-document.getElementById("alongamentosForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const alongamentosCompleted = document.getElementById("alongamentosCompleted").checked;
-  const data = {
-    completed: alongamentosCompleted,
-    timestamp: new Date().getTime(),
-  };
-  await logAlongamentos(data);
-  alert("Alongamentos registrados com sucesso!");
-  e.target.reset();
+// Handle 'Alongamentos' form submission
+document.getElementById('alongamentosForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const completed = document.getElementById('alongamentosCompleted').checked;
+    const data = {
+        data: new Date().toISOString(),
+        concluido: completed
+    };
+    await logAlongamentos(data);
+    alert('Alongamentos registrados com sucesso!');
+    document.getElementById('alongamentosForm').reset();
+    fetchAndDisplayData();
 });
 
-// --------------------- Caminhada ---------------------
+// Function to log 'Caminhada' activity
 async function logCaminhada(data) {
-  try {
-    const docRef = await addDoc(collection(db, "caminhada"), data);
-    console.log("Caminhada Document ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error adding Caminhada document: ", error);
-  }
+    try {
+        const docRef = await addDoc(collection(db, "caminhada"), data);
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
-document.getElementById("caminhadaForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const caminhadaCompleted = document.getElementById("caminhadaCompleted").checked;
-  const data = {
-    completed: caminhadaCompleted,
-    timestamp: new Date().getTime(),
-  };
-  await logCaminhada(data);
-  alert("Caminhada registrada com sucesso!");
-  e.target.reset();
+// Handle 'Caminhada' form submission
+document.getElementById('caminhadaForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const completed = document.getElementById('caminhadaCompleted').checked;
+    const data = {
+        data: new Date().toISOString(),
+        concluido: completed
+    };
+    await logCaminhada(data);
+    alert('Caminhada registrada com sucesso!');
+    document.getElementById('caminhadaForm').reset();
+    fetchAndDisplayData();
 });
 
-// --------------------- WEIGHT MANAGEMENT ---------------------
-async function logWeight(weightData) {
-  try {
-    const docRef = await addDoc(collection(db, "weight_entries"), weightData);
-    console.log("Weight Entry Document ID: ", docRef.id);
-  } catch (error) {
-    console.error("Error adding weight entry: ", error);
-  }
+// Function to log 'Peso' activity
+async function logPeso(data) {
+    try {
+        const docRef = await addDoc(collection(db, "peso"), data);
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
-document.getElementById("weightForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const date = document.getElementById("profileDate").value;
-  const weight = parseFloat(document.getElementById("profileWeight").value);
-
-  // If you have a target weight input:
-  // const targetWeightInput = document.getElementById("profileTargetWeight");
-  // const targetWeight = targetWeightInput.value ? parseFloat(targetWeightInput.value) : null;
-
-  const weightData = {
-    date,
-    weight,
-    // targetWeight,
-    timestamp: new Date().getTime(),
-  };
-
-  await logWeight(weightData);
-  alert("Peso registrado com sucesso!");
-  e.target.reset();
-  await displayWeightIndicator();
-  await updateWeightChart();
-});
-
-/**
- * Displays a simple message or arrow indicating if the most recent
- * weight is up or down compared to the previous entry.
- */
-async function displayWeightIndicator() {
-  const weightIndicator = document.getElementById("weightIndicator");
-  weightIndicator.innerHTML = ""; // Clear previous contents
-
-  // Fetch all weight entries ordered by timestamp
-  const q = query(collection(db, "weight_entries"), orderBy("timestamp", "desc"));
-  const querySnapshot = await getDocs(q);
-  const weightArray = [];
-  querySnapshot.forEach((doc) => {
-    weightArray.push(doc.data());
-  });
-
-  if (weightArray.length === 0) {
-    weightIndicator.textContent = "No weight data yet.";
-    return;
-  }
-
-  if (weightArray.length === 1) {
-    // Only one entry, so no comparison
-    weightIndicator.textContent = `Current Weight: ${weightArray[0].weight} kg`;
-    return;
-  }
-
-  // Compare the two most recent entries
-  const [latest, previous] = weightArray;
-  const diff = latest.weight - previous.weight;
-
-  let message = `Current Weight: ${latest.weight} kg`;
-  if (diff > 0) {
-    message += " (↑ from " + previous.weight + " kg)";
-  } else if (diff < 0) {
-    message += " (↓ from " + previous.weight + " kg)";
-  } else {
-    message += " (no change)";
-  }
-
-  weightIndicator.textContent = message;
+// Handle 'Peso' form submission
+document.getElementById('pesoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        data: document.getElementById('pesoData').value,
+        peso_atual: parseFloat(document.getElementById('pesoAtual').value)
+    };
+    await logPeso(data);
+    alert('Peso registrado com sucesso!');
+    document.getElementById('pesoForm').reset();
+    fetchAndDisplayData();
+    provideWeightRecommendation(data.peso_atual);
 }
 
-// --------------------- DASHBOARD & DATA VISUALIZATION ---------------------
+// Function to provide weight recommendations
+async function provideWeightRecommendation(currentWeight) {
+    const height = 176; // in cm
+    const age = 40; // in years
+    const bmi = (currentWeight) / ((height / 100) ** 2);
+    let recommendation = "";
+    if (bmi < 21) {
+        recommendation = "Seu BMI está abaixo do ideal para desempenho de ciclismo. Considere ganhar um pouco de peso para melhorar a força e resistência.";
+    } else if (bmi >= 21 && bmi <= 24.9) {
+        recommendation = "Seu BMI está dentro da faixa ideal para desempenho de ciclismo. Mantenha seu peso atual para otimizar seu desempenho.";
+    } else if (bmi >= 25 && bmi <= 29.9) {
+        recommendation = "Seu BMI está acima do ideal para desempenho de ciclismo. Considere perder um pouco de peso para melhorar a eficiência e reduzir o estresse nas articulações.";
+    } else {
+        recommendation = "Seu BMI está significativamente acima do ideal para desempenho de ciclismo. Recomenda-se uma avaliação médica e um plano de perda de peso estruturado.";
+    }
+    document.getElementById('recomendacaoTexto').innerText = `Seu BMI atual é ${bmi.toFixed(1)}. ${recommendation}`;
+}
+
+// Function to fetch and display data on dashboard
 async function fetchAndDisplayData() {
-  // Example: Fetch all 'ciclismo_estrada' entries for the performance chart
-  const ciclismoQuery = query(collection(db, "ciclismo_estrada"), orderBy("data", "asc"));
-  const ciclismoSnapshot = await getDocs(ciclismoQuery);
-  const ciclismoData = [];
-  ciclismoSnapshot.forEach((doc) => {
-    ciclismoData.push(doc.data());
-  });
+    // Fetch Ciclismo Estrada Data
+    const ciclismoQuery = query(collection(db, "ciclismo_estrada"), orderBy("data", "desc"));
+    const ciclismoSnapshot = await getDocs(ciclismoQuery);
+    const ciclismoData = [];
+    ciclismoSnapshot.forEach((doc) => {
+        ciclismoData.push(doc.data());
+    });
 
-  // Build a Chart.js line chart for Velocidade Média
-  const perfCtx = document.getElementById("performanceChart").getContext("2d");
-  new Chart(perfCtx, {
-    type: "line",
-    data: {
-      labels: ciclismoData.map((item) => item.data),
-      datasets: [
-        {
-          label: "Velocidade Média (kph)",
-          data: ciclismoData.map((item) => item.velocidade_media),
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 2,
-          fill: false,
+    // Fetch Weight Data
+    const pesoQuery = query(collection(db, "peso"), orderBy("data", "desc"));
+    const pesoSnapshot = await getDocs(pesoQuery);
+    const pesoData = [];
+    pesoSnapshot.forEach((doc) => {
+        pesoData.push(doc.data());
+    });
+
+    // Create Performance Chart
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+    if (window.performanceChart) {
+        window.performanceChart.destroy();
+    }
+    window.performanceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ciclismoData.map(entry => entry.data),
+            datasets: [{
+                label: 'Velocidade Média (kph)',
+                data: ciclismoData.map(entry => entry.velocidade_media),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: false
+            },
+            {
+                label: 'Potência Média (W)',
+                data: ciclismoData.map(entry => entry.potencia_media),
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 2,
+                fill: false
+            },
+            {
+                label: 'Ritmo Cardíaco Médio (bpm)',
+                data: ciclismoData.map(entry => entry.ritmo_cardiaco_medio),
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
         },
-      ],
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: { title: { display: true, text: "Data" } },
-        y: { title: { display: true, text: "Velocidade (kph)" }, beginAtZero: true },
-      },
-    },
-  });
+        options: {
+            responsive: true,
+            scales: {
+                x: { 
+                    title: { 
+                        display: true, 
+                        text: 'Data' 
+                    } 
+                },
+                y: { 
+                    title: { 
+                        display: true, 
+                        text: 'Valores' 
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Create Weight Chart
+    const ctxPeso = document.getElementById('weightChart').getContext('2d');
+    if (window.weightChart) {
+        window.weightChart.destroy();
+    }
+    window.weightChart = new Chart(ctxPeso, {
+        type: 'line',
+        data: {
+            labels: pesoData.map(entry => entry.data),
+            datasets: [{
+                label: 'Peso (kg)',
+                data: pesoData.map(entry => entry.peso_atual),
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: { 
+                    title: { 
+                        display: true, 
+                        text: 'Data' 
+                    } 
+                },
+                y: { 
+                    title: { 
+                        display: true, 
+                        text: 'Peso (kg)' 
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 }
 
-/**
- * (Optional) Build a chart of weight entries over time.
- */
-async function updateWeightChart() {
-  const weightCtx = document.getElementById("weightChart").getContext("2d");
+// Call the function on page load
+window.onload = fetchAndDisplayData;
 
-  // Fetch all weight entries
-  const q = query(collection(db, "weight_entries"), orderBy("date", "asc"));
-  const querySnapshot = await getDocs(q);
-  const weightArray = [];
-  querySnapshot.forEach((doc) => {
-    weightArray.push(doc.data());
-  });
-
-  // Clear existing chart instance if needed
-  if (window.myWeightChart) {
-    window.myWeightChart.destroy();
-  }
-
-  if (weightArray.length === 0) return;
-
-  // Build data for the chart
-  window.myWeightChart = new Chart(weightCtx, {
-    type: "line",
-    data: {
-      labels: weightArray.map((entry) => entry.date),
-      datasets: [
-        {
-          label: "Weight (kg)",
-          data: weightArray.map((entry) => entry.weight),
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 2,
-          fill: false,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: { title: { display: true, text: "Date" } },
-        y: { title: { display: true, text: "Weight (kg)" }, beginAtZero: false },
-      },
-    },
-  });
-}
-
-// --------------------- ON PAGE LOAD ---------------------
-window.onload = async () => {
-  await fetchAndDisplayData();
-  await displayWeightIndicator();
-  await updateWeightChart();
-};
+// Recommendation Engine Placeholder
+// Future implementation: Analyze data to provide training recommendations
