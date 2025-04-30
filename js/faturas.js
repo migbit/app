@@ -157,7 +157,10 @@ function gerarRelatorioModelo30(faturas) {
 }
 
 function gerarRelatorioTMT(faturas) {
-    const faturasAgrupadasPorTrimestre = agruparPorAnoTrimestreApartamento(faturas);
+    const currentYear = new Date().getFullYear();
+    const arr = showPrevFaturaYears
+      ? faturas
+      : faturas.filter(f => f.ano === currentYear);
     let html = '';
 
     Object.entries(faturasAgrupadasPorTrimestre).forEach(([apartamento, trimestres]) => {
