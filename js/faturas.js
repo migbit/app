@@ -111,7 +111,7 @@ function gerarRelatorioFaturacao(faturas) {
       .sort((a,b) => b.ano - a.ano || b.mes - a.mes)
       .forEach(d => {
         const mesNome = obterNomeMes(d.mes);
-        const detalhesJSON = JSON.stringify(d.detalhes).replace(/"/g, '&quot;');
+        const detalhesJSON = JSON.stringify(d.detalhes).replace(/\"/g, '&quot;');
         html += `
           <tr data-year="${d.ano}">
             <td>${d.ano}</td>
@@ -134,7 +134,11 @@ function gerarRelatorioFaturacao(faturas) {
 function gerarRelatorioModelo30(faturas) {
     const arr = faturas.filter(f => showPrevYears || f.ano === selectedYear);
     const fAgr = agruparPorAnoMes(arr);
-    let html = '<table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Total</th><th>Ações</th></tr></thead><tbody>';
+    let html = `<table>
+      <thead>
+        <tr><th>Ano</th><th>Mês</th><th>Valor Total</th><th>Ações</th></tr>
+      </thead>
+      <tbody>`;
 
     Object.entries(fAgr)
       .sort((a,b) => {
@@ -145,7 +149,7 @@ function gerarRelatorioModelo30(faturas) {
       .forEach(([key, grupo]) => {
         const [ano, mes] = key.split('-').map(Number);
         const totalTaxa = grupo.reduce((s,f) => s + (f.taxaAirbnb || 0), 0);
-        const grpJSON = JSON.stringify(grupo).replace(/"/g, '&quot;');
+        const grpJSON    = JSON.stringify(grupo).replace(/\"/g, '&quot;');
         html += `
           <tr data-year="${ano}">
             <td>${ano}</td>
@@ -155,7 +159,7 @@ function gerarRelatorioModelo30(faturas) {
           </tr>`;
       });
 
-    html += '</tbody></table>';
+    html += `</tbody></table>`;
     relatorioModelo30Div.innerHTML = html;
 }
 
@@ -166,12 +170,14 @@ function gerarRelatorioTMT(faturas) {
     let html = '';
 
     Object.entries(tmtData).forEach(([apt, grupos]) => {
-      html += `<h4>Apartamento ${apt}</h4><table><thead>
-        <tr>
-          <th>Ano</th><th>Trimestre</th><th>Estadias</th><th>Extra 7 Noites</th><th>Crianças</th><th>Total</th><th>Ações</th>
-        </tr>
-      </thead><tbody>`;
-
+      html += `<h4>Apartamento ${apt}</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Ano</th><th>Trimestre</th><th>Estadias</th><th>Extra 7 Noites</th><th>Crianças</th><th>Total</th><th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>`;
       Object.entries(grupos)
         .sort((a,b) => {
           const [aAno,aTri] = a[0].split('-').map(Number);
@@ -180,9 +186,9 @@ function gerarRelatorioTMT(faturas) {
         })
         .forEach(([key, d]) => {
           const [ano, tri] = key.split('-');
-          const estadias = Math.round((d.valorOperador + d.valorDireto) / d.valorTmt);
-          const totalEst = estadias + d.noitesExtra + d.noitesCriancas;
-          const detJSON = JSON.stringify(d.detalhes).replace(/"/g, '&quot;');
+          const estadias   = Math.round((d.valorOperador + d.valorDireto) / d.valorTmt);
+          const totalEst   = estadias + d.noitesExtra + d.noitesCriancas;
+          const detJSON    = JSON.stringify(d.detalhes).replace(/\"/g, '&quot;');
           html += `
             <tr data-year="${ano}">
               <td>${ano}</td>
@@ -191,11 +197,10 @@ function gerarRelatorioTMT(faturas) {
               <td>${d.noitesExtra}</td>
               <td>${d.noitesCriancas}</td>
               <td>${totalEst}</td>
-              <td><button onclick="mostrarDetalhesTMT('${apt}','${detJSON}')">Ver Detalhes</button></td>
+              <td><button onclick="mostrarDetalhesTMT('${detJSON}', this)">Ver Detalhes</button></td>
             </tr>`;
         });
-
-      html += '</tbody></table>';
+      html += `</tbody></table>`;
     });
 
     relatorioTmtDiv.innerHTML = html;
@@ -204,30 +209,30 @@ function gerarRelatorioTMT(faturas) {
 // ——— Nova Seção Comparação ———
 function gerarComparacao(faturas) {
     const anoAtual = selectedYear;
-    const anoAnt = anoAtual - 1;
-    function soma(ano, apt) {
-      return faturas
+    const anoAnt   = anoAtual - 1;
+    const soma = (ano, apt) =>
+      faturas
         .filter(f => f.ano === ano && f.apartamento === apt)
-        .reduce((s, f) => s + ((f.valorTransferencia || 0) + (f.taxaAirbnb || 0)), 0);
-    }
+        .reduce((s,f) => s + ((f.valorTransferencia || 0) + (f.taxaAirbnb || 0)), 0);
+
     const apts = ['123','1248'];
     let html = '';
     apts.forEach(apt => {
       const curr = soma(anoAtual, apt);
       const prev = soma(anoAnt, apt) || 1;
-      const pct = Math.round((curr / prev) * 100);
-      html += `<div class="comparacao-item">
-        <strong>Apartamento ${apt}:</strong> €${curr.toFixed(2)} / €${prev.toFixed(2)}
-        <div class="progress"><div class="progress-bar" style="width:${pct}%">${pct}%</div></div>
-      </div>`;
+      const pct  = Math.round((curr / prev) * 100);
+      html += `<div class=\"comparacao-item\">` +
+              `<strong>Apartamento ${apt}:</strong> €${curr.toFixed(2)} / €${prev.toFixed(2)}` +
+              `<div class=\"progress\"><div class=\"progress-bar\" style=\"width:${pct}%\">${pct}%</div></div>` +
+              `</div>`;
     });
-    const totalCurr = apts.reduce((s, a) => s + soma(anoAtual, a), 0);
-    const totalPrev = apts.reduce((s, a) => s + soma(anoAnt, a), 0) || 1;
-    const pctTot = Math.round((totalCurr / totalPrev) * 100);
-    html += `<div class="comparacao-item">
-      <strong>Total Geral:</strong> €${totalCurr.toFixed(2)} / €${totalPrev.toFixed(2)}
-      <div class="progress"><div class="progress-bar" style="width:${pctTot}%">${pctTot}%</div></div>
-    </div>`;
+    const totalCurr = apts.reduce((s,a) => s + soma(anoAtual,a), 0);
+    const totalPrev = apts.reduce((s,a) => s + soma(anoAnt,a), 0) || 1;
+    const pctTot    = Math.round((totalCurr / totalPrev) * 100);
+    html += `<div class=\"comparacao-item\">` +
+            `<strong>Total Geral:</strong> €${totalCurr.toFixed(2)} / €${totalPrev.toFixed(2)}` +
+            `<div class=\"progress\"><div class=\"progress-bar\" style=\"width:${pctTot}%\">${pctTot}%</div></div>` +
+            `</div>`;
     document.getElementById('comparacao').innerHTML = html;
 }
 
@@ -246,12 +251,12 @@ function agruparPorAnoTrimestreApartamento(faturas) {
         const key = `${f.ano}-${tri}`;
         if (!grupos[f.apartamento]) grupos[f.apartamento] = {};
         if (!grupos[f.apartamento][key]) {
-            grupos[f.apartamento][key] = { valorOperador: 0, valorDireto: 0, noitesExtra: 0, noitesCriancas: 0, detalhes: [], valorTmt: f.valorTmt };
+            grupos[f.apartamento][key] = { valorOperador: 0, valorDireto: 0, noitesExtra: 0, noitesCriancas: 0, valorTmt: f.valorTmt, detalhes: [] };
         }
-        grupos[f.apartamento][key].valorOperador += f.valorOperador || 0;
-        grupos[f.apartamento][key].valorDireto += f.valorDireto || 0;
-        grupos[f.apartamento][key].noitesExtra += f.noitesExtra || 0;
-        grupos[f.apartamento][key].noitesCriancas += f.noitesCriancas || 0;
+        grupos[f.apartamento][key].valorOperador += (f.valorOperador || 0);
+        grupos[f.apartamento][key].valorDireto  += (f.valorDireto || 0);
+        grupos[f.apartamento][key].noitesExtra  += (f.noitesExtra || 0);
+        grupos[f.apartamento][key].noitesCriancas+= (f.noitesCriancas || 0);
         grupos[f.apartamento][key].detalhes.push(f);
         return grupos;
     }, {});
@@ -262,8 +267,55 @@ function obterNomeMes(numeroMes) {
     return meses[numeroMes - 1] || '';
 }
 
-// ——— Funções de Detalhes e Exportação (originais, sem alterações) ———
-window.mostrarDetalhesFaturacao = function(key, button) { /* original */ };
-window.mostrarDetalhesModelo30     = function(key, button) { /* original */ };
-window.mostrarDetalhesTMT          = function(apt, det) { /* original */ };
-window.exportarPDFFaturacao        = function(key, grupoJson) { /* original */ };
+// ——— Funções de Detalhes e Exportação ———
+window.mostrarDetalhesFaturacao = function(key, button) {
+    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
+    toggleDetalhes(button, gerarHTMLDetalhesFaturacao(detalhes));
+};
+
+window.mostrarDetalhesModelo30 = function(key, button) {
+    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
+    toggleDetalhes(button, gerarHTMLDetalhesModelo30(detalhes));
+};
+
+window.mostrarDetalhesTMT = function(key, button) {
+    const detalhes = JSON.parse(button.dataset.detalhes.replace(/&quot;/g, '"'));
+    toggleDetalhes(button, gerarHTMLDetalhesTMT(detalhes));
+};
+
+window.exportarPDFFaturacao = function(key, grupoJson) {
+    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js')
+      .then(() => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const grupo = JSON.parse(grupoJson);
+        const [ano, mes] = key.split('-').map(Number);
+        const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+        const titulo = `Relatório de Faturação - ${meses[mes-1]} ${ano}`;
+        doc.setFontSize(16);
+        doc.text(titulo, 105, 15, { align: 'center' });
+
+        const xPositions = [15, 60, 105, 150, 195];
+        const colLabels = ['Nº Fatura', 'Data', 'Transferência', 'Taxa', 'Total'];
+        doc.setFont('helvetica', 'bold');
+        colLabels.forEach((label, i) => {
+          doc.text(label, xPositions[i], 30);
+        });
+
+        doc.setFont('helvetica', 'normal');
+        let yPos = 40;
+        grupo.forEach(f => {
+          doc.text(f.numeroFatura, xPositions[0], yPos);
+          doc.text(new Date(f.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], yPos);
+          doc.text(`€${f.valorTransferencia.toFixed(2)}`, xPositions[2], yPos);
+          doc.text(`€${f.taxaAirbnb.toFixed(2)}`, xPositions[3], yPos);
+          doc.text(`€${(f.valorTransferencia + f.taxaAirbnb).toFixed(2)}`, xPositions[4], yPos);
+          yPos += 10;
+        });
+
+        doc.save(`relatorio-faturacao-${ano}-${meses[mes-1]}.pdf`);
+      })
+      .catch(error => {
+        console.error('Erro ao exportar PDF:', error);
+      });
+};
