@@ -7,7 +7,6 @@ let showPrevFaturaYears = false;
 // DOM Elements
 const faturaForm = document.getElementById('fatura-form');
 const relatorioFaturacaoDiv = document.getElementById('relatorio-faturacao');
-const relatorioModelo30Div = document.getElementById('relatorio-modelo30');
 const relatorioTmtDiv = document.getElementById('relatorio-tmt');
 
 // Inicialização
@@ -75,7 +74,6 @@ faturaForm.addEventListener('submit', async (e) => {
 async function carregarTodosRelatorios() {
     const faturas = await carregarFaturas();
     gerarRelatorioFaturacao(faturas);
-    gerarRelatorioModelo30(faturas);
     gerarRelatorioTMT(faturas);
 }
 
@@ -126,66 +124,45 @@ function gerarRelatorioFaturacao(faturas) {
     relatorioFaturacaoDiv.innerHTML = html;
 }
 
-function gerarRelatorioModelo30(faturas) {
-    const currentYear = new Date().getFullYear();
-    const arr = showPrevFaturaYears
-      ? faturas
-      : faturas.filter(f => f.ano === currentYear);
-    const faturasAgrupadas = agruparPorAnoMes(arr);
-
-    let html = '<table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Total</th><th>Ações</th></tr></thead><tbody>';
-
-    Object.entries(faturasAgrupadas).forEach(([key, grupo]) => {
-        const [ano, mes] = key.split('-');
-        const totalTaxaAirbnb = grupo.reduce((sum, f) => sum + f.taxaAirbnb, 0);
-        const grupoJSON = JSON.stringify(grupo).replace(/"/g, '&quot;');
-
-        html += `
-            <tr>
-                <td>${ano}</td>
-                <td>${obterNomeMes(parseInt(mes))}</td>
-                <td>€${totalTaxaAirbnb.toFixed(2)}</td>
-                <td>
-                    <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes="${grupoJSON}">Ver Detalhes</button>
-                </td>
-            </tr>
-        `;
-    });
-
-    html += '</tbody></table>';
-    relatorioModelo30Div.innerHTML = html;
-}
-
 function gerarRelatorioTMT(faturas) {
     const currentYear = new Date().getFullYear();
     const arr = showPrevFaturaYears
       ? faturas
       : faturas.filter(f => f.ano === currentYear);
+
+    // agrupa por apartamento e trimestre, usando só o arr filtrado
+    const faturasAgrupadasPorTrimestre = agruparPorAnoTrimestreApartamento(arr);
+
     let html = '';
 
     Object.entries(faturasAgrupadasPorTrimestre).forEach(([apartamento, trimestres]) => {
         html += `<h4>Apartamento ${apartamento}</h4>`;
-        html += '<table><thead><tr><th>Ano</th><th>Trimestre</th><th>Estadias</th><th>Estadias Extra 7 Noites</th><th>Estadias Crianças</th><th>Total de Estadias</th><th>Ações</th></tr></thead><tbody>';
+        html += '<table><thead><tr>'
+             +  '<th>Ano</th><th>Trimestre</th><th>Estadias</th>'
+             +  '<th>Extra 7 Noites</th><th>Crianças</th><th>Total</th><th>Ações</th>'
+             +  '</tr></thead><tbody>';
 
         Object.entries(trimestres).forEach(([keyTrimestre, dados]) => {
             const [ano, trimestre] = keyTrimestre.split('-');
             const estadias = Math.round((dados.valorOperador + dados.valorDireto) / dados.valorTmt);
-            const totalEstadias = estadias + dados.noitesExtra + dados.noitesCriancas;
+            const totalEst = estadias + dados.noitesExtra + dados.noitesCriancas;
             const detalhesJSON = JSON.stringify(dados.detalhes).replace(/"/g, '&quot;');
 
             html += `
                 <tr>
                     <td>${ano}</td>
-                    <td>${trimestre}º Trimestre</td>
+                    <td>${trimestre}º</td>
                     <td>${estadias}</td>
                     <td>${dados.noitesExtra}</td>
                     <td>${dados.noitesCriancas}</td>
-                    <td>${totalEstadias}</td>
+                    <td>${totalEst}</td>
                     <td>
-                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)" data-detalhes="${detalhesJSON}">Ver Detalhes</button>
+                        <button onclick="mostrarDetalhesTMT('${apartamento}-${keyTrimestre}', this)"
+                                data-detalhes="${detalhesJSON}">
+                          Ver Detalhes
+                        </button>
                     </td>
-                </tr>
-            `;
+                </tr>`;
         });
 
         html += '</tbody></table>';
