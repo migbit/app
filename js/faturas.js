@@ -127,7 +127,12 @@ function gerarRelatorioFaturacao(faturas) {
 }
 
 function gerarRelatorioModelo30(faturas) {
-    const faturasAgrupadas = agruparPorAnoMes(faturas);
+    const currentYear = new Date().getFullYear();
+    const arr = showPrevFaturaYears
+      ? faturas
+      : faturas.filter(f => f.ano === currentYear);
+    const faturasAgrupadas = agruparPorAnoMes(arr);
+
     let html = '<table><thead><tr><th>Ano</th><th>Mês</th><th>Valor Total</th><th>Ações</th></tr></thead><tbody>';
 
     Object.entries(faturasAgrupadas).forEach(([key, grupo]) => {
