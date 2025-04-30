@@ -1263,6 +1263,15 @@ footer {
 /*    Specific Styles for Faturas Page    */
 /* ------------------------------------ */
 
+.chart-wrap {
+    width: 100%;
+    max-width: 600px;
+    margin: 1.5rem auto;
+  }
+  #progresso-anos .comparacao-item {
+    margin-bottom: 1rem;
+  }
+  
 .report-filters {
     margin-bottom: 1rem;
     display: flex;

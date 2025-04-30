@@ -75,6 +75,7 @@ async function carregarTodosRelatorios() {
     const faturas = await carregarFaturas();
     gerarRelatorioFaturacao(faturas);
     gerarRelatorioTMT(faturas);
+    gerarAnaliseFaturacao(faturas);
 }
 
 async function carregarFaturas() {
@@ -275,28 +276,77 @@ function gerarHTMLDetalhesFaturacao(detalhes) {
     `;
 }
 
-function gerarHTMLDetalhesModelo30(detalhes) {
-    return `
-        <table class="detalhes-table">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Fatura Nº</th>
-                    <th>Taxa AirBnB</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${detalhes.map(d => `
-                    <tr>
-                        <td>${new Date(d.timestamp.seconds * 1000).toLocaleDateString()}</td>
-                        <td>${d.numeroFatura}</td>
-                        <td>€${d.taxaAirbnb.toFixed(2)}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
+function gerarAnaliseFaturacao(faturas) {
+    // 1) Prepara dados: meses 1–12, anos disponíveis (até ano atual)
+    const anos = Array.from(new Set(faturas.map(f => f.ano))).sort();
+    const ultimoAno = anos[anos.length - 1];
+    const penultimoAno = anos[anos.length - 2] || ultimoAno - 1;
+  
+    // função auxiliar para somar valores por (ano, mes, apt)
+    function somaPor(ano, mes, apt) {
+      return faturas
+        .filter(f => f.ano === ano && f.mes === mes && f.apartamento === apt)
+        .reduce((s,f) => s + (f.valorTransferencia + f.taxaAirbnb), 0);
+    }
+  
+    // 2) construir arrays mensais
+    const labels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const data123   = labels.map((_, i) => somaPor(ultimoAno, i+1, '123'));
+    const data1248  = labels.map((_, i) => somaPor(ultimoAno, i+1, '1248'));
+    const dataTotal = labels.map((_, i) => data123[i] + data1248[i]);
+  
+    // 3) criar gráficos com Chart.js
+    new Chart(document.getElementById('chart-apt123'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{ label: `Apt 123 (${ultimoAno})`, data: data123, fill: false }],
+      },
+      options: { responsive: true, plugins: { legend: { display: true } } }
+    });
+  
+    new Chart(document.getElementById('chart-apt1248'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{ label: `Apt 1248 (${ultimoAno})`, data: data1248, fill: false }],
+      },
+      options: { responsive: true }
+    });
+  
+    new Chart(document.getElementById('chart-total'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: `Total ${penultimoAno}`, data: labels.map((_, i) => somaPor(penultimoAno, i+1, '123') + somaPor(penultimoAno, i+1, '1248')), borderDash: [5,5] },
+          { label: `Total ${ultimoAno}`,   data: dataTotal }
+        ],
+      },
+      options: { responsive: true }
+    });
+  
+    // 4) Barras de progresso: acumulado ano vs ano anterior
+    const somaAno = ano => faturas
+      .filter(f => f.ano === ano)
+      .reduce((s,f) => s + (f.valorTransferencia + f.taxaAirbnb), 0);
+  
+    const totalAtual = somaAno(ultimoAno);
+    const totalAnt   = somaAno(penultimoAno) || 1;
+    const pctGanho   = Math.round((totalAtual / totalAnt) * 100);
+  
+    document.getElementById('progresso-anos').innerHTML = `
+      <div class="comparacao-item">
+        <strong>Acumulado ${penultimoAno}:</strong> €${totalAnt.toFixed(2)}
+      </div>
+      <div class="comparacao-item">
+        <strong>Acumulado ${ultimoAno}:</strong> €${totalAtual.toFixed(2)}
+        <div class="progress">
+          <div class="progress-bar" style="width:${pctGanho}%">${pctGanho}%</div>
+        </div>
+      </div>
     `;
-}
+  }
 
 function gerarHTMLDetalhesTMT(detalhes) {
     return `
