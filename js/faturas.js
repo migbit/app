@@ -5,101 +5,248 @@ import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic
 // DOM Elements
 const faturaForm = document.getElementById('fatura-form');
 const relatorioFaturacaoDiv = document.getElementById('relatorio-faturacao');
-const relatorioModelo30Div = document.getElementById('relatorio-modelo30');
-const relatorioTmtDiv = document.getElementById('relatorio-tmt');
+const relatorioModelo30Div   = document.getElementById('relatorio-modelo30');
+const relatorioTmtDiv        = document.getElementById('relatorio-tmt');
+
+// Estado global para filtragem de relatórios
+let showPrevYears = false;
+let selectedYear;
+let faturasGlobal = [];
 
 // Inicialização
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     definirValoresPadrao();
-    carregarTodosRelatorios();
+    await carregarTodosRelatorios();
+
+    // Configurar filtro de ano e botão de toggle
+    const btnToggle = document.getElementById('toggle-prev-year');
+    const selYear  = document.getElementById('report-year');
+    btnToggle.textContent = 'Mostrar anos anteriores';
+    btnToggle.addEventListener('click', () => {
+        showPrevYears = !showPrevYears;
+        btnToggle.textContent = showPrevYears ? 'Ocultar anos anteriores' : 'Mostrar anos anteriores';
+        reloadAllReports(faturasGlobal);
+    });
+    selYear.addEventListener('change', e => {
+        selectedYear = parseInt(e.target.value, 10);
+        reloadAllReports(faturasGlobal);
+    });
 });
 
+// Já existente no teu ficheiro
 function definirValoresPadrao() {
     const hoje = new Date();
     document.getElementById('ano').value = hoje.getFullYear();
     document.getElementById('mes').value = hoje.getMonth() + 1;
 }
 
-// Event Listeners
-faturaForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const formData = {
-        apartamento: document.getElementById('apartamento').value,
-        ano: parseInt(document.getElementById('ano').value),
-        mes: parseInt(document.getElementById('mes').value),
-        numeroFatura: document.getElementById('numero-fatura').value,
-        taxaAirbnb: parseFloat(document.getElementById('taxa-airbnb').value),
-        valorTransferencia: parseFloat(document.getElementById('valor-transferencia').value),
-        valorOperador: parseFloat(document.getElementById('valor-operador').value),
-        noitesExtra: parseInt(document.getElementById('noites-extra').value) || 0,
-        noitesCriancas: parseInt(document.getElementById('noites-criancas').value) || 0,
-        valorDireto: parseFloat(document.getElementById('valor-direto').value) || 0,
-        valorTmt: parseFloat(document.getElementById('valor-tmt').value),
-        timestamp: new Date()
-    };
-
-    try {
-        await addDoc(collection(db, "faturas"), formData);
-        alert('Fatura registrada com sucesso!');
-        faturaForm.reset();
-        definirValoresPadrao();
-        carregarTodosRelatorios();
-    } catch (error) {
-        console.error("Erro ao registrar fatura:", error);
-        alert('Ocorreu um erro ao registrar a fatura.');
-    }
-});
-
+// Modificado: guarda em global e popula filtros
 async function carregarTodosRelatorios() {
-    const faturas = await carregarFaturas();
-    gerarRelatorioFaturacao(faturas);
-    gerarRelatorioModelo30(faturas);
-    gerarRelatorioTMT(faturas);
+    faturasGlobal = await carregarFaturas();
+    populateYearFilter(faturasGlobal);
+    reloadAllReports(faturasGlobal);
 }
 
+// Mantém igual
 async function carregarFaturas() {
     try {
         const q = query(collection(db, "faturas"), orderBy("timestamp", "desc"));
-        const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const snap = await getDocs(q);
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
         console.error("Erro ao carregar faturas:", error);
         return [];
     }
 }
 
+// Popula o <select> de anos disponíveis
+function populateYearFilter(faturas) {
+    const sel = document.getElementById('report-year');
+    const anos = Array.from(new Set(faturas.map(f => f.ano))).sort((a,b) => b - a);
+    sel.innerHTML = anos.map(ano => `<option value="${ano}">${ano}</option>`).join('');
+    selectedYear = anos.includes(new Date().getFullYear())
+                 ? new Date().getFullYear()
+                 : anos[0];
+    sel.value = selectedYear;
+}
+
+// Recarrega todos os relatórios (inclui a nova comparação)
+function reloadAllReports(faturas) {
+    gerarRelatorioFaturacao(faturas);
+    gerarRelatorioModelo30(faturas);
+    gerarRelatorioTMT(faturas);
+    gerarComparacao(faturas);
+}
+
+// Relatório de Faturação, agora separado por apartamento e filtrado por ano
 function gerarRelatorioFaturacao(faturas) {
-    const faturasAgrupadas = agruparPorAnoMes(faturas);
-    let html = '<table><thead><tr><th>Ano</th><th>Mês</th><th>Fatura Nº</th><th>Valor Transferência</th><th>Taxa AirBnB</th><th>Total Fatura</th><th>Ações</th></tr></thead><tbody>';
-
-    Object.entries(faturasAgrupadas).forEach(([key, grupo]) => {
-        const [ano, mes] = key.split('-');
-        const totalTransferencia = grupo.reduce((sum, f) => sum + f.valorTransferencia, 0);
-        const totalTaxaAirbnb = grupo.reduce((sum, f) => sum + f.taxaAirbnb, 0);
-        const totalFatura = totalTransferencia + totalTaxaAirbnb;
-
-        const grupoJSON = JSON.stringify(grupo).replace(/"/g, '&quot;');
-
-        html += `
-            <tr>
-                <td>${ano}</td>
-                <td>${obterNomeMes(parseInt(mes))}</td>
-                <td>${grupo.map(f => f.numeroFatura).join(', ')}</td>
-                <td>€${totalTransferencia.toFixed(2)}</td>
-                <td>€${totalTaxaAirbnb.toFixed(2)}</td>
-                <td>€${totalFatura.toFixed(2)}</td>
-                <td>
-                    <button onclick="mostrarDetalhesFaturacao('${key}', this)" data-detalhes="${grupoJSON}">Ver Detalhes</button>
-                    <button onclick="exportarPDFFaturacao('${key}', '${grupoJSON}')">Exportar PDF</button>
-                </td>
-            </tr>
-        `;
+    const arr = faturas.filter(f => showPrevYears || f.ano === selectedYear);
+    const mesesData = {};
+    arr.forEach(f => {
+        const key = `${f.ano}-${f.mes}`;
+        if (!mesesData[key]) {
+            mesesData[key] = {
+                ano: f.ano,
+                mes: f.mes,
+                apt: { '123': 0, '1248': 0 },
+                total: 0,
+                detalhes: []
+            };
+        }
+        const valor = f.valorTransferencia + f.taxaAirbnb;
+        mesesData[key].apt[f.apartamento] += valor;
+        mesesData[key].total += valor;
+        mesesData[key].detalhes.push(f);
     });
 
-    html += '</tbody></table>';
+    let html = `<table>
+      <thead>
+        <tr>
+          <th>Ano</th><th>Mês</th>
+          <th>Apart. 123</th><th>Apart. 1248</th>
+          <th>Total Geral</th><th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    Object.values(mesesData)
+      .sort((a,b) => b.ano - a.ano || b.mes - a.mes)
+      .forEach(d => {
+        const mesNome    = obterNomeMes(d.mes);
+        const detalhesJS = JSON.stringify(d.detalhes).replace(/"/g,'&quot;');
+        html += `
+          <tr data-year="${d.ano}">
+            <td>${d.ano}</td>
+            <td>${mesNome}</td>
+            <td>€${d.apt['123'].toFixed(2)}</td>
+            <td>€${d.apt['1248'].toFixed(2)}</td>
+            <td>€${d.total.toFixed(2)}</td>
+            <td>
+              <button onclick="mostrarDetalhesFaturacao('${detalhesJS}', this)">
+                Ver Detalhes
+              </button>
+            </td>
+          </tr>`;
+      });
+
+    html += `</tbody></table>`;
     relatorioFaturacaoDiv.innerHTML = html;
 }
+
+// Relatório Modelo 30 — apenas filtra anos
+function gerarRelatorioModelo30(faturas) {
+    const arr = faturas.filter(f => showPrevYears || f.ano === selectedYear);
+    const fAgr = agruparPorAnoMes(arr);
+
+    let html = `<table>
+      <thead>
+        <tr><th>Ano</th><th>Mês</th><th>Valor Total</th><th>Ações</th></tr>
+      </thead><tbody>`;
+
+    Object.entries(fAgr).forEach(([key, grp]) => {
+      const [ano, mes] = key.split('-');
+      const totalTaxa = grp.reduce((s,f) => s + f.taxaAirbnb, 0);
+      const grpJS     = JSON.stringify(grp).replace(/"/g,'&quot;');
+      html += `
+        <tr data-year="${ano}">
+          <td>${ano}</td>
+          <td>${obterNomeMes(parseInt(mes))}</td>
+          <td>€${totalTaxa.toFixed(2)}</td>
+          <td>
+            <button onclick="mostrarDetalhesModelo30('${key}', this)" data-detalhes="${grpJS}">
+              Ver Detalhes
+            </button>
+          </td>
+        </tr>`;
+    });
+
+    html += `</tbody></table>`;
+    relatorioModelo30Div.innerHTML = html;
+}
+
+// Relatório TMT — também filtra anos
+function gerarRelatorioTMT(faturas) {
+    const arr = faturas.filter(f => showPrevYears || f.ano === selectedYear);
+    const trimestres = agruparPorAnoTrimestreApartamento(arr);
+    let html = '';
+
+    Object.entries(trimestres).forEach(([apt, grupos]) => {
+      html += `<h4>Apartamento ${apt}</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Ano</th><th>Trimestre</th><th>Estadias</th>
+              <th>Extra 7 Noites</th><th>Crianças</th><th>Total</th><th>Ações</th>
+            </tr>
+          </thead><tbody>`;
+      Object.entries(grupos).forEach(([key, d]) => {
+        const [ano, tri] = key.split('-');
+        const estadias   = Math.round((d.valorOperador + d.valorDireto)/d.valorTmt);
+        const totEst     = estadias + d.noitesExtra + d.noitesCriancas;
+        const detJS      = JSON.stringify(d.detalhes).replace(/"/g,'&quot;');
+        html += `
+          <tr data-year="${ano}">
+            <td>${ano}</td>
+            <td>${tri}º Trimestre</td>
+            <td>${estadias}</td>
+            <td>${d.noitesExtra}</td>
+            <td>${d.noitesCriancas}</td>
+            <td>${totEst}</td>
+            <td>
+              <button onclick="mostrarDetalhesTMT('${apt}-${key}', this)" data-detalhes="${detJS}">
+                Ver Detalhes
+              </button>
+            </td>
+          </tr>`;
+      });
+      html += `</tbody></table>`;
+    });
+
+    relatorioTmtDiv.innerHTML = html;
+}
+
+// Nova seção “Comparação”
+function gerarComparacao(faturas) {
+    const anoAtual = selectedYear;
+    const anoAnt   = anoAtual - 1;
+    const soma = (ano, apt) =>
+      faturas
+        .filter(f => f.ano === ano && f.apartamento === apt)
+        .reduce((s,f) => s + f.valorTransferencia + f.taxaAirbnb, 0);
+
+    const apts = ['123','1248'];
+    let html = '';
+    apts.forEach(apt => {
+      const curr = soma(anoAtual, apt);
+      const prev = soma(anoAnt, apt) || 1;
+      const pct  = Math.round((curr/prev)*100);
+      html += `
+        <div class="comparacao-item">
+          <strong>Apartamento ${apt}:</strong> €${curr.toFixed(2)} / €${prev.toFixed(2)}
+          <div class="progress">
+            <div class="progress-bar" style="width:${pct}%">${pct}%</div>
+          </div>
+        </div>`;
+    });
+    const totalCurr = apts.reduce((s,a) => s + soma(anoAtual,a), 0);
+    const totalPrev = apts.reduce((s,a) => s + soma(anoAnt,a), 0) || 1;
+    const pctTot    = Math.round((totalCurr/totalPrev)*100);
+    html += `
+      <div class="comparacao-item">
+        <strong>Total Geral:</strong> €${totalCurr.toFixed(2)} / €${totalPrev.toFixed(2)}
+        <div class="progress">
+          <div class="progress-bar" style="width:${pctTot}%">${pctTot}%</div>
+        </div>
+      </div>`;
+
+    document.getElementById('comparacao').innerHTML = html;
+}
+
+// ——————————————
+// A partir daqui, todo o código existente (detalhes, exportação PDF, helpers)
+// permanece exatamente igual ao que tinhas no ficheiro original.
+// ——————————————
+
 
 function gerarRelatorioModelo30(faturas) {
     const faturasAgrupadas = agruparPorAnoMes(faturas);

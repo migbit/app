@@ -116,8 +116,16 @@
         <section class="report-section">
             <h2>Relatórios</h2>
             
+            <!-- filtros de relatório -->
+            <div class="report-filters">
+            <label for="report-year">Ano:</label>
+             <select id="report-year"></select>
+             <button type="button" id="toggle-prev-year">Ocultar anos anteriores</button>
+             </div>
+
             <div class="relatorio-container">
                 <h3>Relatório de Faturação</h3>
+                <div id="relatorio-faturacao"></div>
                 <div id="relatorio-faturacao"></div>
             </div>
 
@@ -130,6 +138,13 @@
                 <h3>Relatório Taxa Municipal Turística</h3>
                 <div id="relatorio-tmt"></div>
             </div>
+
+             <!-- nova seção Comparação -->
+              <div class="relatorio-container" id="comparacao-container">
+                <h3>Comparação Faturação</h3>
+                <div id="comparacao"></div>
+                </div>
+
         </section>
     </main>
 

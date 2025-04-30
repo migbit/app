@@ -1263,6 +1263,35 @@ footer {
 /*    Specific Styles for Faturas Page    */
 /* ------------------------------------ */
 
+.report-filters {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .comparacao-item {
+    margin-bottom: 1rem;
+  }
+  
+  .progress {
+    background: #e9ecef;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    height: 1.5rem;
+    margin-top: 0.25rem;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.9rem;
+  }
+
 /* Remove conflicting fixed width for input[type="number"] within fatura-form */
 #fatura-form input[type="number"],
 #fatura-form input[type="text"],
