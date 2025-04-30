@@ -258,6 +258,75 @@ async function deleteTask(taskId) {
     }
 }
 
+// —— Secção Carlos (Faturas Pendentes) ——
+
+async function addCarlosPayment(e) {
+    e.preventDefault();
+    const num   = document.getElementById('fatura-numero').value.trim();
+    const ano   = parseInt(document.getElementById('fatura-ano').value, 10);
+    const total = parseFloat(document.getElementById('fatura-total').value);
+    const paga  = parseFloat(document.getElementById('fatura-paga').value);
+    const data  = document.getElementById('fatura-data').value;
+  
+    if (!num || !ano || isNaN(total) || isNaN(paga) || !data) {
+      alert('Preencha todos os campos');
+      return;
+    }
+  
+    try {
+      await addDoc(collection(db, "carlosPayments"), {
+        numero: num,
+        ano: ano,
+        total: total,
+        pago: paga,
+        dataTransferencia: data
+      });
+      document.getElementById('carlos-form').reset();
+      loadCarlosPayments();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao adicionar fatura');
+    }
+  }
+  
+  async function loadCarlosPayments() {
+    const body = document.getElementById('carlos-body');
+    body.innerHTML = '<tr><td colspan="6">Carregando…</td></tr>';
+  
+    try {
+      const q = query(collection(db, "carlosPayments"), orderBy("ano", "asc"), orderBy("numero", "asc"));
+      const snap = await getDocs(q);
+      body.innerHTML = '';
+  
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${data.numero}</td>
+          <td>${data.ano}</td>
+          <td>€ ${data.total.toFixed(2)}</td>
+          <td>€ ${data.pago.toFixed(2)}</td>
+          <td>${data.dataTransferencia}</td>
+          <td>
+            <button class="btn btn-danger btn-sm">Apagar</button>
+          </td>
+        `;
+        tr.querySelector('button').addEventListener('click', async () => {
+          await deleteDoc(doc(db, "carlosPayments", docSnap.id));
+          loadCarlosPayments();
+        });
+        body.appendChild(tr);
+      });
+  
+      if (snap.empty) {
+        body.innerHTML = '<tr><td colspan="6">Nenhuma fatura pendente</td></tr>';
+      }
+    } catch (err) {
+      console.error(err);
+      body.innerHTML = '<tr><td colspan="6">Erro ao carregar faturas</td></tr>';
+    }
+  }
+
 // Event Listeners (extended to support comments)
 function setupEventListeners() {
     document.getElementById('prev-month')?.addEventListener('click', () => {
@@ -315,6 +384,10 @@ async function init() {
         
         // Load tasks
         await loadTasks();
+
+        // Inicializar Carlos
+document.getElementById('carlos-form').addEventListener('submit', addCarlosPayment);
+await loadCarlosPayments();
 
         // Setup event listeners
         setupEventListeners();

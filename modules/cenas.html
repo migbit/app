@@ -95,6 +95,32 @@
                 </ul>
             </div>
         </section>
+
+        <!-- Carlos – Faturas Pendentes -->
+<section id="carlos-section" class="card mt-4">
+    <h2 class="card-header">Carlos – Faturas Pendentes</h2>
+    <div class="card-body">
+      <form id="carlos-form" class="form-inline">
+        <input type="text" id="fatura-numero" placeholder="Nº Fatura" required>
+        <input type="number" id="fatura-ano" placeholder="Ano" required>
+        <input type="number" id="fatura-total" placeholder="Total (€)" step="0.01" required>
+        <input type="number" id="fatura-paga" placeholder="Valor Pago (€)" step="0.01" required>
+        <input type="date"   id="fatura-data" placeholder="Data Transferência" required>
+        <button type="submit" class="btn btn-success">Adicionar</button>
+      </form>
+  
+      <table id="carlos-table" class="mt-3">
+        <thead>
+          <tr>
+            <th>Nº</th><th>Ano</th><th>Total</th><th>Pago</th><th>Data Transf.</th><th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="carlos-body">
+          <!-- Linhas serão preenchidas via JS -->
+        </tbody>
+      </table>
+    </div>
+  </section>
                
         <footer>
             <div class="footer-container">
