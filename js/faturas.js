@@ -2,6 +2,8 @@
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
+let showPrevFaturaYears = false;
+
 // DOM Elements
 const faturaForm = document.getElementById('fatura-form');
 const relatorioFaturacaoDiv = document.getElementById('relatorio-faturacao');
@@ -13,7 +15,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         await definirValoresPadrao();
         carregarTodosRelatorios();
     });
-
+    document
+    .getElementById('toggle-prev-faturas')
+    .addEventListener('click', () => {
+      showPrevFaturaYears = !showPrevFaturaYears;
+      document.getElementById('toggle-prev-faturas').textContent =
+        showPrevFaturaYears ? 'Ocultar anos anteriores' : 'Mostrar anos anteriores';
+      carregarTodosRelatorios();
+    });
+    
 async function definirValoresPadrao() {
          const hoje = new Date();
          document.getElementById('ano').value = hoje.getFullYear();
@@ -81,7 +91,11 @@ async function carregarFaturas() {
 }
 
 function gerarRelatorioFaturacao(faturas) {
-    const faturasAgrupadas = agruparPorAnoMes(faturas);
+    const currentYear = new Date().getFullYear();
++    const arr = showPrevFaturaYears
++      ? faturas
++      : faturas.filter(f => f.ano === currentYear);
++    const faturasAgrupadas = agruparPorAnoMes(arr);
     let html = '<table><thead><tr><th>Ano</th><th>Mês</th><th>Fatura Nº</th><th>Valor Transferência</th><th>Taxa AirBnB</th><th>Total Fatura</th><th>Ações</th></tr></thead><tbody>';
 
     Object.entries(faturasAgrupadas).forEach(([key, grupo]) => {
