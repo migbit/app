@@ -313,19 +313,7 @@ function gerarAnaliseFaturacao(faturas) {
       },
       options: { responsive: true }
     });
-  
-    new Chart(document.getElementById('chart-total'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          { label: `Total ${penultimoAno}`, data: labels.map((_, i) => somaPor(penultimoAno, i+1, '123') + somaPor(penultimoAno, i+1, '1248')), borderDash: [5,5] },
-          { label: `Total ${ultimoAno}`,   data: dataTotal }
-        ],
-      },
-      options: { responsive: true }
-    });
-  
+
     // comparativo Apt 123 vs Apt 1248
 new Chart(document.getElementById('chart-comparacao-apt'), {
     type: 'bar',
@@ -352,6 +340,19 @@ new Chart(document.getElementById('chart-comparacao-apt'), {
     }
   });
   
+    new Chart(document.getElementById('chart-total'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: `Total ${penultimoAno}`, data: labels.map((_, i) => somaPor(penultimoAno, i+1, '123') + somaPor(penultimoAno, i+1, '1248')), borderDash: [5,5] },
+          { label: `Total ${ultimoAno}`,   data: dataTotal }
+        ],
+      },
+      options: { responsive: true }
+    });
+  
+    
     // 4) Barras de progresso: acumulado ano vs ano anterior
     const somaAno = ano => faturas
       .filter(f => f.ano === ano)
