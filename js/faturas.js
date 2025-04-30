@@ -326,6 +326,32 @@ function gerarAnaliseFaturacao(faturas) {
       options: { responsive: true }
     });
   
+    // comparativo Apt 123 vs Apt 1248
+new Chart(document.getElementById('chart-comparacao-apt'), {
+    type: 'bar',
+    data: {
+      labels, // meses Jan–Dez, já definidos acima
+      datasets: [
+        {
+          label: 'Apartamento 123',
+          data: data123,
+          backgroundColor: 'blue'
+        },
+        {
+          label: 'Apartamento 1248',
+          data: data1248,
+          backgroundColor: 'orange'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+  
     // 4) Barras de progresso: acumulado ano vs ano anterior
     const somaAno = ano => faturas
       .filter(f => f.ano === ano)
