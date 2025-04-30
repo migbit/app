@@ -92,10 +92,10 @@ async function carregarFaturas() {
 
 function gerarRelatorioFaturacao(faturas) {
     const currentYear = new Date().getFullYear();
-+    const arr = showPrevFaturaYears
-+      ? faturas
-+      : faturas.filter(f => f.ano === currentYear);
-+    const faturasAgrupadas = agruparPorAnoMes(arr);
+    const arr = showPrevFaturaYears
+      ? faturas
+      : faturas.filter(f => f.ano === currentYear);
+    const faturasAgrupadas = agruparPorAnoMes(arr);
     let html = '<table><thead><tr><th>Ano</th><th>Mês</th><th>Fatura Nº</th><th>Valor Transferência</th><th>Taxa AirBnB</th><th>Total Fatura</th><th>Ações</th></tr></thead><tbody>';
 
     Object.entries(faturasAgrupadas).forEach(([key, grupo]) => {
