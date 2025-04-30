@@ -127,13 +127,23 @@
                 <div id="relatorio-tmt"></div>
             </div>
 
-             <!-- nova seção Comparação -->
-              <div class="relatorio-container" id="comparacao-container">
-                <h3>Comparação Faturação</h3>
-                <div id="comparacao"></div>
+            <section class="relatorio-container" id="analise-faturacao-container">
+                <h3>Análise Faturação</h3>
+              
+                <!-- Gráficos -->
+                <div class="chart-wrap">
+                  <canvas id="chart-apt123"></canvas>
                 </div>
-
-        </section>
+                <div class="chart-wrap">
+                  <canvas id="chart-apt1248"></canvas>
+                </div>
+                <div class="chart-wrap">
+                  <canvas id="chart-total"></canvas>
+                </div>
+              
+                <!-- Barras de progresso anuais -->
+                <div id="progresso-anos" class="mt-4"></div>
+              </section>
     </main>
 
     <footer>
@@ -156,4 +166,5 @@
 </script>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </html>
