@@ -1,6 +1,6 @@
 // Importar as funções necessárias do Firebase
 import { db } from './script.js';
-import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // DOM Elements
 const faturaForm = document.getElementById('fatura-form');
@@ -9,16 +9,27 @@ const relatorioModelo30Div = document.getElementById('relatorio-modelo30');
 const relatorioTmtDiv = document.getElementById('relatorio-tmt');
 
 // Inicialização
-document.addEventListener('DOMContentLoaded', () => {
-    definirValoresPadrao();
-    carregarTodosRelatorios();
-});
+document.addEventListener('DOMContentLoaded', async () => {
+        await definirValoresPadrao();
+        carregarTodosRelatorios();
+    });
 
-function definirValoresPadrao() {
-    const hoje = new Date();
-    document.getElementById('ano').value = hoje.getFullYear();
-    document.getElementById('mes').value = hoje.getMonth() + 1;
-}
+async function definirValoresPadrao() {
+         const hoje = new Date();
+         document.getElementById('ano').value = hoje.getFullYear();
+         document.getElementById('mes').value = hoje.getMonth() + 1;
+    
+         // buscar a última fatura (por timestamp) e calcular próximo número
+         const q = query(collection(db, "faturas"), orderBy("timestamp", "desc"), limit(1));
+         const snap = await getDocs(q);
+         let proximo = "M1";
+         if (!snap.empty) {
+             const ultima = snap.docs[0].data().numeroFatura;           // ex: "M593"
+             const num = parseInt(ultima.replace(/\D/g, ""), 10) + 1;   // 593 → 594
+             proximo = `M${num}`;
+         }
+         document.getElementById('numero-fatura').value = proximo;
+     }
 
 // Event Listeners
 faturaForm.addEventListener('submit', async (e) => {
