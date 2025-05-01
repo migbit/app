@@ -424,9 +424,9 @@ async function init() {
         // Load tasks
         await loadTasks();
 
-        // Inicializar Carlos
-document.getElementById('carlos-form').addEventListener('submit', addCarlosPayment);
-await loadCarlosPayments();
+        // Inicializar Carlos – Faturas Pendentes
+invoiceForm.addEventListener('submit', addInvoice);
+await loadInvoices();
 
         // Setup event listeners
         setupEventListeners();
