@@ -26,6 +26,10 @@ const CONFIG = {
     ]
 };
 
+// DOM
+const invoiceForm   = document.getElementById('carlos-invoice-form');
+const invoicesBody  = document.getElementById('carlos-invoices-body');
+
 // State
 const state = {
     reservedDates: new Set(),
@@ -259,72 +263,107 @@ async function deleteTask(taskId) {
 }
 
 // —— Secção Carlos (Faturas Pendentes) ——
-
-async function addCarlosPayment(e) {
-    e.preventDefault();
-    const num   = document.getElementById('fatura-numero').value.trim();
-    const ano   = parseInt(document.getElementById('fatura-ano').value, 10);
-    const total = parseFloat(document.getElementById('fatura-total').value);
-    const paga  = parseFloat(document.getElementById('fatura-paga').value);
-    const data  = document.getElementById('fatura-data').value;
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    loadInvoices();
+    invoiceForm.addEventListener('submit', addInvoice);
+  });
   
-    if (!num || !ano || isNaN(total) || isNaN(paga) || !data) {
-      alert('Preencha todos os campos');
+  // 1) Adicionar nova fatura
+  async function addInvoice(e) {
+    e.preventDefault();
+    const numero = document.getElementById('invoice-number').value.trim();
+    const data   = document.getElementById('invoice-date').value;
+    const total  = parseFloat(document.getElementById('invoice-total').value);
+    if (!numero || !data || isNaN(total)) {
+      alert('Preencha todos os campos da fatura');
       return;
     }
   
     try {
-      await addDoc(collection(db, "carlosPayments"), {
-        numero: num,
-        ano: ano,
-        total: total,
-        pago: paga,
-        dataTransferencia: data
-      });
-      document.getElementById('carlos-form').reset();
-      loadCarlosPayments();
+      await addDoc(collection(db, 'carlosInvoices'), { numero, data, total });
+      invoiceForm.reset();
+      loadInvoices();
     } catch (err) {
       console.error(err);
       alert('Erro ao adicionar fatura');
     }
   }
   
-  async function loadCarlosPayments() {
-    const body = document.getElementById('carlos-body');
-    body.innerHTML = '<tr><td colspan="6">Carregando…</td></tr>';
-  
+  // 2) Carregar e renderizar todas faturas + pagamentos
+  async function loadInvoices() {
+    invoicesBody.innerHTML = '<tr><td colspan="6">Carregando…</td></tr>';
     try {
-      const q = query(collection(db, "carlosPayments"), orderBy("ano", "asc"), orderBy("numero", "asc"));
-      const snap = await getDocs(q);
-      body.innerHTML = '';
-  
-      snap.forEach(docSnap => {
-        const data = docSnap.data();
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${data.numero}</td>
-          <td>${data.ano}</td>
-          <td>€ ${data.total.toFixed(2)}</td>
-          <td>€ ${data.pago.toFixed(2)}</td>
-          <td>${data.dataTransferencia}</td>
-          <td>
-            <button class="btn btn-danger btn-sm">Apagar</button>
-          </td>
-        `;
-        tr.querySelector('button').addEventListener('click', async () => {
-          await deleteDoc(doc(db, "carlosPayments", docSnap.id));
-          loadCarlosPayments();
-        });
-        body.appendChild(tr);
-      });
-  
-      if (snap.empty) {
-        body.innerHTML = '<tr><td colspan="6">Nenhuma fatura pendente</td></tr>';
+      const snapInv = await getDocs(collection(db, 'carlosInvoices'));
+      const invoices = snapInv.docs.map(d => ({ id: d.id, ...d.data() }));
+      invoicesBody.innerHTML = '';
+      await Promise.all(invoices.map(inv => renderInvoiceRow(inv)));
+      if (invoices.length === 0) {
+        invoicesBody.innerHTML = '<tr><td colspan="6">Nenhuma fatura cadastrada</td></tr>';
       }
     } catch (err) {
       console.error(err);
-      body.innerHTML = '<tr><td colspan="6">Erro ao carregar faturas</td></tr>';
+      invoicesBody.innerHTML = '<tr><td colspan="6">Erro ao carregar faturas</td></tr>';
     }
+  }
+  
+  // 3) Renderizar cada linha de fatura + sub-tabela de pagamentos
+  async function renderInvoiceRow(inv) {
+    // buscar todos os pagamentos desta fatura
+    const snapPay = await getDocs(collection(db, 'carlosInvoices', inv.id, 'payments'));
+    const payments = snapPay.docs.map(p => p.data());
+    const paidSum  = payments.reduce((s,p) => s + p.valorPago, 0);
+    const balance  = inv.total - paidSum;
+  
+    // linha principal
+    const tr = document.createElement('tr');
+    if (paidSum >= inv.total) tr.classList.add('text-muted'); // cor esbatida se tudo pago
+    tr.innerHTML = `
+      <td>${inv.numero}</td>
+      <td>${inv.data}</td>
+      <td>€${inv.total.toFixed(2)}</td>
+      <td>€${paidSum.toFixed(2)}</td>
+      <td>€${balance.toFixed(2)}</td>
+      <td>
+        <button class="btn btn-sm btn-primary btn-add-payment">Adicionar Pag.</button>
+      </td>
+    `;
+    invoicesBody.appendChild(tr);
+  
+    //  subtabela/form de pagamento
+    const formRow = document.createElement('tr');
+    formRow.id = `payment-form-${inv.id}`;
+    formRow.innerHTML = `
+      <td colspan="6" style="display:none;">
+        <form class="form-inline" id="payment-form-${inv.id}">
+          <input type="date"   name="dataPagamento" required>
+          <input type="number" name="valorPago" placeholder="Valor (€)" step="0.01" max="${balance.toFixed(2)}" required>
+          <button type="submit" class="btn btn-success btn-sm ml-2">Registar</button>
+        </form>
+      </td>
+    `;
+    tr.after(formRow);
+  
+    // toggle do form
+    tr.querySelector('.btn-add-payment').addEventListener('click', () => {
+      const cell = formRow.firstElementChild;
+      cell.style.display = cell.style.display === 'none' ? 'block' : 'none';
+    });
+  
+    // submissão do pagamento
+    formRow.querySelector('form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const f = e.target;
+      const dataPagamento = f.dataPagamento.value;
+      const valorPago     = parseFloat(f.valorPago.value);
+      try {
+        await addDoc(collection(db, 'carlosInvoices', inv.id, 'payments'), { dataPagamento, valorPago });
+        loadInvoices();
+      } catch (err) {
+        console.error(err);
+        alert('Erro ao registar pagamento');
+      }
+    });
   }
 
 // Event Listeners (extended to support comments)
@@ -398,7 +437,6 @@ await loadCarlosPayments();
     }
 }
 
-// Checklist Data
 // Checklist Data
 const checklists = {
     aulaRPM: [
