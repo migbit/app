@@ -309,16 +309,16 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 3) Renderizar cada linha de fatura + sub-tabela de pagamentos
   async function renderInvoiceRow(inv) {
-    // buscar todos os pagamentos desta fatura
-    const snapPay = await getDocs(collection(db, 'carlosInvoices', inv.id, 'payments'));
+    // 1) Puxa todos os pagamentos desta fatura
+    const snapPay  = await getDocs(collection(db, 'carlosInvoices', inv.id, 'payments'));
     const payments = snapPay.docs.map(p => p.data());
     const paidSum  = payments.reduce((s,p) => s + p.valorPago, 0);
     const balance  = inv.total - paidSum;
   
-    // linha principal
-    const tr = document.createElement('tr');
-    if (paidSum >= inv.total) tr.classList.add('text-muted'); // cor esbatida se tudo pago
-    tr.innerHTML = `
+    // 2) Linha principal da fatura
+    const trInv = document.createElement('tr');
+    if (paidSum >= inv.total) trInv.classList.add('text-muted');
+    trInv.innerHTML = `
       <td>${inv.numero}</td>
       <td>${inv.data}</td>
       <td>€${inv.total.toFixed(2)}</td>
@@ -328,12 +328,26 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="btn btn-sm btn-primary btn-add-payment">Adicionar Pag.</button>
       </td>
     `;
-    invoicesBody.appendChild(tr);
+    invoicesBody.appendChild(trInv);
   
-    //  subtabela/form de pagamento
-    const formRow = document.createElement('tr');
-    formRow.id = `payment-form-${inv.id}`;
-    formRow.innerHTML = `
+    // 3) Linhas de cada pagamento efetuado
+    payments.forEach(pay => {
+      const trPay = document.createElement('tr');
+      trPay.classList.add('text-secondary');
+      trPay.innerHTML = `
+        <td></td>
+        <td>${pay.dataPagamento}</td>
+        <td></td>
+        <td>€${pay.valorPago.toFixed(2)}</td>
+        <td></td>
+        <td></td>
+      `;
+      invoicesBody.appendChild(trPay);
+    });
+  
+    // 4) Linha contendo o formulário, inicialmente escondido
+    const trForm = document.createElement('tr');
+    trForm.innerHTML = `
       <td colspan="6" style="display:none;">
         <form class="form-inline" id="payment-form-${inv.id}">
           <input type="date"   name="dataPagamento" required>
@@ -342,22 +356,25 @@ document.addEventListener('DOMContentLoaded', () => {
         </form>
       </td>
     `;
-    tr.after(formRow);
+    invoicesBody.appendChild(trForm);
   
-    // toggle do form
-    tr.querySelector('.btn-add-payment').addEventListener('click', () => {
-      const cell = formRow.firstElementChild;
+    // 5) Toggle do form
+    trInv.querySelector('.btn-add-payment').addEventListener('click', () => {
+      const cell = trForm.firstElementChild;
       cell.style.display = cell.style.display === 'none' ? 'block' : 'none';
     });
   
-    // submissão do pagamento
-    formRow.querySelector('form').addEventListener('submit', async e => {
+    // 6) Submissão do formulário
+    trForm.querySelector('form').addEventListener('submit', async e => {
       e.preventDefault();
       const f = e.target;
       const dataPagamento = f.dataPagamento.value;
       const valorPago     = parseFloat(f.valorPago.value);
       try {
-        await addDoc(collection(db, 'carlosInvoices', inv.id, 'payments'), { dataPagamento, valorPago });
+        await addDoc(
+          collection(db, 'carlosInvoices', inv.id, 'payments'),
+          { dataPagamento, valorPago }
+        );
         loadInvoices();
       } catch (err) {
         console.error(err);
