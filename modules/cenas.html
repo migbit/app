@@ -96,27 +96,32 @@
             </div>
         </section>
 
-        <!-- Carlos – Faturas Pendentes -->
+       <!-- Carlos – Faturas Pendentes -->
 <section id="carlos-section" class="card mt-4">
     <h2 class="card-header">Carlos – Faturas Pendentes</h2>
     <div class="card-body">
-      <form id="carlos-form" class="form-inline">
-        <input type="text" id="fatura-numero" placeholder="Nº Fatura" required>
-        <input type="number" id="fatura-ano" placeholder="Ano" required>
-        <input type="number" id="fatura-total" placeholder="Total (€)" step="0.01" required>
-        <input type="number" id="fatura-paga" placeholder="Valor Pago (€)" step="0.01" required>
-        <input type="date"   id="fatura-data" placeholder="Data Transferência" required>
-        <button type="submit" class="btn btn-success">Adicionar</button>
+      <!-- 1. Formulário de Fatura -->
+      <form id="carlos-invoice-form" class="form-inline mb-3">
+        <input type="text"    id="invoice-number" placeholder="Nº Fatura (ex: 2023/15)" required>
+        <input type="date"    id="invoice-date"   required>
+        <input type="number"  id="invoice-total"  placeholder="Total (€)" step="0.01" required>
+        <button type="submit" class="btn btn-success ml-2">Adicionar Fatura</button>
       </form>
   
-      <table id="carlos-table" class="mt-3">
+      <!-- 2. Tabela de Faturas + Pagamentos -->
+      <table id="carlos-invoices-table" class="table table-striped">
         <thead>
           <tr>
-            <th>Nº</th><th>Ano</th><th>Total</th><th>Pago</th><th>Data Transf.</th><th>Ações</th>
+            <th>Nº Fatura</th>
+            <th>Data</th>
+            <th>Total (€)</th>
+            <th>Pago (€)</th>
+            <th>Saldo (€)</th>
+            <th>Ações</th>
           </tr>
         </thead>
-        <tbody id="carlos-body">
-          <!-- Linhas serão preenchidas via JS -->
+        <tbody id="carlos-invoices-body">
+          <!-- preenchido via JS -->
         </tbody>
       </table>
     </div>
