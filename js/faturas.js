@@ -380,16 +380,26 @@ function gerarAnaliseFaturacao(faturas) {
   
     const totalAtual = somaAno(ultimoAno);
     const totalAnt   = somaAno(penultimoAno) || 1;
-    const pctGanho   = Math.round((totalAtual / totalAnt) * 100);
-  
+
+    // calcula quanto falta ou excede, e em % relativo ao ano anterior
+    const diff       = totalAnt - totalAtual;
+    const pctDiff    = Math.round(Math.abs(diff) / totalAnt * 100);
+    const colorClass = diff > 0 ? 'danger' : 'success';                // vermelho se faltar, verde se exceder
+    const labelText  = diff > 0
+                         ? `Faltam €${diff.toFixed(2)}`
+                         : `Excedeu €${(-diff).toFixed(2)}`;
+
     document.getElementById('progresso-anos').innerHTML = `
       <div class="comparacao-item">
         <strong>Acumulado ${penultimoAno}:</strong> €${totalAnt.toFixed(2)}
       </div>
       <div class="comparacao-item">
         <strong>Acumulado ${ultimoAno}:</strong> €${totalAtual.toFixed(2)}
-        <div class="progress">
-          <div class="progress-bar" style="width:${pctGanho}%">${pctGanho}%</div>
+        <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+          <div class="progress-bar bg-${colorClass}" 
+               style="width:${pctDiff}%; display:flex; align-items:center; justify-content:center;">
+            ${labelText}
+          </div>
         </div>
       </div>
     `;
