@@ -333,22 +333,22 @@ function gerarAnaliseFaturacao(faturas) {
        {
          label: `Apt 123 ${penultimoAno}`,
          data: data123Prev,
-         backgroundColor: 'rgba(75,192,192,0.4)'  // último ano, tom suave
+         backgroundColor: 'rgba(54,162,235,0.4)'  // último ano, tom suave
        },
        {
          label: `Apt 123 ${ultimoAno}`,
          data: data123,
-         backgroundColor: 'rgba(75,192,192,1)'   // ano atual, sólido
+         backgroundColor: 'rgba(54,162,235,1)'   // ano atual, sólido
        },
        {
          label: `Apt 1248 ${penultimoAno}`,
          data: data1248Prev,
-         backgroundColor: 'rgba(153,102,255,0.4)'
+         backgroundColor: 'rgba(245, 133, 20, 0.4)'
        },
        {
          label: `Apt 1248 ${ultimoAno}`,
          data: data1248,
-         backgroundColor: 'rgba(153,102,255,1)'
+         backgroundColor: 'rgba(245, 133, 20,1)'
        }
      ]
    },
