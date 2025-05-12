@@ -1381,6 +1381,13 @@ footer {
     }
 }
 
+/* separator line for Análise Faturação sections */
+.divider {
+  border: none;
+  border-top: 2px solid #ddd;
+  margin: 1.5rem 0;
+}
+
 @media (max-width: 600px) {
     /* Ensure inputs stack vertically on very small screens */
     #fatura-form .form-group {
