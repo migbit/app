@@ -2,7 +2,29 @@
 import { db } from './script.js';
 import { collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-let showPrevFaturaYears = false;
+// Dados manuais de faturação (substitua X e Y pelos valores reais que me fornecer)
+const manualFaturasEstatica = [
+      { ano: 2024, mes: 1, apartamento: '123', valorTransferencia: 1915.11, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 3851, taxaAirbnb: 0 },
+      { ano: 2024, mes: 2, apartamento: '123', valorTransferencia: 426, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 1454, taxaAirbnb: 0 },
+      { ano: 2024, mes: 3, apartamento: '123', valorTransferencia: 1310, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 2678, taxaAirbnb: 0 },
+      { ano: 2024, mes: 4, apartamento: '123', valorTransferencia: 4858.11, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 6323, taxaAirbnb: 0 },
+      { ano: 2024, mes: 5, apartamento: '123', valorTransferencia: 5680, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 4806.61, taxaAirbnb: 0 },
+      { ano: 2024, mes: 6, apartamento: '123', valorTransferencia: 4708.73, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 6206, taxaAirbnb: 0 },
+      { ano: 2024, mes: 7, apartamento: '123', valorTransferencia: 3659.04, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 6015.30, taxaAirbnb: 0 },
+      { ano: 2024, mes: 8, apartamento: '123', valorTransferencia: 5174, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 7777, taxaAirbnb: 0 },
+      { ano: 2024, mes: 9, apartamento: '123', valorTransferencia: 4599.41, taxaAirbnb: 0 },
+      { ano: 2024, mes: 1, apartamento: '1248', valorTransferencia: 6780.52, taxaAirbnb: 0 },
+    ];
+
+    let showPrevFaturaYears = false;
 
 // DOM Elements
 const faturaForm = document.getElementById('fatura-form');
@@ -72,7 +94,10 @@ faturaForm.addEventListener('submit', async (e) => {
 });
 
 async function carregarTodosRelatorios() {
-    const faturas = await carregarFaturas();
+   const firebaseFaturas = await carregarFaturas();
+   // junta Firebase + estático
+   const faturas = firebaseFaturas.concat(manualFaturasEstatica);
+    
     gerarRelatorioFaturacao(faturas);
     gerarRelatorioTMT(faturas);
     gerarAnaliseFaturacao(faturas);
