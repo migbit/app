@@ -76,6 +76,7 @@ async function carregarTodosRelatorios() {
     gerarRelatorioFaturacao(faturas);
     gerarRelatorioTMT(faturas);
     gerarAnaliseFaturacao(faturas);
+    gerarMediaFaturacao(faturas);
 }
 
 async function carregarFaturas() {
@@ -373,6 +374,52 @@ new Chart(document.getElementById('chart-comparacao-apt'), {
         </div>
       </div>
     `;
+
+    // Função: gerar média mensal por ano e apartamento
+    function gerarMediaFaturacao(faturas) {
+        // Identificar anos disponíveis
+        const anos = Array.from(new Set(faturas.map(f => f.ano))).sort();
+        // Identificar apartamentos disponíveis
+        const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
+    
+        // Construir tabela HTML
+        let html = '<h4>Média Mensal de Receita</h4>';
+        html += '<table class="media-faturacao"><thead><tr><th>Ano</th>';
+        apartamentos.forEach(apt => html += `<th>Apt ${apt}</th>`);
+        html += '<th>Total</th></tr></thead><tbody>';
+    
+        anos.forEach(ano => {
+            const faturasAno = faturas.filter(f => f.ano === ano);
+            const mesesAno = Array.from(new Set(faturasAno.map(f => f.mes)));
+            const numMeses = mesesAno.length || 1;
+    
+            let somaTotal = 0;
+            html += `<tr><td>${ano}</td>`;
+            apartamentos.forEach(apt => {
+                const somaApt = faturasAno
+                    .filter(f => f.apartamento === apt)
+                    .reduce((sum, f) => sum + (f.valorTransferencia + f.taxaAirbnb), 0);
+                const mediaApt = somaApt / numMeses;
+                somaTotal += somaApt;
+                html += `<td>€${mediaApt.toFixed(2)}</td>`;
+            });
+            const mediaTotal = somaTotal / numMeses;
+            html += `<td>€${mediaTotal.toFixed(2)}</td></tr>`;
+        });
+    
+        html += '</tbody></table>';
+    
+        // Inserir no container existente ou criar um novo
+        let container = document.getElementById('media-faturacao');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'media-faturacao';
+            document
+              .getElementById('analise-faturacao-container')
+              .appendChild(container);
+        }
+        container.innerHTML = html;
+    }
   }
 
 function gerarHTMLDetalhesTMT(detalhes) {
