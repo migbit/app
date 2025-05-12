@@ -378,11 +378,12 @@ function gerarAnaliseFaturacao(faturas) {
     .filter(f => f.ano === ano)
     .reduce((s,f) => s + (f.valorTransferencia + f.taxaAirbnb), 0);
 
+  // ── 1) full-year acumulado ──
   const totalAtual = somaAno(ultimoAno);
   const totalAnt   = somaAno(penultimoAno) || 1;
   const diff       = totalAnt - totalAtual;
   const pctDiff    = Math.round(Math.abs(diff) / totalAnt * 100);
-  const colorClass = diff > 0 ? 'danger' : 'success';
+  const barColor   = diff > 0 ? '#dc3545' : '#28a745';
   const labelText  = diff > 0
                        ? `Faltam €${diff.toFixed(2)}`
                        : `Excedeu €${(-diff).toFixed(2)}`;
@@ -396,40 +397,35 @@ function gerarAnaliseFaturacao(faturas) {
   const sumPrevAnt = faturas
     .filter(f => f.ano === penultimoAno && f.mes < currentMonth)
     .reduce((s,f) => s + (f.valorTransferencia + f.taxaAirbnb), 0) || 1;
-  const diffMes   = sumPrevAnt - sumPrevCur;
-  const pctMes    = Math.round(Math.abs(diffMes) / sumPrevAnt * 100);
-  const colorMes  = diffMes > 0 ? 'danger' : 'success';
-  const labelMes  = diffMes > 0
-                      ? `Faltam €${diffMes.toFixed(2)}`
-                      : `Excedeu €${(-diffMes).toFixed(2)}`;
-  const nomeMes   = obterNomeMes(mesAnterior);
+  const diffMes    = sumPrevAnt - sumPrevCur;
+  const pctMes     = Math.round(Math.abs(diffMes) / sumPrevAnt * 100);
+  const barMesColor= diffMes > 0 ? '#dc3545' : '#28a745';
+  const labelMes   = diffMes > 0
+                       ? `Faltam €${diffMes.toFixed(2)}`
+                       : `Excedeu €${(-diffMes).toFixed(2)}`;
+  const nomeMes    = obterNomeMes(mesAnterior);
 
   document.getElementById('progresso-anos').innerHTML = `
     <div class="comparacao-item">
       <strong>Acumulado ${penultimoAno}:</strong> €${totalAnt.toFixed(2)}
     </div>
     <div class="comparacao-item">
-      <strong>Acumulado ${ultimoAno}:</strong> €${totalAtual.toFixed(2)}
+      <strong>Acumulado ${ultimoAno}:</strong>
+      <span style="color:${barColor}; margin-left:0.5rem;">${labelText}</span>
       <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-        <div class="progress-bar bg-${colorClass}"
-             style="width:${pctDiff}%;display:flex;align-items:center;justify-content:center;">
-          ${labelText}
-        </div>
+        <div class="progress-bar" style="width:${pctDiff}%; background:${barColor};"></div>
       </div>
     </div>
 
     <div class="comparacao-item" style="margin-top:1rem;">
       <strong>Comparativo até ${nomeMes}:</strong>
+      <span style="color:${barMesColor}; margin-left:0.5rem;">${labelMes}</span>
       <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-        <div class="progress-bar bg-${colorMes}"
-             style="width:${pctMes}%;display:flex;align-items:center;justify-content:center;">
-          ${labelMes}
-        </div>
+        <div class="progress-bar" style="width:${pctMes}%; background:${barMesColor};"></div>
       </div>
     </div>
   `;
 }
-
 
   // Função: gerar média mensal por ano e apartamento
 function gerarMediaFaturacao(faturas) {
