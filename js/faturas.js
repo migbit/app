@@ -321,25 +321,6 @@ function gerarAnaliseFaturacao(faturas) {
     const data1248  = labels.map((_, i) => somaPor(ultimoAno, i+1, '1248'));
     const dataTotal = labels.map((_, i) => data123[i] + data1248[i]);
   
-    // 3) criar gráficos com Chart.js
-    new Chart(document.getElementById('chart-apt123'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{ label: `Apt 123 (${ultimoAno})`, data: data123, fill: false }],
-      },
-      options: { responsive: true, plugins: { legend: { display: true } } }
-    });
-  
-    new Chart(document.getElementById('chart-apt1248'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{ label: `Apt 1248 (${ultimoAno})`, data: data1248, fill: false }],
-      },
-      options: { responsive: true }
-    });
-
     // comparativo Apt 123 vs Apt 1248
 new Chart(document.getElementById('chart-comparacao-apt'), {
     type: 'bar',
