@@ -320,32 +320,45 @@ function gerarAnaliseFaturacao(faturas) {
     const data123   = labels.map((_, i) => somaPor(ultimoAno, i+1, '123'));
     const data1248  = labels.map((_, i) => somaPor(ultimoAno, i+1, '1248'));
     const dataTotal = labels.map((_, i) => data123[i] + data1248[i]);
-  
-    // comparativo Apt 123 vs Apt 1248
-new Chart(document.getElementById('chart-comparacao-apt'), {
-    type: 'bar',
-    data: {
-      labels, // meses Jan–Dez, já definidos acima
-      datasets: [
-        {
-          label: 'Apartamento 123',
-          data: data123,
-          backgroundColor: 'blue'
-        },
-        {
-          label: 'Apartamento 1248',
-          data: data1248,
-          backgroundColor: 'orange'
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: { beginAtZero: true }
-      }
-    }
-  });
+    // ── Novo: calculamos também o ano anterior ──
+    const data123Prev  = labels.map((_, i) => somaPor(penultimoAno, i+1, '123'));
+    const data1248Prev = labels.map((_, i) => somaPor(penultimoAno, i+1, '1248'));
+
+   // comparativo Apt 123 e 1248: ano anterior (transparente) vs ano atual (sólido)
+ new Chart(document.getElementById('chart-comparacao-apt'), {
+   type: 'bar',
+   data: {
+     labels,
+     datasets: [
+       {
+         label: `Apt 123 ${penultimoAno}`,
+         data: data123Prev,
+         backgroundColor: 'rgba(75,192,192,0.4)'  // último ano, tom suave
+       },
+       {
+         label: `Apt 123 ${ultimoAno}`,
+         data: data123,
+         backgroundColor: 'rgba(75,192,192,1)'   // ano atual, sólido
+       },
+       {
+         label: `Apt 1248 ${penultimoAno}`,
+         data: data1248Prev,
+         backgroundColor: 'rgba(153,102,255,0.4)'
+       },
+       {
+         label: `Apt 1248 ${ultimoAno}`,
+         data: data1248,
+         backgroundColor: 'rgba(153,102,255,1)'
+       }
+     ]
+   },
+   options: {
+     responsive: true,
+     scales: {
+       y: { beginAtZero: true }
+     }
+   }
+ });
   
     new Chart(document.getElementById('chart-total'), {
       type: 'line',
