@@ -1301,6 +1301,22 @@ footer {
     font-size: 0.9rem;
   }
 
+  .media-faturacao {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  .media-faturacao th,
+  .media-faturacao td {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    text-align: right;
+  }
+  .media-faturacao th:first-child,
+  .media-faturacao td:first-child {
+    text-align: left;
+  }
+  
 /* Remove conflicting fixed width for input[type="number"] within fatura-form */
 #fatura-form input[type="number"],
 #fatura-form input[type="text"],
