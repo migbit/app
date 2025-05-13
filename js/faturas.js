@@ -410,7 +410,7 @@ function gerarAnaliseFaturacao(faturas) {
     <div class="comparacao-item"><strong>Ano ${penultimoAno}:</strong></div>
     <div class="comparacao-item"><strong>123 ${penultimoAno}:</strong> €${sumPrev123.toFixed(2)}</div>
     <div class="comparacao-item"><strong>1248 ${penultimoAno}:</strong> €${sumPrev1248.toFixed(2)}</div>
-    <div class="comparacao-item"><strong>${penultimoAno}:</strong> €${totalPrevAno.toFixed(2)}</div>
+    <div class="comparacao-item"><strong>Acumulado ${penultimoAno}:</strong> €${totalPrevAno.toFixed(2)}</div>
     <hr class="divider">
   `;
 
@@ -491,8 +491,8 @@ htmlProg += `<hr class="divider"><strong>Comparativo até ${nomeMes}:</strong>`;
     </div>`;
 });
 
-// Comparativo total até mês anterior
-  // Comparativo total até mês anterior (todos os anos anteriores)
+
+// Comparativo total até mês anterior (todos os anos anteriores)
   (() => {
     const curTot = faturas
       .filter(f => f.ano === ultimoAno && f.mes < currentMonth)
