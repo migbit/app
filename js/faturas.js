@@ -382,10 +382,13 @@ function gerarAnaliseFaturacao(faturas) {
 const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
 let htmlProg = '';
 
-// Acumulado (ano inteiro)
-apartamentos.forEach(apt => {
-  const atual = somaAno(ultimoAno, apt);
-  const antes = somaAno(penultimoAno, apt) || 1;
+// Acumulado (ano inteiro), comparando com todos os anos anteriores
+  apartamentos.forEach(apt => {
+    const atual = somaAno(ultimoAno, apt);
+    // soma de todos os anos < ultimoAno, só valorTransferencia
+    const antes = faturas
+      .filter(f => f.apartamento === apt && f.ano < ultimoAno)
+      .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
   const diff  = antes - atual;
   const pct   = Math.round(Math.abs(diff) / antes * 100);
   const cor   = diff > 0 ? '#dc3545' : '#28a745';
@@ -402,10 +405,13 @@ apartamentos.forEach(apt => {
     </div>`;
 });
 
-// Barra total combinada
-(() => {
-  const atualTot = somaAno(ultimoAno);
-  const antesTot = somaAno(penultimoAno) || 1;
+  // Barra total combinada (todos os anos anteriores)
+  (() => {
+    const atualTot = somaAno(ultimoAno);
+    const antesTot = faturas
+      .filter(f => f.ano < ultimoAno)
+      .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
+
   const diff     = antesTot - atualTot;
   const pct      = Math.round(Math.abs(diff) / antesTot * 100);
   const cor      = diff > 0 ? '#dc3545' : '#28a745';
@@ -429,13 +435,13 @@ const nomeMes      = obterNomeMes(currentMonth - 1);
 
 htmlProg += `<hr class="divider"><strong>Comparativo até ${nomeMes}:</strong>`;
 
-apartamentos.forEach(apt => {
-  const cur = faturas
-    .filter(f => f.ano === ultimoAno && f.apartamento === apt && f.mes < currentMonth)
-    .reduce((s,f) => s + f.valorTransferencia, 0);
-  const ant = faturas
-    .filter(f => f.ano === penultimoAno && f.apartamento === apt && f.mes < currentMonth)
-    .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
+  apartamentos.forEach(apt => {
+    const cur = faturas
+      .filter(f => f.ano === ultimoAno && f.apartamento === apt && f.mes < currentMonth)
+      .reduce((s,f) => s + f.valorTransferencia, 0);
+    const ant = faturas
+      .filter(f => f.apartamento === apt && f.ano < ultimoAno && f.mes < currentMonth)
+      .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
   const diff  = ant - cur;
   const pct   = Math.round(Math.abs(diff) / ant * 100);
   const cor   = diff > 0 ? '#dc3545' : '#28a745';
@@ -454,13 +460,14 @@ apartamentos.forEach(apt => {
 });
 
 // Comparativo total até mês anterior
-(() => {
-  const curTot = faturas
-    .filter(f => f.ano === ultimoAno && f.mes < currentMonth)
-    .reduce((s,f) => s + f.valorTransferencia, 0);
-  const antTot = faturas
-    .filter(f => f.ano === penultimoAno && f.mes < currentMonth)
-    .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
+  // Comparativo total até mês anterior (todos os anos anteriores)
+  (() => {
+    const curTot = faturas
+      .filter(f => f.ano === ultimoAno && f.mes < currentMonth)
+      .reduce((s,f) => s + f.valorTransferencia, 0);
+    const antTot = faturas
+      .filter(f => f.ano < ultimoAno && f.mes < currentMonth)
+      .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
   const diff   = antTot - curTot;
   const pct    = Math.round(Math.abs(diff) / antTot * 100);
   const cor    = diff > 0 ? '#dc3545' : '#28a745';
