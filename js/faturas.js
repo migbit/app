@@ -382,50 +382,37 @@ function gerarAnaliseFaturacao(faturas) {
   const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
 
   // ─── totais acumulados ───
-  // 1) acumulado por apt no ano anterior
-  const sumPrev123  = faturas
+  // ano atual por apartamento
+  const sumCurr123  = faturas
+    .filter(f => f.ano === ultimoAno && f.apartamento === '123')
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const sumCurr1248 = faturas
+    .filter(f => f.ano === ultimoAno && f.apartamento === '1248')
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const totalAcumAtual = sumCurr123 + sumCurr1248;
+
+  // ano anterior por apartamento
+  const sumPrev123   = faturas
     .filter(f => f.ano === penultimoAno && f.apartamento === '123')
     .reduce((s,f) => s + f.valorTransferencia, 0);
-  const sumPrev1248 = faturas
+  const sumPrev1248  = faturas
     .filter(f => f.ano === penultimoAno && f.apartamento === '1248')
     .reduce((s,f) => s + f.valorTransferencia, 0);
-  // 2) acumulado total ano atual
-  const totalAcumAtual = faturas
-    .filter(f => f.ano === ultimoAno)
-    .reduce((s,f) => s + f.valorTransferencia, 0);
-  // 3) acumulado todos os anos anteriores (por ano)
-  const anosAnteriores = Array.from(new Set(faturas.map(f => f.ano)))
-    .filter(y => y < ultimoAno)
-    .sort();
+  const totalPrevAno = sumPrev123 + sumPrev1248;
 
   // monta HTML inicial
   let htmlProg = `
-    <div class="comparacao-item">
-      <strong>Apt 123 ${penultimoAno}:</strong> €${sumPrev123.toFixed(2)}
-    </div>
-    <div class="comparacao-item">
-      <strong>Apt 1248 ${penultimoAno}:</strong> €${sumPrev1248.toFixed(2)}
-    </div>
-    <div class="comparacao-item">
-      <strong>Acumulado ${ultimoAno}:</strong> €${totalAcumAtual.toFixed(2)}
-    </div>
-    <div class="comparacao-item">
-      <strong>Acumulado anos anteriores:</strong>
-    </div>
+    <div class="comparacao-item"><strong>Ano ${ultimoAno}:</strong></div>
+    <div class="comparacao-item"><strong>123:</strong> €${sumCurr123.toFixed(2)}</div>
+    <div class="comparacao-item"><strong>1248:</strong> €${sumCurr1248.toFixed(2)}</div>
+    <div class="comparacao-item"><strong>Acumulado ${ultimoAno}:</strong> €${totalAcumAtual.toFixed(2)}</div>
+    <hr class="divider">
+    <div class="comparacao-item"><strong>Ano ${penultimoAno}:</strong></div>
+    <div class="comparacao-item"><strong>123 ${penultimoAno}:</strong> €${sumPrev123.toFixed(2)}</div>
+    <div class="comparacao-item"><strong>1248 ${penultimoAno}:</strong> €${sumPrev1248.toFixed(2)}</div>
+    <div class="comparacao-item"><strong>${penultimoAno}:</strong> €${totalPrevAno.toFixed(2)}</div>
+    <hr class="divider">
   `;
-
-  // adiciona linha por cada ano anterior
-  anosAnteriores.forEach(year => {
-    const sumYear = faturas
-      .filter(f => f.ano === year)
-      .reduce((s, f) => s + f.valorTransferencia, 0);
-    htmlProg += `
-      <div class="comparacao-item">
-        <strong>${year}:</strong> €${sumYear.toFixed(2)}
-      </div>
-    `;
-  });
-  htmlProg += `<hr class="divider">`;
 
 // Acumulado (ano inteiro), comparando com todos os anos anteriores
   apartamentos.forEach(apt => {
