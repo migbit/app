@@ -312,7 +312,7 @@ function gerarAnaliseFaturacao(faturas) {
     function somaPor(ano, mes, apt) {
       return faturas
         .filter(f => f.ano === ano && f.mes === mes && f.apartamento === apt)
-        .reduce((s,f) => s + (f.valorTransferencia + f.taxaAirbnb), 0);
+        .reduce((s,f) => s + f.valorTransferencia, 0);
     }
   
     // 2) construir arrays mensais
@@ -374,58 +374,114 @@ function gerarAnaliseFaturacao(faturas) {
   
     
   // 4) Barras de progresso: acumulado ano vs ano anterior
-  const somaAno = ano => faturas
-    .filter(f => f.ano === ano)
-    .reduce((s,f) => s + (f.valorTransferencia + f.taxaAirbnb), 0);
+  const somaAno = (ano, apt = null) => faturas
+  .filter(f => f.ano === ano && (!apt || f.apartamento === apt))
+  .reduce((s,f) => s + f.valorTransferencia, 0);
 
-  // ── 1) full-year acumulado ──
-  const totalAtual = somaAno(ultimoAno);
-  const totalAnt   = somaAno(penultimoAno) || 1;
-  const diff       = totalAnt - totalAtual;
-  const pctDiff    = Math.round(Math.abs(diff) / totalAnt * 100);
-  const barColor   = diff > 0 ? '#dc3545' : '#28a745';
-  const labelText  = diff > 0
-                       ? `Faltam €${diff.toFixed(2)}`
-                       : `Excedeu €${(-diff).toFixed(2)}`;
+  // 4) Barras de progresso: acumulado por apartamento + total
+const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
+let htmlProg = '';
 
-  // ── 2) comparativo até mês anterior ──
-  const currentMonth = new Date().getMonth() + 1;
-  const mesAnterior  = currentMonth - 1;
-  const sumPrevCur = faturas
-    .filter(f => f.ano === ultimoAno   && f.mes < currentMonth)
-    .reduce((s,f) => s + (f.valorTransferencia + f.taxaAirbnb), 0);
-  const sumPrevAnt = faturas
+// Acumulado (ano inteiro)
+apartamentos.forEach(apt => {
+  const atual = somaAno(ultimoAno, apt);
+  const antes = somaAno(penultimoAno, apt) || 1;
+  const diff  = antes - atual;
+  const pct   = Math.round(Math.abs(diff) / antes * 100);
+  const cor   = diff > 0 ? '#dc3545' : '#28a745';
+  const label = diff > 0
+    ? `Faltam €${diff.toFixed(2)}`
+    : `Excedeu €${(-diff).toFixed(2)}`;
+  htmlProg += `
+    <div class="comparacao-item">
+      <strong>Apt ${apt} ${ultimoAno} vs ${penultimoAno}:</strong>
+      <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
+      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+        <div class="progress-bar" style="width:${pct}%; background:${cor};"></div>
+      </div>
+    </div>`;
+});
+
+// Barra total combinada
+(() => {
+  const atualTot = somaAno(ultimoAno);
+  const antesTot = somaAno(penultimoAno) || 1;
+  const diff     = antesTot - atualTot;
+  const pct      = Math.round(Math.abs(diff) / antesTot * 100);
+  const cor      = diff > 0 ? '#dc3545' : '#28a745';
+  const label    = diff > 0
+    ? `Faltam €${diff.toFixed(2)}`
+    : `Excedeu €${(-diff).toFixed(2)}`;
+  htmlProg += `
+    <hr class="divider">
+    <div class="comparacao-item">
+      <strong>Total ${ultimoAno} vs ${penultimoAno}:</strong>
+      <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
+      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+        <div class="progress-bar" style="width:${pct}%; background:${cor};"></div>
+      </div>
+    </div>`;
+})();
+
+// 5) Comparativo até mês anterior: idem, por apt + total
+const currentMonth = new Date().getMonth() + 1;
+const nomeMes      = obterNomeMes(currentMonth - 1);
+
+htmlProg += `<hr class="divider"><strong>Comparativo até ${nomeMes}:</strong>`;
+
+apartamentos.forEach(apt => {
+  const cur = faturas
+    .filter(f => f.ano === ultimoAno && f.apartamento === apt && f.mes < currentMonth)
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const ant = faturas
+    .filter(f => f.ano === penultimoAno && f.apartamento === apt && f.mes < currentMonth)
+    .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
+  const diff  = ant - cur;
+  const pct   = Math.round(Math.abs(diff) / ant * 100);
+  const cor   = diff > 0 ? '#dc3545' : '#28a745';
+  const label = diff > 0
+    ? `Faltam €${diff.toFixed(2)}`
+    : `Excedeu €${(-diff).toFixed(2)}`;
+
+  htmlProg += `
+    <div class="comparacao-item">
+      <strong>Apt ${apt} até ${nomeMes}:</strong>
+      <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
+      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+        <div class="progress-bar" style="width:${pct}%; background:${cor};"></div>
+      </div>
+    </div>`;
+});
+
+// Comparativo total até mês anterior
+(() => {
+  const curTot = faturas
+    .filter(f => f.ano === ultimoAno && f.mes < currentMonth)
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const antTot = faturas
     .filter(f => f.ano === penultimoAno && f.mes < currentMonth)
-    .reduce((s,f) => s + (f.valorTransferencia + f.taxaAirbnb), 0) || 1;
-  const diffMes    = sumPrevAnt - sumPrevCur;
-  const pctMes     = Math.round(Math.abs(diffMes) / sumPrevAnt * 100);
-  const barMesColor= diffMes > 0 ? '#dc3545' : '#28a745';
-  const labelMes   = diffMes > 0
-                       ? `Faltam €${diffMes.toFixed(2)}`
-                       : `Excedeu €${(-diffMes).toFixed(2)}`;
-  const nomeMes    = obterNomeMes(mesAnterior);
+    .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
+  const diff   = antTot - curTot;
+  const pct    = Math.round(Math.abs(diff) / antTot * 100);
+  const cor    = diff > 0 ? '#dc3545' : '#28a745';
+  const label  = diff > 0
+    ? `Faltam €${diff.toFixed(2)}`
+    : `Excedeu €${(-diff).toFixed(2)}`;
 
-  document.getElementById('progresso-anos').innerHTML = `
+  htmlProg += `
+    <hr class="divider">
     <div class="comparacao-item">
-      <strong>Acumulado ${penultimoAno}:</strong> €${totalAnt.toFixed(2)}
-    </div>
-    <div class="comparacao-item">
-      <strong>Acumulado ${ultimoAno}:</strong>
-      <span style="color:${barColor}; margin-left:0.5rem;">${labelText}</span>
+      <strong>Total até ${nomeMes}:</strong>
+      <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
       <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-        <div class="progress-bar" style="width:${pctDiff}%; background:${barColor};"></div>
+        <div class="progress-bar" style="width:${pct}%; background:${cor};"></div>
       </div>
-    </div>
+    </div>`;
+})();
 
-    <div class="comparacao-item" style="margin-top:1rem;">
-      <strong>Comparativo até ${nomeMes}:</strong>
-      <span style="color:${barMesColor}; margin-left:0.5rem;">${labelMes}</span>
-      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-        <div class="progress-bar" style="width:${pctMes}%; background:${barMesColor};"></div>
-      </div>
-    </div>
-  `;
+document.getElementById('progresso-anos').innerHTML = htmlProg;
 }
+
 
   // Função: gerar média mensal por ano e apartamento
 function gerarMediaFaturacao(faturas) {
