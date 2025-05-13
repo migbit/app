@@ -382,16 +382,30 @@ function gerarAnaliseFaturacao(faturas) {
   const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
 
   // ─── totais acumulados ───
+  // 1) acumulado por apt no ano anterior
+  const sumPrev123  = faturas
+    .filter(f => f.ano === penultimoAno && f.apartamento === '123')
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const sumPrev1248 = faturas
+    .filter(f => f.ano === penultimoAno && f.apartamento === '1248')
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  // 2) acumulado total ano atual
   const totalAcumAtual = faturas
     .filter(f => f.ano === ultimoAno)
     .reduce((s,f) => s + f.valorTransferencia, 0);
-  // anos anteriores, excluindo o último
+  // 3) acumulado todos os anos anteriores (por ano)
   const anosAnteriores = Array.from(new Set(faturas.map(f => f.ano)))
     .filter(y => y < ultimoAno)
     .sort();
 
-  // inicia htmlProg com o acumulado do ano atual e cabeçalho dos anteriores
+  // monta HTML inicial
   let htmlProg = `
+    <div class="comparacao-item">
+      <strong>Apt 123 ${penultimoAno}:</strong> €${sumPrev123.toFixed(2)}
+    </div>
+    <div class="comparacao-item">
+      <strong>Apt 1248 ${penultimoAno}:</strong> €${sumPrev1248.toFixed(2)}
+    </div>
     <div class="comparacao-item">
       <strong>Acumulado ${ultimoAno}:</strong> €${totalAcumAtual.toFixed(2)}
     </div>
@@ -400,7 +414,7 @@ function gerarAnaliseFaturacao(faturas) {
     </div>
   `;
 
-  // adiciona uma linha por cada ano anterior
+  // adiciona linha por cada ano anterior
   anosAnteriores.forEach(year => {
     const sumYear = faturas
       .filter(f => f.ano === year)
