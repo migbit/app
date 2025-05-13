@@ -378,9 +378,25 @@ function gerarAnaliseFaturacao(faturas) {
   .filter(f => f.ano === ano && (!apt || f.apartamento === apt))
   .reduce((s,f) => s + f.valorTransferencia, 0);
 
-  // 4) Barras de progresso: acumulado por apartamento + total
-const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
-let htmlProg = '';
+  // 4) Barras de progresso: totais gerais e por apartamento
+  const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
+
+  // ─── totais acumulados ───
+  const totalAcumAtual = faturas
+    .filter(f => f.ano === ultimoAno)
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const totalAcumAntes = faturas
+    .filter(f => f.ano < ultimoAno)
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  let htmlProg = `
+    <div class="comparacao-item">
+      <strong>Acumulado ${ultimoAno}:</strong> €${totalAcumAtual.toFixed(2)}
+    </div>
+    <div class="comparacao-item">
+      <strong>Acumulado anos anteriores:</strong> €${totalAcumAntes.toFixed(2)}
+    </div>
+    <hr class="divider">
+  `;
 
 // Acumulado (ano inteiro), comparando com todos os anos anteriores
   apartamentos.forEach(apt => {
