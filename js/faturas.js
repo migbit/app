@@ -381,17 +381,7 @@ function gerarAnaliseFaturacao(faturas) {
   // 4) Barras de progresso: totais gerais e por apartamento
   const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
 
-   // ano atual por apartamento
-  const sumCurr123   = somaAno(ultimoAno, '123');
-  const sumCurr1248  = somaAno(ultimoAno, '1248');
-  const totalAcumAtual = sumCurr123 + sumCurr1248;
-
-  // ano anterior por apartamento
-  const sumPrev123   = somaAno(penultimoAno, '123');
-  const sumPrev1248  = somaAno(penultimoAno, '1248');
-  const totalPrevAno = sumPrev123 + sumPrev1248;
-
-// ─── totais acumulados em tabela ───
+  // ─── totais acumulados em tabela ───
   const sumCurr123   = somaAno(ultimoAno, '123');
   const sumCurr1248  = somaAno(ultimoAno, '1248');
   const totalAtual   = sumCurr123 + sumCurr1248;
@@ -400,7 +390,6 @@ function gerarAnaliseFaturacao(faturas) {
   const sumPrev1248  = somaAno(penultimoAno, '1248');
   const totalPrev    = sumPrev123 + sumPrev1248;
 
-  // construir tabela de totais
   let htmlProg = `
     <table class="media-faturacao">
       <thead>
