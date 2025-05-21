@@ -403,8 +403,8 @@ function gerarAnaliseFaturacao(faturas) {
   // monta HTML inicial
   let htmlProg = `
     <div class="comparacao-item"><strong>Ano ${ultimoAno}:</strong></div>
-    <div class="comparacao-item"><strong>123:</strong> €${sumCurr123.toFixed(2)}</div>
-    <div class="comparacao-item"><strong>1248:</strong> €${sumCurr1248.toFixed(2)}</div>
+    <div class="comparacao-item"><strong class="apt-123">123:</strong> €${sumCurr123.toFixed(2)}</div>
+    <div class="comparacao-item"><strong class="apt-1248">1248:</strong> €${sumCurr1248.toFixed(2)}</div>
     <div class="comparacao-item"><strong>Acumulado ${ultimoAno}:</strong> €${totalAcumAtual.toFixed(2)}</div>
     <hr class="divider">
     <div class="comparacao-item"><strong>Ano ${penultimoAno}:</strong></div>
@@ -422,7 +422,8 @@ function gerarAnaliseFaturacao(faturas) {
       .filter(f => f.apartamento === apt && f.ano < ultimoAno)
       .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
   const diff  = antes - atual;
-  const pct   = Math.round(Math.abs(diff) / antes * 100);
+  const pct      = Math.round(Math.abs(diff) / antes * 100);
+  const labelPct = diff > 0 ? `-${pct}%` : `+${pct}%`;
   const cor   = diff > 0 ? '#dc3545' : '#28a745';
   const label = diff > 0
     ? `Faltam €${diff.toFixed(2)}`
@@ -432,7 +433,10 @@ function gerarAnaliseFaturacao(faturas) {
       <strong>Apt ${apt} ${ultimoAno} vs ${penultimoAno}:</strong>
       <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
       <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-        <div class="progress-bar" style="width:${pct}%; background:${cor};"></div>
+      <div class="progress-bar"
+             style="width:${pct}%; background:${cor}; display:flex; align-items:center; justify-content:center;">
+          ${labelPct}
+        </div>  
       </div>
     </div>`;
 });
@@ -456,7 +460,10 @@ function gerarAnaliseFaturacao(faturas) {
       <strong>Total ${ultimoAno} vs ${penultimoAno}:</strong>
       <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
       <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-        <div class="progress-bar" style="width:${pct}%; background:${cor};"></div>
+      <div class="progress-bar"
+         style="width:${pct}%; background:${cor}; display:flex; align-items:center; justify-content:center;">
+      ${labelPct}
+    </div>  
       </div>
     </div>`;
 })();
@@ -475,7 +482,8 @@ htmlProg += `<hr class="divider"><strong>Comparativo até ${nomeMes}:</strong>`;
       .filter(f => f.apartamento === apt && f.ano < ultimoAno && f.mes < currentMonth)
       .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
   const diff  = ant - cur;
-  const pct   = Math.round(Math.abs(diff) / ant * 100);
+  const pct     = Math.round(Math.abs(diffA) / ant * 100);
+  const labelPctA = diffA > 0 ? `-${pct}%` : `+${pct}%`;
   const cor   = diff > 0 ? '#dc3545' : '#28a745';
   const label = diff > 0
     ? `Faltam €${diff.toFixed(2)}`
@@ -513,7 +521,10 @@ htmlProg += `<hr class="divider"><strong>Comparativo até ${nomeMes}:</strong>`;
       <strong>Total até ${nomeMes}:</strong>
       <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
       <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-        <div class="progress-bar" style="width:${pct}%; background:${cor};"></div>
+      <div class="progress-bar"
+             style="width:${pct}%; background:${corA}; display:flex; align-items:center; justify-content:center;">
+          ${labelPctA}
+        </div>  
       </div>
     </div>`;
 })();
@@ -530,31 +541,33 @@ function gerarMediaFaturacao(faturas) {
     const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
 
     // Construir tabela HTML
-    let html = '<h4>Média Mensal de Receita</h4>';
-    html += '<table class="media-faturacao"><thead><tr><th>Ano</th>';
-    apartamentos.forEach(apt => html += `<th>Apt ${apt}</th>`);
-    html += '<th>Total</th></tr></thead><tbody>';
+let html = '<h4>Média Mensal de Receita</h4>';
+html += '<table class="media-faturacao"><thead><tr><th>Ano</th>';
+apartamentos.forEach(apt => {
+    html += `<th class="apt-${apt}">Apt ${apt}</th>`;
+});
+html += '<th>Total</th></tr></thead><tbody>';
 
-    anos.forEach(ano => {
-        const faturasAno = faturas.filter(f => f.ano === ano);
-        const mesesAno = Array.from(new Set(faturasAno.map(f => f.mes)));
-        const numMeses = mesesAno.length || 1;
+anos.forEach(ano => {
+    const faturasAno = faturas.filter(f => f.ano === ano);
+    const mesesAno = Array.from(new Set(faturasAno.map(f => f.mes)));
+    const numMeses = mesesAno.length || 1;
 
-        let somaTotal = 0;
-        html += `<tr><td>${ano}</td>`;
-        apartamentos.forEach(apt => {
-            const somaApt = faturasAno
-                .filter(f => f.apartamento === apt)
-                .reduce((sum, f) => sum + (f.valorTransferencia + f.taxaAirbnb), 0);
-            const mediaApt = somaApt / numMeses;
-            somaTotal += somaApt;
-            html += `<td>€${mediaApt.toFixed(2)}</td>`;
-        });
-        const mediaTotal = somaTotal / numMeses;
-        html += `<td>€${mediaTotal.toFixed(2)}</td></tr>`;
+    let somaTotal = 0;
+    html += `<tr><td>${ano}</td>`;
+    apartamentos.forEach(apt => {
+        const somaApt = faturasAno
+            .filter(f => f.apartamento === apt)
+            .reduce((sum, f) => sum + f.valorTransferencia, 0);
+        const mediaApt = somaApt / numMeses;
+        somaTotal += somaApt;
+        html += `<td class="apt-${apt}">€${mediaApt.toFixed(2)}</td>`;
     });
+    const mediaTotal = somaTotal / numMeses;
+    html += `<td>€${mediaTotal.toFixed(2)}</td></tr>`;
+});
 
-    html += '</tbody></table>';
+html += '</tbody></table>';
 
     // Inserir no container existente ou criar um novo
     let container = document.getElementById('media-faturacao');
