@@ -1391,6 +1391,13 @@ footer {
 .apt-123 { color: rgba(54,162,235,1); }
 .apt-1248 { color: rgba(245,133,20,1); }
 
+/* Centralizar texto em todas as células das tabelas de receita */
+.media-faturacao,
+.media-faturacao th,
+.media-faturacao td {
+  text-align: center;
+}
+
 @media (max-width: 600px) {
     /* Ensure inputs stack vertically on very small screens */
     #fatura-form .form-group {
