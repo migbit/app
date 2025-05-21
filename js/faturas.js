@@ -387,8 +387,8 @@ function gerarAnaliseFaturacao(faturas) {
   const totalAtual   = sumCurr123 + sumCurr1248;
 
   const sumPrev123   = somaAno(penultimoAno, '123');
-  const sumPrev1248  = somaAno(penultimoAno, '1248');
-  const totalPrev    = sumPrev123 + sumPrev1248;
+  const sumPrev1248   = somaAno(penultimoAno, '1248');
+  const totalPrevAno  = sumPrev123 + sumPrev1248;
 
   let htmlProg = `
     <table class="media-faturacao">
@@ -411,7 +411,7 @@ function gerarAnaliseFaturacao(faturas) {
           <td>${penultimoAno}</td>
           <td class="apt-123">€${sumPrev123.toFixed(2)}</td>
           <td class="apt-1248">€${sumPrev1248.toFixed(2)}</td>
-          <td>€${totalPrev.toFixed(2)}</td>
+          <td>€${totalPrevAno.toFixed(2)}</td>
         </tr>
       </tbody>
     </table>
