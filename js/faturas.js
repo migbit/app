@@ -391,17 +391,41 @@ function gerarAnaliseFaturacao(faturas) {
   const sumPrev1248  = somaAno(penultimoAno, '1248');
   const totalPrevAno = sumPrev123 + sumPrev1248;
 
-  // monta HTML inicial
+// ─── totais acumulados em tabela ───
+  const sumCurr123   = somaAno(ultimoAno, '123');
+  const sumCurr1248  = somaAno(ultimoAno, '1248');
+  const totalAtual   = sumCurr123 + sumCurr1248;
+
+  const sumPrev123   = somaAno(penultimoAno, '123');
+  const sumPrev1248  = somaAno(penultimoAno, '1248');
+  const totalPrev    = sumPrev123 + sumPrev1248;
+
+  // construir tabela de totais
   let htmlProg = `
-    <div class="comparacao-item"><strong>Ano ${ultimoAno}:</strong></div>
-    <div class="comparacao-item"><strong class="apt-123">123:</strong> €${sumCurr123.toFixed(2)}</div>
-    <div class="comparacao-item"><strong class="apt-1248">1248:</strong> €${sumCurr1248.toFixed(2)}</div>
-    <div class="comparacao-item"><strong>Acumulado ${ultimoAno}:</strong> €${totalAcumAtual.toFixed(2)}</div>
-    <hr class="divider">
-    <div class="comparacao-item"><strong>Ano ${penultimoAno}:</strong></div>
-    <div class="comparacao-item"><strong>123 ${penultimoAno}:</strong> €${sumPrev123.toFixed(2)}</div>
-    <div class="comparacao-item"><strong>1248 ${penultimoAno}:</strong> €${sumPrev1248.toFixed(2)}</div>
-    <div class="comparacao-item"><strong>Acumulado ${penultimoAno}:</strong> €${totalPrevAno.toFixed(2)}</div>
+    <table class="media-faturacao">
+      <thead>
+        <tr>
+          <th>Ano</th>
+          <th class="apt-123">123</th>
+          <th class="apt-1248">1248</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>${ultimoAno}</td>
+          <td class="apt-123">€${sumCurr123.toFixed(2)}</td>
+          <td class="apt-1248">€${sumCurr1248.toFixed(2)}</td>
+          <td>€${totalAtual.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td>${penultimoAno}</td>
+          <td class="apt-123">€${sumPrev123.toFixed(2)}</td>
+          <td class="apt-1248">€${sumPrev1248.toFixed(2)}</td>
+          <td>€${totalPrev.toFixed(2)}</td>
+        </tr>
+      </tbody>
+    </table>
     <hr class="divider">
   `;
 
