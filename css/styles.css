@@ -1388,6 +1388,9 @@ footer {
   margin: 1.5rem 0;
 }
 
+.apt-123 { color: rgba(54,162,235,1); }
+.apt-1248 { color: rgba(245,133,20,1); }
+
 @media (max-width: 600px) {
     /* Ensure inputs stack vertically on very small screens */
     #fatura-form .form-group {
