@@ -435,7 +435,7 @@ function gerarAnaliseFaturacao(faturas) {
       <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
       <div class="progress-bar"
              style="width:${pct}%; background:${cor}; display:flex; align-items:center; justify-content:center;">
-          ${labelPct}
+          ${labelPctT}
         </div>  
       </div>
     </div>`;
@@ -523,7 +523,7 @@ htmlProg += `<hr class="divider"><strong>Comparativo até ${nomeMes}:</strong>`;
       <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
       <div class="progress-bar"
              style="width:${pct}%; background:${corA}; display:flex; align-items:center; justify-content:center;">
-          ${labelPctA}
+          ${labelPctT2}
         </div>  
       </div>
     </div>`;
