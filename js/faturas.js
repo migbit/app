@@ -381,10 +381,7 @@ function gerarAnaliseFaturacao(faturas) {
   // 4) Barras de progresso: totais gerais e por apartamento
   const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
 
-  // ─── totais acumulados ───
-  const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
-
-  // ano atual por apartamento
+   // ano atual por apartamento
   const sumCurr123   = somaAno(ultimoAno, '123');
   const sumCurr1248  = somaAno(ultimoAno, '1248');
   const totalAcumAtual = sumCurr123 + sumCurr1248;
@@ -526,7 +523,6 @@ function gerarAnaliseFaturacao(faturas) {
 
 document.getElementById('progresso-anos').innerHTML = htmlProg;
 }
-
 
   // Função: gerar média mensal por ano e apartamento
 function gerarMediaFaturacao(faturas) {
