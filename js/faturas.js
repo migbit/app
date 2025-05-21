@@ -382,22 +382,16 @@ function gerarAnaliseFaturacao(faturas) {
   const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
 
   // ─── totais acumulados ───
+  const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
+
   // ano atual por apartamento
-  const sumCurr123  = faturas
-    .filter(f => f.ano === ultimoAno && f.apartamento === '123')
-    .reduce((s,f) => s + f.valorTransferencia, 0);
-  const sumCurr1248 = faturas
-    .filter(f => f.ano === ultimoAno && f.apartamento === '1248')
-    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const sumCurr123   = somaAno(ultimoAno, '123');
+  const sumCurr1248  = somaAno(ultimoAno, '1248');
   const totalAcumAtual = sumCurr123 + sumCurr1248;
 
   // ano anterior por apartamento
-  const sumPrev123   = faturas
-    .filter(f => f.ano === penultimoAno && f.apartamento === '123')
-    .reduce((s,f) => s + f.valorTransferencia, 0);
-  const sumPrev1248  = faturas
-    .filter(f => f.ano === penultimoAno && f.apartamento === '1248')
-    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const sumPrev123   = somaAno(penultimoAno, '123');
+  const sumPrev1248  = somaAno(penultimoAno, '1248');
   const totalPrevAno = sumPrev123 + sumPrev1248;
 
   // monta HTML inicial
@@ -414,120 +408,121 @@ function gerarAnaliseFaturacao(faturas) {
     <hr class="divider">
   `;
 
-// Acumulado (ano inteiro), comparando com todos os anos anteriores
+  // 1) comparação por apartamento vs todos os anos anteriores
   apartamentos.forEach(apt => {
     const atual = somaAno(ultimoAno, apt);
-    // soma de todos os anos < ultimoAno, só valorTransferencia
     const antes = faturas
       .filter(f => f.apartamento === apt && f.ano < ultimoAno)
       .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
-  const diff  = antes - atual;
-  const pct      = Math.round(Math.abs(diff) / antes * 100);
-  const labelPct = diff > 0 ? `-${pct}%` : `+${pct}%`;
-  const cor   = diff > 0 ? '#dc3545' : '#28a745';
-  const label = diff > 0
-    ? `Faltam €${diff.toFixed(2)}`
-    : `Excedeu €${(-diff).toFixed(2)}`;
-  htmlProg += `
-    <div class="comparacao-item">
-      <strong>Apt ${apt} ${ultimoAno} vs ${penultimoAno}:</strong>
-      <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
-      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-      <div class="progress-bar"
-             style="width:${pct}%; background:${cor}; display:flex; align-items:center; justify-content:center;">
-          ${labelPctT}
-        </div>  
-      </div>
-    </div>`;
-});
 
-  // Barra total combinada (todos os anos anteriores)
+    const diff    = antes - atual;
+    const pct     = Math.round(Math.abs(diff) / antes * 100);
+    const labelPct= diff > 0 ? `-${pct}%` : `+${pct}%`;
+    const barCol  = diff > 0 ? '#dc3545' : '#28a745';
+    const label   = diff > 0
+                      ? `Faltam €${diff.toFixed(2)}`
+                      : `Excedeu €${(-diff).toFixed(2)}`;
+
+    htmlProg += `
+      <div class="comparacao-item">
+        <strong>Apt ${apt} ${ultimoAno} vs ${penultimoAno}:</strong>
+        <span style="color:${barCol}; margin-left:0.5rem;">${label}</span>
+        <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+          <div class="progress-bar"
+               style="width:${pct}%; background:${barCol}; display:flex;align-items:center;justify-content:center;">
+            ${labelPct}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  // 2) total combinado vs todos os anos anteriores
   (() => {
-    const atualTot = somaAno(ultimoAno);
-    const antesTot = faturas
-      .filter(f => f.ano < ultimoAno)
-      .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
+    const diffT     = totalPrevAno - totalAcumAtual;
+    const pctT      = Math.round(Math.abs(diffT) / totalPrevAno * 100);
+    const labelPctT = diffT > 0 ? `-${pctT}%` : `+${pctT}%`;
+    const barColT   = diffT > 0 ? '#dc3545' : '#28a745';
+    const labelT    = diffT > 0
+                        ? `Faltam €${diffT.toFixed(2)}`
+                        : `Excedeu €${(-diffT).toFixed(2)}`;
 
-  const diff     = antesTot - atualTot;
-  const pct      = Math.round(Math.abs(diff) / antesTot * 100);
-  const cor      = diff > 0 ? '#dc3545' : '#28a745';
-  const label    = diff > 0
-    ? `Faltam €${diff.toFixed(2)}`
-    : `Excedeu €${(-diff).toFixed(2)}`;
-  htmlProg += `
-    <hr class="divider">
-    <div class="comparacao-item">
-      <strong>Total ${ultimoAno} vs ${penultimoAno}:</strong>
-      <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
-      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-      <div class="progress-bar"
-         style="width:${pct}%; background:${cor}; display:flex; align-items:center; justify-content:center;">
-      ${labelPct}
-    </div>  
-      </div>
-    </div>`;
-})();
+    htmlProg += `
+      <hr class="divider">
+      <div class="comparacao-item">
+        <strong>Total ${ultimoAno} vs ${penultimoAno}:</strong>
+        <span style="color:${barColT}; margin-left:0.5rem;">${labelT}</span>
+        <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+          <div class="progress-bar"
+               style="width:${pctT}%; background:${barColT}; display:flex;align-items:center;justify-content:center;">
+            ${labelPctT}
+          </div>
+        </div>
+      </div>`;
+  })();
 
-// 5) Comparativo até mês anterior: idem, por apt + total
-const currentMonth = new Date().getMonth() + 1;
-const nomeMes      = obterNomeMes(currentMonth - 1);
-
-htmlProg += `<hr class="divider"><strong>Comparativo até ${nomeMes}:</strong>`;
+  // 3) comparativo até mês anterior por apt + total
+  const currentMonth = new Date().getMonth() + 1;
+  const nomeMes      = obterNomeMes(currentMonth - 1);
+  htmlProg += `<hr class="divider"><strong>Comparativo até ${nomeMes}:</strong>`;
 
   apartamentos.forEach(apt => {
-    const cur = faturas
+    const curA = faturas
       .filter(f => f.ano === ultimoAno && f.apartamento === apt && f.mes < currentMonth)
       .reduce((s,f) => s + f.valorTransferencia, 0);
-    const ant = faturas
+    const antA = faturas
       .filter(f => f.apartamento === apt && f.ano < ultimoAno && f.mes < currentMonth)
       .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
-  const diff  = ant - cur;
-  const pct     = Math.round(Math.abs(diffA) / ant * 100);
-  const labelPctA = diffA > 0 ? `-${pct}%` : `+${pct}%`;
-  const cor   = diff > 0 ? '#dc3545' : '#28a745';
-  const label = diff > 0
-    ? `Faltam €${diff.toFixed(2)}`
-    : `Excedeu €${(-diff).toFixed(2)}`;
 
-  htmlProg += `
-    <div class="comparacao-item">
-      <strong>Apt ${apt} até ${nomeMes}:</strong>
-      <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
-      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-        <div class="progress-bar" style="width:${pct}%; background:${cor};"></div>
-      </div>
-    </div>`;
-});
+    const diffA    = antA - curA;
+    const pctA     = Math.round(Math.abs(diffA) / antA * 100);
+    const labelPctA= diffA > 0 ? `-${pctA}%` : `+${pctA}%`;
+    const barColA  = diffA > 0 ? '#dc3545' : '#28a745';
+    const labelA   = diffA > 0
+                       ? `Faltam €${diffA.toFixed(2)}`
+                       : `Excedeu €${(-diffA).toFixed(2)}`;
 
+    htmlProg += `
+      <div class="comparacao-item">
+        <strong>Apt ${apt} até ${nomeMes}:</strong>
+        <span style="color:${barColA}; margin-left:0.5rem;">${labelA}</span>
+        <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+          <div class="progress-bar"
+               style="width:${pctA}%; background:${barColA}; display:flex;align-items:center;justify-content:center;">
+            ${labelPctA}
+          </div>
+        </div>
+      </div>`;
+  });
 
-// Comparativo total até mês anterior (todos os anos anteriores)
   (() => {
-    const curTot = faturas
+    const curT2 = faturas
       .filter(f => f.ano === ultimoAno && f.mes < currentMonth)
       .reduce((s,f) => s + f.valorTransferencia, 0);
-    const antTot = faturas
+    const antT2 = faturas
       .filter(f => f.ano < ultimoAno && f.mes < currentMonth)
       .reduce((s,f) => s + f.valorTransferencia, 0) || 1;
-  const diff   = antTot - curTot;
-  const pct    = Math.round(Math.abs(diff) / antTot * 100);
-  const cor    = diff > 0 ? '#dc3545' : '#28a745';
-  const label  = diff > 0
-    ? `Faltam €${diff.toFixed(2)}`
-    : `Excedeu €${(-diff).toFixed(2)}`;
 
-  htmlProg += `
-    <hr class="divider">
-    <div class="comparacao-item">
-      <strong>Total até ${nomeMes}:</strong>
-      <span style="color:${cor}; margin-left:0.5rem;">${label}</span>
-      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
-      <div class="progress-bar"
-             style="width:${pct}%; background:${corA}; display:flex; align-items:center; justify-content:center;">
-          ${labelPctT2}
-        </div>  
-      </div>
-    </div>`;
-})();
+    const diffT2    = antT2 - curT2;
+    const pctT2     = Math.round(Math.abs(diffT2) / antT2 * 100);
+    const labelPctT2= diffT2 > 0 ? `-${pctT2}%` : `+${pctT2}%`;
+    const barColT2  = diffT2 > 0 ? '#dc3545' : '#28a745';
+    const labelT2   = diffT2 > 0
+                       ? `Faltam €${diffT2.toFixed(2)}`
+                       : `Excedeu €${(-diffT2).toFixed(2)}`;
+
+    htmlProg += `
+      <hr class="divider">
+      <div class="comparacao-item">
+        <strong>Total até ${nomeMes}:</strong>
+        <span style="color:${barColT2}; margin-left:0.5rem;">${labelT2}</span>
+        <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+          <div class="progress-bar"
+               style="width:${pctT2}%; background:${barColT2}; display:flex;align-items:center;justify-content:center;">
+            ${labelPctT2}
+          </div>
+        </div>
+      </div>`;
+  })();
 
 document.getElementById('progresso-anos').innerHTML = htmlProg;
 }
