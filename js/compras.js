@@ -1,7 +1,6 @@
 // Import Firebase modules
 import { db } from './script.js'; // Ensure that './script.js' correctly exports the initialized Firestore instance
-import { doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import { Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { doc, updateDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Define a estrutura da lista de compras
 const listaCompras = {
@@ -82,43 +81,17 @@ function criarItemCompraEmBranco() {
     return itemDiv;
 }
 
-// Function to save the current shopping list to Firebase
-async function salvarListaCompras() {
-    const itens = document.querySelectorAll('.item-compra');
-    let listaParaSalvar = {};
+ // Helper: save a single item to Firebase (per-item update, avoids overwrites)
+ async function salvarItem(nome, quantidade, local) {
+   const ref = doc(db, "listas_compras", "lista_atual");
+   await updateDoc(ref, {
+     [`itens.${nome}`]: { quantidade, local },
+     ultimaAtualizacao: Timestamp.now()
+   });
+ }
 
-    itens.forEach(item => {
-        const nomeElement = item.querySelector('.item-nome') || item.querySelector('.item-nome-custom');
-        let nome = '';
-        if (nomeElement.classList.contains('item-nome')) {
-            nome = nomeElement.textContent.trim();
-        } else if (nomeElement.classList.contains('item-nome-custom')) {
-            nome = nomeElement.value.trim();
-        }
-
-        const quantidade = parseInt(item.querySelector('.item-quantidade').value, 10);
-        const local = item.getAttribute('data-local') || 'Não definido';
-
-        if (nome && quantidade > 0) {
-            if (listaParaSalvar[nome]) {
-                // Handle duplicate names by aggregating quantities
-                listaParaSalvar[nome].quantidade += quantidade;
-            } else {
-                listaParaSalvar[nome] = { quantidade, local };
-            }
-        }
-    });
-async function salvarItem(nome, quantidade, local) {
-  const ref = doc(db, "listas_compras", "lista_atual");
-  await updateDoc(ref, {
-    [`itens.${nome}`]: { quantidade, local },
-    ultimaAtualizacao: Timestamp.now()
-  });
-}
-
-// In each button branch, replace your save with:
-salvarItem(itemNome, novaQuantidade, novoLocal);
-   }
+ // → In your btn-aumentar, btn-diminuir, btn-zero, btn-local-c and btn-remover branches,
+ //    call salvarItem(itemNome, novaQuantidade, novoLocal) instead of salvarListaCompras().
 
 // Function to generate a summary of the shopping list
 function gerarResumo() {
@@ -164,7 +137,6 @@ function enviarEmailListaCompras(resumo) {
 }
 
 // Function to populate the shopping list UI with data from Firebase
-import { Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 function populateComprasUI(itens) {
   const form = document.getElementById('compras-form');
@@ -185,16 +157,18 @@ function populateComprasUI(itens) {
       // Predefined items live under sections, find their inputs/buttons by data-name
       const container = form.querySelector(`[data-name="${nome}"]`);
       if (!container) continue; // safety
-      container.querySelector('.item-quantidade').textContent = quantidade;
-      container.querySelector('.item-local').textContent = local;
+    // 1) set the quantity input’s value
+    container.querySelector('.item-quantidade').value = quantidade;
+    // 2) store the location flag on the container
+    container.setAttribute('data-local', local);
+    // 3) toggle the “C” button active state
+    container.querySelector('.btn-local-c').classList.toggle('active', local === 'C');
     } else {
       // Custom items go into #custom-items-container
       const customContainer = document.getElementById('custom-items-container');
       const novoItem = criarItemCompraEmBranco();           // creates the HTML structure
       novoItem.setAttribute('data-name', nome);
       novoItem.querySelector('.item-nome').textContent = nome;
-      novoItem.querySelector('.item-quantidade').textContent = quantidade;
-      novoItem.querySelector('.item-local').textContent = local;
       customContainer.appendChild(novoItem);
     }
   }
@@ -242,72 +216,78 @@ function aplicarFiltro(filtro) {
 
 // Function to attach all event listeners
 function attachEventListeners() {
-    // Use Event Delegation for efficiency
-    document.getElementById('compras-form').addEventListener('click', (e) => {
-        const item = e.target.closest('.item-compra');
-        if (!item) return; // Click outside an item-compra
+  const form = document.getElementById('compras-form');
 
-        if (e.target.classList.contains('btn-aumentar')) {
-            const input = item.querySelector('.item-quantidade');
-            input.value = Math.min(parseInt(input.value, 10) + 1, 99);
+  form.addEventListener('click', async e => {
+    // 1) “Adicionar Item” lives here:
+    if (e.target.id === 'btn-adicionar-custom-item') {
+      document
+        .getElementById('custom-items-container')
+        .appendChild(criarItemCompraEmBranco());
+      return; // no further handling for this click
+    }
 
-            if (parseInt(input.value, 10) > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
+    // 2) Everything else needs an .item-compra ancestor
+    const item = e.target.closest('.item-compra');
+    if (!item) return;
 
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-diminuir')) {
-            const input = item.querySelector('.item-quantidade');
-            input.value = Math.max(parseInt(input.value, 10) - 1, 0);
+    // Grab the quantity input and current name/local
+    const inp    = item.querySelector('.item-quantidade');
+    const nomeEl = item.querySelector('.item-nome, .item-nome-custom');
+    const nome   = nomeEl.textContent?.trim() || nomeEl.value.trim();
+    let   local  = item.getAttribute('data-local') || 'Não definido';
 
-            if (parseInt(input.value, 10) > 0) {
-                item.classList.add('item-comprado');
-            } else {
-                item.classList.remove('item-comprado');
-            }
+    // 3) Handle each button type
+    if (e.target.classList.contains('btn-aumentar')) {
+      inp.value = Math.min(+inp.value + 1, 99);
+    }
+    else if (e.target.classList.contains('btn-diminuir')) {
+      inp.value = Math.max(+inp.value - 1, 0);
+    }
+    else if (e.target.classList.contains('btn-zero')) {
+      inp.value = 0;
+    }
+    else if (e.target.classList.contains('btn-local-c')) {
+      // toggle C vs Não definido
+      local = local === 'C' ? 'Não definido' : 'C';
+      item.setAttribute('data-local', local);
+      e.target.classList.toggle('active');
+    }
+    else if (e.target.classList.contains('btn-remover-custom-item')) {
+      item.remove();
+      // no need to save nome/quantidade after removal
+      await salvarItem(nome, 0, 'Não definido');
+      return;
+    }
+    else {
+      return; // clicked something else
+    }
 
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-zero')) {
-            const input = item.querySelector('.item-quantidade');
-            input.value = 0;
+    // 4) Visual feedback
+    item.classList.toggle('item-comprado', +inp.value > 0);
 
-            item.classList.remove('item-comprado');
+    // 5) Save *just* this item
+    await salvarItem(nome, parseInt(inp.value, 10), local);
+  });
 
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-local-c')) {
-            e.target.classList.toggle('active');
-            updateLocalData(item);
-            salvarListaCompras();
-        } else if (e.target.classList.contains('btn-remover-custom-item')) {
-            // Remove the custom item from the UI
-            item.remove();
-            salvarListaCompras();
-        }
-    });
-
-     // Delegated click‐handler for everything, including “Adicionar Item”
- document.getElementById('compras-form').addEventListener('click', e => {
-   // … your existing cases for btn-aumentar, btn-diminuir, btn-zero, btn-remover-custom-item …
-
-   // “Adicionar Item” via delegation
-   if (e.target.id === 'btn-adicionar-custom-item') {
-     const customItemsContainer = document.getElementById('custom-items-container');
-     const newCustomItem = criarItemCompraEmBranco();
-     customItemsContainer.appendChild(newCustomItem);
-   }
- });
 
     // "Requisitar" Button
-    document.getElementById('btn-requisitar').addEventListener('click', async () => {
-        const resumo = gerarResumo();
-        const resumoConteudo = document.getElementById('resumo-conteudo');
-        resumoConteudo.innerHTML = resumo.replace(/\n/g, '<br>');
-        document.getElementById('resumo').style.display = 'block';
-        await salvarListaCompras();
+document
+  .getElementById('btn-requisitar')
+  .addEventListener('click', async () => {
+    const resumo = gerarResumo();
+    document.getElementById('resumo-conteudo')
+      .innerHTML = resumo.replace(/\n/g, '<br>');
+    document.getElementById('resumo').style.display = 'block';
+    // now persist every non-zero item:
+    document.querySelectorAll('.item-compra').forEach(async item => {
+      const nomeEl = item.querySelector('.item-nome, .item-nome-custom');
+      const nome   = nomeEl.textContent?.trim() || nomeEl.value.trim();
+      const qt     = parseInt(item.querySelector('.item-quantidade').value, 10);
+      const local  = item.getAttribute('data-local') || 'Não definido';
+      if (nome && qt > 0) await salvarItem(nome, qt, local);
     });
-
+  });
     // "Enviar Email" Button
     document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
 
