@@ -1,6 +1,7 @@
 // Import Firebase modules
 import { db } from './script.js'; // Ensure that './script.js' correctly exports the initialized Firestore instance
 import { doc, setDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Define a estrutura da lista de compras
 const listaCompras = {
@@ -107,18 +108,17 @@ async function salvarListaCompras() {
             }
         }
     });
-
-    try {
-        await setDoc(doc(db, "listas_compras", "lista_atual"), {
-            itens: listaParaSalvar,
-            ultimaAtualizacao: Timestamp.now()
-        });
-        console.log("Lista de compras salva com sucesso!");
-    } catch (e) {
-        console.error("Erro ao salvar a lista de compras: ", e);
-        alert('Ocorreu um erro ao salvar a lista de compras.');
-    }
+async function salvarItem(nome, quantidade, local) {
+  const ref = doc(db, "listas_compras", "lista_atual");
+  await updateDoc(ref, {
+    [`itens.${nome}`]: { quantidade, local },
+    ultimaAtualizacao: Timestamp.now()
+  });
 }
+
+// In each button branch, replace your save with:
+salvarItem(itemNome, novaQuantidade, novoLocal);
+   }
 
 // Function to generate a summary of the shopping list
 function gerarResumo() {
@@ -164,88 +164,44 @@ function enviarEmailListaCompras(resumo) {
 }
 
 // Function to populate the shopping list UI with data from Firebase
+import { Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
 function populateComprasUI(itens) {
-    // No need to call criarListaCompras() here, as UI is already created
+  const form = document.getElementById('compras-form');
 
-    // Create a Set of predefined item names for easy lookup
-    const predefinedItems = new Set();
-    Object.values(listaCompras).forEach(itensCategoria => {
-        itensCategoria.forEach(itemName => predefinedItems.add(itemName));
-    });
+  // 1) Fully clear and rebuild the form skeleton
+  form.innerHTML = '';
+  criarListaCompras();
 
-    // Iterate through all saved items
-    for (const [nome, detalhes] of Object.entries(itens)) {
-        if (predefinedItems.has(nome)) {
-            // Handle predefined items
-            const predefinedItem = Array.from(document.querySelectorAll('.item-compra')).find(item => {
-                const nomeElement = item.querySelector('.item-nome');
-                return nomeElement && nomeElement.textContent.trim() === nome;
-            });
+  // 2) Populate with Firestore data
+  // Build a set of predefined item names for quick lookup
+  const predefined = new Set();
+  Object.values(listaCompras).flat().forEach(name => predefined.add(name));
 
-            if (predefinedItem) {
-                predefinedItem.querySelector('.item-quantidade').value = detalhes.quantidade;
-                predefinedItem.setAttribute('data-local', detalhes.local);
-                if (detalhes.local.includes('C')) {
-                    predefinedItem.querySelector('.btn-local-c').classList.add('active');
-                }
+  for (const [nome, detalhes] of Object.entries(itens)) {
+    const { quantidade, local } = detalhes;
 
-                // Add or remove 'item-comprado' class based on quantity
-                if (detalhes.quantidade > 0) {
-                    predefinedItem.classList.add('item-comprado');
-                } else {
-                    predefinedItem.classList.remove('item-comprado');
-                }
-            } else {
-                console.warn(`Item pré-definido "${nome}" não encontrado na UI.`);
-            }
-        } else {
-            // Handle custom items
-            const customItemsContainer = document.getElementById('custom-items-container');
-
-            // Check if a custom item with the same name already exists
-            const existingCustomItem = Array.from(customItemsContainer.querySelectorAll('.item-compra')).find(item => {
-                const nomeCustomInput = item.querySelector('.item-nome-custom');
-                return nomeCustomInput && nomeCustomInput.value.trim() === nome;
-            });
-
-            if (existingCustomItem) {
-                // If exists, update its quantity and local
-                existingCustomItem.querySelector('.item-quantidade').value = detalhes.quantidade;
-                existingCustomItem.setAttribute('data-local', detalhes.local);
-                if (detalhes.local.includes('C')) {
-                    existingCustomItem.querySelector('.btn-local-c').classList.add('active');
-                }
-
-                // Add or remove 'item-comprado' class based on quantity
-                if (detalhes.quantidade > 0) {
-                    existingCustomItem.classList.add('item-comprado');
-                } else {
-                    existingCustomItem.classList.remove('item-comprado');
-                }
-            } else {
-                // If not exists, create a new custom item
-                const newCustomItem = criarItemCompraEmBranco();
-                const nomeCustomInput = newCustomItem.querySelector('.item-nome-custom');
-                nomeCustomInput.value = nome;
-                newCustomItem.querySelector('.item-quantidade').value = detalhes.quantidade;
-                newCustomItem.setAttribute('data-local', detalhes.local);
-                if (detalhes.local.includes('C')) {
-                    newCustomItem.querySelector('.btn-local-c').classList.add('active');
-                }
-
-                // Add or remove 'item-comprado' class based on quantity
-                if (detalhes.quantidade > 0) {
-                    newCustomItem.classList.add('item-comprado');
-                } else {
-                    newCustomItem.classList.remove('item-comprado');
-                }
-
-                customItemsContainer.appendChild(newCustomItem);
-            }
-        }
+    if (predefined.has(nome)) {
+      // Predefined items live under sections, find their inputs/buttons by data-name
+      const container = form.querySelector(`[data-name="${nome}"]`);
+      if (!container) continue; // safety
+      container.querySelector('.item-quantidade').textContent = quantidade;
+      container.querySelector('.item-local').textContent = local;
+    } else {
+      // Custom items go into #custom-items-container
+      const customContainer = document.getElementById('custom-items-container');
+      const novoItem = criarItemCompraEmBranco();           // creates the HTML structure
+      novoItem.setAttribute('data-name', nome);
+      novoItem.querySelector('.item-nome').textContent = nome;
+      novoItem.querySelector('.item-quantidade').textContent = quantidade;
+      novoItem.querySelector('.item-local').textContent = local;
+      customContainer.appendChild(novoItem);
     }
+  }
 
-    aplicarFiltro(document.getElementById('search-input').value); // Apply the current filter after loading data
+  // 3) Re-apply any active search filter
+  const search = document.getElementById('search-input').value;
+  aplicarFiltro(search);
 }
 
 // Function to monitor real-time updates from Firebase
@@ -331,12 +287,17 @@ function attachEventListeners() {
         }
     });
 
-    // "Adicionar Item" Button
-    document.getElementById('btn-adicionar-custom-item').addEventListener('click', () => {
-        const customItemsContainer = document.getElementById('custom-items-container');
-        const newCustomItem = criarItemCompraEmBranco();
-        customItemsContainer.appendChild(newCustomItem);
-    });
+     // Delegated click‐handler for everything, including “Adicionar Item”
+ document.getElementById('compras-form').addEventListener('click', e => {
+   // … your existing cases for btn-aumentar, btn-diminuir, btn-zero, btn-remover-custom-item …
+
+   // “Adicionar Item” via delegation
+   if (e.target.id === 'btn-adicionar-custom-item') {
+     const customItemsContainer = document.getElementById('custom-items-container');
+     const newCustomItem = criarItemCompraEmBranco();
+     customItemsContainer.appendChild(newCustomItem);
+   }
+ });
 
     // "Requisitar" Button
     document.getElementById('btn-requisitar').addEventListener('click', async () => {
