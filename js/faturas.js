@@ -615,93 +615,114 @@ function gerarHTMLDetalhesTMT(detalhes) {
 }
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
-    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js')
-      .then(jsPDFModule => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        const grupo = JSON.parse(grupoJson);
+  import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js')
+    .then(jsPDFModule => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const grupo = JSON.parse(grupoJson);
 
-        // Definir o título
-        const [ano, mes] = key.split('-');
-        const meses = [
-          'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-          'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
-        ];
-        const titulo = `Relatório de Faturação - ${meses[mes - 1]} ${ano}`;
-        doc.setFontSize(16);
-        doc.text(titulo, 105, 15, { align: 'center' });
+      // --- Título ---
+      const [ano, mes] = key.split('-');
+      const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                     'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+      doc.setFontSize(16);
+      doc.text(`Relatório de Faturação - ${meses[mes-1]} ${ano}`, 105, 15, { align: 'center' });
 
-        // Preparar cabeçalho de 7 colunas
-        const headers = [
-          'Fatura Nº',
-          'Data',
-          'Transferência',
-          'Taxa AirBnB',
-          'Base',
-          'IVA',
-          'Total'
-        ];
-        const xPositions = [2, 32, 62, 92, 122, 152, 182];
-        const colWidths =   [30, 30, 30, 30, 30, 30, 30];
+      // --- Cabeçalho de 7 colunas ---
+      const headers = [
+        'Fatura Nº','Data','Transferência','Taxa Airbnb','Base','IVA (€)','Total (€)'
+      ];
+      const xPos = [2,32,62,92,122,152,182];
+      const wCol = 30;
+      let y = 30;
 
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        let y = 30;
-
-        function writeCentered(text, x, y, w) {
-          const textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-          const offsetX = x + (w - textWidth) / 2;
-          doc.text(text, offsetX, y);
-        }
-
-        // Cabeçalhos
-        headers.forEach((h, i) => writeCentered(h, xPositions[i], y, colWidths[i]));
-        y += 10;
-
-        // Linhas de dados
-        doc.setFont('helvetica', 'normal');
-        let sumTransfer = 0, sumTaxa = 0, sumBase = 0, sumIVA = 0, sumTotal = 0;
-
-        grupo.forEach(f => {
-          const dataStr = new Date(f.timestamp.seconds * 1000).toLocaleDateString();
-          const vb = f.valorTransferencia / 1.06;
-          const iva = f.valorTransferencia - vb;
-          const tot = f.valorTransferencia + f.taxaAirbnb;
-
-          // Acumula totais
-          sumTransfer += f.valorTransferencia;
-          sumTaxa     += f.taxaAirbnb;
-          sumBase     += vb;
-          sumIVA      += iva;
-          sumTotal    += tot;
-
-          const vals = [
-            f.numeroFatura,
-            dataStr,
-            `€${f.valorTransferencia.toFixed(2)}`,
-            `€${f.taxaAirbnb.toFixed(2)}`,
-            `€${vb.toFixed(2)}`,
-            `€${iva.toFixed(2)}`,
-            `€${tot.toFixed(2)}`
-          ];
-          vals.forEach((txt, i) => writeCentered(txt, xPositions[i], y, colWidths[i]));
-          y += 10;
-        });
-
-        // Linha de totais
-        doc.setFont('helvetica', 'bold');
-        writeCentered('Totais',      xPositions[0], y, colWidths[0]);
-        writeCentered('',            xPositions[1], y, colWidths[1]);
-        writeCentered(`€${sumTransfer.toFixed(2)}`, xPositions[2], y, colWidths[2]);
-        writeCentered(`€${sumTaxa.toFixed(2)}`,     xPositions[3], y, colWidths[3]);
-        writeCentered(`€${sumBase.toFixed(2)}`,     xPositions[4], y, colWidths[4]);
-        writeCentered(`€${sumIVA.toFixed(2)}`,      xPositions[5], y, colWidths[5]);
-        writeCentered(`€${sumTotal.toFixed(2)}`,    xPositions[6], y, colWidths[6]);
-
-        // Salvar PDF
-        doc.save(`relatorio-faturacao-${ano}-${meses[mes - 1]}.pdf`);
-      })
-      .catch(error => {
-        console.error('Erro ao exportar PDF:', error);
+      doc.setFontSize(12);
+      doc.setFont('helvetica','bold');
+      headers.forEach((h,i) => {
+        const tw = doc.getStringUnitWidth(h)*doc.internal.getFontSize()/doc.internal.scaleFactor;
+        doc.text(h, xPos[i] + (wCol - tw)/2, y);
       });
+
+      // --- separar M… vs CX… ---
+      const mItems  = grupo.filter(f => f.numeroFatura.startsWith('M'));
+      const cxItems = grupo.filter(f => !f.numeroFatura.startsWith('M'));
+
+      // --- linhas M… + totais ---
+      let sumT=0, sumTax=0, sumB=0, sumI=0, sumTot=0;
+      doc.setFont('helvetica','normal');
+      y += 10;
+      mItems.forEach(f => {
+        const dataStr = new Date(f.timestamp.seconds*1000).toLocaleDateString();
+        const base      = f.valorTransferencia / 1.06;
+        const iva       = f.valorTransferencia - base;
+        const total     = f.valorTransferencia + f.taxaAirbnb;
+
+        sumT   += f.valorTransferencia;
+        sumTax += f.taxaAirbnb;
+        sumB   += base;
+        sumI   += iva;
+        sumTot += total;
+
+        const vals = [
+          f.numeroFatura,
+          dataStr,
+          `€${f.valorTransferencia.toFixed(2)}`,
+          `€${f.taxaAirbnb.toFixed(2)}`,
+          `€${base.toFixed(2)}`,
+          `€${iva.toFixed(2)}`,
+          `€${total.toFixed(2)}`
+        ];
+        vals.forEach((txt,i) => {
+          const tw = doc.getStringUnitWidth(txt)*doc.internal.getFontSize()/doc.internal.scaleFactor;
+          doc.text(txt, xPos[i] + (wCol - tw)/2, y);
+        });
+        y += 10;
+      });
+
+      // totais linha
+      doc.setFont('helvetica','bold');
+      const totalVals = [
+        'Totais','',
+        `€${sumT.toFixed(2)}`,
+        `€${sumTax.toFixed(2)}`,
+        `€${sumB.toFixed(2)}`,
+        `€${sumI.toFixed(2)}`,
+        `€${sumTot.toFixed(2)}`
+      ];
+      totalVals.forEach((txt,i) => {
+        const tw = doc.getStringUnitWidth(txt)*doc.internal.getFontSize()/doc.internal.scaleFactor;
+        doc.text(txt, xPos[i] + (wCol - tw)/2, y);
+      });
+
+      // --- CX entries at bottom, only Nº / Data / Total ---
+      const pageH = doc.internal.pageSize.getHeight();
+      let yCX = pageH - 20;
+      doc.setFont('helvetica','normal');
+      cxItems.forEach(f => {
+        const dataStr = new Date(f.timestamp.seconds*1000).toLocaleDateString();
+        const total   = f.valorTransferencia + f.taxaAirbnb;
+        // Nº
+        {
+          const txt = f.numeroFatura;
+          const tw  = doc.getStringUnitWidth(txt)*doc.internal.getFontSize()/doc.internal.scaleFactor;
+          doc.text(txt, xPos[0] + (wCol - tw)/2, yCX);
+        }
+        // Data
+        {
+          const tw  = doc.getStringUnitWidth(dataStr)*doc.internal.getFontSize()/doc.internal.scaleFactor;
+          doc.text(dataStr, xPos[1] + (wCol - tw)/2, yCX);
+        }
+        // Total
+        {
+          const txt = `€${total.toFixed(2)}`;
+          const tw  = doc.getStringUnitWidth(txt)*doc.internal.getFontSize()/doc.internal.scaleFactor;
+          doc.text(txt, xPos[6] + (wCol - tw)/2, yCX);
+        }
+        yCX += 10;
+      });
+
+      // salvar
+      doc.save(`relatorio-faturacao-${ano}-${meses[mes-1]}.pdf`);
+    })
+    .catch(err => console.error('Erro ao exportar PDF:', err));
 };
