@@ -649,6 +649,9 @@ input[type=number]::-webkit-inner-spin-button {
     text-align: center;
 }
 
+/* Highlight purchased items */
+.item-compra.item-comprado { background-color: yellow; }
+
 /* Repair Page Styles */
 .urgente {
     background-color: #ffe4e1;
