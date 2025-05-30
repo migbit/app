@@ -635,11 +635,11 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
         const headers = [
           'Fatura Nº',
           'Data',
-          'Valor Transferência (€)',
-          'Taxa AirBnB (€)',
-          'Valor Base (€)',
-          'IVA (€)',
-          'Total (€)'
+          'Transferência',
+          'Taxa AirBnB,
+          'Base',
+          'IVA',
+          'Total'
         ];
         const xPositions = [2, 32, 62, 92, 122, 152, 182];
         const colWidths =   [30, 30, 30, 30, 30, 30, 30];
