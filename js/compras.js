@@ -9,7 +9,7 @@ import { doc, updateDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/f
 const listaCompras = {
   "Produtos Limpeza": ["Lixívia tradicional","Multiusos com Lixívia","Gel com Lixívia","CIF","Limpeza Chão (Lava Tudo)","Limpeza Chão (Madeira)","Limpa Vidros","Limpeza Potente","Limpeza Placas","Vinagre","Álcool"],
   "Roupa": ["Detergente Roupa","Amaciador","Lixívia Roupa Branca","Tira Nódoas","Tira Gorduras","Oxi Active","Branqueador","Perfumador"],
-  "WC": ["Papel Higiénico", "Shampoo", "Gel WC Sanitas","Toalhitas","Toalhitas Desmaquilhantes","Blocos Sanitários","Anticalcário","Limpeza Chuveiro","Desentupidor de Canos","Manutenção Canos","Papel Higiénico Húmido","Sabonete Líquido"],
+  "WC": ["Papel Higiénico","Shampoo", "Gel WC Sanitas","Toalhitas","Toalhitas Desmaquilhantes","Blocos Sanitários","Anticalcário","Limpeza Chuveiro","Desentupidor de Canos","Manutenção Canos","Papel Higiénico Húmido","Sabonete Líquido"],
   "Cozinha": ["Água 1.5l","Água 5l","Café","Rolo de Cozinha","Guardanapos","Bolachas","Chá","Lava-Loiça","Esfregões Verdes","Esfregões Bravo","Película Transparente","Papel Alumínio","Sacos congelação"],
   "Diversos": ["Varetas Difusoras (Ambientador)","Limpa Óculos"]
 };
@@ -79,15 +79,17 @@ export async function salvarItem(nome, quantidade, local) {
   });
 }
 
+// 5) Populate with highlight
 export function populateComprasUI(itens) {
   criarListaCompras();
-  const pre = new Set(Object.values(listaCompras).flat());
   Object.entries(itens).forEach(([nome, {quantidade, local}]) => {
     const el = document.querySelector(`[data-name="${nome}"]`);
     if (el) {
       el.querySelector('.item-quantidade').value = quantidade;
       el.dataset.local = local;
       el.querySelector('.btn-local-c').classList.toggle('active', local === 'C');
+      // Highlight purchased
+      el.classList.toggle('item-comprado', quantidade > 0);
     } else {
       const div = criarItemCompraEmBranco();
       div.dataset.name = nome;
@@ -95,17 +97,18 @@ export function populateComprasUI(itens) {
       div.querySelector('.item-quantidade').value = quantidade;
       div.dataset.local = local;
       div.querySelector('.btn-local-c').classList.toggle('active', local === 'C');
+      // Highlight purchased
+      div.classList.toggle('item-comprado', quantidade > 0);
       document.getElementById('custom-items-container').appendChild(div);
     }
   });
 }
 
 export function monitorListaCompras() {
-  const ref = doc(db, 'listas_compras', 'lista_atual');
-  onSnapshot(ref, snap => snap.exists() && populateComprasUI(snap.data().itens));
+  onSnapshot(doc(db,'listas_compras','lista_atual'), snap => snap.exists() && populateComprasUI(snap.data().itens));
 }
 
-// 5) Events & delegation
+// 6) Events & delegation
 export function attachEventListeners() {
   document.getElementById('compras-form').addEventListener('click', async e => {
     if (e.target.id === 'btn-adicionar-custom-item') {
@@ -133,7 +136,6 @@ export function attachEventListeners() {
     await salvarItem(nome, +inp.value, local);
   });
 
-  // Requisitar
   document.getElementById('btn-requisitar').addEventListener('click', async () => {
     const resumo = gerarResumo();
     document.getElementById('resumo-conteudo').innerHTML = resumo.replace(/\n/g,'<br>');
@@ -147,15 +149,12 @@ export function attachEventListeners() {
     });
   });
 
-  // Enviar Email
   document.getElementById('btn-enviar-email').addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
-
-  // Search
   document.getElementById('search-input').addEventListener('input', e => aplicarFiltro(e.target.value));
   document.getElementById('clear-search').addEventListener('click', () => { document.getElementById('search-input').value = ''; aplicarFiltro(''); });
 }
 
-// 6) Summary & helpers
+// 7) Summary & helpers
 export function gerarResumo() {
   let r = '';
   document.querySelectorAll('.item-compra').forEach(div => {
@@ -169,14 +168,8 @@ export function gerarResumo() {
 }
 
 export function enviarEmailListaCompras(resumo) {
-  emailjs.send('service_tuglp9h','template_4micnki',{
-    to_name:'apartments.oporto@gmail.com', subject:'Lista de Compras', message:resumo
-  });
+  emailjs.send('service_tuglp9h','template_4micnki',{ to_name:'apartments.oporto@gmail.com', subject:'Lista de Compras', message:resumo });
 }
 
-// 7) Initialize on load
-window.addEventListener('DOMContentLoaded', () => {
-  criarListaCompras();
-  attachEventListeners();
-  monitorListaCompras();
-});
+// 8) Initialize on load
+window.addEventListener('DOMContentLoaded', () => { criarListaCompras(); attachEventListeners(); monitorListaCompras(); });
