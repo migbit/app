@@ -615,58 +615,93 @@ function gerarHTMLDetalhesTMT(detalhes) {
 }
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
-    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js').then(jsPDFModule => {
+    import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js')
+      .then(jsPDFModule => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const grupo = JSON.parse(grupoJson);
-        
-        // Definir o título com o mês por extenso e centralizar
+
+        // Definir o título
         const [ano, mes] = key.split('-');
         const meses = [
-            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+          'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+          'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
         ];
         const titulo = `Relatório de Faturação - ${meses[mes - 1]} ${ano}`;
         doc.setFontSize(16);
         doc.text(titulo, 105, 15, { align: 'center' });
 
-        // Cabeçalho da Tabela em negrito e centralizado
-        let yPosition = 30;
-        const xPositions = [2, 35, 80, 130, 170]; // Ajustado para começar mais perto da margem esquerda
-        const colWidths = [40, 40, 40, 40, 40]; // Larguras das colunas
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "bold");
+        // Preparar cabeçalho de 7 colunas
+        const headers = [
+          'Fatura Nº',
+          'Data',
+          'Valor Transferência (€)',
+          'Taxa AirBnB (€)',
+          'Valor Base (€)',
+          'IVA (€)',
+          'Total (€)'
+        ];
+        const xPositions = [2, 32, 62, 92, 122, 152, 182];
+        const colWidths =   [30, 30, 30, 30, 30, 30, 30];
 
-        // Função para escrever texto centralizado
-        function writeCenteredText(text, x, y, width) {
-            const textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-            const textX = x + (width - textWidth) / 2;
-            doc.text(text, textX, y);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        let y = 30;
+
+        function writeCentered(text, x, y, w) {
+          const textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+          const offsetX = x + (w - textWidth) / 2;
+          doc.text(text, offsetX, y);
         }
 
-        // Escrever cabeçalhos centralizados
-        writeCenteredText('Fatura Nº', xPositions[0], yPosition, colWidths[0]);
-        writeCenteredText('Data', xPositions[1], yPosition, colWidths[1]);
-        writeCenteredText('Valor Transferência (€)', xPositions[2], yPosition, colWidths[2]);
-        writeCenteredText('Taxa AirBnB (€)', xPositions[3], yPosition, colWidths[3]);
-        writeCenteredText('Total (€)', xPositions[4], yPosition, colWidths[4]);
+        // Cabeçalhos
+        headers.forEach((h, i) => writeCentered(h, xPositions[i], y, colWidths[i]));
+        y += 10;
 
-        yPosition += 10;
+        // Linhas de dados
+        doc.setFont('helvetica', 'normal');
+        let sumTransfer = 0, sumTaxa = 0, sumBase = 0, sumIVA = 0, sumTotal = 0;
 
-        // Dados das Faturas centralizados
-        doc.setFont("helvetica", "normal");
-        grupo.forEach(fatura => {
-            writeCenteredText(fatura.numeroFatura, xPositions[0], yPosition, colWidths[0]);
-            writeCenteredText(new Date(fatura.timestamp.seconds * 1000).toLocaleDateString(), xPositions[1], yPosition, colWidths[1]);
-            writeCenteredText(`€${fatura.valorTransferencia.toFixed(2)}`, xPositions[2], yPosition, colWidths[2]);
-            writeCenteredText(`€${fatura.taxaAirbnb.toFixed(2)}`, xPositions[3], yPosition, colWidths[3]);
-            writeCenteredText(`€${(fatura.valorTransferencia + fatura.taxaAirbnb).toFixed(2)}`, xPositions[4], yPosition, colWidths[4]);
-            yPosition += 10;
+        grupo.forEach(f => {
+          const dataStr = new Date(f.timestamp.seconds * 1000).toLocaleDateString();
+          const vb = f.valorTransferencia / 1.06;
+          const iva = f.valorTransferencia - vb;
+          const tot = f.valorTransferencia + f.taxaAirbnb;
+
+          // Acumula totais
+          sumTransfer += f.valorTransferencia;
+          sumTaxa     += f.taxaAirbnb;
+          sumBase     += vb;
+          sumIVA      += iva;
+          sumTotal    += tot;
+
+          const vals = [
+            f.numeroFatura,
+            dataStr,
+            `€${f.valorTransferencia.toFixed(2)}`,
+            `€${f.taxaAirbnb.toFixed(2)}`,
+            `€${vb.toFixed(2)}`,
+            `€${iva.toFixed(2)}`,
+            `€${tot.toFixed(2)}`
+          ];
+          vals.forEach((txt, i) => writeCentered(txt, xPositions[i], y, colWidths[i]));
+          y += 10;
         });
 
-        // Salvar o PDF
+        // Linha de totais
+        doc.setFont('helvetica', 'bold');
+        writeCentered('Totais',      xPositions[0], y, colWidths[0]);
+        writeCentered('',            xPositions[1], y, colWidths[1]);
+        writeCentered(`€${sumTransfer.toFixed(2)}`, xPositions[2], y, colWidths[2]);
+        writeCentered(`€${sumTaxa.toFixed(2)}`,     xPositions[3], y, colWidths[3]);
+        writeCentered(`€${sumBase.toFixed(2)}`,     xPositions[4], y, colWidths[4]);
+        writeCentered(`€${sumIVA.toFixed(2)}`,      xPositions[5], y, colWidths[5]);
+        writeCentered(`€${sumTotal.toFixed(2)}`,    xPositions[6], y, colWidths[6]);
+
+        // Salvar PDF
         doc.save(`relatorio-faturacao-${ano}-${meses[mes - 1]}.pdf`);
-    }).catch(error => {
+      })
+      .catch(error => {
         console.error('Erro ao exportar PDF:', error);
-    });
+      });
 };
