@@ -25,6 +25,7 @@ if (!getApps().length) {
 
 // Inicializar Firestore
 const db = getFirestore(app);
+window.db = db;  // <-- make db globally available
 
 // Inicializar o Firebase Authentication e o provedor do Google
 const auth = getAuth(app);
