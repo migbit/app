@@ -4,10 +4,10 @@
 import { doc, updateDoc, onSnapshot, Timestamp } 
   from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// 2) Grab the same `db` you put on window in script.js
+// 2) Grab the same `db` you exposed on window in script.js
 const db = window.db;
 
-// 3) Predefined shopping categories
+// 3) Predefined shopping categories (must match your HTML structure)
 const listaCompras = {
   "Produtos Limpeza": [
     "Lixívia tradicional","Multiusos com Lixívia","Gel com Lixívia","CIF",
@@ -19,7 +19,7 @@ const listaCompras = {
     "Tira Gorduras","Oxi Active","Branqueador","Perfumador"
   ],
   "WC": [
-    "Papel Higiénico","Gel WC Sanitas","Toalhitas","Toalhitas Desmaquilhantes",
+    "Papel Higiénico","Shampoo","Gel WC Sanitas","Toalhitas","Toalhitas Desmaquilhantes",
     "Blocos Sanitários","Anticalcário","Limpeza Chuveiro",
     "Desentupidor de Canos","Manutenção Canos","Papel Higiénico Húmido",
     "Sabonete Líquido"
@@ -36,7 +36,7 @@ const listaCompras = {
 function criarItemCompra(nome) {
   const div = document.createElement('div');
   div.className = 'item-compra';
-  div.dataset.name = nome;
+  div.dataset.name = nome; // for lookup on updates
   div.innerHTML = `
     <div class="item-info">
       <span class="item-nome">${nome}</span>
@@ -56,6 +56,7 @@ function criarItemCompra(nome) {
 function criarItemCompraEmBranco() {
   const div = document.createElement('div');
   div.className = 'item-compra';
+  // no data-name yet; will set once the user types a name
   div.innerHTML = `
     <div class="item-info">
       <input type="text" class="item-nome-custom" placeholder="Novo item" />
@@ -115,17 +116,18 @@ async function salvarItem(nome, quantidade, local) {
 function populateComprasUI(itens) {
   criarListaCompras();
 
-  Object.entries(itens).forEach(([nome, { quantidade, local }]) => {
+  Object.entries(itens || {}).forEach(([nome, { quantidade, local }]) => {
     const el = document.querySelector(`.item-compra[data-name="${nome}"]`);
 
     if (el) {
-      // Update predefined row
+      // Update predefined row if it already exists
       el.querySelector('.item-quantidade').value = quantidade;
       el.dataset.local = local;
       el.querySelector('.btn-local-c').classList.toggle('active', local === 'C');
+      // Yellow highlight
       el.classList.toggle('item-comprado', quantidade > 0);
     } else {
-      // Add a custom row for newly saved custom items
+      // New custom‐added item
       const div = criarItemCompraEmBranco();
       div.dataset.name = nome;
       div.querySelector('.item-nome-custom').value = nome;
@@ -148,7 +150,7 @@ function monitorListaCompras() {
   onSnapshot(ref, snap => {
     if (!snap.exists()) return;
     const data = snap.data();
-    populateComprasUI(data.itens || {});
+    populateComprasUI(data.itens);
   });
 }
 
@@ -159,9 +161,8 @@ function attachEventListeners() {
   form.addEventListener('click', async (e) => {
     // 8a) “Adicionar Item” button
     if (e.target.id === 'btn-adicionar-custom-item') {
-      document
-        .getElementById('custom-items-container')
-        .appendChild(criarItemCompraEmBranco());
+      document.getElementById('custom-items-container')
+              .appendChild(criarItemCompraEmBranco());
       return;
     }
 
@@ -191,9 +192,9 @@ function attachEventListeners() {
       e.target.classList.toggle('active');
     }
     else if (e.target.classList.contains('btn-remover-custom-item')) {
-      // Remove row and zero in Firestore
+      // Remove custom row and zero it in Firestore
       div.remove();
-      await salvarItem(nome, 0, 'Não definido');
+      if (nome) await salvarItem(nome, 0, 'Não definido');
       return;
     }
     else {
@@ -204,12 +205,11 @@ function attachEventListeners() {
     div.classList.toggle('item-comprado', +inp.value > 0);
 
     // 8e) Save just this one item back to Firestore
-    await salvarItem(nome, +inp.value, local);
+    if (nome) await salvarItem(nome, +inp.value, local);
   });
 
   // 8f) “Requisitar” (summary + save all)
-  document
-    .getElementById('btn-requisitar')
+  document.getElementById('btn-requisitar')
     .addEventListener('click', async () => {
       const resumo = gerarResumo();
       document.getElementById('resumo-conteudo').innerHTML =
@@ -228,16 +228,13 @@ function attachEventListeners() {
     });
 
   // 8g) “Enviar Email” button
-  document
-    .getElementById('btn-enviar-email')
+  document.getElementById('btn-enviar-email')
     .addEventListener('click', () => enviarEmailListaCompras(gerarResumo()));
 
   // 8h) Search bar + clear button
-  document
-    .getElementById('search-input')
+  document.getElementById('search-input')
     .addEventListener('input', (e) => aplicarFiltro(e.target.value));
-  document
-    .getElementById('clear-search')
+  document.getElementById('clear-search')
     .addEventListener('click', () => {
       document.getElementById('search-input').value = '';
       aplicarFiltro('');
@@ -283,10 +280,7 @@ function aplicarFiltro(texto) {
   });
 }
 
-// 12) Highlight CSS rule: make sure this is in your stylesheet
-// .item-compra.item-comprado { background-color: yellow; }
-
-// 13) Initialization on page load
+// 12) Initialization on page load
 window.addEventListener('DOMContentLoaded', () => {
   criarListaCompras();
   attachEventListeners();
