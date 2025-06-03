@@ -1,7 +1,7 @@
 // compras.js
 
 // 1) Import Firestore helpers as a module
-import { doc, updateDoc, onSnapshot, Timestamp } 
+import { doc, updateDoc, deleteField, onSnapshot, Timestamp } 
   from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // 2) Grab the same `db` you exposed on window in script.js
@@ -191,14 +191,17 @@ function attachEventListeners() {
       e.target.classList.toggle('active');
     }
     else if (e.target.classList.contains('btn-remover-custom-item')) {
-      // Remove custom row and zero it in Firestore
-      div.remove();
-      if (nome) await salvarItem(nome, 0, 'Não definido');
-      return;
-    }
-    else {
-      return; // clicked elsewhere
-    }
+  // Remove a <div> da tela e deleta o item do Firestore
+  div.remove();
+  if (nome) {
+    const ref = doc(db, 'listas_compras', 'lista_atual');
+    await updateDoc(ref, {
+      [`itens.${nome}`]: deleteField(),
+      ultimaAtualizacao: Timestamp.now()
+    });
+  }
+  return;
+}
 
     // 8d) Yellow highlight if purchased (quantity > 0)
     div.classList.toggle('item-comprado', +inp.value > 0);
