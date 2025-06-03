@@ -1,11 +1,11 @@
-// compras.js
-// Stand‑alone JS for Lista de Compras page
+ // compras.js (now a plain script, not a module)
+ // 1) Grab Firestore reference that script.js attached to window
+ const db = window.db;
+ // 2) Pull Firestore helpers from the global `firebase` namespace
+ const { doc, updateDoc, onSnapshot, Timestamp } = firebase.firestore;
 
-// 1) Imports & Firestore reference (from script.js)
-import { db } from './script.js';
-import { doc, updateDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+ // 3) Predefined categories (reuse from HTML)
 
-// 2) Predefined categories (reuse from HTML)
 const listaCompras = {
   "Produtos Limpeza": ["Lixívia tradicional","Multiusos com Lixívia","Gel com Lixívia","CIF","Limpeza Chão (Lava Tudo)","Limpeza Chão (Madeira)","Limpa Vidros","Limpeza Potente","Limpeza Placas","Vinagre","Álcool"],
   "Roupa": ["Detergente Roupa","Amaciador","Lixívia Roupa Branca","Tira Nódoas","Tira Gorduras","Oxi Active","Branqueador","Perfumador"],
@@ -15,7 +15,7 @@ const listaCompras = {
 };
 
 // 3) UI construction functions
-export function criarListaCompras() {
+function criarItemCompra(nome) {
   const form = document.getElementById('compras-form');
   form.innerHTML = '';
   // Predefined
@@ -52,7 +52,7 @@ export function criarItemCompra(nome) {
   return div;
 }
 
-export function criarItemCompraEmBranco() {
+function criarItemCompraEmBranco() {
   const div = document.createElement('div'); div.className = 'item-compra';
   div.innerHTML = `
     <div class="item-info">
@@ -71,7 +71,7 @@ export function criarItemCompraEmBranco() {
 }
 
 // 4) Firestore synchronization
-export async function salvarItem(nome, quantidade, local) {
+async function salvarItem(nome, quantidade, local) {
   const ref = doc(db, 'listas_compras', 'lista_atual');
   await updateDoc(ref, {
     [`itens.${nome}`]: { quantidade, local },
@@ -80,7 +80,7 @@ export async function salvarItem(nome, quantidade, local) {
 }
 
 // 5) Populate with highlight
-export function populateComprasUI(itens) {
+function populateComprasUI(itens) {
   criarListaCompras();
   Object.entries(itens).forEach(([nome, {quantidade, local}]) => {
     const el = document.querySelector(`[data-name="${nome}"]`);
@@ -104,12 +104,12 @@ export function populateComprasUI(itens) {
   });
 }
 
-export function monitorListaCompras() {
+function monitorListaCompras() {
   onSnapshot(doc(db,'listas_compras','lista_atual'), snap => snap.exists() && populateComprasUI(snap.data().itens));
 }
 
 // 6) Events & delegation
-export function attachEventListeners() {
+function attachEventListeners() {
   document.getElementById('compras-form').addEventListener('click', async e => {
     if (e.target.id === 'btn-adicionar-custom-item') {
       document.getElementById('custom-items-container').appendChild(criarItemCompraEmBranco());
@@ -155,7 +155,7 @@ export function attachEventListeners() {
 }
 
 // 7) Summary & helpers
-export function gerarResumo() {
+function gerarResumo() {
   let r = '';
   document.querySelectorAll('.item-compra').forEach(div => {
     const nomeEl = div.querySelector('.item-nome, .item-nome-custom');
@@ -167,7 +167,7 @@ export function gerarResumo() {
   return r;
 }
 
-export function enviarEmailListaCompras(resumo) {
+function enviarEmailListaCompras(resumo) {
   emailjs.send('service_tuglp9h','template_4micnki',{ to_name:'apartments.oporto@gmail.com', subject:'Lista de Compras', message:resumo });
 }
 
