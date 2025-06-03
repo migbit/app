@@ -7,7 +7,7 @@ import { doc, updateDoc, onSnapshot, Timestamp }
 // 2) Grab the same `db` you exposed on window in script.js
 const db = window.db;
 
-// 3) Predefined shopping categories (must match your HTML structure)
+// 3) Predefined shopping categories
 const listaCompras = {
   "Produtos Limpeza": [
     "Lixívia tradicional","Multiusos com Lixívia","Gel com Lixívia","CIF",
@@ -19,7 +19,7 @@ const listaCompras = {
     "Tira Gorduras","Oxi Active","Branqueador","Perfumador"
   ],
   "WC": [
-    "Papel Higiénico","Shampoo","Gel WC Sanitas","Toalhitas","Toalhitas Desmaquilhantes",
+    "Papel Higiénico", "Shampoo", "Gel WC Sanitas","Toalhitas","Toalhitas Desmaquilhantes",
     "Blocos Sanitários","Anticalcário","Limpeza Chuveiro",
     "Desentupidor de Canos","Manutenção Canos","Papel Higiénico Húmido",
     "Sabonete Líquido"
@@ -56,7 +56,6 @@ function criarItemCompra(nome) {
 function criarItemCompraEmBranco() {
   const div = document.createElement('div');
   div.className = 'item-compra';
-  // no data-name yet; will set once the user types a name
   div.innerHTML = `
     <div class="item-info">
       <input type="text" class="item-nome-custom" placeholder="Novo item" />
