@@ -86,8 +86,9 @@
         });
     </script>
 
-    <!-- Include your JavaScript files as modules after EmailJS is initialized -->
+    <!-- Load Firebase/auth logic first (still as a module) -->
     <script type="module" src="../js/script.js"></script>
-    <script type="module" src="../js/compras.js"></script>
+    <!-- Then load our compras page logic as a plain script -->
+    <script src="../js/compras.js"></script>
 </body>
 </html>
