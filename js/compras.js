@@ -1,10 +1,7 @@
- // compras.js (now a plain script, not a module)
- // 1) Grab Firestore reference that script.js attached to window
+// compras.js (as a module, importing exactly what we need)
+ import { doc, updateDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+ // Grab the same `db` instance that script.js put on window
  const db = window.db;
- // 2) Pull Firestore helpers from the global `firebase` namespace
- const { doc, updateDoc, onSnapshot, Timestamp } = firebase.firestore;
-
- // 3) Predefined categories (reuse from HTML)
 
 const listaCompras = {
   "Produtos Limpeza": ["Lixívia tradicional","Multiusos com Lixívia","Gel com Lixívia","CIF","Limpeza Chão (Lava Tudo)","Limpeza Chão (Madeira)","Limpa Vidros","Limpeza Potente","Limpeza Placas","Vinagre","Álcool"],
@@ -35,7 +32,7 @@ function criarItemCompra(nome) {
   form.appendChild(ad);
 }
 
-export function criarItemCompra(nome) {
+function criarItemCompra(nome) {
   const div = document.createElement('div'); div.className = 'item-compra';
   div.innerHTML = `
     <div class="item-info">
