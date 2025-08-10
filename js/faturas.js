@@ -1,6 +1,6 @@
 // Importar as funções necessárias do Firebase
 import { db } from './script.js';
-import { collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, addDoc, getDocs, query, orderBy, limit, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Dados manuais de faturação (substitua X e Y pelos valores reais que me fornecer)
 const manualFaturasEstatica = [
@@ -30,6 +30,47 @@ const manualFaturasEstatica = [
 const faturaForm = document.getElementById('fatura-form');
 const relatorioFaturacaoDiv = document.getElementById('relatorio-faturacao');
 const relatorioTmtDiv = document.getElementById('relatorio-tmt');
+
+const editarIdInput      = document.getElementById('fatura-id-edicao');
+const cancelarEdicaoBtn  = document.getElementById('cancelar-edicao');
+const submitBtn          = document.getElementById('submit-fatura') || faturaForm.querySelector('button[type="submit"]');
+
+function entrarEmModoEdicao(f) {
+  if (!f || !f.id) return;
+  editarIdInput.value = f.id;
+
+  // Preencher formulário
+  document.getElementById('apartamento').value        = f.apartamento;
+  document.getElementById('ano').value                = f.ano;
+  document.getElementById('mes').value                = f.mes;
+  document.getElementById('numero-fatura').value      = f.numeroFatura;
+  document.getElementById('taxa-airbnb').value        = Number(f.taxaAirbnb || 0);
+  document.getElementById('valor-transferencia').value= Number(f.valorTransferencia || 0);
+  document.getElementById('valor-operador').value     = Number(f.valorOperador || 0);
+  document.getElementById('noites-extra').value       = Number(f.noitesExtra || 0);
+  document.getElementById('noites-criancas').value    = Number(f.noitesCriancas || 0);
+  document.getElementById('valor-direto').value       = Number(f.valorDireto || 0);
+  document.getElementById('valor-tmt').value          = Number(f.valorTmt || 0);
+
+  if (submitBtn) submitBtn.textContent = 'Guardar alterações';
+  if (cancelarEdicaoBtn) cancelarEdicaoBtn.style.display = 'inline-block';
+
+  // Foco e scroll para o form
+  document.getElementById('numero-fatura').focus();
+  window.scrollTo({ top: faturaForm.offsetTop - 20, behavior: 'smooth' });
+}
+
+function sairDoModoEdicao() {
+  if (editarIdInput) editarIdInput.value = '';
+  if (submitBtn) submitBtn.textContent = 'Registrar Fatura';
+  if (cancelarEdicaoBtn) cancelarEdicaoBtn.style.display = 'none';
+  faturaForm.reset();
+  definirValoresPadrao(); // mantém o teu comportamento atual do “próximo nº”
+}
+
+if (cancelarEdicaoBtn) {
+  cancelarEdicaoBtn.addEventListener('click', sairDoModoEdicao);
+}
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', async () => {
@@ -64,33 +105,44 @@ async function definirValoresPadrao() {
 
 // Event Listeners
 faturaForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const formData = {
-        apartamento: document.getElementById('apartamento').value,
-        ano: parseInt(document.getElementById('ano').value),
-        mes: parseInt(document.getElementById('mes').value),
-        numeroFatura: document.getElementById('numero-fatura').value,
-        taxaAirbnb: parseFloat(document.getElementById('taxa-airbnb').value),
-        valorTransferencia: parseFloat(document.getElementById('valor-transferencia').value),
-        valorOperador: parseFloat(document.getElementById('valor-operador').value),
-        noitesExtra: parseInt(document.getElementById('noites-extra').value) || 0,
-        noitesCriancas: parseInt(document.getElementById('noites-criancas').value) || 0,
-        valorDireto: parseFloat(document.getElementById('valor-direto').value) || 0,
-        valorTmt: parseFloat(document.getElementById('valor-tmt').value),
-        timestamp: new Date()
-    };
+  const formData = {
+    apartamento: document.getElementById('apartamento').value,
+    ano: parseInt(document.getElementById('ano').value),
+    mes: parseInt(document.getElementById('mes').value),
+    numeroFatura: document.getElementById('numero-fatura').value,
+    taxaAirbnb: parseFloat(document.getElementById('taxa-airbnb').value),
+    valorTransferencia: parseFloat(document.getElementById('valor-transferencia').value),
+    valorOperador: parseFloat(document.getElementById('valor-operador').value),
+    noitesExtra: parseInt(document.getElementById('noites-extra').value) || 0,
+    noitesCriancas: parseInt(document.getElementById('noites-criancas').value) || 0,
+    valorDireto: parseFloat(document.getElementById('valor-direto').value) || 0,
+    valorTmt: parseFloat(document.getElementById('valor-tmt').value),
+    timestamp: new Date() // só usado na criação
+  };
 
-    try {
-        await addDoc(collection(db, "faturas"), formData);
-        alert('Fatura registrada com sucesso!');
-        faturaForm.reset();
-        definirValoresPadrao();
-        carregarTodosRelatorios();
-    } catch (error) {
-        console.error("Erro ao registrar fatura:", error);
-        alert('Ocorreu um erro ao registrar a fatura.');
+  const editId = editarIdInput ? editarIdInput.value : '';
+
+  try {
+    if (editId) {
+      // não atualizar o timestamp numa edição
+      const { timestamp, ...dataSemTimestamp } = formData;
+      await updateDoc(doc(db, "faturas", editId), dataSemTimestamp);
+      alert('Fatura atualizada com sucesso!');
+      sairDoModoEdicao();
+    } else {
+      await addDoc(collection(db, "faturas"), formData);
+      alert('Fatura registrada com sucesso!');
+      faturaForm.reset();
+      definirValoresPadrao();
     }
+
+    carregarTodosRelatorios();
+  } catch (error) {
+    console.error("Erro ao gravar fatura:", error);
+    alert('Ocorreu um erro ao gravar a fatura.');
+  }
 });
 
 async function carregarTodosRelatorios() {
@@ -256,6 +308,32 @@ window.mostrarDetalhesTMT = function(key, button) {
     toggleDetalhes(button, gerarHTMLDetalhesTMT(detalhes));
 }
 
+// Editar: preenche o formulário e ativa modo edição
+window.editarFatura = function(btn) {
+  const f = JSON.parse(btn.dataset.fatura.replace(/&quot;/g, '"'));
+  entrarEmModoEdicao(f);
+};
+
+// Apagar: remove doc do Firestore e recarrega relatórios
+window.apagarFatura = async function(btn) {
+  const id  = btn.dataset.id;
+  const num = btn.dataset.num || '';
+  if (!id) return;
+
+  const ok = confirm(`Apagar a fatura ${num}? Esta ação não pode ser anulada.`);
+  if (!ok) return;
+
+  try {
+    await deleteDoc(doc(db, 'faturas', id));
+    alert('Fatura apagada.');
+    sairDoModoEdicao();
+    carregarTodosRelatorios();
+  } catch (err) {
+    console.error('Erro ao apagar fatura:', err);
+    alert('Não foi possível apagar a fatura.');
+  }
+};
+
 function toggleDetalhes(button, htmlContent) {
     let detalhesDiv = button.parentElement.querySelector('.detalhes');
     if (detalhesDiv) {
@@ -276,31 +354,62 @@ function toggleDetalhes(button, htmlContent) {
 }
 
 function gerarHTMLDetalhesFaturacao(detalhes) {
+  const rows = detalhes.map(d => {
+    const dataStr = (d.timestamp && d.timestamp.seconds)
+      ? new Date(d.timestamp.seconds * 1000).toLocaleDateString()
+      : '—';
+    const total   = Number(d.valorTransferencia || 0) + Number(d.taxaAirbnb || 0);
+
+    // dados mínimos para preencher o formulário em modo edição
+    const payload = {
+      id: d.id,
+      apartamento: d.apartamento,
+      ano: d.ano,
+      mes: d.mes,
+      numeroFatura: d.numeroFatura,
+      taxaAirbnb: d.taxaAirbnb,
+      valorTransferencia: d.valorTransferencia,
+      valorOperador: d.valorOperador,
+      noitesExtra: d.noitesExtra || 0,
+      noitesCriancas: d.noitesCriancas || 0,
+      valorDireto: d.valorDireto || 0,
+      valorTmt: d.valorTmt
+    };
+    const jsonAttr = d.id ? JSON.stringify(payload).replace(/"/g, '&quot;') : '';
+
+    const acoes = d.id
+      ? `<button onclick="editarFatura(this)" data-fatura="${jsonAttr}">Editar</button>
+         <button onclick="apagarFatura(this)" data-id="${d.id}" data-num="${d.numeroFatura}">Apagar</button>`
+      : '—';
+
     return `
-        <table class="detalhes-table">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Fatura Nº</th>
-                    <th>Valor Transferência</th>
-                    <th>Taxa AirBnB</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${detalhes.map(d => `
-                    <tr>
-                        <td>${new Date(d.timestamp.seconds * 1000).toLocaleDateString()}</td>
-                        <td>${d.numeroFatura}</td>
-                        <td>€${d.valorTransferencia.toFixed(2)}</td>
-                        <td>€${d.taxaAirbnb.toFixed(2)}</td>
-                        <td>€${(d.valorTransferencia + d.taxaAirbnb).toFixed(2)}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
+      <tr>
+        <td>${dataStr}</td>
+        <td>${d.numeroFatura}</td>
+        <td>€${Number(d.valorTransferencia).toFixed(2)}</td>
+        <td>€${Number(d.taxaAirbnb).toFixed(2)}</td>
+        <td>€${total.toFixed(2)}</td>
+        <td>${acoes}</td>
+      </tr>`;
+  }).join('');
+
+  return `
+    <table class="detalhes-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Fatura Nº</th>
+          <th>Valor Transferência</th>
+          <th>Taxa AirBnB</th>
+          <th>Total</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
 }
+
 
 function gerarAnaliseFaturacao(faturas) {
     // 1) Prepara dados: meses 1–12, anos disponíveis (até ano atual)
