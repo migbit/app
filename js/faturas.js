@@ -643,55 +643,111 @@ function gerarAnaliseFaturacao(faturas) {
       </div>`;
   })();
 
+(() => {
+  const mesAtual = new Date().getMonth() + 1;
+  const temDados = faturas.some(f => f.ano === ultimoAno && f.mes === mesAtual);
+  if (!temDados) return;
+
+  const nomeMesAtual = obterNomeMes(mesAtual);
+  htmlProg += `<hr class="divider"><strong>Comparativo de ${nomeMesAtual} (parcial):</strong>`;
+
+  // por apartamento
+  apartamentos.forEach(apt => {
+    const cur = faturas
+      .filter(f => f.ano === ultimoAno && f.apartamento === apt && f.mes === mesAtual)
+      .reduce((s,f) => s + f.valorTransferencia, 0);
+    const ant = faturas
+      .filter(f => f.apartamento === apt && f.ano < ultimoAno && f.mes === mesAtual)
+      .reduce((s,f) => s + f.valorTransferencia, 0);
+
+    const base = ant === 0 ? (cur === 0 ? 1 : cur) : ant;
+    const diff = ant - cur;
+    const pct  = Math.round(Math.abs(diff) / base * 100);
+    const cor  = diff > 0 ? '#dc3545' : '#28a745';
+    const rot  = diff > 0 ? `Faltam €${diff.toFixed(2)}` : `Excedeu €${(-diff).toFixed(2)}`;
+    const lbl  = diff > 0 ? `-${pct}%` : `+${pct}%`;
+
+    htmlProg += `
+      <div class="comparacao-item">
+        <strong>Apt ${apt} em ${nomeMesAtual}:</strong>
+        <span style="color:${cor}; margin-left:0.5rem;">${rot}</span>
+        <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+          <div class="progress-bar"
+               style="width:${pct}%; background:${cor}; display:flex; align-items:center; justify-content:center;">
+            ${lbl}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  // total
+  const curT = faturas
+    .filter(f => f.ano === ultimoAno && f.mes === mesAtual)
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+  const antT = faturas
+    .filter(f => f.ano < ultimoAno && f.mes === mesAtual)
+    .reduce((s,f) => s + f.valorTransferencia, 0);
+
+  const baseT = antT === 0 ? (curT === 0 ? 1 : curT) : antT;
+  const diffT = antT - curT;
+  const pctT  = Math.round(Math.abs(diffT) / baseT * 100);
+  const corT  = diffT > 0 ? '#dc3545' : '#28a745';
+  const rotT  = diffT > 0 ? `Faltam €${diffT.toFixed(2)}` : `Excedeu €${(-diffT).toFixed(2)}`;
+  const lblT  = diffT > 0 ? `-${pctT}%` : `+${pctT}%`;
+
+  htmlProg += `
+    <div class="comparacao-item">
+      <strong>Total em ${nomeMesAtual}:</strong>
+      <span style="color:${corT}; margin-left:0.5rem;">${rotT}</span>
+      <div class="progress" style="background:#e9ecef; height:1.5rem; margin-top:0.5rem;">
+        <div class="progress-bar"
+             style="width:${pctT}%; background:${corT}; display:flex; align-items:center; justify-content:center;">
+          ${lblT}
+        </div>
+      </div>
+    </div>`;
+})();
+
 document.getElementById('progresso-anos').innerHTML = htmlProg;
 }
 
   // Função: gerar média mensal por ano e apartamento
 function gerarMediaFaturacao(faturas) {
-    // Identificar anos disponíveis
-    const anos = Array.from(new Set(faturas.map(f => f.ano))).sort();
-    // Identificar apartamentos disponíveis
-    const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
+  const anos = Array.from(new Set(faturas.map(f => f.ano))).sort();
+  const apartamentos = Array.from(new Set(faturas.map(f => f.apartamento))).sort();
 
-    // Construir tabela HTML
-let html = '<h4>Média Mensal de Receita</h4>';
-html += '<table class="media-faturacao"><thead><tr><th>Ano</th>';
-apartamentos.forEach(apt => {
-    html += `<th class="apt-${apt}">Apt ${apt}</th>`;
-});
-html += '<th>Total</th></tr></thead><tbody>';
+  let html = '<h4>Média Mensal de Receita (÷12 meses)</h4>';
+  html += '<table class="media-faturacao"><thead><tr><th>Ano</th>';
+  apartamentos.forEach(apt => { html += `<th class="apt-${apt}">Apt ${apt}</th>`; });
+  html += '<th>Total</th></tr></thead><tbody>';
 
-anos.forEach(ano => {
+  anos.forEach(ano => {
     const faturasAno = faturas.filter(f => f.ano === ano);
-    const mesesAno = Array.from(new Set(faturasAno.map(f => f.mes)));
-    const numMeses = mesesAno.length || 1;
+    const numMeses = 12;
 
     let somaTotal = 0;
     html += `<tr><td>${ano}</td>`;
     apartamentos.forEach(apt => {
-        const somaApt = faturasAno
-            .filter(f => f.apartamento === apt)
-            .reduce((sum, f) => sum + f.valorTransferencia, 0);
-        const mediaApt = somaApt / numMeses;
-        somaTotal += somaApt;
-        html += `<td class="apt-${apt}">€${mediaApt.toFixed(2)}</td>`;
+      const somaApt = faturasAno
+        .filter(f => f.apartamento === apt)
+        .reduce((sum, f) => sum + f.valorTransferencia, 0);
+      const mediaApt = somaApt / numMeses;
+      somaTotal += somaApt;
+      html += `<td class="apt-${apt}">€${mediaApt.toFixed(2)}</td>`;
     });
     const mediaTotal = somaTotal / numMeses;
     html += `<td>€${mediaTotal.toFixed(2)}</td></tr>`;
-});
+  });
 
-html += '</tbody></table>';
+  html += '</tbody></table>';
 
-    // Inserir no container existente ou criar um novo
-    let container = document.getElementById('media-faturacao');
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'media-faturacao';
-        document
-          .getElementById('analise-faturacao-container')
-          .appendChild(container);
-    }
-    container.innerHTML = html;
+  let container = document.getElementById('media-faturacao');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'media-faturacao';
+    document.getElementById('analise-faturacao-container').appendChild(container);
+  }
+  container.innerHTML = html;
 }
 
 function gerarHTMLDetalhesTMT(detalhes) {
