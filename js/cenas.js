@@ -262,6 +262,226 @@ async function deleteTask(taskId) {
     }
 }
 
+const dcaForm   = document.getElementById('dca-form');
+const dcaRows   = document.getElementById('dca-rows');
+const dcaMonth  = document.getElementById('dca-month');
+const dcaSWDA   = document.getElementById('dca-swda');
+const dcaAGGU   = document.getElementById('dca-aggu');
+const dcaCNDX   = document.getElementById('dca-cndx');
+const dcaChartEl= document.getElementById('dca-chart');
+
+let dcaChart;
+
+// Parâmetros da estratégia Anti-crise
+const DCA_CFG = {
+  startYear: 2025,             // começaste em setembro 2025
+  endYear: 2050,
+  monthlyDefault: 100,         // referência para projeção (podes mudar)
+  weights: { SWDA: 0.40, AGGU: 0.40, CNDX: 0.20 },
+  rates: {                     // anualizados (líquidos de ER), conforme simulações anteriores
+    pessimistic: 0.0384,
+    realistic:  0.0464,
+    optimistic: 0.0700
+  }
+};
+
+// Helpers
+function ymKey(yyyyMM){ return yyyyMM; } // chave "YYYY-MM"
+function toYYYYMM(date){
+  const y = date.getFullYear();
+  const m = (date.getMonth()+1).toString().padStart(2,'0');
+  return `${y}-${m}`;
+}
+function mmRange(startYYYY, endYYYY){
+  const out = [];
+  for (let y = startYYYY; y <= endYYYY; y++){
+    for (let m = 1; m <= 12; m++){
+      out.push(`${y}-${String(m).padStart(2,'0')}`);
+    }
+  }
+  return out;
+}
+
+// Firestore
+async function saveDcaEntry(yyyyMM, swda, aggu, cndx){
+  const total = Number(swda)+Number(aggu)+Number(cndx);
+  const col = collection(db,'dca_entries');
+  // upsert por mês
+  // procurar doc com campo month == yyyyMM
+  const q = query(col, where('month','==',yyyyMM));
+  const snap = await getDocs(q);
+  if (snap.empty){
+    await addDoc(col, { month: yyyyMM, swda: Number(swda), aggu: Number(aggu), cndx: Number(cndx), total });
+  } else {
+    await updateDoc(doc(db,'dca_entries', snap.docs[0].id), { swda: Number(swda), aggu: Number(aggu), cndx: Number(cndx), total });
+  }
+}
+
+async function loadDcaEntries(){
+  const col = collection(db,'dca_entries');
+  const qs = await getDocs(col);
+  const rows = [];
+  qs.forEach(d => rows.push({ id:d.id, ...d.data() }));
+  // ordenar por mês
+  rows.sort((a,b)=>a.month.localeCompare(b.month));
+  return rows;
+}
+
+async function deleteDcaEntry(docId){
+  await deleteDoc(doc(db,'dca_entries', docId));
+}
+
+// Projeções (compounding mensal)
+function projectSeries(rateAnnual, monthly, startYYYY, endYYYY){
+  const months = mmRange(startYYYY,endYYYY);
+  let bal = 0;
+  const r = rateAnnual/12;
+  const out = [];
+  months.forEach(mm=>{
+    bal += monthly;
+    bal *= 1 + r;
+    out.push({ month:mm, value: bal });
+  });
+  return out;
+}
+
+// Série real (com base nos inputs gravados)
+function actualSeries(entries, startYYYY, endYYYY){
+  const months = mmRange(startYYYY,endYYYY);
+  const map = new Map(entries.map(e=>[e.month, e]));
+  let bal = 0;
+  const out = [];
+  // Para a série real, assumimos que cada compra fica investida e rende
+  // à taxa "realistic" média (podes trocar para outra).
+  const r = DCA_CFG.rates.realistic/12;
+
+  months.forEach(mm=>{
+    const row = map.get(mm);
+    const contrib = row ? Number(row.total) : 0;
+    bal += contrib;
+    bal *= 1 + r;
+    out.push({ month:mm, value: bal });
+  });
+  return out;
+}
+
+// Render tabela
+function renderDcaTable(rows){
+  dcaRows.innerHTML = '';
+  rows.forEach(r=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.month}</td>
+      <td>$${Number(r.swda).toFixed(2)}</td>
+      <td>$${Number(r.aggu).toFixed(2)}</td>
+      <td>$${Number(r.cndx).toFixed(2)}</td>
+      <td>$${Number(r.total).toFixed(2)}</td>
+      <td>
+        <button class="btn btn-sm btn-primary" data-edit="${r.id}">Editar</button>
+        <button class="btn btn-sm btn-danger" data-del="${r.id}">Apagar</button>
+      </td>
+    `;
+    dcaRows.appendChild(tr);
+  });
+
+  // Ações
+  dcaRows.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      await deleteDcaEntry(btn.dataset.del);
+      await refreshDca();
+    });
+  });
+
+  dcaRows.querySelectorAll('[data-edit]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.edit;
+      const row = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
+      const tds = row.querySelectorAll('td');
+      dcaMonth.value = tds[0].innerText;
+      dcaSWDA.value  = tds[1].innerText.replace('$','');
+      dcaAGGU.value  = tds[2].innerText.replace('$','');
+      dcaCNDX.value  = tds[3].innerText.replace('$','');
+      window.scrollTo({ top: dcaForm.offsetTop - 20, behavior:'smooth' });
+    });
+  });
+}
+
+// Render Chart
+function renderDcaChart(series){
+  const ctx = dcaChartEl.getContext('2d');
+  const labels = series.realistic.map(p=>p.month);
+
+  const ds = (label, data, dashed=false)=>({
+    label, data: data.map(p=>Number(p.value.toFixed(2))),
+    borderWidth: 2, tension: 0.12,
+    borderDash: dashed ? [6,6] : undefined,
+    fill: false
+  });
+
+  if (dcaChart) dcaChart.destroy();
+
+  dcaChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        ds('Pessimista', series.pessimistic),
+        ds('Realista',  series.realistic),
+        ds('Otimista',  series.optimistic),
+        ds('Real (inputs)', series.actual, true)
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: { callbacks:{
+          label: (ctx)=> `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`
+        }}
+      },
+      scales: {
+        x: { ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 24 } },
+        y: { ticks: { callback: v=>'$'+v.toLocaleString() } }
+      }
+    }
+  });
+}
+
+// Refresh total (carrega dados, redesenha tabela e gráfico)
+async function refreshDca(){
+  const rows = await loadDcaEntries();
+  renderDcaTable(rows);
+
+  const start = DCA_CFG.startYear;
+  const end   = DCA_CFG.endYear;
+
+  // Projeções com $100/mês (podes ajustar se quiseres outra base)
+  const projP = projectSeries(DCA_CFG.rates.pessimistic, DCA_CFG.monthlyDefault, start, end);
+  const projR = projectSeries(DCA_CFG.rates.realistic,  DCA_CFG.monthlyDefault, start, end);
+  const projO = projectSeries(DCA_CFG.rates.optimistic, DCA_CFG.monthlyDefault, start, end);
+
+  // Série real com base nas entradas gravadas
+  const realS  = actualSeries(rows, start, end);
+
+  renderDcaChart({
+    pessimistic: projP,
+    realistic: projR,
+    optimistic: projO,
+    actual: realS
+  });
+}
+
+// Handler do form
+dcaForm?.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const mm = dcaMonth.value;
+  if (!mm) { alert('Escolhe o mês.'); return; }
+  await saveDcaEntry(ymKey(mm), dcaSWDA.value, dcaAGGU.value, dcaCNDX.value);
+  dcaForm.reset();
+  await refreshDca();
+});
+
 // —— Secção Carlos (Faturas Pendentes) ——
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
@@ -440,6 +660,9 @@ async function init() {
         
         // Load tasks
         await loadTasks();
+
+        // DCA – carregar e desenhar
+        await refreshDca();
 
         // Inicializar Carlos – Faturas Pendentes
 invoiceForm.addEventListener('submit', addInvoice);
