@@ -133,25 +133,45 @@
   <h2 class="card-header">DCA – Projeção até 2050 e Curva Real</h2>
   <div class="card-body">
     <!-- Form de input mensal -->
-    <form id="dca-form" class="form-inline mb-3">
-      <label for="dca-month" style="margin-right:8px;">Mês</label>
-      <input type="month" id="dca-month" required>
+    <form id="dca-form" class="form-inline mb-3" style="gap:10px;flex-wrap:wrap;">
+  <div>
+    <label for="dca-year" style="display:block;">Ano</label>
+    <input type="number" id="dca-year" min="2025" max="2050" class="wide-input" required>
+  </div>
 
-      <label for="dca-swda" style="margin:0 8px;">SWDA ($)</label>
-      <input type="number" id="dca-swda" step="0.01" min="0" required>
+  <div>
+    <label for="dca-month-sel" style="display:block;">Mês</label>
+    <select id="dca-month-sel" class="wide-input" required>
+      <option value="01">Jan</option><option value="02">Fev</option><option value="03">Mar</option>
+      <option value="04">Abr</option><option value="05">Mai</option><option value="06">Jun</option>
+      <option value="07">Jul</option><option value="08">Ago</option><option value="09">Set</option>
+      <option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option>
+    </select>
+  </div>
 
-      <label for="dca-aggu" style="margin:0 8px;">AGGU ($)</label>
-      <input type="number" id="dca-aggu" step="0.01" min="0" required>
+  <div>
+    <label for="dca-swda" style="display:block;">SWDA ($)</label>
+    <input type="number" id="dca-swda" step="0.01" min="0" class="ticker-input" required>
+  </div>
 
-      <label for="dca-cndx" style="margin:0 8px;">CNDX ($)</label>
-      <input type="number" id="dca-cndx" step="0.01" min="0" required>
+  <div>
+    <label for="dca-aggu" style="display:block;">AGGU ($)</label>
+    <input type="number" id="dca-aggu" step="0.01" min="0" class="ticker-input" required>
+  </div>
 
-      <button type="submit" class="btn btn-success ml-2">Guardar mês</button>
-    </form>
+  <div>
+    <label for="dca-cndx" style="display:block;">CNDX ($)</label>
+    <input type="number" id="dca-cndx" step="0.01" min="0" class="ticker-input" required>
+  </div>
+
+  <div style="display:flex;align-items:flex-end;">
+    <button type="submit" class="btn btn-success">Guardar mês</button>
+  </div>
+</form>
 
     <!-- Gráfico -->
-    <div style="width:100%;max-width:1000px;">
-      <canvas id="dca-chart" height="120"></canvas>
+    <div id="dca-chart-wrap" style="width:100%;max-width:1200px;min-width:min(100%,900px);height:460px;">
+        <canvas id="dca-chart"></canvas>
     </div>
 
     <!-- Tabela de meses registados -->
