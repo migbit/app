@@ -1403,9 +1403,27 @@ footer {
 
 /* DCA */
 
-.wide-input { width: 110px; }
-.ticker-input { width: 120px; }
-#dca-section .card-body { padding-bottom: 16px; }
+/* Largura dos inputs */
+.wide-input {
+  width: 150px !important;
+}
+
+.ticker-input {
+  width: 150px !important;
+}
+
+/* Ajustar também o select do mês */
+#dca-month-sel {
+  width: 150px !important;
+}
+
+#dca-form input,
+#dca-form select {
+  height: 38px;          /* altura consistente */
+  font-size: 15px;       /* texto legível */
+  padding: 4px 8px;      /* mais espaço interno */
+  margin-top: 4px;
+}
 
 @media (max-width: 600px) {
     /* Ensure inputs stack vertically on very small screens */
