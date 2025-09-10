@@ -275,15 +275,12 @@ let dcaChart;
 
 // Parâmetros da estratégia Anti-crise
 const DCA_CFG = {
-  startYear: 2025,             // começaste em setembro 2025
+  startYear: 2025,
   endYear: 2050,
-  monthlyDefault: 100,         // referência para projeção (podes mudar)
+  startMonth: 9, // 1=Jan … 9=Set
+  monthlyDefault: 100,
   weights: { SWDA: 0.40, AGGU: 0.40, CNDX: 0.20 },
-  rates: {                     // anualizados (líquidos de ER), conforme simulações anteriores
-    pessimistic: 0.0384,
-    realistic:  0.0464,
-    optimistic: 0.0700
-  }
+  rates: { pessimistic: 0.0384, realistic: 0.0464, optimistic: 0.0700 }
 };
 
 // Pré-preencher com ano/mês atuais
