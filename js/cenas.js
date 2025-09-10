@@ -378,22 +378,25 @@ function actualSeries(entries, startYYYY, endYYYY){
 
 // Render tabela
 function renderDcaTable(rows){
-  dcaRows.querySelectorAll('[data-edit]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const id = btn.dataset.edit;
-    const rowEl = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
-    const tds = rowEl.querySelectorAll('td');
-    const ym = tds[0].innerText; // "YYYY-MM"
-    dcaYear.value = ym.slice(0,4);
-    dcaMonthSel.value = ym.slice(5,7);
-    dcaSWDA.value  = tds[1].innerText.replace('$','');
-    dcaAGGU.value  = tds[2].innerText.replace('$','');
-    dcaCNDX.value  = tds[3].innerText.replace('$','');
-    window.scrollTo({ top: dcaForm.offsetTop - 20, behavior:'smooth' });
+  // 1) Recriar o corpo da tabela
+  dcaRows.innerHTML = '';
+  rows.forEach(r=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.month}</td>
+      <td>$${Number(r.swda).toFixed(2)}</td>
+      <td>$${Number(r.aggu).toFixed(2)}</td>
+      <td>$${Number(r.cndx).toFixed(2)}</td>
+      <td>$${Number(r.total).toFixed(2)}</td>
+      <td>
+        <button class="btn btn-sm btn-primary" data-edit="${r.id}">Editar</button>
+        <button class="btn btn-sm btn-danger" data-del="${r.id}">Apagar</button>
+      </td>
+    `;
+    dcaRows.appendChild(tr);
   });
-});
 
-  // Ações
+  // 2) Ações: apagar
   dcaRows.querySelectorAll('[data-del]').forEach(btn=>{
     btn.addEventListener('click', async ()=>{
       await deleteDcaEntry(btn.dataset.del);
@@ -401,12 +404,15 @@ function renderDcaTable(rows){
     });
   });
 
+  // 3) Ações: editar (preenche ano/mês e valores no formulário)
   dcaRows.querySelectorAll('[data-edit]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.edit;
-      const row = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
-      const tds = row.querySelectorAll('td');
-      dcaMonth.value = tds[0].innerText;
+      const rowEl = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
+      const tds = rowEl.querySelectorAll('td');
+      const ym = tds[0].innerText; // "YYYY-MM"
+      dcaYear.value = ym.slice(0,4);
+      dcaMonthSel.value = ym.slice(5,7);
       dcaSWDA.value  = tds[1].innerText.replace('$','');
       dcaAGGU.value  = tds[2].innerText.replace('$','');
       dcaCNDX.value  = tds[3].innerText.replace('$','');
