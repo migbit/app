@@ -262,13 +262,14 @@ async function deleteTask(taskId) {
     }
 }
 
-const dcaForm   = document.getElementById('dca-form');
-const dcaRows   = document.getElementById('dca-rows');
-const dcaMonth  = document.getElementById('dca-month');
-const dcaSWDA   = document.getElementById('dca-swda');
-const dcaAGGU   = document.getElementById('dca-aggu');
-const dcaCNDX   = document.getElementById('dca-cndx');
-const dcaChartEl= document.getElementById('dca-chart');
+const dcaForm     = document.getElementById('dca-form');
+const dcaRows     = document.getElementById('dca-rows');
+const dcaYear     = document.getElementById('dca-year');
+const dcaMonthSel = document.getElementById('dca-month-sel');
+const dcaSWDA     = document.getElementById('dca-swda');
+const dcaAGGU     = document.getElementById('dca-aggu');
+const dcaCNDX     = document.getElementById('dca-cndx');
+const dcaChartEl  = document.getElementById('dca-chart');
 
 let dcaChart;
 
@@ -284,6 +285,15 @@ const DCA_CFG = {
     optimistic: 0.0700
   }
 };
+
+// Pré-preencher com ano/mês atuais
+function presetYearMonth(){
+  const now = new Date();
+  dcaYear.value = now.getFullYear();
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  dcaMonthSel.value = mm;
+}
+presetYearMonth();
 
 // Helpers
 function ymKey(yyyyMM){ return yyyyMM; } // chave "YYYY-MM"
@@ -301,6 +311,7 @@ function mmRange(startYYYY, endYYYY){
   }
   return out;
 }
+function toYYYYdashMM(y, mm){ return `${y}-${mm}`; }
 
 // Firestore
 async function saveDcaEntry(yyyyMM, swda, aggu, cndx){
@@ -367,22 +378,20 @@ function actualSeries(entries, startYYYY, endYYYY){
 
 // Render tabela
 function renderDcaTable(rows){
-  dcaRows.innerHTML = '';
-  rows.forEach(r=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${r.month}</td>
-      <td>$${Number(r.swda).toFixed(2)}</td>
-      <td>$${Number(r.aggu).toFixed(2)}</td>
-      <td>$${Number(r.cndx).toFixed(2)}</td>
-      <td>$${Number(r.total).toFixed(2)}</td>
-      <td>
-        <button class="btn btn-sm btn-primary" data-edit="${r.id}">Editar</button>
-        <button class="btn btn-sm btn-danger" data-del="${r.id}">Apagar</button>
-      </td>
-    `;
-    dcaRows.appendChild(tr);
+  dcaRows.querySelectorAll('[data-edit]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const id = btn.dataset.edit;
+    const rowEl = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
+    const tds = rowEl.querySelectorAll('td');
+    const ym = tds[0].innerText; // "YYYY-MM"
+    dcaYear.value = ym.slice(0,4);
+    dcaMonthSel.value = ym.slice(5,7);
+    dcaSWDA.value  = tds[1].innerText.replace('$','');
+    dcaAGGU.value  = tds[2].innerText.replace('$','');
+    dcaCNDX.value  = tds[3].innerText.replace('$','');
+    window.scrollTo({ top: dcaForm.offsetTop - 20, behavior:'smooth' });
   });
+});
 
   // Ações
   dcaRows.querySelectorAll('[data-del]').forEach(btn=>{
@@ -412,9 +421,12 @@ function renderDcaChart(series){
   const labels = series.realistic.map(p=>p.month);
 
   const ds = (label, data, dashed=false)=>({
-    label, data: data.map(p=>Number(p.value.toFixed(2))),
-    borderWidth: 2, tension: 0.12,
+    label,
+    data: data.map(p=>Number(p.value.toFixed(2))),
+    borderWidth: 2,
+    tension: 0.12,
     borderDash: dashed ? [6,6] : undefined,
+    pointRadius: 0,
     fill: false
   });
 
@@ -432,17 +444,33 @@ function renderDcaChart(series){
       ]
     },
     options: {
+      maintainAspectRatio: false,
+      layout: { padding: { left: 8, right: 16, top: 8, bottom: 8 } },
       responsive: true,
       interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { position: 'top' },
+        legend: { position: 'top', labels: { boxWidth: 20 } },
         tooltip: { callbacks:{
           label: (ctx)=> `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`
         }}
       },
       scales: {
-        x: { ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 24 } },
-        y: { ticks: { callback: v=>'$'+v.toLocaleString() } }
+        x: {
+          ticks: {
+            maxRotation: 0,
+            autoSkip: true,
+            // mostrar só Janeiro de cada ano
+            callback: (val, idx) => {
+              const lbl = labels[idx]; // "YYYY-MM"
+              return lbl?.endsWith('-01') ? lbl.slice(0,4) : '';
+            }
+          },
+          grid: { drawOnChartArea: false }
+        },
+        y: {
+          ticks: { callback: v => '$'+v.toLocaleString() },
+          beginAtZero: true
+        }
       }
     }
   });
@@ -475,10 +503,13 @@ async function refreshDca(){
 // Handler do form
 dcaForm?.addEventListener('submit', async (e)=>{
   e.preventDefault();
-  const mm = dcaMonth.value;
-  if (!mm) { alert('Escolhe o mês.'); return; }
-  await saveDcaEntry(ymKey(mm), dcaSWDA.value, dcaAGGU.value, dcaCNDX.value);
+  const y  = Number(dcaYear.value);
+  const mm = dcaMonthSel.value;
+  if (!y || !mm){ alert('Seleciona ano e mês.'); return; }
+  const key = toYYYYdashMM(y, mm);
+  await saveDcaEntry(key, dcaSWDA.value, dcaAGGU.value, dcaCNDX.value);
   dcaForm.reset();
+  presetYearMonth(); // repor defaults
   await refreshDca();
 });
 
