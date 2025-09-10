@@ -270,6 +270,8 @@ const dcaSWDA     = document.getElementById('dca-swda');
 const dcaAGGU     = document.getElementById('dca-aggu');
 const dcaCNDX     = document.getElementById('dca-cndx');
 const chartIds = ['dca-chart-1','dca-chart-2','dca-chart-3','dca-chart-4','dca-chart-5'];
+const dcaPortfolio = document.getElementById('dca-portfolio');
+const dcaSummaryRows = document.getElementById('dca-summary-rows');
 let dcaCharts = []; // guardamos as instâncias dos 5 charts para destruir no refresh
 
 // Parâmetros da estratégia Anti-crise
@@ -431,19 +433,26 @@ function renderDcaChartsSegmented(seriesAll){
 }
 
 // Firestore
-async function saveDcaEntry(yyyyMM, swda, aggu, cndx){
+async function saveDcaEntry(yyyyMM, swda, aggu, cndx, portfolio){
   const total = Number(swda)+Number(aggu)+Number(cndx);
-  const col = collection(db,'dca_entries');
-  // upsert por mês
-  // procurar doc com campo month == yyyyMM
-  const q = query(col, where('month','==',yyyyMM));
-  const snap = await getDocs(q);
+  const colRef = collection(db,'dca_entries');
+  const qy = query(colRef, where('month','==',yyyyMM));
+  const snap = await getDocs(qy);
+  const payload = {
+    month: yyyyMM,
+    swda: Number(swda),
+    aggu: Number(aggu),
+    cndx: Number(cndx),
+    total,
+    portfolio: portfolio === '' || portfolio == null ? null : Number(portfolio)
+  };
   if (snap.empty){
-    await addDoc(col, { month: yyyyMM, swda: Number(swda), aggu: Number(aggu), cndx: Number(cndx), total });
+    await addDoc(colRef, payload);
   } else {
-    await updateDoc(doc(db,'dca_entries', snap.docs[0].id), { swda: Number(swda), aggu: Number(aggu), cndx: Number(cndx), total });
+    await updateDoc(doc(db,'dca_entries', snap.docs[0].id), payload);
   }
 }
+
 
 async function loadDcaEntries(){
   const col = collection(db,'dca_entries');
@@ -489,7 +498,6 @@ function actualSeries(entries, startYYYY, endYYYY, startMonth){
 
 // Render tabela
 function renderDcaTable(rows){
-  // 1) Recriar o corpo da tabela
   dcaRows.innerHTML = '';
   rows.forEach(r=>{
     const tr = document.createElement('tr');
@@ -499,6 +507,7 @@ function renderDcaTable(rows){
       <td>$${Number(r.aggu).toFixed(2)}</td>
       <td>$${Number(r.cndx).toFixed(2)}</td>
       <td>$${Number(r.total).toFixed(2)}</td>
+      <td>${r.portfolio != null ? '$'+Number(r.portfolio).toFixed(2) : '—'}</td>
       <td>
         <button class="btn btn-sm btn-primary" data-edit="${r.id}">Editar</button>
         <button class="btn btn-sm btn-danger" data-del="${r.id}">Apagar</button>
@@ -507,7 +516,7 @@ function renderDcaTable(rows){
     dcaRows.appendChild(tr);
   });
 
-  // 2) Ações: apagar
+  // Apagar
   dcaRows.querySelectorAll('[data-del]').forEach(btn=>{
     btn.addEventListener('click', async ()=>{
       await deleteDcaEntry(btn.dataset.del);
@@ -515,22 +524,61 @@ function renderDcaTable(rows){
     });
   });
 
-  // 3) Ações: editar (preenche ano/mês e valores no formulário)
+  // Editar (preenche também a carteira)
   dcaRows.querySelectorAll('[data-edit]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.edit;
-      const rowEl = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
-      const tds = rowEl.querySelectorAll('td');
+      const row = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
+      const tds = row.querySelectorAll('td');
       const ym = tds[0].innerText; // "YYYY-MM"
       dcaYear.value = ym.slice(0,4);
       dcaMonthSel.value = ym.slice(5,7);
       dcaSWDA.value  = tds[1].innerText.replace('$','');
       dcaAGGU.value  = tds[2].innerText.replace('$','');
       dcaCNDX.value  = tds[3].innerText.replace('$','');
+      dcaPortfolio.value = tds[5].innerText === '—' ? '' : tds[5].innerText.replace('$','');
       window.scrollTo({ top: dcaForm.offsetTop - 20, behavior:'smooth' });
     });
   });
 }
+
+// Constrói linhas do resumo acumulado
+function buildSummaryRows(rows){
+  // rows já vem ordenado por mês
+  let investedCum = 0;
+  return rows.map(r=>{
+    investedCum += Number(r.total);
+    const havePortfolio = r.portfolio != null && !Number.isNaN(Number(r.portfolio));
+    const valueReal = havePortfolio ? Number(r.portfolio) : null;
+    const realized = havePortfolio ? (valueReal - investedCum) : null;
+    const effRate = havePortfolio && investedCum > 0 ? (valueReal/investedCum - 1) : null;
+
+    return {
+      month: r.month,
+      invested: investedCum,
+      valueReal,
+      realized,
+      effRate
+    };
+  });
+}
+
+function renderSummaryTable(rows){
+  dcaSummaryRows.innerHTML = '';
+  const data = buildSummaryRows(rows);
+  data.forEach(row=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${row.month}</td>
+      <td>$${row.invested.toFixed(2)}</td>
+      <td>${row.valueReal == null ? '—' : '$'+row.valueReal.toFixed(2)}</td>
+      <td>${row.realized == null ? '—' : (row.realized>=0?'+$':'-$') + Math.abs(row.realized).toFixed(2)}</td>
+      <td>${row.effRate == null ? '—' : (row.effRate>=0?'+':'') + (row.effRate*100).toFixed(2) + '%'}</td>
+    `;
+    dcaSummaryRows.appendChild(tr);
+  });
+}
+
 
 // Render Chart
 function renderDcaChart(series){
@@ -601,6 +649,7 @@ function renderDcaChart(series){
 async function refreshDca(){
   const rows = await loadDcaEntries();
   renderDcaTable(rows);
+  renderSummaryTable(rows);
 
 const start = DCA_CFG.startYear;
 const end   = DCA_CFG.endYear;
@@ -627,7 +676,7 @@ dcaForm?.addEventListener('submit', async (e)=>{
   const mm = dcaMonthSel.value;
   if (!y || !mm){ alert('Seleciona ano e mês.'); return; }
   const key = toYYYYdashMM(y, mm);
-  await saveDcaEntry(key, dcaSWDA.value, dcaAGGU.value, dcaCNDX.value);
+  await saveDcaEntry(key, dcaSWDA.value, dcaAGGU.value, dcaCNDX.value, dcaPortfolio.value);
   dcaForm.reset();
   presetYearMonth(); // repor defaults
   await refreshDca();
