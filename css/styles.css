@@ -1445,10 +1445,16 @@ footer {
   font-weight: 600;
 }
 
-/* Tamanho do canvas (altura fixa, largura 100%) */
-.chart-card canvas {
-  width: 100% !important;
-  height: 340px !important; /* ajusta aqui se quiseres maior/menor */
+.chart-card {
+  padding: 6px 8px 20px 8px;
+  border-radius: 10px;
+  background: transparent;
+  border-bottom: 1px solid #ddd; /* separador cinza claro */
+}
+
+/* Retira a linha do último gráfico */
+.chart-card:last-child {
+  border-bottom: none;
 }
 
 @media (max-width: 600px) {
