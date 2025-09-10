@@ -419,14 +419,14 @@ function renderDcaTable(rows){
 // Render Chart
 function renderDcaChart(series){
   const ctx = dcaChartEl.getContext('2d');
-  const labels = series.realistic.map(p=>p.month);
+  const labels = series.realistic.map(p => p.month); // ex.: "2025-09", "2025-10", ...
 
-  const ds = (label, data, dashed=false)=>({
+  const ds = (label, data, dashed = false) => ({
     label,
-    data: data.map(p=>Number(p.value.toFixed(2))),
+    data: data.map(p => Number(p.value.toFixed(2))),
     borderWidth: 2,
     tension: 0.12,
-    borderDash: dashed ? [6,6] : undefined,
+    borderDash: dashed ? [6, 6] : undefined,
     pointRadius: 0,
     fill: false
   });
@@ -451,26 +451,30 @@ function renderDcaChart(series){
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { position: 'top', labels: { boxWidth: 20 } },
-        tooltip: { callbacks:{
-          label: (ctx)=> `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`
-        }}
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`
+          }
+        }
       },
       scales: {
         x: {
           ticks: {
             maxRotation: 0,
             autoSkip: true,
-            // mostrar só Janeiro de cada ano
-            callback: (val, idx) => {
-              const lbl = labels[idx]; // "YYYY-MM"
-              return lbl?.endsWith('-01') ? lbl.slice(0,4) : '';
+            // Mostrar o ano no 1.º ponto (mesmo sendo Setembro)
+            // e depois só em Janeiro de cada ano.
+            callback: (value, index) => {
+              const lbl = (typeof value === 'string') ? value : (labels[index] || '');
+              if (index === 0) return lbl.slice(0, 4);         // ex.: "2025" no 1.º ponto (2025-09)
+              return lbl.endsWith('-01') ? lbl.slice(0, 4) : ''; // janeiro de cada ano
             }
           },
           grid: { drawOnChartArea: false }
         },
         y: {
-          ticks: { callback: v => '$'+v.toLocaleString() },
-          beginAtZero: true
+          beginAtZero: true,
+          ticks: { callback: v => '$' + v.toLocaleString() }
         }
       }
     }
@@ -482,7 +486,7 @@ async function refreshDca(){
   const rows = await loadDcaEntries();
   renderDcaTable(rows);
 
-const start = DCA_CFG.startYear;
+const  start = DCA_CFG.startYear;
 const end   = DCA_CFG.endYear;
 const m0    = DCA_CFG.startMonth;
 
