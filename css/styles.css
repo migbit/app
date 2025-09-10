@@ -1401,61 +1401,59 @@ footer {
   text-align: center;
 }
 
-/* DCA */
-
-/* Largura dos inputs */
-.wide-input {
-  width: 150px !important;
+/* === DCA (limpo e compacto) === */
+#dca-section {
+  /* full-bleed só nesta secção */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-inline: var(--spacing-md);
 }
 
-.ticker-input {
-  width: 150px !important;
+/* Inputs (largura e ergonomia) */
+:root {
+  --dca-input-w: 150px;
+  --dca-gap: 24px;
+  --dca-canvas-h: 360px;
 }
-
-/* Ajustar também o select do mês */
-#dca-month-sel {
-  width: 150px !important;
-}
+.wide-input,
+.ticker-input,
+#dca-month-sel { width: var(--dca-input-w) !important; }
 
 #dca-form input,
 #dca-form select {
-  height: 38px;          /* altura consistente */
-  font-size: 15px;       /* texto legível */
-  padding: 4px 8px;      /* mais espaço interno */
+  height: 38px;
+  font-size: 15px;
+  padding: 4px 8px;
   margin-top: 4px;
 }
 
-/* Layout dos 5 gráficos: sempre na vertical */
+/* Lista de gráficos sempre vertical */
 .charts-grid {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--dca-gap);
 }
 
-/* Cartão de cada gráfico */
+/* Cartão de gráfico + separador */
 .chart-card {
-  padding: 6px 8px;
+  padding: 6px 8px 20px;
   border-radius: 10px;
   background: transparent;
+  border-bottom: 1px solid #ddd;
 }
-
-/* Título do gráfico */
+.chart-card:last-child { border-bottom: none; }
 .chart-card h3 {
   margin: 0 0 6px 4px;
   font-weight: 600;
 }
 
-.chart-card {
-  padding: 6px 8px 20px 8px;
-  border-radius: 10px;
-  background: transparent;
-  border-bottom: 1px solid #ddd; /* separador cinza claro */
+/* Canvas ocupa toda a largura disponível desta secção */
+#dca-section .chart-card canvas {
+  width: 100% !important;
+  height: var(--dca-canvas-h) !important;
 }
 
-/* Retira a linha do último gráfico */
-.chart-card:last-child {
-  border-bottom: none;
-}
 
 @media (max-width: 600px) {
     /* Ensure inputs stack vertically on very small screens */
