@@ -277,7 +277,7 @@ let dcaChart;
 const DCA_CFG = {
   startYear: 2025,
   endYear: 2050,
-  startMonth: 9, // 1=Jan … 9=Set
+  startMonth: 9,             // <-- começar em setembro
   monthlyDefault: 100,
   weights: { SWDA: 0.40, AGGU: 0.40, CNDX: 0.20 },
   rates: { pessimistic: 0.0384, realistic: 0.0464, optimistic: 0.0700 }
@@ -299,16 +299,17 @@ function toYYYYMM(date){
   const m = (date.getMonth()+1).toString().padStart(2,'0');
   return `${y}-${m}`;
 }
-function mmRange(startYYYY, endYYYY, startMonth=1){
+function mmRange(startYYYY, endYYYY, startMonth = 1) {
   const out = [];
-  for (let y = startYYYY; y <= endYYYY; y++){
+  for (let y = startYYYY; y <= endYYYY; y++) {
     const mStart = (y === startYYYY) ? startMonth : 1;
-    for (let m = mStart; m <= 12; m++){
-      out.push(`${y}-${String(m).padStart(2,'0')}`);
+    for (let m = mStart; m <= 12; m++) {
+      out.push(`${y}-${String(m).padStart(2, '0')}`);
     }
   }
   return out;
 }
+
 
 function toYYYYdashMM(y, mm){ return `${y}-${mm}`; }
 
