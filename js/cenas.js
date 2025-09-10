@@ -310,7 +310,6 @@ function mmRange(startYYYY, endYYYY, startMonth = 1) {
   return out;
 }
 
-
 function toYYYYdashMM(y, mm){ return `${y}-${mm}`; }
 
 // Firestore
@@ -343,8 +342,8 @@ async function deleteDcaEntry(docId){
 }
 
 // Projeções (compounding mensal)
-function projectSeries(rateAnnual, monthly, startYYYY, endYYYY){
-  const months = mmRange(startYYYY,endYYYY);
+function projectSeries(rateAnnual, monthly, startYYYY, endYYYY, startMonth){
+  const months = mmRange(startYYYY, endYYYY, startMonth);
   let bal = 0;
   const r = rateAnnual/12;
   const out = [];
@@ -356,16 +355,12 @@ function projectSeries(rateAnnual, monthly, startYYYY, endYYYY){
   return out;
 }
 
-// Série real (com base nos inputs gravados)
-function actualSeries(entries, startYYYY, endYYYY){
-  const months = mmRange(startYYYY,endYYYY);
+function actualSeries(entries, startYYYY, endYYYY, startMonth){
+  const months = mmRange(startYYYY, endYYYY, startMonth);
   const map = new Map(entries.map(e=>[e.month, e]));
   let bal = 0;
   const out = [];
-  // Para a série real, assumimos que cada compra fica investida e rende
-  // à taxa "realistic" média (podes trocar para outra).
   const r = DCA_CFG.rates.realistic/12;
-
   months.forEach(mm=>{
     const row = map.get(mm);
     const contrib = row ? Number(row.total) : 0;
@@ -487,16 +482,14 @@ async function refreshDca(){
   const rows = await loadDcaEntries();
   renderDcaTable(rows);
 
-  const start = DCA_CFG.startYear;
-  const end   = DCA_CFG.endYear;
+const start = DCA_CFG.startYear;
+const end   = DCA_CFG.endYear;
+const m0    = DCA_CFG.startMonth;
 
-  // Projeções com $100/mês (podes ajustar se quiseres outra base)
-  const projP = projectSeries(DCA_CFG.rates.pessimistic, DCA_CFG.monthlyDefault, start, end);
-  const projR = projectSeries(DCA_CFG.rates.realistic,  DCA_CFG.monthlyDefault, start, end);
-  const projO = projectSeries(DCA_CFG.rates.optimistic, DCA_CFG.monthlyDefault, start, end);
-
-  // Série real com base nas entradas gravadas
-  const realS  = actualSeries(rows, start, end);
+const projP = projectSeries(DCA_CFG.rates.pessimistic, DCA_CFG.monthlyDefault, start, end, m0);
+const projR = projectSeries(DCA_CFG.rates.realistic,  DCA_CFG.monthlyDefault, start, end, m0);
+const projO = projectSeries(DCA_CFG.rates.optimistic, DCA_CFG.monthlyDefault, start, end, m0);
+const realS = actualSeries(rows, start, end, m0);
 
   renderDcaChart({
     pessimistic: projP,
