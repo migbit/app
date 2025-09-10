@@ -366,8 +366,7 @@ function renderDcaChartsSegmented(seriesAll){
 
   const makeDs = (label, data, dashed=false) => ({
     label,
-    data: data.map(p => Number(p.value.toFixed(2))),
-    borderWidth: 2,
+    data: data.map(p => (p.value == null ? null : Number(p.value.toFixed(2)))),    borderWidth: 2,
     tension: 0.12,
     borderDash: dashed ? [6,6] : undefined,
     pointRadius: 0,
@@ -550,44 +549,6 @@ function renderDcaTable(rows){
 }
 
 
-// Constrói linhas do resumo acumulado
-function buildSummaryRows(rows){
-  // rows já vem ordenado por mês
-  let investedCum = 0;
-  return rows.map(r=>{
-    investedCum += Number(r.total);
-    const havePortfolio = r.portfolio != null && !Number.isNaN(Number(r.portfolio));
-    const valueReal = havePortfolio ? Number(r.portfolio) : null;
-    const realized = havePortfolio ? (valueReal - investedCum) : null;
-    const effRate = havePortfolio && investedCum > 0 ? (valueReal/investedCum - 1) : null;
-
-    return {
-      month: r.month,
-      invested: investedCum,
-      valueReal,
-      realized,
-      effRate
-    };
-  });
-}
-
-function renderSummaryTable(rows){
-  dcaSummaryRows.innerHTML = '';
-  const data = buildSummaryRows(rows);
-  data.forEach(row=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${row.month}</td>
-      <td>$${row.invested.toFixed(2)}</td>
-      <td>${row.valueReal == null ? '—' : '$'+row.valueReal.toFixed(2)}</td>
-      <td>${row.realized == null ? '—' : (row.realized>=0?'+$':'-$') + Math.abs(row.realized).toFixed(2)}</td>
-      <td>${row.effRate == null ? '—' : (row.effRate>=0?'+':'') + (row.effRate*100).toFixed(2) + '%'}</td>
-    `;
-    dcaSummaryRows.appendChild(tr);
-  });
-}
-
-
 // Render Chart
 function renderDcaChart(series){
   const ctx = dcaChartEl.getContext('2d');
@@ -657,7 +618,6 @@ function renderDcaChart(series){
 async function refreshDca(){
   const rows = await loadDcaEntries();
   renderDcaTable(rows);
-  renderSummaryTable(rows);
 
 const start = DCA_CFG.startYear;
 const end   = DCA_CFG.endYear;
@@ -677,8 +637,6 @@ renderDcaChartsSegmented({
   optimistic:  projO,
   actual:      realS
 });
-
-renderDcaTable(rows);
 
 
 }
