@@ -152,29 +152,15 @@
   </div>
 
   <div>
-    <label for="dca-swda" style="display:block;">SWDA ($)</label>
-    <input type="number" id="dca-swda" step="0.01" min="0" class="ticker-input" required>
+    <label for="dca-portfolio" style="display:block;">Valor da carteira ($)</label>
+    <input type="number" id="dca-portfolio" step="0.01" min="0" class="ticker-input" required>
   </div>
-
-  <div>
-    <label for="dca-aggu" style="display:block;">AGGU ($)</label>
-    <input type="number" id="dca-aggu" step="0.01" min="0" class="ticker-input" required>
-  </div>
-
-  <div>
-    <label for="dca-cndx" style="display:block;">CNDX ($)</label>
-    <input type="number" id="dca-cndx" step="0.01" min="0" class="ticker-input" required>
-  </div>
-
-<div>
-  <label for="dca-portfolio" style="display:block;">Valor da carteira ($)</label>
-  <input type="number" id="dca-portfolio" step="0.01" min="0" class="ticker-input" placeholder="opcional">
-</div>
 
   <div style="display:flex;align-items:flex-end;">
     <button type="submit" class="btn btn-success">Guardar mês</button>
   </div>
 </form>
+
 
     <!-- Gráfico -->
     <<div id="dca-charts-grid" class="charts-grid">
@@ -186,20 +172,20 @@
 </div>
 
     <!-- Tabela de meses registados -->
-    <table class="table table-striped mt-3">
-      <thead>
-        <tr>
-          <th>Mês</th>
-          <th>SWDA ($)</th>
-          <th>AGGU ($)</th>
-          <th>CNDX ($)</th>
-          <th>Total ($)</th>
-          <th>Carteira ($)</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="dca-rows"></tbody>
-    </table>
+<table class="table table-striped mt-3">
+  <thead>
+    <tr>
+      <th>Mês</th>
+      <th>Investido ($)</th>
+      <th>Carteira ($)</th>
+      <th>Realizado ($)</th>
+      <th>Taxa efetiva</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody id="dca-rows"></tbody>
+</table>
+
   </div>
 </section>
 
