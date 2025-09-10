@@ -266,32 +266,29 @@ const dcaForm     = document.getElementById('dca-form');
 const dcaRows     = document.getElementById('dca-rows');
 const dcaYear     = document.getElementById('dca-year');
 const dcaMonthSel = document.getElementById('dca-month-sel');
-const dcaSWDA     = document.getElementById('dca-swda');
-const dcaAGGU     = document.getElementById('dca-aggu');
-const dcaCNDX     = document.getElementById('dca-cndx');
+const dcaPortfolio= document.getElementById('dca-portfolio');
+
 const chartIds = ['dca-chart-1','dca-chart-2','dca-chart-3','dca-chart-4','dca-chart-5'];
-const dcaPortfolio = document.getElementById('dca-portfolio');
-const dcaSummaryRows = document.getElementById('dca-summary-rows');
-let dcaCharts = []; // guardamos as instâncias dos 5 charts para destruir no refresh
+let dcaCharts = [];
 
 // Parâmetros da estratégia Anti-crise
 const DCA_CFG = {
   startYear: 2025,
   endYear: 2050,
-  startMonth: 9,             // <-- começar em setembro
-  monthlyDefault: 100,
-  weights: { SWDA: 0.40, AGGU: 0.40, CNDX: 0.20 },
+  startMonth: 9,               // começa em setembro
+  monthlyDefault: 100,         // usado nas projeções
   rates: { pessimistic: 0.0384, realistic: 0.0464, optimistic: 0.0700 }
 };
+
 
 // Pré-preencher com ano/mês atuais
 function presetYearMonth(){
   const now = new Date();
   dcaYear.value = now.getFullYear();
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  dcaMonthSel.value = mm;
+  dcaMonthSel.value = String(now.getMonth()+1).padStart(2,'0');
 }
 presetYearMonth();
+
 
 // Helpers
 function ymKey(yyyyMM){ return yyyyMM; } // chave "YYYY-MM"
@@ -312,6 +309,10 @@ function mmRange(startYYYY, endYYYY, startMonth = 1) {
 }
 
 function toYYYYdashMM(y, mm){ return `${y}-${mm}`; }
+
+function monthsBetweenInclusive(startY, startM, y, m){
+  return (y - startY)*12 + (m - startM) + 1; // +1 inclui o mês final
+}
 
 function buildFiveYearSegments(startYYYY, startMonth, endYYYY){
   // Segmentos: [2025-09..2030-08], [2030-09..2035-08], ... até 2050-08
@@ -433,19 +434,11 @@ function renderDcaChartsSegmented(seriesAll){
 }
 
 // Firestore
-async function saveDcaEntry(yyyyMM, swda, aggu, cndx, portfolio){
-  const total = Number(swda)+Number(aggu)+Number(cndx);
+async function saveDcaEntry(yyyyMM, portfolio){
   const colRef = collection(db,'dca_entries');
   const qy = query(colRef, where('month','==',yyyyMM));
   const snap = await getDocs(qy);
-  const payload = {
-    month: yyyyMM,
-    swda: Number(swda),
-    aggu: Number(aggu),
-    cndx: Number(cndx),
-    total,
-    portfolio: portfolio === '' || portfolio == null ? null : Number(portfolio)
-  };
+  const payload = { month: yyyyMM, portfolio: Number(portfolio) };
   if (snap.empty){
     await addDoc(colRef, payload);
   } else {
@@ -454,15 +447,16 @@ async function saveDcaEntry(yyyyMM, swda, aggu, cndx, portfolio){
 }
 
 
+
 async function loadDcaEntries(){
-  const col = collection(db,'dca_entries');
-  const qs = await getDocs(col);
+  const colRef = collection(db,'dca_entries');
+  const qs = await getDocs(colRef);
   const rows = [];
   qs.forEach(d => rows.push({ id:d.id, ...d.data() }));
-  // ordenar por mês
   rows.sort((a,b)=>a.month.localeCompare(b.month));
   return rows;
 }
+
 
 async function deleteDcaEntry(docId){
   await deleteDoc(doc(db,'dca_entries', docId));
@@ -496,18 +490,34 @@ function actualSeries(entries, startYYYY, endYYYY, startMonth){
   return out;
 }
 
+function actualSeriesFromPortfolio(entries, startYYYY, endYYYY, startMonth){
+  const months = mmRange(startYYYY, endYYYY, startMonth);
+  const map = new Map(entries.map(e => [e.month, Number(e.portfolio)]));
+  return months.map(mm => ({ month: mm, value: map.has(mm) ? map.get(mm) : null }));
+}
+
+
 // Render tabela
 function renderDcaTable(rows){
   dcaRows.innerHTML = '';
   rows.forEach(r=>{
+    // Investido acumulado até YYYY-MM
+    const y = parseInt(r.month.slice(0,4), 10);
+    const m = parseInt(r.month.slice(5,7), 10);
+    const nMonths = monthsBetweenInclusive(DCA_CFG.startYear, DCA_CFG.startMonth, y, m);
+    const invested = DCA_CFG.monthlyDefault * nMonths;
+
+    const portfolio = Number(r.portfolio);
+    const realized  = portfolio - invested;
+    const effRate   = invested > 0 ? (portfolio/invested - 1) : 0;
+
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${r.month}</td>
-      <td>$${Number(r.swda).toFixed(2)}</td>
-      <td>$${Number(r.aggu).toFixed(2)}</td>
-      <td>$${Number(r.cndx).toFixed(2)}</td>
-      <td>$${Number(r.total).toFixed(2)}</td>
-      <td>${r.portfolio != null ? '$'+Number(r.portfolio).toFixed(2) : '—'}</td>
+      <td>$${invested.toFixed(2)}</td>
+      <td>$${portfolio.toFixed(2)}</td>
+      <td>${realized>=0?'+$':'-$'}${Math.abs(realized).toFixed(2)}</td>
+      <td>${(effRate>=0?'+':'') + (effRate*100).toFixed(2)}%</td>
       <td>
         <button class="btn btn-sm btn-primary" data-edit="${r.id}">Editar</button>
         <button class="btn btn-sm btn-danger" data-del="${r.id}">Apagar</button>
@@ -519,28 +529,26 @@ function renderDcaTable(rows){
   // Apagar
   dcaRows.querySelectorAll('[data-del]').forEach(btn=>{
     btn.addEventListener('click', async ()=>{
-      await deleteDcaEntry(btn.dataset.del);
+      await deleteDoc(doc(db,'dca_entries', btn.dataset.del));
       await refreshDca();
     });
   });
 
-  // Editar (preenche também a carteira)
+  // Editar (preenche ano/mês e carteira)
   dcaRows.querySelectorAll('[data-edit]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.edit;
       const row = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
       const tds = row.querySelectorAll('td');
-      const ym = tds[0].innerText; // "YYYY-MM"
+      const ym = tds[0].innerText;
       dcaYear.value = ym.slice(0,4);
       dcaMonthSel.value = ym.slice(5,7);
-      dcaSWDA.value  = tds[1].innerText.replace('$','');
-      dcaAGGU.value  = tds[2].innerText.replace('$','');
-      dcaCNDX.value  = tds[3].innerText.replace('$','');
-      dcaPortfolio.value = tds[5].innerText === '—' ? '' : tds[5].innerText.replace('$','');
+      dcaPortfolio.value = tds[2].innerText.replace('$','');
       window.scrollTo({ top: dcaForm.offsetTop - 20, behavior:'smooth' });
     });
   });
 }
+
 
 // Constrói linhas do resumo acumulado
 function buildSummaryRows(rows){
@@ -655,10 +663,13 @@ const start = DCA_CFG.startYear;
 const end   = DCA_CFG.endYear;
 const m0    = DCA_CFG.startMonth;
 
+// Projeções (mantêm-se iguais)
 const projP = projectSeries(DCA_CFG.rates.pessimistic, DCA_CFG.monthlyDefault, start, end, m0);
 const projR = projectSeries(DCA_CFG.rates.realistic,  DCA_CFG.monthlyDefault, start, end, m0);
 const projO = projectSeries(DCA_CFG.rates.optimistic, DCA_CFG.monthlyDefault, start, end, m0);
-const realS = actualSeries(rows, start, end, m0);
+
+// Real = valores de carteira (sem qualquer juro simulado)
+const realS = actualSeriesFromPortfolio(rows, start, end, m0);
 
 renderDcaChartsSegmented({
   pessimistic: projP,
@@ -666,6 +677,9 @@ renderDcaChartsSegmented({
   optimistic:  projO,
   actual:      realS
 });
+
+renderDcaTable(rows);
+
 
 }
 
@@ -676,11 +690,12 @@ dcaForm?.addEventListener('submit', async (e)=>{
   const mm = dcaMonthSel.value;
   if (!y || !mm){ alert('Seleciona ano e mês.'); return; }
   const key = toYYYYdashMM(y, mm);
-  await saveDcaEntry(key, dcaSWDA.value, dcaAGGU.value, dcaCNDX.value, dcaPortfolio.value);
+  await saveDcaEntry(key, dcaPortfolio.value);
   dcaForm.reset();
-  presetYearMonth(); // repor defaults
+  presetYearMonth();
   await refreshDca();
 });
+
 
 // —— Secção Carlos (Faturas Pendentes) ——
   
