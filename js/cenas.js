@@ -269,9 +269,8 @@ const dcaMonthSel = document.getElementById('dca-month-sel');
 const dcaSWDA     = document.getElementById('dca-swda');
 const dcaAGGU     = document.getElementById('dca-aggu');
 const dcaCNDX     = document.getElementById('dca-cndx');
-const dcaChartEl  = document.getElementById('dca-chart');
-
-let dcaChart;
+const chartIds = ['dca-chart-1','dca-chart-2','dca-chart-3','dca-chart-4','dca-chart-5'];
+let dcaCharts = []; // guardamos as instâncias dos 5 charts para destruir no refresh
 
 // Parâmetros da estratégia Anti-crise
 const DCA_CFG = {
@@ -311,6 +310,125 @@ function mmRange(startYYYY, endYYYY, startMonth = 1) {
 }
 
 function toYYYYdashMM(y, mm){ return `${y}-${mm}`; }
+
+function buildFiveYearSegments(startYYYY, startMonth, endYYYY){
+  // Segmentos: [2025-09..2030-08], [2030-09..2035-08], ... até 2050-08
+  const segments = [];
+  let sy = startYYYY, sm = startMonth;
+  while (sy < endYYYY) {
+    let ey = sy + 5;       // +5 anos
+    let em = sm - 1;       // termina no mês anterior (ex.: 9→8)
+    if (em === 0) { em = 12; ey -= 1; }
+    // não passar do endYYYY
+    if (ey > endYYYY) { ey = endYYYY; em = 8; } // 2050-08 para fechar 25 anos desde 2025-09
+    segments.push({
+      label: `${sy}–${ey + (em === 12 ? 1 : 0) || ey}`, // label amigável; mas abaixo usamos títulos fixos
+      startY: sy, startM: sm,
+      endY: ey, endM: em
+    });
+    // próximo segmento começa no mês seguinte
+    let nsm = sm + 1;
+    let nsy = sy + 5;
+    if (nsm === 13) { nsm = 1; nsy += 1; }
+    sy = nsy; sm = nsm;
+    if (sy >= endYYYY) break;
+  }
+  // Vamos forçar os títulos como pediste:
+  const forcedTitles = [
+    '2025–2030', '2030–2035', '2035–2040', '2040–2045', '2045–2050'
+  ];
+  return segments.slice(0,5).map((s,i)=>({ ...s, title: forcedTitles[i] || s.label }));
+}
+
+function withinRange(ym, sy, sm, ey, em){
+  // ym = "YYYY-MM"
+  const y = parseInt(ym.slice(0,4),10);
+  const m = parseInt(ym.slice(5,7),10);
+  if (y < sy || y > ey) return false;
+  if (y === sy && m < sm) return false;
+  if (y === ey && m > em) return false;
+  return true;
+}
+
+function sliceSeries(seriesArr, seg){
+  return seriesArr.filter(p => withinRange(p.month, seg.startY, seg.startM, seg.endY, seg.endM));
+}
+
+function renderDcaChartsSegmented(seriesAll){
+  // destruir charts antigos
+  dcaCharts.forEach(ch => ch && ch.destroy());
+  dcaCharts = [];
+
+  const segments = buildFiveYearSegments(DCA_CFG.startYear, DCA_CFG.startMonth, DCA_CFG.endYear);
+
+  const makeDs = (label, data, dashed=false) => ({
+    label,
+    data: data.map(p => Number(p.value.toFixed(2))),
+    borderWidth: 2,
+    tension: 0.12,
+    borderDash: dashed ? [6,6] : undefined,
+    pointRadius: 0,
+    fill: false
+  });
+
+  segments.forEach((seg, i) => {
+    const ctx = document.getElementById(chartIds[i]).getContext('2d');
+
+    const serP = sliceSeries(seriesAll.pessimistic, seg);
+    const serR = sliceSeries(seriesAll.realistic,  seg);
+    const serO = sliceSeries(seriesAll.optimistic, seg);
+    const serA = sliceSeries(seriesAll.actual,     seg);
+
+    const labels = serR.map(p => p.month); // eixo X
+
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          makeDs('Pessimista', serP),
+          makeDs('Realista',   serR),
+          makeDs('Otimista',   serO),
+          { ...makeDs('Real (inputs)', serA, true), stepped: true }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        layout: { padding: { left: 8, right: 12, top: 4, bottom: 4 } },
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { boxWidth: 18 } },
+          title: { display: true, text: seg.title, align: 'start', padding: { bottom: 6 } },
+          tooltip: { callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`
+          }}
+        },
+        scales: {
+          x: {
+            ticks: {
+              maxRotation: 0,
+              autoSkip: true,
+              callback: (value, index) => {
+                const lbl = labels[index] || '';
+                // mostra ano no 1.º ponto do segmento e nos Janeiros
+                if (index === 0) return lbl.slice(0,4);
+                return lbl.endsWith('-01') ? lbl.slice(0,4) : '';
+              }
+            },
+            grid: { drawOnChartArea: false }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { callback: v => '$' + v.toLocaleString() }
+          }
+        }
+      }
+    });
+
+    dcaCharts.push(chart);
+  });
+}
 
 // Firestore
 async function saveDcaEntry(yyyyMM, swda, aggu, cndx){
@@ -484,7 +602,7 @@ async function refreshDca(){
   const rows = await loadDcaEntries();
   renderDcaTable(rows);
 
-const  start = DCA_CFG.startYear;
+const start = DCA_CFG.startYear;
 const end   = DCA_CFG.endYear;
 const m0    = DCA_CFG.startMonth;
 
@@ -493,12 +611,13 @@ const projR = projectSeries(DCA_CFG.rates.realistic,  DCA_CFG.monthlyDefault, st
 const projO = projectSeries(DCA_CFG.rates.optimistic, DCA_CFG.monthlyDefault, start, end, m0);
 const realS = actualSeries(rows, start, end, m0);
 
-  renderDcaChart({
-    pessimistic: projP,
-    realistic: projR,
-    optimistic: projO,
-    actual: realS
-  });
+renderDcaChartsSegmented({
+  pessimistic: projP,
+  realistic:   projR,
+  optimistic:  projO,
+  actual:      realS
+});
+
 }
 
 // Handler do form
