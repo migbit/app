@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cenas</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -127,6 +128,49 @@
     </div>
   </section>
                
+<!-- DCA – Projeção e Registo Mensal -->
+<section class="card mt-4" id="dca-section">
+  <h2 class="card-header">DCA – Projeção até 2050 e Curva Real</h2>
+  <div class="card-body">
+    <!-- Form de input mensal -->
+    <form id="dca-form" class="form-inline mb-3">
+      <label for="dca-month" style="margin-right:8px;">Mês</label>
+      <input type="month" id="dca-month" required>
+
+      <label for="dca-swda" style="margin:0 8px;">SWDA ($)</label>
+      <input type="number" id="dca-swda" step="0.01" min="0" required>
+
+      <label for="dca-aggu" style="margin:0 8px;">AGGU ($)</label>
+      <input type="number" id="dca-aggu" step="0.01" min="0" required>
+
+      <label for="dca-cndx" style="margin:0 8px;">CNDX ($)</label>
+      <input type="number" id="dca-cndx" step="0.01" min="0" required>
+
+      <button type="submit" class="btn btn-success ml-2">Guardar mês</button>
+    </form>
+
+    <!-- Gráfico -->
+    <div style="width:100%;max-width:1000px;">
+      <canvas id="dca-chart" height="120"></canvas>
+    </div>
+
+    <!-- Tabela de meses registados -->
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>SWDA ($)</th>
+          <th>AGGU ($)</th>
+          <th>CNDX ($)</th>
+          <th>Total ($)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="dca-rows"></tbody>
+    </table>
+  </div>
+</section>
+
         <footer>
             <div class="footer-container">
                 <p>&copy; 2024 OM&MT.</p>
