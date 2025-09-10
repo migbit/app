@@ -364,13 +364,11 @@ function renderDcaChartsSegmented(seriesAll){
 
   const segments = buildFiveYearSegments(DCA_CFG.startYear, DCA_CFG.startMonth, DCA_CFG.endYear);
 
-  const makeDs = (label, data, dashed=false) => ({
+  const makeDs = (label, data, color) => ({
     label,
-    data: data.map(p => (p.value == null ? null : Number(p.value.toFixed(2)))),    borderWidth: 2,
-    tension: 0.12,
-    borderDash: dashed ? [6,6] : undefined,
-    pointRadius: 0,
-    fill: false
+    data: data.map(p => (p.value == null ? null : Number(p.value.toFixed(2)))),
+    backgroundColor: color,
+    borderWidth: 1
   });
 
   segments.forEach((seg, i) => {
@@ -381,46 +379,47 @@ function renderDcaChartsSegmented(seriesAll){
     const serO = sliceSeries(seriesAll.optimistic, seg);
     const serA = sliceSeries(seriesAll.actual,     seg);
 
-    const labels = serR.map(p => p.month); // eixo X
+    const labels = serR.map(p => p.month);
 
     const chart = new Chart(ctx, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels,
         datasets: [
-          makeDs('Pessimista', serP),
-          makeDs('Realista',   serR),
-          makeDs('Otimista',   serO),
-          { ...makeDs('Real (inputs)', serA, true), stepped: true }
+          makeDs('Pessimista', serP, 'rgba(255,99,132,0.7)'),
+          makeDs('Realista',   serR, 'rgba(54,162,235,0.7)'),
+          makeDs('Otimista',   serO, 'rgba(75,192,192,0.7)'),
+          makeDs('Real (inputs)', serA, 'rgba(255,206,86,0.9)')
         ]
       },
       options: {
         maintainAspectRatio: false,
-        layout: { padding: { left: 8, right: 12, top: 4, bottom: 4 } },
         responsive: true,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { position: 'top', labels: { boxWidth: 18 } },
+          legend: { position: 'top' },
           title: { display: true, text: seg.title, align: 'start', padding: { bottom: 6 } },
-          tooltip: { callbacks: {
-            label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`
-          }}
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}`
+            }
+          }
         },
         scales: {
           x: {
+            stacked: true,
             ticks: {
               maxRotation: 0,
               autoSkip: true,
               callback: (value, index) => {
                 const lbl = labels[index] || '';
-                // mostra ano no 1.º ponto do segmento e nos Janeiros
                 if (index === 0) return lbl.slice(0,4);
                 return lbl.endsWith('-01') ? lbl.slice(0,4) : '';
               }
-            },
-            grid: { drawOnChartArea: false }
+            }
           },
           y: {
+            stacked: true,
             beginAtZero: true,
             ticks: { callback: v => '$' + v.toLocaleString() }
           }
@@ -431,6 +430,7 @@ function renderDcaChartsSegmented(seriesAll){
     dcaCharts.push(chart);
   });
 }
+
 
 // Firestore
 async function saveDcaEntry(yyyyMM, portfolio){
