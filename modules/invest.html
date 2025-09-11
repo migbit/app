@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Investimentos (DCA)</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+  <header>
+    <h1>Investimentos</h1>
+    <div class="menu-icon" id="menu-icon">&#9776;</div>
+    <nav id="nav-menu">
+      <ul>
+        <li><a href="mensagens.html">Mensagens</a></li>
+        <li><a href="ficheiros.html">Ficheiros</a></li>
+        <li class="separator">|</li>
+        <li><a href="compras.html">Compras</a></li>
+        <li><a href="faturas.html">Faturas / Relatórios</a></li>
+        <li><a href="caixa.html">Caixa</a></li>
+        <li><a href="reparações.html">Reparações</a></li>
+        <li><a href="tarefas.html">Tarefas</a></li>
+        <li><a href="hospedes.html">Hóspedes</a></li>
+        <li><a href="cenas.html">Cenas</a></li>
+        <li class="separator">|</li>
+        <li><a href="invest.html" class="active">Invest</a></li>
+        <li class="separator">|</li>
+        <li id="login-section">
+          <a href="#" id="login-btn" class="login-visible">Login</a>
+          <span id="user-info" class="user-visible" style="display:none;">
+            <a href="#" id="user-name">Username</a>
+          </span>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- DCA – Navegação por Ano e Tabelas -->
+    <section class="card mt-4" id="dca-section">
+      <h2 class="card-header">DCA – Tabelas por Ano</h2>
+      <div class="card-body">
+
+        <!-- Form de input mensal (mês/ano + carteira) -->
+        <form id="dca-form" class="form-inline mb-3" style="gap:10px;flex-wrap:wrap;">
+          <div>
+            <label for="dca-year" style="display:block;">Ano</label>
+            <input type="number" id="dca-year" min="2025" max="2050" class="wide-input" required>
+          </div>
+
+          <div>
+            <label for="dca-month-sel" style="display:block;">Mês</label>
+            <select id="dca-month-sel" class="wide-input" required>
+              <option value="01">Jan</option><option value="02">Fev</option><option value="03">Mar</option>
+              <option value="04">Abr</option><option value="05">Mai</option><option value="06">Jun</option>
+              <option value="07">Jul</option><option value="08">Ago</option><option value="09">Set</option>
+              <option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="dca-portfolio" style="display:block;">Valor da carteira ($)</label>
+            <input type="number" id="dca-portfolio" step="0.01" min="0" class="ticker-input" required>
+          </div>
+
+          <div style="display:flex;align-items:flex-end;">
+            <button type="submit" class="btn btn-success">Guardar mês</button>
+          </div>
+        </form>
+
+        <!-- Navegação de ano -->
+        <div class="flex mb-3" style="gap:8px;align-items:center;">
+          <button id="dca-prev-year" class="btn btn-secondary btn-sm">◀ Ano anterior</button>
+          <div>
+            <strong>Anos:</strong>
+            <span id="dca-year-prev" class="badge badge-light"></span>
+            <span id="dca-year-current" class="badge badge-primary" style="margin:0 6px;"></span>
+            <span id="dca-year-next" class="badge badge-light"></span>
+          </div>
+          <button id="dca-next-year" class="btn btn-secondary btn-sm">Ano seguinte ▶</button>
+        </div>
+
+        <!-- Tabela A — Projeções para o ano selecionado -->
+        <h3 id="dca-title-proj" class="mt-2"></h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Mês</th>
+              <th>Investido ($)</th>
+              <th>Pessimista ($)</th>
+              <th>Realista ($)</th>
+              <th>Otimista ($)</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="dca-proj-rows"></tbody>
+        </table>
+
+        <!-- Form inline para registar valor de carteira do mês -->
+        <form id="dca-inline-form" class="form-inline mb-3" style="gap:8px;display:none;">
+          <input type="hidden" id="dca-inline-ym">
+          <label for="dca-inline-portfolio" style="margin-right:6px;">
+            Valor da carteira ($) em <span id="dca-inline-label"></span>
+          </label>
+          <input type="number" id="dca-inline-portfolio" class="ticker-input" step="0.01" min="0" required>
+          <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+          <button type="button" id="dca-inline-cancel" class="btn btn-link btn-sm">Cancelar</button>
+        </form>
+
+        <!-- Tabela B — Registos reais do ano selecionado -->
+        <h3 id="dca-title-real" class="mt-3"></h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Mês</th>
+              <th>Investido ($)</th>
+              <th>Carteira ($)</th>
+              <th>Realizado ($)</th>
+              <th>Taxa efetiva</th>
+              <th>Δ Pess.</th>
+              <th>Δ Real.</th>
+              <th>Δ Otim.</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="dca-real-rows"></tbody>
+        </table>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <p>&copy; 2025 OM&MT.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase bootstrap da tua app -->
+  <script type="module" src="../js/script.js"></script>
+  <!-- Lógica DCA apenas nesta página -->
+  <script type="module" src="../js/invest.js"></script>
+
+  <!-- Mobile Menu Toggle -->
+  <script>
+    const menuIcon = document.getElementById('menu-icon');
+    const navMenu = document.getElementById('nav-menu');
+    menuIcon?.addEventListener('click', ()=> navMenu.classList.toggle('active'));
+  </script>
+</body>
+</html>
