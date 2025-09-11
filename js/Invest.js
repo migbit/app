@@ -1,6 +1,6 @@
 // js/invest.js — INVEST 1 tabela/ano, inline edit, CSV, projeções
 
-import { db } from './script.js';
+import { db } from '../js/script.js';
 import {
   collection, addDoc, getDocs, deleteDoc, doc, query, where, updateDoc
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
