@@ -581,7 +581,6 @@ function actualSeriesFromPortfolio(entries, startYYYY, endYYYY, startMonth){
       window.scrollTo({ top: dcaForm.offsetTop - 20, behavior:'smooth' });
     });
   });
-}
 
 
 // Refresh total (carrega dados, redesenha tabela e gráfico)
