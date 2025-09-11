@@ -1,314 +1,295 @@
-// js/invest.js – Página exclusiva do DCA por ano
+// js/invest.js — INVEST 1 tabela/ano, inline edit, CSV, projeções
 
-import { db } from '../js/script.js';
+import { db } from './script.js';
 import {
   collection, addDoc, getDocs, deleteDoc, doc, query, where, updateDoc
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-/* ========= Config ========= */
-const DCA_CFG = {
+/* ===== Config ===== */
+const CFG = {
   startYear: 2025,
+  startMonth: 9,   // Setembro
   endYear: 2050,
-  startMonth: 9,               // começa em Setembro/2025
-  monthlyDefault: 100,         // DCA mensal
-  rates: { pessimistic: 0.0384, realistic: 0.0464, optimistic: 0.0700 } // anuais
+  monthlyDca: 100,
+  rates: { pess: 0.0384, real: 0.0464, otim: 0.0700 }, // anuais
 };
+const PT_M = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
-// Ano selecionado (por defeito, ano corrente dentro dos limites)
-let dcaYearSelected = new Date().getFullYear();
-if (dcaYearSelected < DCA_CFG.startYear) dcaYearSelected = DCA_CFG.startYear;
-if (dcaYearSelected > DCA_CFG.endYear)   dcaYearSelected = DCA_CFG.endYear;
-
-/* ========= Selectors ========= */
-// Navegação
-const dcaPrevYearBtn   = document.getElementById('dca-prev-year');
-const dcaNextYearBtn   = document.getElementById('dca-next-year');
-const dcaYearPrevEl    = document.getElementById('dca-year-prev');
-const dcaYearCurEl     = document.getElementById('dca-year-current');
-const dcaYearNextEl    = document.getElementById('dca-year-next');
-
-// Tabelas
-const dcaProjRows      = document.getElementById('dca-proj-rows');
-const dcaRealRows      = document.getElementById('dca-real-rows');
-const dcaTitleProj     = document.getElementById('dca-title-proj');
-const dcaTitleReal     = document.getElementById('dca-title-real');
-
-// Form de topo
-const dcaForm      = document.getElementById('dca-form');
-const dcaYear      = document.getElementById('dca-year');
-const dcaMonthSel  = document.getElementById('dca-month-sel');
-const dcaPortfolio = document.getElementById('dca-portfolio');
-
-// Form inline
-const dcaInlineForm   = document.getElementById('dca-inline-form');
-const dcaInlineYM     = document.getElementById('dca-inline-ym');
-const dcaInlineLabel  = document.getElementById('dca-inline-label');
-const dcaInlineValue  = document.getElementById('dca-inline-portfolio');
-const dcaInlineCancel = document.getElementById('dca-inline-cancel');
-
-/* ========= Helpers ========= */
-function toYYYYdashMM(y, mm){ return `${y}-${mm}`; }
-
-function monthsBetweenInclusive(startY, startM, y, m){
-  return (y - startY)*12 + (m - startM) + 1; // inclui mês final
+/* ===== Helpers ===== */
+const ym = (y,m) => `${y}-${String(m).padStart(2,'0')}`;
+const pretty = (y,m) => `${PT_M[m-1]} ${y}`;
+function monthsFromStartTo(y,m){
+  return (y - CFG.startYear)*12 + (m - CFG.startMonth) + 1;
 }
-
-function monthsOfYear(year){
-  const startM = (year === DCA_CFG.startYear) ? DCA_CFG.startMonth : 1;
+function investidoAte(y,m){
+  const n = monthsFromStartTo(y,m);
+  return n>0 ? n * CFG.monthlyDca : 0;
+}
+function mmRange(){
   const arr = [];
-  for (let m = startM; m <= 12; m++){
-    arr.push(toYYYYdashMM(year, String(m).padStart(2,'0')));
+  for(let y=CFG.startYear;y<=CFG.endYear;y++){
+    const m0 = (y===CFG.startYear?CFG.startMonth:1);
+    for(let m=m0;m<=12;m++) arr.push({y,m,ym:ym(y,m)});
   }
   return arr;
 }
-
-// range total deste plano (2025-09..2050-12)
-function mmRange(startYYYY, endYYYY, startMonth = 1){
-  const out = [];
-  for (let y = startYYYY; y <= endYYYY; y++){
-    const mStart = (y === startYYYY) ? startMonth : 1;
-    for (let m = mStart; m <= 12; m++){
-      out.push(`${y}-${String(m).padStart(2,'0')}`);
-    }
-  }
-  return out;
-}
-
-// Projeção acumulada com DCA + capitalização mensal
-function projectSeries(rateAnnual, monthly, startYYYY, endYYYY, startMonth){
-  const months = mmRange(startYYYY, endYYYY, startMonth);
-  let bal = 0;
-  const r = rateAnnual/12;
-  return months.map(mm=>{
-    bal += monthly;
-    bal *= (1 + r);
-    return { month:mm, value: bal };
+function groupByYear(list){
+  const map = new Map();
+  list.forEach(({y,m,ym})=>{
+    if(!map.has(y)) map.set(y,[]);
+    map.get(y).push({y,m,ym});
   });
+  return map;
 }
 
-function investidoAte(ym){
-  const y = parseInt(ym.slice(0,4),10);
-  const m = parseInt(ym.slice(5,7),10);
-  const n = monthsBetweenInclusive(DCA_CFG.startYear, DCA_CFG.startMonth, y, m);
-  return DCA_CFG.monthlyDefault * n;
+/* Projeções acumuladas DCA + compounding mensal */
+function buildProjections(){
+  const months = mmRange();
+  const maps = { pess:new Map(), real:new Map(), otim:new Map() };
+  let balP=0, balR=0, balO=0;
+  const rP=CFG.rates.pess/12, rR=CFG.rates.real/12, rO=CFG.rates.otim/12;
+
+  months.forEach(({ym})=>{
+    balP += CFG.monthlyDca; balP *= (1+rP); maps.pess.set(ym, balP);
+    balR += CFG.monthlyDca; balR *= (1+rR); maps.real.set(ym, balR);
+    balO += CFG.monthlyDca; balO *= (1+rO); maps.otim.set(ym, balO);
+  });
+  return maps;
 }
 
-/* ========= Firestore ========= */
-async function saveDcaEntry(yyyyMM, portfolio){
+/* ===== Firestore ===== */
+async function loadEntries(){
+  const rows = [];
+  const qs = await getDocs(collection(db,'dca_entries'));
+  qs.forEach(d=> rows.push({ id:d.id, ...d.data() })); // {id, month:"YYYY-MM", portfolio:Number}
+  const map = new Map(rows.map(r=>[r.month, r]));
+  return { rows, map };
+}
+async function upsertPortfolio(monthStr, val){
   const colRef = collection(db,'dca_entries');
-  const qy = query(colRef, where('month','==',yyyyMM));
+  const qy = query(colRef, where('month','==',monthStr));
   const snap = await getDocs(qy);
-  const payload = { month: yyyyMM, portfolio: Number(portfolio) };
+  const payload = { month: monthStr, portfolio: Number(val) };
   if (snap.empty) await addDoc(colRef, payload);
   else await updateDoc(doc(db,'dca_entries', snap.docs[0].id), payload);
 }
+async function removeEntry(docId){ await deleteDoc(doc(db,'dca_entries', docId)); }
 
-async function loadDcaEntries(){
-  const qs = await getDocs(collection(db,'dca_entries'));
-  const rows = [];
-  qs.forEach(d => rows.push({ id:d.id, ...d.data() }));
-  rows.sort((a,b)=> a.month.localeCompare(b.month));
-  return rows;
-}
+/* ===== Render ===== */
+const root = document.getElementById('invest-root');
+let PROJ = null;
+let CURRENT_YEAR = (new Date()).getFullYear();
+if (CURRENT_YEAR<CFG.startYear) CURRENT_YEAR = CFG.startYear;
+if (CURRENT_YEAR>CFG.endYear)   CURRENT_YEAR = CFG.endYear;
 
-async function deleteDcaEntry(docId){
-  await deleteDoc(doc(db,'dca_entries', docId));
-}
+function renderYearBlock(year, monthsOfYear, entryMap){
+  // Título + mostrar/ocultar + CSV
+  const wrapper = document.createElement('div');
 
-/* ========= Render ========= */
-function renderYearTables(rows, year){
-  // cabeçalhos
-  dcaYearPrevEl.textContent = year-1;
-  dcaYearCurEl.textContent  = year;
-  dcaYearNextEl.textContent = year+1;
+  const header = document.createElement('div');
+  header.className = 'year-header';
+  const h2 = document.createElement('h2'); h2.textContent = year;
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-secondary btn-sm year-toggle';
+  btn.textContent = (year===CURRENT_YEAR) ? 'Ocultar' : 'Mostrar';
+  const csvBtn = document.createElement('button');
+  csvBtn.className = 'btn btn-primary btn-sm';
+  csvBtn.textContent = 'Exportar CSV';
 
-  const months = monthsOfYear(year);
-  dcaTitleProj.textContent = `Projeções para ${year}`;
-  dcaTitleReal.textContent = `Registos reais de ${year}`;
+  header.appendChild(h2);
+  header.appendChild(btn);
+  header.appendChild(csvBtn);
+  wrapper.appendChild(header);
 
-  // Índice de registos por mês
-  const byMonth = new Map(rows.map(r => [r.month, r]));
+  // Tabela
+  const table = document.createElement('table');
+  table.className = 'table table-striped table-narrow';
+  const thead = document.createElement('thead');
+  thead.innerHTML = `
+    <tr>
+      <th class="nowrap">Ano</th>
+      <th class="nowrap">Mês</th>
+      <th class="right nowrap">DCA</th>
+      <th class="right nowrap">Rentabilidade</th>
+      <th class="right nowrap">Carteira</th>
+      <th class="right nowrap">Realizado</th>
+      <th class="right nowrap">Pessimista</th>
+      <th class="right nowrap">Realista</th>
+      <th class="right nowrap">Otimista</th>
+      <th class="nowrap">Ações</th>
+    </tr>
+  `;
+  const tbody = document.createElement('tbody');
 
-  // Projeções para lookup:
-  const mapP = window.__DCA_PROJ__.mapP;
-  const mapR = window.__DCA_PROJ__.mapR;
-  const mapO = window.__DCA_PROJ__.mapO;
+  let totalInvest=0, totalPort=0;
 
-  /* Tabela A — Projeções */
-  dcaProjRows.innerHTML = '';
-  months.forEach(ym=>{
-    const inv = investidoAte(ym);
-    const vP  = mapP.get(ym);
-    const vR  = mapR.get(ym);
-    const vO  = mapO.get(ym);
-    const has = byMonth.has(ym);
+  monthsOfYear.forEach(({y,m,ym})=>{
+    const inv = investidoAte(y,m);
+    const vP  = PROJ.pess.get(ym);
+    const vR  = PROJ.real.get(ym);
+    const vO  = PROJ.otim.get(ym);
 
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${ym}</td>
-      <td>$${inv.toFixed(2)}</td>
-      <td>${vP ? '$'+vP.toFixed(2) : '—'}</td>
-      <td>${vR ? '$'+vR.toFixed(2) : '—'}</td>
-      <td>${vO ? '$'+vO.toFixed(2) : '—'}</td>
-      <td>
-        ${has
-          ? '<span class="badge badge-success">Registado</span>'
-          : `<button class="btn btn-sm btn-primary" data-reg="${ym}">Registar</button>`
-        }
-      </td>
-    `;
-    dcaProjRows.appendChild(tr);
-  });
+    const entry = entryMap.get(ym) || null;
+    const port = entry ? Number(entry.portfolio) : null;
+    const realized = (port!=null) ? port - inv : null;
+    const eff = (port!=null && inv>0) ? (port/inv - 1) : null;
 
-  // Abrir form inline ao clicar "Registar"
-  dcaProjRows.querySelectorAll('[data-reg]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const ym = btn.dataset.reg;
-      dcaInlineYM.value = ym;
-      dcaInlineLabel.textContent = ym;
-      dcaInlineValue.value = '';
-      dcaInlineForm.style.display = 'flex';
-      window.scrollTo({ top: dcaInlineForm.offsetTop - 80, behavior: 'smooth' });
-    });
-  });
-
-  /* Tabela B — Reais */
-  dcaRealRows.innerHTML = '';
-  months.forEach(ym=>{
-    const row = byMonth.get(ym);
-    if (!row) return;
-
-    const inv  = investidoAte(ym);
-    const port = Number(row.portfolio);
-    const realized = port - inv;
-    const eff = inv > 0 ? (port/inv - 1) : 0;
-
-    const vP  = mapP.get(ym);
-    const vR  = mapR.get(ym);
-    const vO  = mapO.get(ym);
-    const dP = vP!=null ? port - vP : null;
-    const dR = vR!=null ? port - vR : null;
-    const dO = vO!=null ? port - vO : null;
-    const fmtDelta = (x) => x==null ? '—' : `${x>=0?'+$':'-$'}${Math.abs(x).toFixed(2)}`;
+    if (port!=null){ totalInvest = inv; totalPort = port; }
 
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${ym}</td>
-      <td>$${inv.toFixed(2)}</td>
-      <td>$${port.toFixed(2)}</td>
-      <td>${realized>=0?'+$':'-$'}${Math.abs(realized).toFixed(2)}</td>
-      <td>${(eff>=0?'+':'') + (eff*100).toFixed(2)}%</td>
-      <td>${fmtDelta(dP)}</td>
-      <td>${fmtDelta(dR)}</td>
-      <td>${fmtDelta(dO)}</td>
-      <td>
-        <button class="btn btn-sm btn-primary" data-edit="${row.id}">Editar</button>
-        <button class="btn btn-sm btn-danger" data-del="${row.id}">Apagar</button>
-      </td>
-    `;
-    dcaRealRows.appendChild(tr);
-  });
 
-  // Editar
-  dcaRealRows.querySelectorAll('[data-edit]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const tr = btn.closest('tr');
-      const ym = tr.children[0].innerText;
-      const currentVal = tr.children[2].innerText.replace('$','');
-      dcaInlineYM.value = ym;
-      dcaInlineLabel.textContent = ym;
-      dcaInlineValue.value = currentVal;
-      dcaInlineForm.style.display = 'flex';
-      window.scrollTo({ top: dcaInlineForm.offsetTop - 80, behavior: 'smooth' });
+    // cells
+    const cYear = `<td class="nowrap">${y}</td>`;
+    const cMonth = `<td class="nowrap">${PT_M[m-1]}</td>`;
+    const cDca = `<td class="right">$${CFG.monthlyDca.toFixed(2)}</td>`;
+    const cRent = `<td class="right ${eff==null?'muted':(eff>=0?'rent-pos':'rent-neg')}">${eff==null?'—':((eff*100)>=0?'+':'') + (eff*100).toFixed(2)+'%'}</td>`;
+
+    // Carteira: célula editável inline
+    const carteiraCell = document.createElement('td');
+    carteiraCell.className = 'right edit-cell';
+    carteiraCell.dataset.ym = ym;
+    carteiraCell.innerHTML = port==null ? '<span class="muted">—</span>' : `$${port.toFixed(2)}`;
+
+    // Realizado
+    const cReal = `<td class="right ${realized==null?'muted':(realized>=0?'rent-pos':'rent-neg')}">${realized==null?'—':(realized>=0?'+$':'-$')+Math.abs(realized).toFixed(2)}</td>`;
+
+    const cP = `<td class="right">${vP?('$'+vP.toFixed(2)):'—'}</td>`;
+    const cR = `<td class="right">${vR?('$'+vR.toFixed(2)):'—'}</td>`;
+    const cO = `<td class="right">${vO?('$'+vO.toFixed(2)):'—'}</td>`;
+
+    // Ações: Editar/Apagar
+    const actions = document.createElement('td');
+    actions.className = 'nowrap';
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn-link-sm';
+    editBtn.textContent = 'Editar';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn-link-sm';
+    delBtn.textContent = 'Apagar';
+    if (!entry) delBtn.disabled = true;
+
+    actions.appendChild(editBtn);
+    actions.appendChild(document.createTextNode(' | '));
+    actions.appendChild(delBtn);
+
+    tr.innerHTML = cYear + cMonth + cDca + cRent;
+    tr.appendChild(carteiraCell);
+    tr.insertAdjacentHTML('beforeend', cReal + cP + cR + cO);
+    tr.appendChild(actions);
+    tbody.appendChild(tr);
+
+    // Inline edit handlers
+    function openEditor(){
+      const current = entryMap.get(ym)?.portfolio ?? '';
+      carteiraCell.innerHTML = `<input type="number" step="0.01" min="0" value="${current}" />`;
+      const input = carteiraCell.querySelector('input');
+      input.focus();
+      input.select();
+
+      const save = async ()=>{
+        const val = input.value;
+        if (val === '') { carteiraCell.innerHTML = '<span class="muted">—</span>'; return; }
+        await upsertPortfolio(ym, val);
+        await refresh(); // re-render este ano
+      };
+      const cancel = ()=> {
+        carteiraCell.innerHTML = current === '' ? '<span class="muted">—</span>' : `$${Number(current).toFixed(2)}`;
+      };
+
+      input.addEventListener('keydown', async (e)=>{
+        if (e.key==='Enter'){ await save(); }
+        if (e.key==='Escape'){ cancel(); }
+      });
+      input.addEventListener('blur', save);
+    }
+
+    carteiraCell.addEventListener('dblclick', openEditor);
+    editBtn.addEventListener('click', openEditor);
+    delBtn.addEventListener('click', async ()=>{
+      const docId = entry?.id;
+      if (!docId) return;
+      if (!confirm(`Apagar registo de ${pretty(y,m)}?`)) return;
+      await removeEntry(docId);
+      await refresh();
     });
   });
 
-  // Apagar
-  dcaRealRows.querySelectorAll('[data-del]').forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      await deleteDoc(doc(db,'dca_entries', btn.dataset.del));
-      await refreshDca();
-    });
+  // Total do ano (soma acumulada até ao último mês com carteira)
+  const tfoot = document.createElement('tfoot');
+  const rentTot = (totalInvest>0) ? (totalPort/totalInvest - 1) : null;
+  const trTot = document.createElement('tr');
+  trTot.className = 'total-row';
+  trTot.innerHTML = `
+    <td colspan="2">Total ${year}</td>
+    <td class="right">$${(CFG.monthlyDca).toFixed(2)}</td>
+    <td class="right ${rentTot==null?'muted':(rentTot>=0?'rent-pos':'rent-neg')}">${rentTot==null?'—':((rentTot*100)>=0?'+':'')+(rentTot*100).toFixed(2)}%</td>
+    <td class="right">${totalPort?('$'+totalPort.toFixed(2)):'—'}</td>
+    <td class="right">${(totalPort&&totalInvest)?((totalPort-totalInvest>=0?'+$':'-$')+Math.abs(totalPort-totalInvest).toFixed(2)):'—'}</td>
+    <td class="right muted">—</td>
+    <td class="right muted">—</td>
+    <td class="right muted">—</td>
+    <td></td>
+  `;
+  tfoot.appendChild(trTot);
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  table.appendChild(tfoot);
+  wrapper.appendChild(table);
+
+  // Mostrar/ocultar meses do ano
+  const collapsed = (year!==CURRENT_YEAR);
+  table.style.display = collapsed ? 'none' : '';
+  btn.textContent = collapsed ? 'Mostrar' : 'Ocultar';
+  btn.addEventListener('click', ()=>{
+    const isHidden = table.style.display==='none';
+    table.style.display = isHidden ? '' : 'none';
+    btn.textContent = isHidden ? 'Ocultar' : 'Mostrar';
   });
+
+  // Export CSV do ano
+  csvBtn.addEventListener('click', ()=>{
+    const rows = [['Ano','Mês','DCA','Rentabilidade','Carteira','Realizado','Pessimista','Realista','Otimista']];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const tds = [...tr.children].map(td=>td.innerText.replace(/\u00A0/g,' ').trim());
+      // Ano, Mês, DCA, Rentabilidade, Carteira, Realizado, Pess, Real, Otim
+      rows.push([tds[0], tds[1], tds[2], tds[3], tds[4], tds[5], tds[6], tds[7], tds[8]]);
+    });
+    const csv = rows.map(r=>r.map(v=>`"${v.replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `invest_${year}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  return wrapper;
 }
 
-/* ========= Refresh ========= */
-async function refreshDca(){
-  const rows = await loadDcaEntries();
+/* ===== Refresh ===== */
+async function refresh(){
+  // Projeções (uma vez por refresh)
+  PROJ = buildProjections();
 
-  // construir projeções para lookup
-  const start = DCA_CFG.startYear, end = DCA_CFG.endYear, m0 = DCA_CFG.startMonth;
-  const projP = projectSeries(DCA_CFG.rates.pessimistic, DCA_CFG.monthlyDefault, start, end, m0);
-  const projR = projectSeries(DCA_CFG.rates.realistic,  DCA_CFG.monthlyDefault, start, end, m0);
-  const projO = projectSeries(DCA_CFG.rates.optimistic, DCA_CFG.monthlyDefault, start, end, m0);
+  // Dados reais
+  const { rows, map } = await loadEntries();
 
-  window.__DCA_PROJ__ = {
-    mapP: new Map(projP.map(p => [p.month, p.value])),
-    mapR: new Map(projR.map(p => [p.month, p.value])),
-    mapO: new Map(projO.map(p => [p.month, p.value]))
-  };
+  // Construir UI por ano
+  root.innerHTML = '';
+  const all = groupByYear(mmRange());
+  [...all.keys()].sort((a,b)=>a-b).forEach(y=>{
+    const block = renderYearBlock(y, all.get(y), map);
+    root.appendChild(block);
+  });
 
-  renderYearTables(rows, dcaYearSelected);
-}
-
-/* ========= Listeners ========= */
-// Form topo: guardar mês
-dcaForm?.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const y  = Number(dcaYear.value);
-  const mm = dcaMonthSel.value;
-  if (!y || !mm){ alert('Seleciona ano e mês.'); return; }
-  const key = toYYYYdashMM(y, mm);
-  await saveDcaEntry(key, dcaPortfolio.value);
-  dcaForm.reset();
-  presetYearMonth();
-  await refreshDca();
-});
-
-// Form inline
-dcaInlineForm?.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const ym = dcaInlineYM.value;
-  const val = dcaInlineValue.value;
-  if (!ym || !val){ alert('Falta o valor.'); return; }
-  await saveDcaEntry(ym, val);
-  dcaInlineForm.style.display = 'none';
-  await refreshDca();
-});
-dcaInlineCancel?.addEventListener('click', ()=>{
-  dcaInlineForm.style.display = 'none';
-});
-
-// Navegação anos
-dcaPrevYearBtn?.addEventListener('click', async ()=>{
-  if (dcaYearSelected > DCA_CFG.startYear) {
-    dcaYearSelected--;
-    await refreshDca();
-  }
-});
-dcaNextYearBtn?.addEventListener('click', async ()=>{
-  if (dcaYearSelected < DCA_CFG.endYear) {
-    dcaYearSelected++;
-    await refreshDca();
-  }
-});
-
-/* ========= Util ========= */
-function presetYearMonth(){
-  const now = new Date();
-  if (dcaYear)     dcaYear.value = now.getFullYear();
-  if (dcaMonthSel) dcaMonthSel.value = String(now.getMonth()+1).padStart(2,'0');
-}
-
-/* ========= Init ========= */
-async function init(){
-  try {
-    presetYearMonth();
-    await refreshDca();
-  } catch (err){
-    console.error('Invest init error:', err);
-    alert('Erro a carregar Investimentos');
+  // Scroll para o ano corrente (se expandido)
+  const yearHeaders = [...root.querySelectorAll('.year-header h2')];
+  const idx = yearHeaders.findIndex(h=>h.textContent==String(CURRENT_YEAR));
+  if (idx>=0){
+    yearHeaders[idx].scrollIntoView({ behavior:'smooth', block:'start' });
   }
 }
 
-document.addEventListener('DOMContentLoaded', init);
+/* ===== Init ===== */
+document.addEventListener('DOMContentLoaded', refresh);
