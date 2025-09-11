@@ -1,6 +1,6 @@
 // js/invest.js — INVEST 1 tabela/ano, inline edit, CSV, projeções
 
-import { db } from '../js/script.js';
+import { db } from './script.js';
 import {
   collection, addDoc, getDocs, deleteDoc, doc, query, where, updateDoc
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
@@ -85,7 +85,7 @@ if (CURRENT_YEAR>CFG.endYear)   CURRENT_YEAR = CFG.endYear;
 function renderYearBlock(year, monthsOfYear, entryMap){
   // Título + mostrar/ocultar + CSV
   const wrapper = document.createElement('div');
-
+  const inv = investidoAte(y,m);
   const header = document.createElement('div');
   header.className = 'year-header';
   const h2 = document.createElement('h2'); h2.textContent = year;
@@ -141,7 +141,7 @@ function renderYearBlock(year, monthsOfYear, entryMap){
     // cells
     const cYear = `<td class="nowrap">${y}</td>`;
     const cMonth = `<td class="nowrap">${PT_M[m-1]}</td>`;
-    const cDca = `<td class="right">$${CFG.monthlyDca.toFixed(2)}</td>`;
+    const cDca = `<td class="right">$${inv.toFixed(2)}</td>`;
     const cRent = `<td class="right ${eff==null?'muted':(eff>=0?'rent-pos':'rent-neg')}">${eff==null?'—':((eff*100)>=0?'+':'') + (eff*100).toFixed(2)+'%'}</td>`;
 
     // Carteira: célula editável inline
@@ -214,6 +214,10 @@ function renderYearBlock(year, monthsOfYear, entryMap){
     });
   });
 
+const lastMonth = monthsOfYear[monthsOfYear.length - 1].m; // 12 (ou 12, e em 2025 conta desde Set)
+const invYearEnd = investidoAte(year, lastMonth);
+
+
   // Total do ano (soma acumulada até ao último mês com carteira)
   const tfoot = document.createElement('tfoot');
   const rentTot = (totalInvest>0) ? (totalPort/totalInvest - 1) : null;
@@ -221,7 +225,7 @@ function renderYearBlock(year, monthsOfYear, entryMap){
   trTot.className = 'total-row';
   trTot.innerHTML = `
     <td colspan="2">Total ${year}</td>
-    <td class="right">$${(CFG.monthlyDca).toFixed(2)}</td>
+    <td class="right">$${invYearEnd.toFixed(2)}</td>
     <td class="right ${rentTot==null?'muted':(rentTot>=0?'rent-pos':'rent-neg')}">${rentTot==null?'—':((rentTot*100)>=0?'+':'')+(rentTot*100).toFixed(2)}%</td>
     <td class="right">${totalPort?('$'+totalPort.toFixed(2)):'—'}</td>
     <td class="right">${(totalPort&&totalInvest)?((totalPort-totalInvest>=0?'+$':'-$')+Math.abs(totalPort-totalInvest).toFixed(2)):'—'}</td>
