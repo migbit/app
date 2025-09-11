@@ -536,20 +536,6 @@ async function deleteDcaEntry(docId){
   await deleteDoc(doc(db,'dca_entries', docId));
 }
 
-function actualSeries(entries, startYYYY, endYYYY, startMonth){
-  const months = mmRange(startYYYY, endYYYY, startMonth);
-  const map = new Map(entries.map(e => [e.month, e]));
-  let bal = 0;                  // total investido acumulado (sem render)
-  const out = [];
-  months.forEach(mm => {
-    const row = map.get(mm);
-    const contrib = row ? Number(row.total) : 0;
-    bal += contrib;             // soma apenas o que investiste nesse mês
-    out.push({ month: mm, value: bal });
-  });
-  return out;
-}
-
 function actualSeriesFromPortfolio(entries, startYYYY, endYYYY, startMonth){
   const months = mmRange(startYYYY, endYYYY, startMonth);
   const map = new Map(entries.map(e => [e.month, Number(e.portfolio)]));
