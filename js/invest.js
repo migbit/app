@@ -128,7 +128,6 @@ function renderYearBlock(year, monthsOfYear, entryMap){
     const vR  = PROJ.real.get(ym);
     const vO  = PROJ.otim.get(ym);
 
-    const inv = investidoAte(y,m);   // (esta é a certa, *dentro* do forEach)
     const cDca = `<td class="right">$${inv.toFixed(2)}</td>`;
 
     const entry = entryMap.get(ym) || null;
