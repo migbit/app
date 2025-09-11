@@ -129,43 +129,37 @@
   </section>
               
   
-
-<!-- DCA – Projeção e Registo Mensal -->
-<section class="card mt-4" id="dca-section">
-  <h2 class="card-header">DCA – Projeção até 2050 e Curva Real</h2>
-  <div class="card-body">
-    <!-- Form de input mensal -->
-    <form id="dca-form" class="form-inline mb-3" style="gap:10px;flex-wrap:wrap;">
-  <div>
-    <label for="dca-year" style="display:block;">Ano</label>
-    <input type="number" id="dca-year" min="2025" max="2050" class="wide-input" required>
-  </div>
-
-  <div>
-    <label for="dca-month-sel" style="display:block;">Mês</label>
-    <select id="dca-month-sel" class="wide-input" required>
-      <option value="01">Jan</option><option value="02">Fev</option><option value="03">Mar</option>
-      <option value="04">Abr</option><option value="05">Mai</option><option value="06">Jun</option>
-      <option value="07">Jul</option><option value="08">Ago</option><option value="09">Set</option>
-      <option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option>
-    </select>
-  </div>
-
-  <div>
-    <label for="dca-portfolio" style="display:block;">Valor da carteira ($)</label>
-    <input type="number" id="dca-portfolio" step="0.01" min="0" class="ticker-input" required>
-  </div>
-
-  <div style="display:flex;align-items:flex-end;">
-    <button type="submit" class="btn btn-success">Guardar mês</button>
-  </div>
-</form>
-
-
 <!-- DCA – Navegação por Ano e Tabelas -->
 <section class="card mt-4" id="dca-section">
   <h2 class="card-header">DCA – Tabelas por Ano</h2>
   <div class="card-body">
+
+    <!-- Form de input mensal (mês/ano + carteira) -->
+    <form id="dca-form" class="form-inline mb-3" style="gap:10px;flex-wrap:wrap;">
+      <div>
+        <label for="dca-year" style="display:block;">Ano</label>
+        <input type="number" id="dca-year" min="2025" max="2050" class="wide-input" required>
+      </div>
+
+      <div>
+        <label for="dca-month-sel" style="display:block;">Mês</label>
+        <select id="dca-month-sel" class="wide-input" required>
+          <option value="01">Jan</option><option value="02">Fev</option><option value="03">Mar</option>
+          <option value="04">Abr</option><option value="05">Mai</option><option value="06">Jun</option>
+          <option value="07">Jul</option><option value="08">Ago</option><option value="09">Set</option>
+          <option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="dca-portfolio" style="display:block;">Valor da carteira ($)</label>
+        <input type="number" id="dca-portfolio" step="0.01" min="0" class="ticker-input" required>
+      </div>
+
+      <div style="display:flex;align-items:flex-end;">
+        <button type="submit" class="btn btn-success">Guardar mês</button>
+      </div>
+    </form>
 
     <!-- Navegação de ano -->
     <div class="flex mb-3" style="gap:8px;align-items:center;">
@@ -195,10 +189,12 @@
       <tbody id="dca-proj-rows"></tbody>
     </table>
 
-    <!-- Pequeno formulário inline para registar valor de carteira do mês -->
+    <!-- Form inline para registar valor de carteira do mês -->
     <form id="dca-inline-form" class="form-inline mb-3" style="gap:8px;display:none;">
       <input type="hidden" id="dca-inline-ym">
-      <label for="dca-inline-portfolio" style="margin-right:6px;">Valor da carteira ($) em <span id="dca-inline-label"></span></label>
+      <label for="dca-inline-portfolio" style="margin-right:6px;">
+        Valor da carteira ($) em <span id="dca-inline-label"></span>
+      </label>
       <input type="number" id="dca-inline-portfolio" class="ticker-input" step="0.01" min="0" required>
       <button type="submit" class="btn btn-success btn-sm">Guardar</button>
       <button type="button" id="dca-inline-cancel" class="btn btn-link btn-sm">Cancelar</button>
@@ -222,6 +218,10 @@
       </thead>
       <tbody id="dca-real-rows"></tbody>
     </table>
+
+  </div>
+</section>
+
 
   </div>
 </section>
