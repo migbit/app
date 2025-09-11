@@ -128,8 +128,6 @@ function renderYearBlock(year, monthsOfYear, entryMap){
     const vR  = PROJ.real.get(ym);
     const vO  = PROJ.otim.get(ym);
 
-    const cDca = `<td class="right">$${inv.toFixed(2)}</td>`;
-
     const entry = entryMap.get(ym) || null;
     const port = entry ? Number(entry.portfolio) : null;
     const realized = (port!=null) ? port - inv : null;
