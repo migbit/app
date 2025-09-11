@@ -283,7 +283,6 @@ const dcaInlineValue   = document.getElementById('dca-inline-portfolio');
 const dcaInlineCancel  = document.getElementById('dca-inline-cancel');
 
 const dcaForm     = document.getElementById('dca-form');
-const dcaRows     = document.getElementById('dca-rows');
 const dcaYear     = document.getElementById('dca-year');
 const dcaMonthSel = document.getElementById('dca-month-sel');
 const dcaPortfolio= document.getElementById('dca-portfolio');
@@ -559,33 +558,7 @@ function actualSeriesFromPortfolio(entries, startYYYY, endYYYY, startMonth){
 
 
 // Render tabela
-function renderDcaTable(rows){
-  dcaRows.innerHTML = '';
-  rows.forEach(r=>{
-    // Investido acumulado até YYYY-MM
-    const y = parseInt(r.month.slice(0,4), 10);
-    const m = parseInt(r.month.slice(5,7), 10);
-    const nMonths = monthsBetweenInclusive(DCA_CFG.startYear, DCA_CFG.startMonth, y, m);
-    const invested = DCA_CFG.monthlyDefault * nMonths;
 
-    const portfolio = Number(r.portfolio);
-    const realized  = portfolio - invested;
-    const effRate   = invested > 0 ? (portfolio/invested - 1) : 0;
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${r.month}</td>
-      <td>$${invested.toFixed(2)}</td>
-      <td>$${portfolio.toFixed(2)}</td>
-      <td>${realized>=0?'+$':'-$'}${Math.abs(realized).toFixed(2)}</td>
-      <td>${(effRate>=0?'+':'') + (effRate*100).toFixed(2)}%</td>
-      <td>
-        <button class="btn btn-sm btn-primary" data-edit="${r.id}">Editar</button>
-        <button class="btn btn-sm btn-danger" data-del="${r.id}">Apagar</button>
-      </td>
-    `;
-    dcaRows.appendChild(tr);
-  });
 
   // Apagar
   dcaRows.querySelectorAll('[data-del]').forEach(btn=>{
