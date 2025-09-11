@@ -1,74 +1,150 @@
 <!DOCTYPE html>
 <html lang="pt-pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Investimentos (DCA)</title>
-  <link rel="stylesheet" href="../css/styles.css" />
-  <style>
-    /* Toque leve para a tabela */
-    .year-header { display:flex; align-items:center; gap:12px; margin:18px 0 8px; }
-    .year-header h2 { margin:0; }
-    .year-toggle { cursor:pointer; }
-    .rent-pos { color: #1e8e3e; font-weight: 600; }
-    .rent-neg { color: #c5221f; font-weight: 600; }
-    .muted { opacity:.75 }
-    .right { text-align:right }
-    .nowrap { white-space:nowrap }
-    .table-narrow th, .table-narrow td { padding: 6px 8px; }
-    .total-row { background: #f5f6f7; font-weight: 600; }
-    .edit-cell input {
-      width: 110px; height: 30px; font-size: 14px; padding: 2px 6px;
-    }
-    .btn-link-sm { background:none; border:none; color:#0b57d0; cursor:pointer; padding:0; }
-    .btn-link-sm:hover { text-decoration: underline; }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cenas</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-  <header>
-    <h1>Investimentos</h1>
-    <div class="menu-icon" id="menu-icon">&#9776;</div>
-    <nav id="nav-menu">
-      <ul>
-        <li><a href="cenas.html">Cenas</a></li>
-        <li class="separator">|</li>
-        <li><a href="invest.html" class="active">Invest</a></li>
-        <li class="separator">|</li>
-        <li id="login-section">
-          <a href="#" id="login-btn" class="login-visible">Login</a>
-          <span id="user-info" class="user-visible" style="display:none;">
-            <a href="#" id="user-name">Username</a>
-          </span>
-        </li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <h1>Cenas</h1>
+        <!-- Mobile menu icon -->
+        <div class="menu-icon" id="menu-icon">
+            &#9776; <!-- Hamburger icon (three lines) -->
+        </div>
+    
+        <nav id="nav-menu">
+            <ul>
+                <li><a href="mensagens.html">Mensagens</a></li>
+                <li><a href="ficheiros.html">Ficheiros</a></li>
+                <li class="separator">|</li>
+                <li><a href="compras.html">Compras</a></li>
+                <li><a href="faturas.html">Faturas / Relatórios</a></li>
+                <li><a href="caixa.html">Caixa</a></li>
+                <li><a href="reparações.html">Reparações</a></li>
+                <li><a href="tarefas.html">Tarefas</a></li>
+                <li><a href="hospedes.html">Hóspedes</a></li>
+                <li><a href="cenas.html" class="active">Cenas</a></li>
+                <li class="separator">|</li>
+                <!-- Login/User section, controlled by server-side or CSS visibility -->
+                <li id="login-section">
+                    <a href="#" id="login-btn" class="login-visible">Login</a>
+                    <span id="user-info" class="user-visible" style="display:none;">
+                        <a href="#" id="user-name">Username</a> <!-- Visible if logged in -->
+                    </span>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <!-- Calendar Section -->
+        <section class="calendar-container">
+            <div class="calendar-header">
+                <button id="prev-month">&lt;</button>
+                <h2 id="month-year"></h2>
+                <button id="next-month">&gt;</button>
+            </div>
+            <table id="calendar">
+                <thead>
+                    <tr>
+                        <th>Dom</th>
+                        <th>Seg</th>
+                        <th>Ter</th>
+                        <th>Qua</th>
+                        <th>Qui</th>
+                        <th>Sex</th>
+                        <th>Sáb</th>
+                    </tr>
+                </thead>
+                <tbody id="calendar-body">
+                    <!-- Calendar dates will be dynamically populated here -->
+                </tbody>
+            </table>
+        </section>
 
-  <main>
-    <section id="invest-section" class="card mt-4">
-      <h2 class="card-header">DCA — Tabela única</h2>
-      <div class="card-body" id="invest-root">
-        <!-- JS insere aqui anos + tabela -->
-      </div>
-    </section>
-  </main>
+        <!-- To-Do List Section -->
+        <section class="todo-section card">
+            <h2 class="card-header">Cenas a Fazer</h2>
+            <div class="card-body">
+                <form id="todo-form" class="form-inline">
+                    <input type="text" id="todo-input" class="form-control" placeholder="Nova tarefa" required>
+                    <button type="submit" class="btn btn-success">Adicionar</button>
+                </form>
+                <ul id="todo-list" class="list-group mt-3">
+                    <!-- To-do list will be dynamically populated here -->
+                </ul>
+            </div>
+        </section>
+        
+        <section class="checklist-section card mt-4">
+            <h2 class="card-header">Cena das Checklists</h2>
+            <div class="card-body">
+                <label for="checklist-dropdown">Selecione uma lista:</label>
+                <select id="checklist-dropdown" class="form-control">
+                    <option value="">Escolha uma lista...</option>
+                    <option value="aulaRPM">Aula RPM</option>
+                    <option value="bikeRide">Passeio de Bike</option>
+                    <option value="Ginásio">Ginásio</option>
+                </select>
+                <ul id="checklist-items" class="list-group mt-3" style="display: none;">
+                    <!-- Checklist items will be populated here by JavaScript -->
+                </ul>
+            </div>
+        </section>
 
-  <footer>
-    <div class="footer-container">
-      <p>&copy; 2025 OM&amp;MT.</p>
+       <!-- Carlos – Faturas Pendentes -->
+<section id="carlos-section" class="card mt-4">
+    <h2 class="card-header">Carlos – Faturas Pendentes</h2>
+    <div class="card-body">
+      <!-- 1. Formulário de Fatura -->
+      <form id="carlos-invoice-form" class="form-inline mb-3">
+        <input type="text"    id="invoice-number" placeholder="Nº Fatura (ex: 2023/15)" required>
+        <input type="date"    id="invoice-date"   required>
+        <input type="number"  id="invoice-total"  placeholder="Total (€)" step="0.01" required>
+        <button type="submit" class="btn btn-success ml-2">Adicionar Fatura</button>
+      </form>
+  
+      <!-- 2. Tabela de Faturas + Pagamentos -->
+      <table id="carlos-invoices-table" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nº Fatura</th>
+            <th>Data</th>
+            <th>Total (€)</th>
+            <th>Pago (€)</th>
+            <th>Saldo (€)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="carlos-invoices-body">
+          <!-- preenchido via JS -->
+        </tbody>
+      </table>
     </div>
-  </footer>
+  </section>
+               
+        <footer>
+            <div class="footer-container">
+                <p>&copy; 2024 OM&MT.</p>
+            </div>
+        </footer>
 
-  <!-- Firebase bootstrap da tua app -->
-  <script type="module" src="../js/script.js"></script>
-  <!-- INVEST logic -->
-  <script type="module" src="../js/invest.js"></script>
+    <!-- Required Scripts -->
+    <script src="../js/ical.min.js"></script>
+    <script type="module" src="../js/cenas.js"></script>
 
-  <script>
-    // Mobile menu
-    const menuIcon = document.getElementById('menu-icon');
-    const navMenu = document.getElementById('nav-menu');
-    menuIcon?.addEventListener('click', ()=> navMenu.classList.toggle('active'));
-  </script>
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        const menuIcon = document.getElementById('menu-icon');
+        const navMenu = document.getElementById('nav-menu');
+
+        menuIcon.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
