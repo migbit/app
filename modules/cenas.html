@@ -162,29 +162,66 @@
 </form>
 
 
-    <!-- Gráfico -->
-    <div id="dca-charts-grid" class="charts-grid">
-  <div class="chart-card"><h3>2025–2030</h3><canvas id="dca-chart-1"></canvas></div>
-  <div class="chart-card"><h3>2030–2035</h3><canvas id="dca-chart-2"></canvas></div>
-  <div class="chart-card"><h3>2035–2040</h3><canvas id="dca-chart-3"></canvas></div>
-  <div class="chart-card"><h3>2040–2045</h3><canvas id="dca-chart-4"></canvas></div>
-  <div class="chart-card"><h3>2045–2050</h3><canvas id="dca-chart-5"></canvas></div>
-</div>
+<!-- DCA – Navegação por Ano e Tabelas -->
+<section class="card mt-4" id="dca-section">
+  <h2 class="card-header">DCA – Tabelas por Ano</h2>
+  <div class="card-body">
 
-    <!-- Tabela de meses registados -->
-<table class="table table-striped mt-3">
-  <thead>
-    <tr>
-      <th>Mês</th>
-      <th>Investido ($)</th>
-      <th>Carteira ($)</th>
-      <th>Realizado ($)</th>
-      <th>Taxa efetiva</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody id="dca-rows"></tbody>
-</table>
+    <!-- Navegação de ano -->
+    <div class="flex mb-3" style="gap:8px;align-items:center;">
+      <button id="dca-prev-year" class="btn btn-secondary btn-sm">◀ Ano anterior</button>
+      <div>
+        <strong>Anos:</strong>
+        <span id="dca-year-prev" class="badge badge-light"></span>
+        <span id="dca-year-current" class="badge badge-primary" style="margin:0 6px;"></span>
+        <span id="dca-year-next" class="badge badge-light"></span>
+      </div>
+      <button id="dca-next-year" class="btn btn-secondary btn-sm">Ano seguinte ▶</button>
+    </div>
+
+    <!-- Tabela A — Projeções para o ano selecionado -->
+    <h3 id="dca-title-proj" class="mt-2"></h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>Investido ($)</th>
+          <th>Pessimista ($)</th>
+          <th>Realista ($)</th>
+          <th>Otimista ($)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="dca-proj-rows"></tbody>
+    </table>
+
+    <!-- Pequeno formulário inline para registar valor de carteira do mês -->
+    <form id="dca-inline-form" class="form-inline mb-3" style="gap:8px;display:none;">
+      <input type="hidden" id="dca-inline-ym">
+      <label for="dca-inline-portfolio" style="margin-right:6px;">Valor da carteira ($) em <span id="dca-inline-label"></span></label>
+      <input type="number" id="dca-inline-portfolio" class="ticker-input" step="0.01" min="0" required>
+      <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+      <button type="button" id="dca-inline-cancel" class="btn btn-link btn-sm">Cancelar</button>
+    </form>
+
+    <!-- Tabela B — Registos reais do ano selecionado -->
+    <h3 id="dca-title-real" class="mt-3"></h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>Investido ($)</th>
+          <th>Carteira ($)</th>
+          <th>Realizado ($)</th>
+          <th>Taxa efetiva</th>
+          <th>Δ Pess.</th>
+          <th>Δ Real.</th>
+          <th>Δ Otim.</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="dca-real-rows"></tbody>
+    </table>
 
   </div>
 </section>
