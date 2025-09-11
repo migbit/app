@@ -85,7 +85,6 @@ if (CURRENT_YEAR>CFG.endYear)   CURRENT_YEAR = CFG.endYear;
 function renderYearBlock(year, monthsOfYear, entryMap){
   // Título + mostrar/ocultar + CSV
   const wrapper = document.createElement('div');
-  const inv = investidoAte(y,m);
   const header = document.createElement('div');
   header.className = 'year-header';
   const h2 = document.createElement('h2'); h2.textContent = year;
@@ -128,6 +127,9 @@ function renderYearBlock(year, monthsOfYear, entryMap){
     const vP  = PROJ.pess.get(ym);
     const vR  = PROJ.real.get(ym);
     const vO  = PROJ.otim.get(ym);
+
+    const inv = investidoAte(y,m);   // (esta é a certa, *dentro* do forEach)
+    const cDca = `<td class="right">$${inv.toFixed(2)}</td>`;
 
     const entry = entryMap.get(ym) || null;
     const port = entry ? Number(entry.portfolio) : null;
@@ -214,11 +216,9 @@ function renderYearBlock(year, monthsOfYear, entryMap){
     });
   });
 
-const lastMonth = monthsOfYear[monthsOfYear.length - 1].m; // 12 (ou 12, e em 2025 conta desde Set)
-const invYearEnd = investidoAte(year, lastMonth);
-
-
   // Total do ano (soma acumulada até ao último mês com carteira)
+  const lastMonth = monthsOfYear[monthsOfYear.length - 1].m; // 12 (ou 12, e em 2025 conta desde Set)
+  const invYearEnd = investidoAte(year, lastMonth);
   const tfoot = document.createElement('tfoot');
   const rentTot = (totalInvest>0) ? (totalPort/totalInvest - 1) : null;
   const trTot = document.createElement('tr');
