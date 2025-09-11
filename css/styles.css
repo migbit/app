@@ -1454,6 +1454,10 @@ footer {
   height: var(--dca-canvas-h) !important;
 }
 
+#dca-year-current.badge { font-size: 1rem; }
+#dca-year-prev.badge, #dca-year-next.badge { font-size: .95rem; opacity: .8; }
+
+
 
 @media (max-width: 600px) {
     /* Ensure inputs stack vertically on very small screens */
