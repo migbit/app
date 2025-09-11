@@ -556,33 +556,6 @@ function actualSeriesFromPortfolio(entries, startYYYY, endYYYY, startMonth){
   return months.map(mm => ({ month: mm, value: map.has(mm) ? map.get(mm) : null }));
 }
 
-
-// Render tabela
-
-
-  // Apagar
-  dcaRows.querySelectorAll('[data-del]').forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      await deleteDoc(doc(db,'dca_entries', btn.dataset.del));
-      await refreshDca();
-    });
-  });
-
-  // Editar (preenche ano/mês e carteira)
-  dcaRows.querySelectorAll('[data-edit]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.dataset.edit;
-      const row = Array.from(dcaRows.children).find(tr => tr.querySelector(`[data-edit="${id}"]`));
-      const tds = row.querySelectorAll('td');
-      const ym = tds[0].innerText;
-      dcaYear.value = ym.slice(0,4);
-      dcaMonthSel.value = ym.slice(5,7);
-      dcaPortfolio.value = tds[2].innerText.replace('$','');
-      window.scrollTo({ top: dcaForm.offsetTop - 20, behavior:'smooth' });
-    });
-  });
-
-
 // Refresh total (carrega dados, redesenha tabela e gráfico)
 async function refreshDca(){
   const rows = await loadDcaEntries();
