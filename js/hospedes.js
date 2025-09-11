@@ -1,6 +1,6 @@
 // hospedes.js
 
-import { db } from '../js/script.js';
+import { db } from '../script.js';
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Function to add a guest (comment)
