@@ -649,6 +649,29 @@ input[type=number]::-webkit-inner-spin-button {
     text-align: center;
 }
 
+/* Boxes layout for Caixa section */
+.report-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.report-box {
+    background: #fff;
+    padding: 16px;
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Optional: tidy h2 spacing inside each box */
+.report-box > h2 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+}
+
+
+
+
 /* Highlight purchased items */
 .item-compra.item-comprado { background-color: yellow; }
 
