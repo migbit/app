@@ -71,18 +71,22 @@
                 <button type="submit">Registrar Transação</button>
             </form>
         </section>
-            <section id="bloco-banco" class="caixa-bloco">
   <h3>Caixa Banco</h3>
-  <table id="table-banco" class="tabela-caixa">
-    <thead>
-      <tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <div class="subtotal"><span>Subtotal:</span> <strong id="subtotal-banco">€0,00</strong></div>
-</section>
+<table id="table-banco" class="tabela-caixa">
+  <thead>
+    <tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th></tr>
+  </thead>
+  <tbody></tbody>
+</table>
+<div class="subtotal"><span>Subtotal (sem P):</span> <strong id="subtotal-banco">€0,00</strong></div>
 
-<section id="bloco-direita" class="caixa-bloco">
+<h3>Totais finais</h3>
+<div class="subtotal"><span>Total (sem P):</span> <strong id="total-sem-p">€0,00</strong></div>
+<div class="subtotal"><span>Total (P):</span> <strong id="total-p">€0,00</strong></div>
+<button id="btn-export">Exportar CSV</button>
+          
+
+<section id="bloco-direita" class="content-card">
   <h3>Caixa Direita</h3>
   <table id="table-direita" class="tabela-caixa">
     <thead>
@@ -94,7 +98,7 @@
   <div class="subtotal"><span>Subtotal (P):</span> <strong id="subtotal-direita-p">€0,00</strong></div>
 </section>
 
-<section id="bloco-esquerda" class="caixa-bloco">
+<section id="bloco-esquerda" class="content-card"> 
   <h3>Caixa Esquerda</h3>
   <table id="table-esquerda" class="tabela-caixa">
     <thead>
