@@ -12,16 +12,6 @@ const btnSaida     = document.getElementById('btn-saida');
 const tipoInput    = document.getElementById('tipo');
 
 const selectCaixa  = document.getElementById('caixa');      // dropdown Banco/Direita/Esquerda
-const checkboxP    = document.getElementById('marcar-p');   // checkbox "P"
-const pGroup       = document.querySelector('.form-group.checkbox'); // grupo do "P"
-
-// Mostrar/ocultar o “P” consoante a caixa
-function togglePVisibility() {
-  const show = selectCaixa.value !== 'banco';
-  if (pGroup) pGroup.style.display = show ? 'grid' : 'none';
-  if (!show && checkboxP) checkboxP.checked = false;
-}
-selectCaixa.addEventListener('change', togglePVisibility);
 
 // Botões Entrada/Saída (exclusivos)
 btnEntrada.addEventListener('click', () => setTipoTransacao('Entrada'));
@@ -45,7 +35,6 @@ caixaForm.addEventListener('submit', async (e) => {
   const tipo  = tipoInput.value;
   const valor = parseFloat(document.getElementById('valor').value);
   const caixa = selectCaixa.value;           // banco | direita | esquerda
-  const marcarP = checkboxP?.checked ?? false;
 
   if (!tipo || isNaN(valor) || valor <= 0) {
     alert('Por favor, selecione um tipo de transação e insira um valor válido.');
@@ -66,7 +55,6 @@ caixaForm.addEventListener('submit', async (e) => {
     alert('Transação registada com sucesso!');
     caixaForm.reset();
     setTipoTransacao('');
-    togglePVisibility();               // volta a esconder "P" se o default do select for Banco
     carregarRelatorio();
   } catch (e) {
     console.error('Erro ao registar transação: ', e);
