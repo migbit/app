@@ -680,6 +680,29 @@ input[type=number]::-webkit-inner-spin-button {
     margin-right: 0.5rem;
 }
 
+/* Center the Entrada / Saída buttons */
+.form-group.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Make the Valor input full width */
+#valor {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+/* Align checkbox with label text */
+.form-group.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 
 
 
