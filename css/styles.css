@@ -1476,9 +1476,3 @@ footer {
         margin-bottom: var(--spacing-sm);
     }
 }
-
-/* Caixa page tweaks */
-.btn.active{outline:2px solid var(--primary,#2d7);}
-.value-pos{color:var(--success,#18b26b)}
-.value-neg{color:var(--danger,#e74c3c)}
-.pill{background:transparent}
