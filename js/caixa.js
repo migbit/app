@@ -2,7 +2,7 @@
 
 // Importar Firestore
 import { db } from './script.js';
-import { collection, addDoc, getDocs, query, orderBy, doc, updateDoc, deleteDoc, deleteField } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, addDoc, getDocs, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 
 // Elementos do DOM
@@ -108,7 +108,6 @@ async function carregarRelatorio() {
     const rowActions = (id) =>
       `<div style="display:flex; gap:.4rem; justify-content:center;">
          <button type="button" data-action="edit" data-id="${id}">Editar</button>
-         <button type="button" data-action="remove" data-id="${id}">Remover</button>
        </div>`;
 
     const trRow = (t) => {
@@ -156,7 +155,7 @@ if (elTotalBE) {
 
   elTotalBE.innerHTML = `
     <div class="total-caixa centered">
-      Total: <span class="\${totalClass} formatted-number">\${totalBE >= 0 ? '+' : '-'}€\${formatted}</span>
+      Total: <span class="${totalClass} formatted-number">${totalBE >= 0 ? '+' : '-'}€${formatted}</span>
     </div>
   `;
 }
@@ -175,14 +174,7 @@ document.addEventListener('click', async (e) => {
   const action = btn.dataset.action;
   const id = btn.dataset.id;
 
-  if (action === 'remove') {
-    if (!confirm('Remover esta transação?')) return;
-    await deleteDoc(doc(db, 'caixa', id));
-    await carregarRelatorio();
-    return;
-  }
-
-  if (action === 'edit') {
+if (action === 'edit') {
     const tr = btn.closest('tr');
     if (!tr) return;
 
