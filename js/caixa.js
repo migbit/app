@@ -86,44 +86,32 @@ async function carregarRelatorio() {
     const q  = query(collection(db, 'caixa'), orderBy('timestamp', 'desc'));
     const qs = await getDocs(q);
 
-    // Agrupadores
     const caixas = {
       banco:   { transacoes: [], total: 0 },
-      direita: { P: [], semP: [], totalP: 0, totalSemP: 0 },
-      esquerda:{ P: [], semP: [], totalP: 0, totalSemP: 0 }
+      direita: { transacoes: [], total: 0 },
+      esquerda:{ transacoes: [], total: 0 }
     };
 
     qs.forEach(docSnap => {
       const d = docSnap.data();
       const id = docSnap.id;
-      const caixa = d.caixa || 'banco'; // docs antigos → banco (apenas em memória)
+      const caixa = d.caixa || 'banco';
       const v = Number(d.valor) || 0;
       const ts = d.timestamp?.toDate ? d.timestamp.toDate() : new Date(d.timestamp);
       const row = { ...d, id, _valor: v, _date: ts };
 
-      if (caixa === 'banco') {
-        caixas.banco.transacoes.push(row);
-        caixas.banco.total += v;
-      } else if (caixa === 'direita' || caixa === 'esquerda') {
-        const isP = !!d.marcarP;
-        if (caixa === 'direita') {
-          (isP ? caixas.direita.P : caixas.direita.semP).push(row);
-          isP ? (caixas.direita.totalP += v) : (caixas.direita.totalSemP += v);
-        } else {
-          (isP ? caixas.esquerda.P : caixas.esquerda.semP).push(row);
-          isP ? (caixas.esquerda.totalP += v) : (caixas.esquerda.totalSemP += v);
-        }
-      }
+      if (!caixas[caixa]) return; // ignora se for inválido
+      caixas[caixa].transacoes.push(row);
+      caixas[caixa].total += v;
     });
 
-    // helpers
     const rowActions = (id) =>
-      `<div class="row-actions" style="display:flex; gap:.4rem; justify-content:center;">
-         <button type="button" class="btn-edit" data-action="edit" data-id="${id}">Editar</button>
-         <button type="button" class="btn-remove" data-action="remove" data-id="${id}">Remover</button>
+      `<div style="display:flex; gap:.4rem; justify-content:center;">
+         <button type="button" data-action="edit" data-id="${id}">Editar</button>
+         <button type="button" data-action="remove" data-id="${id}">Remover</button>
        </div>`;
 
-    const trRow = (t, showPcol) => {
+    const trRow = (t) => {
       const date = t._date.toLocaleDateString('pt-PT');
       const v = t._valor;
       const valorClass = v >= 0 ? 'valor-positivo' : 'valor-negativo';
@@ -133,57 +121,130 @@ async function carregarRelatorio() {
           <td>${date}</td>
           <td>${t.tipo}</td>
           <td class="${valorClass} formatted-number">${v >= 0 ? '+' : '-'}€${formattedValor}</td>
-          ${showPcol ? `<td>${t.marcarP ? 'P' : ''}</td>` : ''}
           <td>${rowActions(t.id)}</td>
-        </tr>
-      `;
+        </tr>`;
     };
 
-    const tableWrap = (rowsHtml, cols) =>
+    const tableWrap = (rowsHtml) =>
       `<table>
-         <tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>
-         ${rowsHtml || `<tr><td colspan="${cols.length}" style="text-align:center;">Sem registos</td></tr>`}
+         <tr><th>Data</th><th>Tipo</th><th>Valor (€)</th><th>Ações</th></tr>
+         ${rowsHtml || '<tr><td colspan="4" style="text-align:center;">Sem registos</td></tr>'}
        </table>`;
 
-    const totalDiv = (label, total) => {
+    const totalDiv = (total) => {
       const totalClass = total >= 0 ? 'valor-positivo' : 'valor-negativo';
       const formatted = formatNumber(Math.abs(total));
-      return `<div class="total-caixa centered">${label}: <span class="${totalClass} formatted-number">${total >= 0 ? '+' : '-'}€${formatted}</span></div>`;
+      return `<div class="total-caixa centered">Total: <span class="${totalClass} formatted-number">${total >= 0 ? '+' : '-'}€${formatted}</span></div>`;
     };
 
-    // Render Banco
-    if (elBanco) {
-      const rows = caixas.banco.transacoes.map(t => trRow(t, false)).join('');
-      elBanco.innerHTML =
-        tableWrap(rows, ['Data','Tipo','Valor (€)','Ações']) +
-        totalDiv('Total', caixas.banco.total);
-    }
-
-    // Render Direita/Esquerda com Sem P e P (totais separados e total geral)
-    const renderCaixaComP = (cont, dados) => {
-      const rowsSemP = dados.semP.map(t => trRow(t, true)).join('');
-      const rowsP    = dados.P.map(t => trRow(t, true)).join('');
-      const totalGeral = dados.totalP + dados.totalSemP;
-
-      cont.innerHTML =
-        `<h3>Sem P</h3>` +
-        tableWrap(rowsSemP, ['Data','Tipo','Valor (€)','P','Ações']) +
-        totalDiv('Total Sem P', dados.totalSemP) +
-        `<h3 style="margin-top:1.25rem;">P</h3>` +
-        tableWrap(rowsP, ['Data','Tipo','Valor (€)','P','Ações']) +
-        totalDiv('Total P', dados.totalP) +
-        `<div style="margin-top:1.25rem;"></div>` +
-        totalDiv('Total Geral', totalGeral);
+    const renderCaixa = (cont, dados) => {
+      const rows = dados.transacoes.map(t => trRow(t)).join('');
+      cont.innerHTML = tableWrap(rows) + totalDiv(dados.total);
     };
 
-    if (elDireita)  renderCaixaComP(elDireita,  caixas.direita);
-    if (elEsquerda) renderCaixaComP(elEsquerda, caixas.esquerda);
+    if (elBanco)    renderCaixa(elBanco,    caixas.banco);
+    if (elDireita)  renderCaixa(elDireita,  caixas.direita);
+    if (elEsquerda) renderCaixa(elEsquerda, caixas.esquerda);
 
   } catch (e) {
     console.error('Erro ao carregar relatório: ', e);
     [elBanco, elDireita, elEsquerda].forEach(el => { if (el) el.innerHTML = '<p>Ocorreu um erro ao carregar.</p>'; });
   }
 }
+
+// Editar/Remover
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+
+  const action = btn.dataset.action;
+  const id = btn.dataset.id;
+
+  if (action === 'remove') {
+    if (!confirm('Remover esta transação?')) return;
+    await deleteDoc(doc(db, 'caixa', id));
+    await carregarRelatorio();
+    return;
+  }
+
+  if (action === 'edit') {
+    const tr = btn.closest('tr');
+    if (!tr) return;
+
+    const tds = Array.from(tr.children);
+    const currentDate = tds[0].textContent.trim();
+    const currentTipo = tds[1].textContent.trim();
+    const currentValorTxt = tds[2].textContent.trim().replace(/[+€.\s]/g,'').replace(',', '.');
+    const negative = tds[2].textContent.includes('-');
+    const currentValor = (negative ? -1 : 1) * parseFloat(currentValorTxt || '0');
+
+    const tipoSel = `
+      <select class="edit-tipo">
+        <option value="Entrada" ${currentTipo==='Entrada'?'selected':''}>Entrada</option>
+        <option value="Saída"   ${currentTipo==='Saída'  ?'selected':''}>Saída</option>
+      </select>`;
+
+    const valorInput = `<input type="number" class="edit-valor" step="0.01" value="${Math.abs(currentValor)}" style="width:110px;">`;
+
+    const caixaSel = `
+      <select class="edit-caixa">
+        <option value="banco">Caixa Banco</option>
+        <option value="direita">Caixa Direita</option>
+        <option value="esquerda">Caixa Esquerda</option>
+      </select>`;
+
+    tr.setAttribute('data-old-html', tr.innerHTML);
+    tr.innerHTML = `
+      <td>${currentDate}</td>
+      <td>${tipoSel}</td>
+      <td>${valorInput}</td>
+      <td>
+        <div style="display:flex; gap:.4rem; align-items:center; flex-wrap:wrap;">
+          ${caixaSel}
+          <button type="button" data-action="save" data-id="${id}">Guardar</button>
+          <button type="button" data-action="cancel" data-id="${id}">Cancelar</button>
+        </div>
+      </td>`;
+
+    // Selecionar caixa correta
+    const container = tr.closest('#caixa-banco, #caixa-direita, #caixa-esquerda');
+    const sel = tr.querySelector('.edit-caixa');
+    if (container?.id === 'caixa-banco') sel.value = 'banco';
+    if (container?.id === 'caixa-direita') sel.value = 'direita';
+    if (container?.id === 'caixa-esquerda') sel.value = 'esquerda';
+
+    return;
+  }
+
+  if (action === 'cancel') {
+    const tr = e.target.closest('tr');
+    tr.innerHTML = tr.getAttribute('data-old-html') || tr.innerHTML;
+    tr.removeAttribute('data-old-html');
+    return;
+  }
+
+  if (action === 'save') {
+    const tr = e.target.closest('tr');
+    const id = e.target.dataset.id;
+    const newTipo  = tr.querySelector('.edit-tipo').value;
+    const newValor = parseFloat(tr.querySelector('.edit-valor').value || '0');
+    const newCaixa = tr.querySelector('.edit-caixa').value;
+
+    if (!newValor || newValor <= 0) { alert('Valor inválido'); return; }
+
+    const docRef = doc(db, 'caixa', id);
+    const update = {
+      tipo: newTipo,
+      valor: newTipo === 'Entrada' ? Math.abs(newValor) : -Math.abs(newValor),
+      caixa: newCaixa
+    };
+
+    await updateDoc(docRef, update);
+    await carregarRelatorio();
+    return;
+  }
+});
+
 
 // Click handler para Editar / Remover / Guardar / Cancelar
 document.addEventListener('click', async (e) => {
