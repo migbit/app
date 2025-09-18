@@ -703,6 +703,57 @@ input[type=number]::-webkit-inner-spin-button {
     gap: 0.5rem;
 }
 
+/* Center Entrada / Saída buttons */
+.form-group.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Make buttons consistent width */
+.btn-entrada,
+.btn-saida {
+    min-width: 110px;
+}
+
+/* Ensure active colors: Entrada = green, Saída = red */
+.btn-entrada.btn-active {
+    background-color: #2ecc71;
+    color: #fff;
+}
+.btn-saida.btn-active {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+/* Wider/taller Valor input */
+#valor {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* Align the "P" checkbox with its label */
+.form-group.checkbox {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    align-items: center;
+    column-gap: 8px;
+}
+.form-group.checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+.form-group.checkbox label {
+    margin: 0;            /* override any global label margins */
+    display: inline-block;/* override any global block display */
+    white-space: nowrap;
+}
+
 
 
 
