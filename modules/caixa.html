@@ -44,8 +44,8 @@
     <main>
         <section class="form-section">
             <h2>Registrar Transação</h2>
-            <form id="caixa-form">
-    <div class="form-group">
+<form id="caixa-form">
+    <div class="form-group buttons">
         <button type="button" id="btn-entrada" class="btn-entrada">Entrada</button>
         <button type="button" id="btn-saida" class="btn-saida">Saída</button>
         <input type="hidden" id="tipo" value="">
@@ -65,11 +65,9 @@
         <input type="number" id="valor" step="0.01" required>
     </div>
 
-    <div class="form-group">
-        <label>
-            <input type="checkbox" id="marcar-p">
-            Marcar como "P"
-        </label>
+    <div class="form-group checkbox">
+        <input type="checkbox" id="marcar-p">
+        <label for="marcar-p">Marcar como "P"</label>
     </div>
 
     <button type="submit">Registrar Transação</button>
