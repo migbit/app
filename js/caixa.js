@@ -146,6 +146,21 @@ async function carregarRelatorio() {
     if (elDireita)  renderCaixa(elDireita,  caixas.direita);
     if (elEsquerda) renderCaixa(elEsquerda, caixas.esquerda);
 
+// Calcular e renderizar o Total Banco + Esquerda
+const elTotalBE = document.getElementById('total-banco-esquerda');
+if (elTotalBE) {
+  const totalBE = (caixas.banco.total || 0) + (caixas.esquerda.total || 0);
+
+  const totalClass = totalBE >= 0 ? 'valor-positivo' : 'valor-negativo';
+  const formatted  = formatNumber(Math.abs(totalBE));
+
+  elTotalBE.innerHTML = `
+    <div class="total-caixa centered">
+      Total: <span class="\${totalClass} formatted-number">\${totalBE >= 0 ? '+' : '-'}€\${formatted}</span>
+    </div>
+  `;
+}
+
   } catch (e) {
     console.error('Erro ao carregar relatório: ', e);
     [elBanco, elDireita, elEsquerda].forEach(el => { if (el) el.innerHTML = '<p>Ocorreu um erro ao carregar.</p>'; });
