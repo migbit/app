@@ -1,111 +1,235 @@
-// js/caixa.js
+// js/caixa.js (reworked)
 
-// Importar a instância do Firestore do script.js e funções necessárias do Firestore
 import { db } from './script.js';
-import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Selecionar elementos do DOM
-const caixaForm = document.getElementById('caixa-form');
-const relatorioCaixaDiv = document.getElementById('relatorio-caixa');
+// DOM
+const form = document.getElementById('caixa-form');
+const tipoInput = document.getElementById('tipo');
 const btnEntrada = document.getElementById('btn-entrada');
 const btnSaida = document.getElementById('btn-saida');
-const tipoInput = document.getElementById('tipo');
+const valorInput = document.getElementById('valor');
+const descricaoInput = document.getElementById('descricao');
+const dataInput = document.getElementById('data');
+const caixaSelect = document.getElementById('caixa-select');
+const flagP = document.getElementById('flag-p');
 
-// Configurar os botões de tipo de transação
-btnEntrada.addEventListener('click', () => setTipoTransacao('Entrada'));
-btnSaida.addEventListener('click', () => setTipoTransacao('Saída'));
+// Tabelas
+const tblBanco = document.querySelector('#table-banco tbody');
+const tblDireita = document.querySelector('#table-direita tbody');
+const tblEsquerda = document.querySelector('#table-esquerda tbody');
 
-/**
- * Define o tipo de transação e atualiza as classes dos botões para refletir a seleção.
- * @param {string} tipo - O tipo de transação ('Entrada' ou 'Saída').
- */
-function setTipoTransacao(tipo) {
-    tipoInput.value = tipo;
-    btnEntrada.classList.toggle('btn-active', tipo === 'Entrada');
-    btnSaida.classList.toggle('btn-active', tipo === 'Saída');
+// Subtotais
+const subBanco = document.getElementById('subtotal-banco');
+const subDirNP = document.getElementById('subtotal-direita-np');
+const subDirP = document.getElementById('subtotal-direita-p');
+const subEsqNP = document.getElementById('subtotal-esquerda-np');
+const subEsqP = document.getElementById('subtotal-esquerda-p');
+
+// Totais finais
+const totalSemP = document.getElementById('total-sem-p');
+const totalP = document.getElementById('total-p');
+
+// Export
+const btnExport = document.getElementById('btn-export');
+
+// Estado
+let transacoes = [];
+
+// Utils
+function parseValor(str){
+  if (typeof str === 'number') return +(str.toFixed(2));
+  if (!str) return 0;
+  // Normaliza vírgula para ponto e remove separadores de milhar
+  let s = String(str).trim().replace(/[\s\.]/g,'').replace(',', '.');
+  // Agora s deve ser tipo 1234.56
+  let v = parseFloat(s);
+  if (isNaN(v)) return 0;
+  // Limite €999.999,00
+  if (v > 999999) v = 999999;
+  return Math.round(v * 100) / 100;
 }
 
-/**
- * Formata um número com separadores de milhares e duas casas decimais.
- * @param {number} number - O número a ser formatado.
- * @returns {string} O número formatado.
- */
-function formatNumber(number) {
-    return number.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2, style: 'decimal' });
+function formatEUR(v){
+  const sinal = v < 0 ? '-' : '+';
+  const abs = Math.abs(v);
+  return `${sinal}€${abs.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-// Função para adicionar uma transação
-caixaForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+function setTipo(t){
+  tipoInput.value = t;
+  btnEntrada.classList.toggle('active', t === 'Entrada');
+  btnSaida.classList.toggle('active', t === 'Saída');
+}
 
-    const tipo = tipoInput.value;
-    const valor = parseFloat(document.getElementById('valor').value);
+btnEntrada.addEventListener('click', ()=> setTipo('Entrada'));
+btnSaida.addEventListener('click', ()=> setTipo('Saída'));
 
-    if (!tipo || isNaN(valor) || valor <= 0) {
-        alert('Por favor, selecione um tipo de transação e insira um valor válido.');
-        return;
-    }
-
-    try {
-        await addDoc(collection(db, "caixa"), {
-            tipo: tipo,
-            valor: tipo === 'Entrada' ? valor : -valor,
-            timestamp: new Date()
-        });
-        alert('Transação registrada com sucesso!');
-        caixaForm.reset();
-        setTipoTransacao('');
-        carregarRelatorio();
-    } catch (e) {
-        console.error("Erro ao registrar transação: ", e);
-        alert('Ocorreu um erro ao registrar a transação.');
-    }
+caixaSelect.addEventListener('change', ()=>{
+  const v = caixaSelect.value;
+  const enableP = (v === 'Caixa Direita' || v === 'Caixa Esquerda');
+  flagP.disabled = !enableP;
+  if (!enableP) flagP.checked = false;
 });
 
-// Função para carregar e exibir o relatório de caixa
-async function carregarRelatorio() {
-    relatorioCaixaDiv.innerHTML = '<p>Carregando relatório...</p>';
-    try {
-        const q = query(collection(db, "caixa"), orderBy("timestamp", "desc"));
-        const querySnapshot = await getDocs(q);
-        let totalCaixa = 0;
-        let transacoes = [];
+// Impor máscara/validação leve
+valorInput.addEventListener('input', ()=>{
+  // Permite dígitos, vírgula, ponto
+  let v = valorInput.value.replace(/[^0-9,\.\s]/g,'');
+  // evita mais do que uma vírgula/ponto decimal
+  const parts = v.split(/[\.,]/);
+  if (parts.length > 2){
+    v = parts[0] + ',' + parts.slice(1).join('').replace(/[\.,]/g,'');
+  }
+  // Limite de dígitos antes da vírgula: 6
+  const segs = v.split(/[,\.]/);
+  segs[0] = segs[0].replace(/\s/g,'');
+  if (segs[0].length > 6){
+    segs[0] = segs[0].slice(0,6);
+  }
+  valorInput.value = segs.join(',');
+});
 
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            totalCaixa += data.valor;
-            transacoes.push({ ...data, id: doc.id });
-        });
+// Submit
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const valor = parseValor(valorInput.value);
+  if (valor <= 0){ alert('Introduza um valor válido.'); return; }
+  const tipo = tipoInput.value; // Entrada | Saída
+  const descricao = descricaoInput.value?.trim() || '';
+  const caixa = caixaSelect.value;
+  const isP = !!flagP.checked;
 
-        // Criar HTML para exibir as transações
-        let html = '<h3>Transações</h3>';
-        html += '<table>';
-        html += '<tr><th>Data</th><th>Tipo</th><th>Valor (€)</th></tr>';
-        transacoes.forEach((t) => {
-            const date = t.timestamp.toDate().toLocaleDateString('pt-PT');
-            const valorClass = t.valor >= 0 ? 'valor-positivo' : 'valor-negativo';
-            const formattedValor = formatNumber(Math.abs(t.valor));
-            html += `<tr>
-                <td>${date}</td>
-                <td>${t.tipo}</td>
-                <td class="${valorClass} formatted-number">${t.valor >= 0 ? '+' : '-'}€${formattedValor}</td>
-            </tr>`;
-        });
-        html += '</table>';
+  // Data
+  let data;
+  if (dataInput.value){
+    data = new Date(dataInput.value + 'T00:00:00');
+  } else {
+    data = new Date();
+  }
 
-        // Adicionar o total em caixa centralizado
-        const totalClass = totalCaixa >= 0 ? 'valor-positivo' : 'valor-negativo';
-        const formattedTotal = formatNumber(Math.abs(totalCaixa));
-        html += `<div class="total-caixa centered">Total em caixa: <span class="${totalClass} formatted-number">${totalCaixa >= 0 ? '+' : '-'}€${formattedTotal}</span></div>`;
+  const payload = {
+    data: Timestamp.fromDate(data),
+    tipo,
+    descricao,
+    valor,        // número em euros com 2 casas
+    caixa,        // 'Caixa Banco' | 'Caixa Direita' | 'Caixa Esquerda'
+    isP           // true/false
+  };
 
-        relatorioCaixaDiv.innerHTML = html;
-    } catch (e) {
-        console.error("Erro ao carregar relatório de caixa: ", e);
-        relatorioCaixaDiv.innerHTML = '<p>Ocorreu um erro ao carregar o relatório.</p>';
-    }
+  try{
+    await addDoc(collection(db, 'caixa'), payload);
+    form.reset();
+    setTipo('Entrada');
+    caixaSelect.value = 'Caixa Banco';
+    flagP.disabled = true;
+    await carregar();
+  }catch(err){
+    console.error('Erro ao guardar:', err);
+    alert('Erro ao guardar a transação.');
+  }
+});
+
+function linhaHTML(tx){
+  // Data
+  let d = '';
+  if (tx.data && tx.data.toDate){
+    const dt = tx.data.toDate();
+    d = dt.toLocaleDateString('pt-PT');
+  } else if (tx.data instanceof Date){
+    d = tx.data.toLocaleDateString('pt-PT');
+  } else {
+    d = '';
+  }
+  const valorSigned = (tx.tipo === 'Entrada' ? +tx.valor : -tx.valor);
+  return `<tr>
+    <td>${d}</td>
+    <td>${tx.tipo}</td>
+    <td>${tx.descricao ?? ''}</td>
+    <td class="${valorSigned>=0?'value-pos':'value-neg'}">${formatEUR(valorSigned)}</td>
+  </tr>`;
 }
 
-// Carregar o relatório ao iniciar
-document.addEventListener('DOMContentLoaded', () => {
-    carregarRelatorio();
+function soma(trans){
+  return Math.round(trans.reduce((acc, t)=>{
+    const s = (t.tipo === 'Entrada' ? +t.valor : -t.valor);
+    return acc + s;
+  }, 0) * 100) / 100;
+}
+
+async function carregar(){
+  // Ler todas as transações, ordenar por data crescente por defeito
+  const q = query(collection(db, 'caixa'), orderBy('data','asc'));
+  const snap = await getDocs(q);
+  transacoes = [];
+  snap.forEach(doc=>{
+    const d = doc.data();
+    // Compatibilidade com dados antigos
+    if (typeof d.isP !== 'boolean') d.isP = false;
+    if (!d.caixa) d.caixa = 'Caixa Banco';
+    // valor pode vir como string — normalizar
+    d.valor = parseValor(d.valor);
+    transacoes.push(d);
+  });
+
+  // Separar por caixa
+  const arrBanco = transacoes.filter(t=> t.caixa === 'Caixa Banco');
+  const arrDir = transacoes.filter(t=> t.caixa === 'Caixa Direita');
+  const arrEsq = transacoes.filter(t=> t.caixa === 'Caixa Esquerda');
+
+  // Render tabelas
+  tblBanco.innerHTML = arrBanco.map(linhaHTML).join('') || '<tr><td colspan="4" class="muted">Sem movimentos.</td></tr>';
+  tblDireita.innerHTML = arrDir.map(linhaHTML).join('') || '<tr><td colspan="4" class="muted">Sem movimentos.</td></tr>';
+  tblEsquerda.innerHTML = arrEsq.map(linhaHTML).join('') || '<tr><td colspan="4" class="muted">Sem movimentos.</td></tr>';
+
+  // Subtotais
+  const bancoNP = soma(arrBanco); // Banco nunca tem P
+  const dirNP = soma(arrDir.filter(t=> !t.isP));
+  const dirP = soma(arrDir.filter(t=> t.isP));
+  const esqNP = soma(arrEsq.filter(t=> !t.isP));
+  const esqP = soma(arrEsq.filter(t=> t.isP));
+
+  subBanco.textContent = formatEUR(bancoNP);
+  subDirNP.textContent = formatEUR(dirNP);
+  subDirP.textContent = formatEUR(dirP);
+  subEsqNP.textContent = formatEUR(esqNP);
+  subEsqP.textContent = formatEUR(esqP);
+
+  // Totais finais
+  const totalNP = bancoNP + dirNP + esqNP;
+  const totalPonly = dirP + esqP;
+
+  totalSemP.textContent = formatEUR(totalNP);
+  totalP.textContent = formatEUR(totalPonly);
+}
+
+btnExport.addEventListener('click', ()=>{
+  const rows = [
+    ['Secção','Tipo','Valor'],
+    ['Caixa Banco','Subtotal (sem P)', subBanco.textContent],
+    ['Caixa Direita','Subtotal (sem P)', subDirNP.textContent],
+    ['Caixa Direita','Subtotal (P)', subDirP.textContent],
+    ['Caixa Esquerda','Subtotal (sem P)', subEsqNP.textContent],
+    ['Caixa Esquerda','Subtotal (P)', subEsqP.textContent],
+    ['Totais Finais','Total (sem P)', totalSemP.textContent],
+    ['Totais Finais','Total (P)', totalP.textContent],
+  ];
+  const csv = rows.map(r=> r.map(c=> `"${String(c).replace(/"/g,'""')}"`).join(';')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'caixa_totais.csv';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{
+    URL.revokeObjectURL(url);
+    a.remove();
+  }, 200);
+});
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  // defaults
+  setTipo('Entrada');
+  carregar();
 });

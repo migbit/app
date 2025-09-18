@@ -1,90 +1,143 @@
 <!DOCTYPE html>
 <html lang="pt-pt">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caixa</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caixa</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <style>
+    /* Minimal page-scoped styles for the new blocks; keeps existing theme */
+    .caixa-wrapper{max-width:1100px;margin:0 auto;padding:var(--spacing-md,16px)}
+    .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end}
+    .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{cursor:pointer}
+    .section-card{background:var(--card-bg,#111);border:1px solid var(--border-color,#333);border-radius:12px;padding:16px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+    .section-card h2{margin:0 0 8px 0;font-size:1.1rem}
+    .tx-table{width:100%;border-collapse:collapse;margin-top:8px}
+    .tx-table th,.tx-table td{border-bottom:1px solid var(--border-color,#333);padding:8px;text-align:left;font-variant-numeric:tabular-nums}
+    .tx-table th{opacity:.8}
+    .totals-line{display:flex;justify-content:flex-end;gap:16px;margin-top:8px;font-weight:600}
+    .totals-line span{white-space:nowrap}
+    .muted{opacity:.7}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--border-color,#333);font-size:.85rem}
+    .value-pos{color:var(--success,#18b26b)}
+    .value-neg{color:var(--danger,#e74c3c)}
+    .footer-totals{margin-top:24px;padding:16px;border-top:1px dashed var(--border-color,#333);display:flex;flex-wrap:wrap;gap:16px;justify-content:flex-end}
+    .export-row{display:flex;justify-content:flex-end;margin-top:8px}
+    .inline-help{font-size:.85rem}
+    .checkbox-wrap{display:flex;align-items:center;gap:8px}
+    @media (max-width:600px){.totals-line{justify-content:space-between}}
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Caixa</h1>
-    
-        <!-- Ícone de menu "hambúrguer" para mobile -->
-        <div class="menu-icon" id="menu-icon">
-            &#9776; <!-- Ícone de três linhas -->
+  <header>
+    <h1>Caixa</h1>
+    <div class="menu-icon" id="menu-icon">&#9776;</div>
+    <nav id="nav-menu">
+      <ul>
+        <li><a href="mensagens.html">Mensagens</a></li>
+        <li><a href="ficheiros.html">Ficheiros</a></li>
+        <li class="separator">|</li>
+        <li><a href="compras.html">Compras</a></li>
+        <li><a href="faturas.html">Faturas / Relatórios</a></li>
+        <li><a href="caixa.html" class="active">Caixa</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="caixa-wrapper">
+    <section class="section-card">
+      <h2>Registar transação</h2>
+      <form id="caixa-form" class="form-grid" autocomplete="off">
+        <div>
+          <label for="data">Data</label>
+          <input type="date" id="data" required>
         </div>
-    
-        <nav id="nav-menu">
-            <ul>
-                <li><a href="mensagens.html">Mensagens</a></li>
-                <li><a href="ficheiros.html">Ficheiros</a></li>
-                <li class="separator">|</li>
-                <li><a href="compras.html">Compras</a></li>
-                <li><a href="faturas.html">Faturas / Relatórios</a></li>
-                <li><a href="caixa.html" class="active">Caixa</a></li>
-                <li><a href="reparações.html">Reparações</a></li>
-                <li><a href="tarefas.html">Tarefas</a></li>             
-                <li><a href="hospedes.html">Hóspedes</a></li>
-                <li><a href="cenas.html">Cenas</a></li>
-                <li class="separator">|</li>
-                <!-- Login/User section, controlled by server-side or CSS visibility -->
-                <li id="login-section">
-                    <a href="#" id="login-btn" class="login-visible">Login</a>
-                    <span id="user-info" class="user-visible" style="display:none;">
-                        <a href="#" id="user-name">Username</a> <!-- Visible if logged in -->
-                    </span>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section class="form-section">
-            <h2>Registrar Transação</h2>
-            <form id="caixa-form">
-                <div class="form-group">
-                    <button type="button" id="btn-entrada" class="btn-entrada">Entrada</button>
-                    <button type="button" id="btn-saida" class="btn-saida">Saída</button>
-                    <input type="hidden" id="tipo" value="">
-                </div>
-                <div class="form-group">
-                    <label for="valor">Valor (€):</label>
-                    <input type="number" id="valor" step="0.01" required>
-                </div>
-                <button type="submit">Registrar Transação</button>
-            </form>
-        </section>
-
-        <section class="report-section">
-            <h2 class="centered">Relatório de Caixa</h2>
-            <div id="relatorio-caixa">
-                <!-- Relatórios serão exibidos aqui -->
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-container">
-            <p>&copy; 2024 OM&MT.</p>
+        <div>
+          <label for="descricao">Descrição</label>
+          <input type="text" id="descricao" placeholder="Ex.: Pagamento, Troco, etc." required>
         </div>
-    </footer>
+        <div>
+          <label for="valor">Valor (€)</label>
+          <input type="text" id="valor" inputmode="decimal" placeholder="0,00" required>
+          <div class="inline-help muted">Até €999.999,00 • aceita vírgula ou ponto</div>
+        </div>
+        <div>
+          <label for="caixa-select">Caixa</label>
+          <select id="caixa-select" required>
+            <option value="Caixa Banco" selected>Caixa Banco</option>
+            <option value="Caixa Direita">Caixa Direita</option>
+            <option value="Caixa Esquerda">Caixa Esquerda</option>
+          </select>
+        </div>
+        <div class="checkbox-wrap">
+          <input type="checkbox" id="flag-p" disabled>
+          <label for="flag-p" title='"P" só para Direita/Esquerda'>Marcar como “P”</label>
+        </div>
+        <div class="btn-row">
+          <input type="hidden" id="tipo" value="Entrada">
+          <button type="button" id="btn-entrada" class="btn">Entrada</button>
+          <button type="button" id="btn-saida" class="btn">Saída</button>
+          <button type="submit" class="btn">Guardar</button>
+        </div>
+      </form>
+    </section>
 
-    <!-- Importar o script.js e caixa.js como módulos -->
-    <script type="module" src="../js/script.js"></script>
-    <script type="module" src="../js/caixa.js"></script>
+    <!-- Blocos de relatório por caixa -->
+    <section id="bloco-banco" class="section-card">
+      <h2>Caixa Banco</h2>
+      <div class="muted pill">Sem “P”</div>
+      <table class="tx-table" id="table-banco">
+        <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="totals-line"><span class="muted">Subtotal (sem P):</span><span id="subtotal-banco">€0,00</span></div>
+    </section>
 
-    <!-- Script para alternar o menu no mobile -->
-<script>
+    <section id="bloco-direita" class="section-card">
+      <h2>Caixa Direita</h2>
+      <div class="pill">Movimentos</div>
+      <table class="tx-table" id="table-direita">
+        <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="totals-line"><span class="muted">Subtotal (sem P):</span><span id="subtotal-direita-np">€0,00</span></div>
+      <div class="totals-line"><span class="muted">Subtotal (P):</span><span id="subtotal-direita-p">€0,00</span></div>
+    </section>
+
+    <section id="bloco-esquerda" class="section-card">
+      <h2>Caixa Esquerda</h2>
+      <div class="pill">Movimentos</div>
+      <table class="tx-table" id="table-esquerda">
+        <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="totals-line"><span class="muted">Subtotal (sem P):</span><span id="subtotal-esquerda-np">€0,00</span></div>
+      <div class="totals-line"><span class="muted">Subtotal (P):</span><span id="subtotal-esquerda-p">€0,00</span></div>
+    </section>
+
+    <section class="section-card">
+      <h2>Totais finais</h2>
+      <div class="footer-totals">
+        <div><span class="muted">Total (sem P):</span> <strong id="total-sem-p">€0,00</strong></div>
+        <div><span class="muted">Total (P):</span> <strong id="total-p">€0,00</strong></div>
+      </div>
+      <div class="export-row">
+        <button id="btn-export" class="btn">Exportar CSV</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="../js/caixa.js"></script>
+
+  <script>
     const menuIcon = document.getElementById('menu-icon');
     const navMenu = document.getElementById('nav-menu');
-
-    menuIcon.addEventListener('click', function() {
-        navMenu.classList.toggle('active');
-    });
-</script>
-
+    if (menuIcon && navMenu) {
+      menuIcon.addEventListener('click', function(){ navMenu.classList.toggle('active'); });
+    }
+  </script>
 </body>
 </html>
