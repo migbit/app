@@ -48,79 +48,20 @@
                 <div class="form-group">
                     <button type="button" id="btn-entrada" class="btn-entrada">Entrada</button>
                     <button type="button" id="btn-saida" class="btn-saida">Saída</button>
-                    <input type="hidden" id="tipo" value="Entrada">
+                    <input type="hidden" id="tipo" value="">
                 </div>
                 <div class="form-group">
                     <label for="valor">Valor (€):</label>
-                    <input type="text" id="valor" inputmode="decimal" required>
+                    <input type="number" id="valor" step="0.01" required>
                 </div>
-                <div class="form-group">
-                     <label for="caixa-select">Caixa:</label>
-                      <select id="caixa-select" required>
-                       <option value="Caixa Banco" selected>Caixa Banco</option>
-                       <option value="Caixa Direita">Caixa Direita</option>
-                      <option value="Caixa Esquerda">Caixa Esquerda</option>
-                       </select>
-<div class="form-group form-inline">
-  <input type="checkbox" id="flag-p" disabled>
-  <label for="flag-p">Marcar como “P”</label>
-</div>
-       
-                </div>
-
                 <button type="submit">Registrar Transação</button>
             </form>
         </section>
-  <h3>Caixa Banco</h3>
-<table id="table-banco" class="tabela-caixa">
-  <thead>
-    <tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th></tr>
-  </thead>
-  <tbody></tbody>
-</table>
-<div class="subtotal"><span>Subtotal (sem P):</span> <strong id="subtotal-banco">€0,00</strong></div>
-
-<h3>Totais finais</h3>
-<div class="subtotal"><span>Total (sem P):</span> <strong id="total-sem-p">€0,00</strong></div>
-<div class="subtotal"><span>Total (P):</span> <strong id="total-p">€0,00</strong></div>
-<button id="btn-export">Exportar CSV</button>
-          
-
-<section id="bloco-direita" class="content-card">
-  <h3>Caixa Direita</h3>
-  <table id="table-direita" class="tabela-caixa">
-    <thead>
-      <tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <div class="subtotal"><span>Subtotal (sem P):</span> <strong id="subtotal-direita-np">€0,00</strong></div>
-  <div class="subtotal"><span>Subtotal (P):</span> <strong id="subtotal-direita-p">€0,00</strong></div>
-</section>
-
-<section id="bloco-esquerda" class="content-card"> 
-  <h3>Caixa Esquerda</h3>
-  <table id="table-esquerda" class="tabela-caixa">
-    <thead>
-      <tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Valor</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <div class="subtotal"><span>Subtotal (sem P):</span> <strong id="subtotal-esquerda-np">€0,00</strong></div>
-  <div class="subtotal"><span>Subtotal (P):</span> <strong id="subtotal-esquerda-p">€0,00</strong></div>
-</section>
-
-<section id="totais-finais" class="caixa-bloco">
-  <h3>Totais finais</h3>
-  <div class="subtotal"><span>Total (sem P):</span> <strong id="total-sem-p">€0,00</strong></div>
-  <div class="subtotal"><span>Total (P):</span> <strong id="total-p">€0,00</strong></div>
-  <button id="btn-export">Exportar CSV</button>
-</section>
 
         <section class="report-section">
             <h2 class="centered">Relatório de Caixa</h2>
             <div id="relatorio-caixa">
-
+                <!-- Relatórios serão exibidos aqui -->
             </div>
         </section>
     </main>
