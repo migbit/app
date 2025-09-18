@@ -233,8 +233,7 @@ label {
 
 /* Global Input Styles */
 input[type="number"],
-select,
-input[type="checkbox"] {
+select {
     width: 100%;
     padding: var(--spacing-xs);
     border: 1px solid var(--color-gray);
