@@ -753,7 +753,16 @@ input[type=number]::-webkit-inner-spin-button {
     white-space: nowrap;
 }
 
-
+.row-actions button,
+button[data-action="save"],
+button[data-action="cancel"] {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius-sm);
+  background: #ecf0f1;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
 
 
 /* Highlight purchased items */
