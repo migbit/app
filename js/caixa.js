@@ -75,77 +75,111 @@ caixaForm.addEventListener('submit', async (e) => {
 
 // Carregar relatório para as três caixas
 async function carregarRelatorio() {
-  const containers = {
-    banco:   document.getElementById('caixa-banco'),
-    direita: document.getElementById('caixa-direita'),
-    esquerda:document.getElementById('caixa-esquerda')
-  };
+  const elBanco    = document.getElementById('caixa-banco');
+  const elDireita  = document.getElementById('caixa-direita');
+  const elEsquerda = document.getElementById('caixa-esquerda');
 
-  // placeholders
-  Object.values(containers).forEach(el => { if (el) el.innerHTML = '<p>A carregar…</p>'; });
+  [elBanco, elDireita, elEsquerda].forEach(el => { if (el) el.innerHTML = '<p>A carregar…</p>'; });
 
   try {
     const q  = query(collection(db, 'caixa'), orderBy('timestamp', 'desc'));
     const qs = await getDocs(q);
 
+    // Estrutura de acumulação: Banco simples; Direita/Esquerda divididas por P vs Sem P
     const caixas = {
       banco:   { transacoes: [], total: 0 },
-      direita: { transacoes: [], total: 0 },
-      esquerda:{ transacoes: [], total: 0 }
+      direita: {
+        P:    { transacoes: [], total: 0 },   // marcarP === true
+        semP: { transacoes: [], total: 0 },   // marcarP === false
+      },
+      esquerda: {
+        P:    { transacoes: [], total: 0 },
+        semP: { transacoes: [], total: 0 },
+      }
     };
 
     qs.forEach(docSnap => {
-      const data = docSnap.data();
-      const key  = data.caixa || 'banco';           // dados antigos sem "caixa" vão para Banco
-      if (!caixas[key]) return;
+      const d = docSnap.data();
+      const caixa = d.caixa || 'banco';               // antigos vão para banco
+      const v = Number(d.valor) || 0;
+      const ts = d.timestamp?.toDate ? d.timestamp.toDate() : new Date(d.timestamp);
+      const row = { ...d, id: docSnap.id, _date: ts, _valor: v };
 
-      const v = Number(data.valor) || 0;
-      caixas[key].total += v;
-      caixas[key].transacoes.push({ ...data, id: docSnap.id });
+      if (caixa === 'banco') {
+        caixas.banco.transacoes.push(row);
+        caixas.banco.total += v;
+      } else if (caixa === 'direita' || caixa === 'esquerda') {
+        const bucket = d.marcarP ? 'P' : 'semP';
+        caixas[caixa][bucket].transacoes.push(row);
+        caixas[caixa][bucket].total += v;
+      }
     });
 
-    const renderCaixa = (key, dados) => {
-      const target = containers[key];
-      if (!target) return;
-
-      let html = '<h3>Transações</h3><table>';
-      if (key === 'banco') {
-        html += '<tr><th>Data</th><th>Tipo</th><th>Valor (€)</th></tr>';
-      } else {
-        html += '<tr><th>Data</th><th>Tipo</th><th>Valor (€)</th><th>P</th></tr>';
-      }
-
-      dados.transacoes.forEach(t => {
-        const ts = t.timestamp?.toDate ? t.timestamp.toDate() : new Date(t.timestamp);
-        const date = ts.toLocaleDateString('pt-PT');
-        const v = Number(t.valor) || 0;
-        const valorClass = v >= 0 ? 'valor-positivo' : 'valor-negativo';
-        const formattedValor = formatNumber(Math.abs(v));
-
-        html += '<tr>';
-        html += `<td>${date}</td>`;
-        html += `<td>${t.tipo}</td>`;
-        html += `<td class="${valorClass} formatted-number">${v >= 0 ? '+' : '-'}€${formattedValor}</td>`;
-        if (key !== 'banco') {
-          html += `<td>${t.marcarP ? 'P' : ''}</td>`;
-        }
-        html += '</tr>';
-      });
-
-      html += '</table>';
-
-      const total = dados.total;
-      const totalClass = total >= 0 ? 'valor-positivo' : 'valor-negativo';
-      const formattedTotal = formatNumber(Math.abs(total));
-      html += `<div class="total-caixa centered">Total: <span class="${totalClass} formatted-number">${total >= 0 ? '+' : '-'}€${formattedTotal}</span></div>`;
-
-      target.innerHTML = html;
+    // Helpers
+    const trRow = (t, showPcol = false) => {
+      const date = t._date.toLocaleDateString('pt-PT');
+      const valorClass = t._valor >= 0 ? 'valor-positivo' : 'valor-negativo';
+      const formattedValor = formatNumber(Math.abs(t._valor));
+      return `
+        <tr>
+          <td>${date}</td>
+          <td>${t.tipo}</td>
+          <td class="${valorClass} formatted-number">${t._valor >= 0 ? '+' : '-'}€${formattedValor}</td>
+          ${showPcol ? `<td>${t.marcarP ? 'P' : ''}</td>` : ''}
+        </tr>
+      `;
     };
 
-    Object.entries(caixas).forEach(([key, dados]) => renderCaixa(key, dados));
+    const tableWrap = (rowsHtml, showPcol = false) =>
+      `<table>
+         <tr>
+           <th>Data</th><th>Tipo</th><th>Valor (€)</th>
+           ${showPcol ? '<th>P</th>' : ''}
+         </tr>
+         ${rowsHtml || '<tr><td colspan="'+(showPcol?4:3)+'">Sem registos</td></tr>'}
+       </table>`;
+
+    const totalDiv = (label, total) => {
+      const totalClass = total >= 0 ? 'valor-positivo' : 'valor-negativo';
+      const formatted = formatNumber(Math.abs(total));
+      return `<div class="total-caixa centered">${label}: <span class="${totalClass} formatted-number">${total >= 0 ? '+' : '-'}€${formatted}</span></div>`;
+    };
+
+    // Render Banco (simples)
+    if (elBanco) {
+      const rows = caixas.banco.transacoes.map(t => trRow(t, false)).join('');
+      elBanco.innerHTML =
+        `<h3>Transações</h3>
+         ${tableWrap(rows, false)}
+         ${totalDiv('Total', caixas.banco.total)}`;
+    }
+
+    // Render Direita/Esquerda (Sem P e P)
+    const renderCaixaComP = (cont, dados) => {
+      const totalGeral = dados.P.total + dados.semP.total;
+
+      const rowsSemP = dados.semP.transacoes.map(t => trRow(t, true)).join('');
+      const rowsP    = dados.P.transacoes.map(t => trRow(t, true)).join('');
+
+      cont.innerHTML =
+        `<h3>Sem P</h3>
+         ${tableWrap(rowsSemP, true)}
+         ${totalDiv('Total Sem P', dados.semP.total)}
+
+         <h3 style="margin-top:1.25rem;">P</h3>
+         ${tableWrap(rowsP, true)}
+         ${totalDiv('Total P', dados.P.total)}
+
+         <div style="margin-top:1.25rem;"></div>
+         ${totalDiv('Total Geral', totalGeral)}`;
+    };
+
+    if (elDireita)  renderCaixaComP(elDireita,  caixas.direita);
+    if (elEsquerda) renderCaixaComP(elEsquerda, caixas.esquerda);
+
   } catch (e) {
     console.error('Erro ao carregar relatório: ', e);
-    Object.values(containers).forEach(el => { if (el) el.innerHTML = '<p>Ocorreu um erro ao carregar.</p>'; });
+    [elBanco, elDireita, elEsquerda].forEach(el => { if (el) el.innerHTML = '<p>Ocorreu um erro ao carregar.</p>'; });
   }
 }
 
