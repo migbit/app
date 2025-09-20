@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Relatório Taxa Municipal Turística</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+  <header>
+    <h1>Relatório Taxa Municipal Turística</h1>
+
+    <div class="menu-icon" id="menu-icon">&#9776;</div>
+    <nav id="nav-menu">
+      <ul>
+        <li><a href="mensagens.html">Mensagens</a></li>
+        <li><a href="ficheiros.html">Ficheiros</a></li>
+        <li class="separator">|</li>
+        <li><a href="compras.html">Compras</a></li>
+        <!-- Nesta app, esta página passa a ser só TMT -->
+        <li><a href="tmt.html" class="active">Taxa Turística</a></li>
+        <li><a href="caixa.html">Caixa</a></li>
+        <li><a href="reparações.html">Reparações</a></li>
+        <li><a href="tarefas.html">Tarefas</a></li>
+        <li><a href="hospedes.html">Hóspedes</a></li>
+        <li><a href="cenas.html">Cenas</a></li>
+        <li class="separator">|</li>
+        <li id="login-section">
+          <a href="#" id="login-btn" class="login-visible">Login</a>
+          <span id="user-info" class="user-visible" style="display:none;">
+            <a href="#" id="user-name">Username</a>
+          </span>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="report-section">
+      <h2>Relatório Trimestral</h2>
+      <p style="margin-bottom:.5rem;">Apresentação por apartamento e por trimestre (com base na coleção <code>faturas</code> do Firestore).</p>
+      <div id="relatorio-tmt"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <p>&copy; 2024 OM&MT.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="../js/script.js"></script>
+  <script type="module" src="../js/tmt.js"></script>
+
+  <script>
+    const menuIcon = document.getElementById('menu-icon');
+    const navMenu = document.getElementById('nav-menu');
+    menuIcon.addEventListener('click', () => navMenu.classList.toggle('active'));
+  </script>
+</body>
+</html>
