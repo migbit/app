@@ -229,16 +229,23 @@ async function loadTasks() {
         querySnapshot.forEach((doc) => {
             const task = doc.data();
             const li = document.createElement('li');
-            
-            const taskText = document.createElement('span');
-            taskText.textContent = task.text;
-            li.appendChild(taskText);
-            
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'Apagar';
-            deleteBtn.classList.add('delete-btn');
-            deleteBtn.onclick = () => deleteTask(doc.id);
-            li.appendChild(deleteBtn);
+
+    const taskText = document.createElement('span');
+    taskText.textContent = task.text;
+    li.appendChild(taskText);
+
+    // Mostrar timestamp
+    if (task.timestamp) {
+        const ts = task.timestamp.toDate ? task.timestamp.toDate() : new Date(task.timestamp);
+        const formatted = ts.toLocaleString('pt-PT', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+        const timeSpan = document.createElement('small');
+        timeSpan.style.marginLeft = '10px';
+        timeSpan.style.color = '#666';
+        timeSpan.textContent = `(${formatted})`;
+        li.appendChild(timeSpan);
             
             todoList.appendChild(li);
         });
