@@ -22,10 +22,13 @@
                 <li><a href="ficheiros.html">Ficheiros</a></li>
                 <li class="separator">|</li>
                 <li><a href="compras.html">Compras</a></li>
-                <li><a href="tmt.html">Taxa Turística</a></li>
+                <li><a href="faturas.html">Faturas / Relatórios</a></li>
+                <li><a href="caixa.html">Caixa</a></li>
                 <li><a href="reparações.html">Reparações</a></li>
+                <li><a href="tarefas.html">Tarefas</a></li>
                 <li><a href="hospedes.html">Hóspedes</a></li>
                 <li><a href="cenas.html" class="active">Cenas</a></li>
+                <li><a href="invest.html">DCA</a></li>
                 <li class="separator">|</li>
                 <!-- Login/User section, controlled by server-side or CSS visibility -->
                 <li id="login-section">
@@ -93,41 +96,10 @@
                 </ul>
             </div>
         </section>
-
-       <!-- Carlos – Faturas Pendentes -->
-<section id="carlos-section" class="card mt-4">
-    <h2 class="card-header">Carlos – Faturas Pendentes</h2>
-    <div class="card-body">
-      <!-- 1. Formulário de Fatura -->
-      <form id="carlos-invoice-form" class="form-inline mb-3">
-        <input type="text"    id="invoice-number" placeholder="Nº Fatura (ex: 2023/15)" required>
-        <input type="date"    id="invoice-date"   required>
-        <input type="number"  id="invoice-total"  placeholder="Total (€)" step="0.01" required>
-        <button type="submit" class="btn btn-success ml-2">Adicionar Fatura</button>
-      </form>
-  
-      <!-- 2. Tabela de Faturas + Pagamentos -->
-      <table id="carlos-invoices-table" class="table table-striped">
-        <thead>
-          <tr>
-            <th>Nº Fatura</th>
-            <th>Data</th>
-            <th>Total (€)</th>
-            <th>Pago (€)</th>
-            <th>Saldo (€)</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="carlos-invoices-body">
-          <!-- preenchido via JS -->
-        </tbody>
-      </table>
-    </div>
-  </section>
                
         <footer>
             <div class="footer-container">
-                <p>&copy; 2025 OM&MT.</p>
+                <p>&copy; 2024 OM&MT.</p>
             </div>
         </footer>
 
