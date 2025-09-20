@@ -781,26 +781,24 @@ function gerarHTMLDetalhesTMT(detalhes) {
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
   import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js')
-    .then(jsPDFModule => {
-      const { jsPDF } = window.jspdf;
+    .then((jspdfMod) => {
+      // usar o módulo importado; cair para o global só se necessário
+      const jsPDF = (jspdfMod && jspdfMod.jsPDF) ? jspdfMod.jsPDF
+                     : (window.jspdf && window.jspdf.jsPDF);
       const doc = new jsPDF();
+
+      // grupo vem com &quot; → converter para aspas normais
       const grupo = JSON.parse(grupoJson.replace(/&quot;/g, '"'));
 
-      const dataStr = (f.timestamp && f.timestamp.seconds)
-  ? new Date(f.timestamp.seconds * 1000).toLocaleDateString()
-  : '';
-
-      // --- Título ---
+      // Título
       const [ano, mes] = key.split('-');
       const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                      'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
       doc.setFontSize(16);
       doc.text(`Relatório de Faturação - ${meses[mes-1]} ${ano}`, 105, 15, { align: 'center' });
 
-      // --- Cabeçalho de 7 colunas ---
-      const headers = [
-        'Fatura Nº','Data','Transferência','Taxa Airbnb','Base','IVA (€)','Total (€)'
-      ];
+      // Cabeçalho (7 colunas)
+      const headers = ['Fatura Nº','Data','Transferência','Taxa Airbnb','Base','IVA (€)','Total (€)'];
       const xPos = [2,32,62,92,122,152,182];
       const wCol = 30;
       let y = 30;
@@ -812,31 +810,36 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
         doc.text(h, xPos[i] + (wCol - tw)/2, y);
       });
 
-      // --- separar M… vs CX… ---
-      const mItems  = grupo.filter(f => f.numeroFatura.startsWith('M'));
-      const cxItems = grupo.filter(f => !f.numeroFatura.startsWith('M'));
+      // Separar M vs CX com proteção para numeroFatura ausente
+      const mItems  = grupo.filter(f => typeof f.numeroFatura === 'string' && f.numeroFatura.startsWith('M'));
+      const cxItems = grupo.filter(f => typeof f.numeroFatura === 'string' && !f.numeroFatura.startsWith('M'));
 
-      // --- linhas M… + totais ---
+      // Linhas M + totais
       let sumT=0, sumTax=0, sumB=0, sumI=0, sumTot=0;
       doc.setFont('helvetica','normal');
       y += 10;
-      mItems.forEach(f => {
-        const dataStr = new Date(f.timestamp.seconds*1000).toLocaleDateString();
-const total = (Number(f.valorTransferencia) || 0) + (Number(f.taxaAirbnb) || 0);
-const base  = total / 1.06;
-const iva   = total - base;
 
-        sumT   += f.valorTransferencia;
-        sumTax += f.taxaAirbnb;
+      mItems.forEach(f => {
+        const dataStr = (f.timestamp && f.timestamp.seconds)
+          ? new Date(f.timestamp.seconds*1000).toLocaleDateString()
+          : '';
+        const transf = Number(f.valorTransferencia) || 0;
+        const taxa   = Number(f.taxaAirbnb) || 0;
+        const total  = transf + taxa;
+        const base   = total / 1.06;
+        const iva    = total - base;
+
+        sumT   += transf;
+        sumTax += taxa;
         sumB   += base;
         sumI   += iva;
         sumTot += total;
 
         const vals = [
-          f.numeroFatura,
+          f.numeroFatura || '',
           dataStr,
-          `€${f.valorTransferencia.toFixed(2)}`,
-          `€${f.taxaAirbnb.toFixed(2)}`,
+          `€${transf.toFixed(2)}`,
+          `€${taxa.toFixed(2)}`,
           `€${base.toFixed(2)}`,
           `€${iva.toFixed(2)}`,
           `€${total.toFixed(2)}`
@@ -848,7 +851,7 @@ const iva   = total - base;
         y += 10;
       });
 
-      // totais linha
+      // Totais
       doc.setFont('helvetica','bold');
       const totalVals = [
         'Totais','',
@@ -863,16 +866,21 @@ const iva   = total - base;
         doc.text(txt, xPos[i] + (wCol - tw)/2, y);
       });
 
-      // --- CX entries at bottom, only Nº / Data / Total ---
+      // CX no rodapé (Nº / Data / Total)
       const pageH = doc.internal.pageSize.getHeight();
       let yCX = pageH - 20;
       doc.setFont('helvetica','normal');
       cxItems.forEach(f => {
-        const dataStr = new Date(f.timestamp.seconds*1000).toLocaleDateString();
-        const total   = f.valorTransferencia + f.taxaAirbnb;
+        const dataStr = (f.timestamp && f.timestamp.seconds)
+          ? new Date(f.timestamp.seconds*1000).toLocaleDateString()
+          : '';
+        const transf = Number(f.valorTransferencia) || 0;
+        const taxa   = Number(f.taxaAirbnb) || 0;
+        const total  = transf + taxa;
+
         // Nº
         {
-          const txt = f.numeroFatura;
+          const txt = f.numeroFatura || '';
           const tw  = doc.getStringUnitWidth(txt)*doc.internal.getFontSize()/doc.internal.scaleFactor;
           doc.text(txt, xPos[0] + (wCol - tw)/2, yCX);
         }
@@ -890,8 +898,8 @@ const iva   = total - base;
         yCX += 10;
       });
 
-      // salvar
       doc.save(`relatorio-faturacao-${ano}-${meses[mes-1]}.pdf`);
     })
     .catch(err => console.error('Erro ao exportar PDF:', err));
 };
+
