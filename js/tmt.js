@@ -4,10 +4,8 @@ import {
   collection, getDocs, query, orderBy
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// ---- DOM
 const relatorioTmtDiv = document.getElementById('relatorio-tmt');
 
-// ---- Init
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const faturas = await carregarFaturas();
@@ -18,14 +16,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// ---- Data
 async function carregarFaturas() {
   const q = query(collection(db, "faturas"), orderBy("timestamp", "desc"));
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
-// Mesma agregação por ano/trimestre/apartamento da tua página anterior
 function agruparPorAnoTrimestreApartamento(faturas) {
   return faturas.reduce((grupos, f) => {
     const tri = Math.ceil((+f.mes) / 3);
@@ -58,17 +54,44 @@ function obterNomeMes(n) {
   return meses[(n|0)-1] || '';
 }
 
-// ---- UI
 function gerarRelatorioTMT(faturas) {
-  // (Opcional) filtrar para ano corrente; se preferires, remove este filtro
-  // const anoAtual = new Date().getFullYear();
-  // faturas = faturas.filter(f => f.ano === anoAtual);
-
+  const anoAtual = new Date().getFullYear();
   const byAptTri = agruparPorAnoTrimestreApartamento(faturas);
 
   let html = '';
   Object.entries(byAptTri).forEach(([apt, trimestres]) => {
     html += `<h3 style="margin-top:1rem;">Apartamento ${apt}</h3>`;
+
+    let atuais = '';
+    let antigos = '';
+
+    Object.entries(trimestres).forEach(([triKey, dados]) => {
+      const [ano, tri] = triKey.split('-').map(x => +x);
+      const valorNoitesBase = Number(dados.valorOperador || 0) + Number(dados.valorDireto || 0);
+      const valorTmt = Number(dados.valorTmt || 0);
+      const estadias = valorTmt > 0 ? Math.round(valorNoitesBase / valorTmt) : 0;
+      const totalEst = estadias + Number(dados.noitesExtra||0) + Number(dados.noitesCriancas||0);
+
+      const detalhesJSON = encodeURIComponent(JSON.stringify(dados.detalhes));
+      const linha = `
+        <tr>
+          <td>${ano}</td>
+          <td>${tri}º</td>
+          <td>${estadias}</td>
+          <td>${dados.noitesExtra}</td>
+          <td>${dados.noitesCriancas}</td>
+          <td>${totalEst}</td>
+          <td><button type="button" data-det="${detalhesJSON}" class="btn-detalhes">Ver Detalhes</button></td>
+        </tr>
+      `;
+
+      if (ano === anoAtual) {
+        atuais += linha;
+      } else {
+        antigos += linha;
+      }
+    });
+
     html += `
       <table>
         <thead>
@@ -83,46 +106,45 @@ function gerarRelatorioTMT(faturas) {
           </tr>
         </thead>
         <tbody>
+          ${atuais}
+        </tbody>
+      </table>
     `;
 
-    Object.entries(trimestres).forEach(([triKey, dados]) => {
-      const [ano, tri] = triKey.split('-').map(x => +x);
-      const valorNoitesBase = Number(dados.valorOperador || 0) + Number(dados.valorDireto || 0);
-      const valorTmt = Number(dados.valorTmt || 0);
-      const estadias = valorTmt > 0 ? Math.round(valorNoitesBase / valorTmt) : 0;
-      const totalEst = estadias + Number(dados.noitesExtra||0) + Number(dados.noitesCriancas||0);
-
-      const detalhesJSON = encodeURIComponent(JSON.stringify(dados.detalhes));
-
+    if (antigos) {
       html += `
-        <tr>
-          <td>${ano}</td>
-          <td>${tri}º</td>
-          <td>${estadias}</td>
-          <td>${dados.noitesExtra}</td>
-          <td>${dados.noitesCriancas}</td>
-          <td>${totalEst}</td>
-          <td><button type="button" data-det="${detalhesJSON}" class="btn-detalhes">Ver Detalhes</button></td>
-        </tr>
+        <button class="toggle-antigos" style="margin-top:.5rem;">Mostrar anos anteriores</button>
+        <div class="bloco-antigos" style="display:none;">
+          <table>
+            <tbody>
+              ${antigos}
+            </tbody>
+          </table>
+        </div>
       `;
-    });
-
-    html += `</tbody></table>`;
+    }
   });
 
   relatorioTmtDiv.innerHTML = html;
 
-  // listeners para abrir detalhes
   relatorioTmtDiv.querySelectorAll('.btn-detalhes').forEach(btn => {
     btn.addEventListener('click', () => {
       const detalhes = JSON.parse(decodeURIComponent(btn.dataset.det || '[]'));
       toggleDetalhes(btn, gerarHTMLDetalhesTMT(detalhes));
     });
   });
+
+  relatorioTmtDiv.querySelectorAll('.toggle-antigos').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const bloco = btn.nextElementSibling;
+      const visivel = bloco.style.display !== 'none';
+      bloco.style.display = visivel ? 'none' : 'block';
+      btn.textContent = visivel ? 'Mostrar anos anteriores' : 'Ocultar anos anteriores';
+    });
+  });
 }
 
 function toggleDetalhes(anchorBtn, contentHTML) {
-  // cria/alternar um bloco de detalhes abaixo da célula do botão
   const td = anchorBtn.closest('td');
   let box = td.querySelector('.detalhes');
   if (box) {
