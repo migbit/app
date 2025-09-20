@@ -784,7 +784,11 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
     .then(jsPDFModule => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      const grupo = JSON.parse(grupoJson);
+      const grupo = JSON.parse(grupoJson.replace(/&quot;/g, '"'));
+
+      const dataStr = (f.timestamp && f.timestamp.seconds)
+  ? new Date(f.timestamp.seconds * 1000).toLocaleDateString()
+  : '';
 
       // --- Título ---
       const [ano, mes] = key.split('-');
@@ -818,9 +822,9 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
       y += 10;
       mItems.forEach(f => {
         const dataStr = new Date(f.timestamp.seconds*1000).toLocaleDateString();
-        const base      = total / 1.06;
-        const iva       = total - base;
-        const total     = f.valorTransferencia + f.taxaAirbnb;
+const total = (Number(f.valorTransferencia) || 0) + (Number(f.taxaAirbnb) || 0);
+const base  = total / 1.06;
+const iva   = total - base;
 
         sumT   += f.valorTransferencia;
         sumTax += f.taxaAirbnb;
