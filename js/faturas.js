@@ -160,7 +160,7 @@ async function carregarFaturas() {
     try {
         const q = query(collection(db, "faturas"), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
     } catch (error) {
         console.error("Erro ao carregar faturas:", error);
         return [];
@@ -779,24 +779,27 @@ function gerarHTMLDetalhesTMT(detalhes) {
     `;
 }
 
-window.exportarPDFFaturacao = async function (key, grupoJson) {
+// Single source of truth:
+window.exportarPDFFaturacao = function (key, grupoJson) {
   try {
-    // Load jsPDF (ES module) and instantiate
-    const { jsPDF } = await import('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.es.min.js');
-    const doc = new jsPDF();
+    const jsPDFCtor = window.jspdf && window.jspdf.jsPDF;
+    if (typeof jsPDFCtor !== 'function') {
+      alert('PDF export failed: jsPDF not loaded');
+      return;
+    }
+    const doc = new jsPDFCtor();
 
-    // Decode inline JSON
+    // The JSON is HTML-escaped when embedded in the onclick attribute
     const grupo = JSON.parse(grupoJson.replace(/&quot;/g, '"'));
 
-    // ---- Title -------------------------------------------------------------
-    const [ano, mesStr] = key.split('-');
-    const monthIndex = parseInt(mesStr, 10) - 1;
+    // --- Title ---
+    const [ano, mes] = key.split('-');
     const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                    'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
     doc.setFontSize(16);
-    doc.text(`Relatório de Faturação - ${meses[monthIndex]} ${ano}`, 105, 15, { align: 'center' });
+    doc.text(`Relatório de Faturação - ${meses[mes-1]} ${ano}`, 105, 15, { align: 'center' });
 
-    // ---- Header ------------------------------------------------------------
+    // --- Table header (7 columns) ---
     const headers = ['Fatura Nº','Data','Transferência','Taxa Airbnb','Base','IVA (€)','Total (€)'];
     const xPos = [2,32,62,92,122,152,182];
     const wCol = 30;
@@ -809,100 +812,69 @@ window.exportarPDFFaturacao = async function (key, grupoJson) {
       doc.text(h, xPos[i] + (wCol - tw)/2, y);
     });
 
-    // ---- Split M vs CX safely ---------------------------------------------
-    const mItems  = grupo.filter(f => typeof f.numeroFatura === 'string' && f.numeroFatura.startsWith('M'));
-    const cxItems = grupo.filter(f => typeof f.numeroFatura === 'string' && !f.numeroFatura.startsWith('M'));
+    // --- Rows (split by M… vs CX…) ---
+    const safeNum = v => Number(v) || 0;
+    const itemsM  = grupo.filter(f => typeof f.numeroFatura === 'string' && f.numeroFatura.startsWith('M'));
+    const itemsCX = grupo.filter(f => typeof f.numeroFatura === 'string' && !f.numeroFatura.startsWith('M'));
 
-    // ---- Rows & totals (M items) ------------------------------------------
-    let sumT=0, sumTax=0, sumB=0, sumI=0, sumTot=0;
-    doc.setFont('helvetica','normal');
-    y += 10;
+    const drawRows = (items, title) => {
+      let sumT=0, sumTax=0, sumB=0, sumI=0, sumTot=0;
 
-    mItems.forEach(f => {
-      const dataStr = (f.timestamp && f.timestamp.seconds)
-        ? new Date(f.timestamp.seconds*1000).toLocaleDateString()
-        : '';
-      const transf = Number(f.valorTransferencia) || 0;
-      const taxa   = Number(f.taxaAirbnb) || 0;
-      const total  = transf + taxa;
-      const base   = total / 1.06;
-      const iva    = total - base;
+      doc.setFont('helvetica','bold');
+      y += 10;
+      doc.text(title, 2, y);
+      doc.setFont('helvetica','normal');
+      y += 6;
 
-      sumT   += transf;
-      sumTax += taxa;
-      sumB   += base;
-      sumI   += iva;
-      sumTot += total;
+      items.forEach(f => {
+        const dataStr = f.timestamp && f.timestamp.seconds
+          ? new Date(f.timestamp.seconds*1000).toLocaleDateString()
+          : '';
+        const transf = safeNum(f.valorTransferencia);
+        const taxa   = safeNum(f.taxaAirbnb);
+        const total  = transf + taxa;
+        const base   = total / 1.06;
+        const iva    = total - base;
 
-      const vals = [
-        f.numeroFatura || '',
-        dataStr,
-        `€${transf.toFixed(2)}`,
-        `€${taxa.toFixed(2)}`,
-        `€${base.toFixed(2)}`,
-        `€${iva.toFixed(2)}`,
-        `€${total.toFixed(2)}`
-      ];
-      vals.forEach((txt,i) => {
+        sumT += transf; sumTax += taxa; sumB += base; sumI += iva; sumTot += total;
+
+        const row = [
+          f.numeroFatura || '',
+          dataStr,
+          `€${transf.toFixed(2)}`,
+          `€${taxa.toFixed(2)}`,
+          `€${base.toFixed(2)}`,
+          `€${iva.toFixed(2)}`,
+          `€${total.toFixed(2)}`
+        ];
+        row.forEach((txt,i) => {
+          const tw = doc.getStringUnitWidth(txt) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+          doc.text(txt, xPos[i] + (wCol - tw)/2, y);
+        });
+        y += 6;
+      });
+
+      // Totals
+      doc.setFont('helvetica','bold');
+      const totals = ['Totais','', `€${sumT.toFixed(2)}`, `€${sumTax.toFixed(2)}`,
+                      `€${sumB.toFixed(2)}`, `€${sumI.toFixed(2)}`, `€${sumTot.toFixed(2)}`];
+      totals.forEach((txt,i) => {
         const tw = doc.getStringUnitWidth(txt) * doc.internal.getFontSize() / doc.internal.scaleFactor;
         doc.text(txt, xPos[i] + (wCol - tw)/2, y);
       });
+      doc.setFont('helvetica','normal');
       y += 10;
-    });
+    };
 
-    // ---- Totals row --------------------------------------------------------
-    doc.setFont('helvetica','bold');
-    const totalVals = [
-      'Totais','',
-      `€${sumT.toFixed(2)}`,
-      `€${sumTax.toFixed(2)}`,
-      `€${sumB.toFixed(2)}`,
-      `€${sumI.toFixed(2)}`,
-      `€${sumTot.toFixed(2)}`
-    ];
-    totalVals.forEach((txt,i) => {
-      const tw = doc.getStringUnitWidth(txt) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-      doc.text(txt, xPos[i] + (wCol - tw)/2, y);
-    });
+    if (itemsM.length)  drawRows(itemsM,  'Faturas M…');
+    if (itemsCX.length) drawRows(itemsCX, 'Faturas CX…');
 
-    // ---- CX footer ( Nº / Data / Total ) ----------------------------------
-    const pageH = doc.internal.pageSize.getHeight();
-    let yCX = pageH - 20;
-    doc.setFont('helvetica','normal');
-    cxItems.forEach(f => {
-      const dataStr = (f.timestamp && f.timestamp.seconds)
-        ? new Date(f.timestamp.seconds*1000).toLocaleDateString()
-        : '';
-      const transf = Number(f.valorTransferencia) || 0;
-      const taxa   = Number(f.taxaAirbnb) || 0;
-      const total  = transf + taxa;
-
-      // Nº
-      {
-        const txt = f.numeroFatura || '';
-        const tw  = doc.getStringUnitWidth(txt) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-        doc.text(txt, xPos[0] + (wCol - tw)/2, yCX);
-      }
-      // Data
-      {
-        const tw  = doc.getStringUnitWidth(dataStr) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-        doc.text(dataStr, xPos[1] + (wCol - tw)/2, yCX);
-      }
-      // Total
-      {
-        const txt = `€${total.toFixed(2)}`;
-        const tw  = doc.getStringUnitWidth(txt) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-        doc.text(txt, xPos[6] + (wCol - tw)/2, yCX);
-      }
-      yCX += 10;
-    });
-
-    // ---- Save --------------------------------------------------------------
-    doc.save(`relatorio-faturacao-${ano}-${meses[monthIndex]}.pdf`);
+    doc.save(`faturacao-${key}.pdf`);
   } catch (err) {
     console.error('Erro ao exportar PDF:', err);
     alert('PDF export failed: ' + err.message);
   }
 };
+
 
 
