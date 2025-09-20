@@ -779,15 +779,20 @@ function gerarHTMLDetalhesTMT(detalhes) {
     `;
 }
 
-window.exportarPDFFaturacao = function(key, grupoJson) {
-  import('https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js')
-    .then((jspdfMod) => {
-      // usar o módulo importado; cair para o global só se necessário
-      const jsPDF = (jspdfMod && jspdfMod.jsPDF) ? jspdfMod.jsPDF
-                     : (window.jspdf && window.jspdf.jsPDF);
-      const doc = new jsPDF();
+window.exportarPDFFaturacao = function (key, grupoJson) {
+  import('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js')
+    .then((mod) => {
+      // Try module export first, then global fallback, then default
+      const jsPDFCtor = mod?.jsPDF || window.jspdf?.jsPDF || mod?.default?.jsPDF;
+      if (typeof jsPDFCtor !== 'function') {
+        console.error('jsPDF constructor not found', { mod, windowjspdf: window.jspdf });
+        alert('PDF export failed: jsPDF not loaded');
+        return;
+      }
 
-      // grupo vem com &quot; → converter para aspas normais
+      const doc = new jsPDFCtor();
+
+      // grupoJson chega com &quot; — converter antes de parse
       const grupo = JSON.parse(grupoJson.replace(/&quot;/g, '"'));
 
       // Título
