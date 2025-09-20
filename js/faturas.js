@@ -779,21 +779,20 @@ function gerarHTMLDetalhesTMT(detalhes) {
     `;
 }
 
-window.exportarPDFFaturacao = function (key, grupoJson) {
-  import('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js')
-    .then((mod) => {
-      // Try module export first, then global fallback, then default
-      const jsPDFCtor = mod?.jsPDF || window.jspdf?.jsPDF || mod?.default?.jsPDF;
-      if (typeof jsPDFCtor !== 'function') {
-        console.error('jsPDF constructor not found', { mod, windowjspdf: window.jspdf });
-        alert('PDF export failed: jsPDF not loaded');
-        return;
-      }
+window.exportarPDFFaturacao = async function (key, grupoJson) {
+  try {
+    const { jsPDF } = await import('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.es.min.js');
+    const doc = new jsPDF();
 
-      const doc = new jsPDFCtor();
+    // decode inline JSON once
+    const grupo = JSON.parse(grupoJson.replace(/&quot;/g, '"'));
 
-      // grupoJson chega com &quot; — converter antes de parse
-      const grupo = JSON.parse(grupoJson.replace(/&quot;/g, '"'));
+    // ... rest of your PDF code ...
+  } catch (err) {
+    console.error('Erro ao exportar PDF:', err);
+    alert('PDF export failed: ' + err.message);
+  }
+};
 
       // Título
       const [ano, mes] = key.split('-');
