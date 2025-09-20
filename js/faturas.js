@@ -818,8 +818,8 @@ window.exportarPDFFaturacao = function(key, grupoJson) {
       y += 10;
       mItems.forEach(f => {
         const dataStr = new Date(f.timestamp.seconds*1000).toLocaleDateString();
-        const base      = f.valorTransferencia / 1.06;
-        const iva       = f.valorTransferencia - base;
+        const base      = total / 1.06;
+        const iva       = total - base;
         const total     = f.valorTransferencia + f.taxaAirbnb;
 
         sumT   += f.valorTransferencia;
