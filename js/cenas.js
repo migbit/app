@@ -215,45 +215,53 @@ async function addTask(taskText) {
 }
 
 async function loadTasks() {
-    const todoList = document.getElementById('todo-list');
-    if (!todoList) return;
+  const todoList = document.getElementById('todo-list');
+  if (!todoList) return;
 
-    todoList.innerHTML = '<li>Carregando tarefas...</li>';
-    
-    try {
-        const q = query(collection(db, "todos"), orderBy("timestamp", "asc"));
-        const querySnapshot = await getDocs(q);
-        
-        todoList.innerHTML = '';
-        
-        querySnapshot.forEach((doc) => {
-            const task = doc.data();
-            const li = document.createElement('li');
+  todoList.innerHTML = '<li>Carregando tarefas...</li>';
 
-    const taskText = document.createElement('span');
-    taskText.textContent = task.text;
-    li.appendChild(taskText);
+  try {
+    const q = query(collection(db, "todos"), orderBy("timestamp", "asc"));
+    const querySnapshot = await getDocs(q);
 
-    // Mostrar timestamp
-    if (task.timestamp) {
+    todoList.innerHTML = '';
+
+    querySnapshot.forEach((docSnap) => {
+      const task = docSnap.data();
+      const li = document.createElement('li');
+
+      const taskText = document.createElement('span');
+      taskText.textContent = task.text;
+      li.appendChild(taskText);
+
+      // Timestamp
+      if (task.timestamp) {
         const ts = task.timestamp.toDate ? task.timestamp.toDate() : new Date(task.timestamp);
         const formatted = ts.toLocaleString('pt-PT', {
-            day: '2-digit', month: '2-digit', year: 'numeric',
-            hour: '2-digit', minute: '2-digit'
+          day: '2-digit', month: '2-digit', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
         });
         const timeSpan = document.createElement('small');
         timeSpan.style.marginLeft = '10px';
         timeSpan.style.color = '#666';
         timeSpan.textContent = `(${formatted})`;
         li.appendChild(timeSpan);
-            
-            todoList.appendChild(li);
-        });
-    } catch (error) {
-        console.error("Error loading tasks:", error);
-        todoList.innerHTML = '<li>Erro ao carregar tarefas</li>';
-    }
+      }
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Apagar';
+      deleteBtn.classList.add('delete-btn');
+      deleteBtn.onclick = () => deleteTask(docSnap.id);
+      li.appendChild(deleteBtn);
+
+      todoList.appendChild(li);
+    });
+  } catch (error) {
+    console.error("Error loading tasks:", error);
+    todoList.innerHTML = '<li>Erro ao carregar tarefas</li>';
+  }
 }
+
 
 async function deleteTask(taskId) {
     try {
