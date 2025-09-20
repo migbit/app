@@ -780,7 +780,7 @@ function gerarHTMLDetalhesTMT(detalhes) {
 }
 
 window.exportarPDFFaturacao = function(key, grupoJson) {
-  import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js')
+  import('https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js')
     .then((jspdfMod) => {
       // usar o módulo importado; cair para o global só se necessário
       const jsPDF = (jspdfMod && jspdfMod.jsPDF) ? jspdfMod.jsPDF
