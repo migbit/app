@@ -31,9 +31,6 @@ const faturaForm = document.getElementById('fatura-form');
 const relatorioFaturacaoDiv = document.getElementById('relatorio-faturacao');
 const relatorioTmtDiv = document.getElementById('relatorio-tmt');
 
-let chartComparacaoApt = null;
-let chartTotal = null;
-
 const editarIdInput      = document.getElementById('fatura-id-edicao');
 const cancelarEdicaoBtn  = document.getElementById('cancelar-edicao');
 const submitBtn          = document.getElementById('submit-fatura') || faturaForm.querySelector('button[type="submit"]');
@@ -415,17 +412,6 @@ function gerarHTMLDetalhesFaturacao(detalhes) {
 
 
 function gerarAnaliseFaturacao(faturas) {
-
-    // destruir gráficos antigos antes de recriar
-  if (chartComparacaoApt) {
-    chartComparacaoApt.destroy();
-    chartComparacaoApt = null;
-  }
-  if (chartTotal) {
-    chartTotal.destroy();
-    chartTotal = null;
-  }
-
     // 1) Prepara dados: meses 1–12, anos disponíveis (até ano atual)
     const anos = Array.from(new Set(faturas.map(f => f.ano))).sort();
     const ultimoAno = anos[anos.length - 1];
@@ -448,60 +434,52 @@ function gerarAnaliseFaturacao(faturas) {
     const data1248Prev = labels.map((_, i) => somaPor(penultimoAno, i+1, '1248'));
 
    // comparativo Apt 123 e 1248: ano anterior (transparente) vs ano atual (sólido)
- chartComparacaoApt = new Chart(document.getElementById('chart-comparacao-apt'), {
-  type: 'bar',
-  data: {
-    labels,
-    datasets: [
-      {
-        label: `Apt 123 ${penultimoAno}`,
-        data: data123Prev,
-        backgroundColor: 'rgba(54,162,235,0.4)'
+ new Chart(document.getElementById('chart-comparacao-apt'), {
+   type: 'bar',
+   data: {
+     labels,
+     datasets: [
+       {
+         label: `Apt 123 ${penultimoAno}`,
+         data: data123Prev,
+         backgroundColor: 'rgba(54,162,235,0.4)'  // último ano, tom suave
+       },
+       {
+         label: `Apt 123 ${ultimoAno}`,
+         data: data123,
+         backgroundColor: 'rgba(54,162,235,1)'   // ano atual, sólido
+       },
+       {
+         label: `Apt 1248 ${penultimoAno}`,
+         data: data1248Prev,
+         backgroundColor: 'rgba(245, 133, 20, 0.4)'
+       },
+       {
+         label: `Apt 1248 ${ultimoAno}`,
+         data: data1248,
+         backgroundColor: 'rgba(245, 133, 20,1)'
+       }
+     ]
+   },
+   options: {
+     responsive: true,
+     scales: {
+       y: { beginAtZero: true }
+     }
+   }
+ });
+  
+    new Chart(document.getElementById('chart-total'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: `Total ${penultimoAno}`, data: labels.map((_, i) => somaPor(penultimoAno, i+1, '123') + somaPor(penultimoAno, i+1, '1248')), borderDash: [5,5] },
+          { label: `Total ${ultimoAno}`,   data: dataTotal }
+        ],
       },
-      {
-        label: `Apt 123 ${ultimoAno}`,
-        data: data123,
-        backgroundColor: 'rgba(54,162,235,1)'
-      },
-      {
-        label: `Apt 1248 ${penultimoAno}`,
-        data: data1248Prev,
-        backgroundColor: 'rgba(245, 133, 20, 0.4)'
-      },
-      {
-        label: `Apt 1248 ${ultimoAno}`,
-        data: data1248,
-        backgroundColor: 'rgba(245, 133, 20,1)'
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    scales: { y: { beginAtZero: true } }
-  }
-});
-
-chartTotal = new Chart(document.getElementById('chart-total'), {
-  type: 'line',
-  data: {
-    labels,
-    datasets: [
-      {
-        label: `Total ${penultimoAno}`,
-        data: labels.map((_, i) =>
-          somaPor(penultimoAno, i + 1, '123') + somaPor(penultimoAno, i + 1, '1248')
-        ),
-        borderDash: [5, 5]
-      },
-      {
-        label: `Total ${ultimoAno}`,
-        data: dataTotal
-      }
-    ]
-  },
-  options: { responsive: true }
-});
-
+      options: { responsive: true }
+    });
   
     
   // 4) Barras de progresso: acumulado ano vs ano anterior
