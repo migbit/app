@@ -26,10 +26,6 @@ const CONFIG = {
     ]
 };
 
-// DOM
-const invoiceForm   = document.getElementById('carlos-invoice-form');
-const invoicesBody  = document.getElementById('carlos-invoices-body');
-
 // State
 const state = {
     reservedDates: new Set(),
@@ -320,10 +316,6 @@ async function init() {
         
         // Load tasks
         await loadTasks();
-
-        // Inicializar Carlos – Faturas Pendentes
-invoiceForm.addEventListener('submit', addInvoice);
-await loadInvoices();
 
         // Setup event listeners
         setupEventListeners();
